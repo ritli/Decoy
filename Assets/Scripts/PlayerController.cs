@@ -10,8 +10,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
     [RequireComponent(typeof (AudioSource))]
     public class PlayerController : MonoBehaviour
     {
+        [Header("Walk Variables")]
+        [SerializeField] private float m_WindupScale;
         [SerializeField] private float m_WalkSpeed;
-        [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
+        [Header("Jump Variables")]
         [SerializeField] private float m_JumpForce;
         [SerializeField] private float m_StickToGroundForce;
         [SerializeField] private float m_GravityMultiplier;
@@ -39,6 +41,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        private float m_speedWindup;
+        private Vector2 m_lastInput;
 
         // Use this for initialization
         private void Start()
@@ -72,7 +76,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-            }
+            } 
 
             if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
             {
@@ -89,20 +93,39 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
+            Move();
+        }
+
+        private void Move()
+        {
             float speed;
-            GetInput(out speed);
+            m_Input = GetInput();
+            Vector2 Input = m_speedWindup > 0 && m_Input.magnitude < 0.1f ? m_lastInput : m_Input;
+
+            if (m_Input.magnitude > 0)
+            {
+                m_speedWindup += m_WindupScale;
+            }
+            else
+            {
+                m_speedWindup -= m_WindupScale;
+            }
+
+            m_speedWindup = Mathf.Clamp01(m_speedWindup);
+
+            speed = m_WalkSpeed * m_speedWindup;
 
             // always move along the camera forward as it is the direction that it being aimed at
-            Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
+            Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
             // get a normal for the surface that is being touched to move along it
             RaycastHit hitInfo;
-            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                               m_CharacterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo, m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+
             desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-            m_MoveDir.x = desiredMove.x*speed;
-            m_MoveDir.z = desiredMove.z*speed;
+            m_MoveDir.x = desiredMove.x * speed;
+            m_MoveDir.z = desiredMove.z * speed;
 
             if (m_CharacterController.isGrounded)
             {
@@ -111,21 +134,43 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 if (m_Jump)
                 {
                     m_MoveDir.y = m_JumpForce;
-                    PlayJumpSound();
                     m_Jump = false;
                     m_Jumping = true;
                 }
             }
             else
             {
-                m_MoveDir += Physics.gravity*m_GravityMultiplier*Time.fixedDeltaTime;
+                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
             }
-            m_CollisionFlags = m_CharacterController.Move(m_MoveDir*Time.fixedDeltaTime);
 
-            ProgressStepCycle(speed);
+            m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
+
             UpdateCameraPosition(speed);
 
             m_MouseLook.UpdateCursorLock();
+
+            m_lastInput = Input;
+        }
+
+
+        private Vector2 GetInput()
+        {
+            // Read input
+            float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
+            float vertical = CrossPlatformInputManager.GetAxis("Vertical");
+
+            if (m_Input.sqrMagnitude > 1)
+            {
+                m_Input.Normalize();
+            }
+
+            return new Vector2(horizontal, vertical);
+
+        }
+
+        private void RotateView()
+        {
+            m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
         private void PlayLandingSound()
@@ -177,6 +222,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void UpdateCameraPosition(float speed)
         {
             Vector3 newCameraPosition;
+
             if (!m_UseHeadBob)
             {
                 return;
@@ -196,33 +242,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Camera.transform.localPosition = newCameraPosition;
         }
 
-        private void GetInput(out float speed)
-        {
-            // Read input
-            float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
-            float vertical = CrossPlatformInputManager.GetAxis("Vertical");
-
-#if !MOBILE_INPUT
-            // On standalone builds, walk/run speed is modified by a key press.
-            // keep track of whether or not the character is walking or running
-
-#endif
-            // set the desired speed to be walking or running
-            speed = m_WalkSpeed;
-            m_Input = new Vector2(horizontal, vertical);
-
-            // normalize input if it exceeds 1 in combined length:
-            if (m_Input.sqrMagnitude > 1)
-            {
-                m_Input.Normalize();
-            }
-
-        }
-
-        private void RotateView()
-        {
-            m_MouseLook.LookRotation (transform, m_Camera.transform);
-        }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
