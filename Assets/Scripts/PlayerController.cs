@@ -10,11 +10,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
     [RequireComponent(typeof (AudioSource))]
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
-        [SerializeField] private float m_RunSpeed;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
-        [SerializeField] private float m_JumpSpeed;
+        [SerializeField] private float m_JumpForce;
         [SerializeField] private float m_StickToGroundForce;
         [SerializeField] private float m_GravityMultiplier;
         [SerializeField] private MouseLook m_MouseLook;
@@ -63,6 +61,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             RotateView();
             // the jump state needs to read here to make sure it is not missed
+
+            Jump();
+
+            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+        }
+
+        void Jump()
+        {
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
@@ -79,23 +85,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_MoveDir.y = 0f;
             }
-
-            m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
-
-
-        private void PlayLandingSound()
-        {
-            m_AudioSource.clip = m_LandSound;
-            m_AudioSource.Play();
-            m_NextStep = m_StepCycle + .5f;
-        }
-
 
         private void FixedUpdate()
         {
             float speed;
             GetInput(out speed);
+
             // always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
 
@@ -108,14 +104,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.x = desiredMove.x*speed;
             m_MoveDir.z = desiredMove.z*speed;
 
-
             if (m_CharacterController.isGrounded)
             {
                 m_MoveDir.y = -m_StickToGroundForce;
 
                 if (m_Jump)
                 {
-                    m_MoveDir.y = m_JumpSpeed;
+                    m_MoveDir.y = m_JumpForce;
                     PlayJumpSound();
                     m_Jump = false;
                     m_Jumping = true;
@@ -133,6 +128,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.UpdateCursorLock();
         }
 
+        private void PlayLandingSound()
+        {
+            m_AudioSource.clip = m_LandSound;
+            m_AudioSource.Play();
+            m_NextStep = m_StepCycle + .5f;
+        }
 
         private void PlayJumpSound()
         {
@@ -140,13 +141,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_AudioSource.Play();
         }
 
-
         private void ProgressStepCycle(float speed)
         {
             if (m_CharacterController.velocity.sqrMagnitude > 0 && (m_Input.x != 0 || m_Input.y != 0))
             {
-                m_StepCycle += (m_CharacterController.velocity.magnitude + (speed*(m_IsWalking ? 1f : m_RunstepLenghten)))*
-                             Time.fixedDeltaTime;
+                m_StepCycle += (m_CharacterController.velocity.magnitude + speed) * Time.fixedDeltaTime;
             }
 
             if (!(m_StepCycle > m_NextStep))
@@ -158,7 +157,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             PlayFootStepAudio();
         }
-
 
         private void PlayFootStepAudio()
         {
@@ -176,7 +174,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_FootstepSounds[0] = m_AudioSource.clip;
         }
 
-
         private void UpdateCameraPosition(float speed)
         {
             Vector3 newCameraPosition;
@@ -187,8 +184,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (m_CharacterController.velocity.magnitude > 0 && m_CharacterController.isGrounded)
             {
                 m_Camera.transform.localPosition =
-                    m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude +
-                                      (speed*(m_IsWalking ? 1f : m_RunstepLenghten)));
+                    m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude + speed);
                 newCameraPosition = m_Camera.transform.localPosition;
                 newCameraPosition.y = m_Camera.transform.localPosition.y - m_JumpBob.Offset();
             }
@@ -200,14 +196,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Camera.transform.localPosition = newCameraPosition;
         }
 
-
         private void GetInput(out float speed)
         {
             // Read input
             float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
             float vertical = CrossPlatformInputManager.GetAxis("Vertical");
-
-            bool waswalking = m_IsWalking;
 
 #if !MOBILE_INPUT
             // On standalone builds, walk/run speed is modified by a key press.
@@ -224,21 +217,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_Input.Normalize();
             }
 
-            // handle speed change to give an fov kick
-            // only if the player is going to a run, is running and the fovkick is to be used
-            if (m_IsWalking != waswalking && m_UseFovKick && m_CharacterController.velocity.sqrMagnitude > 0)
-            {
-                StopAllCoroutines();
-                StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
-            }
         }
-
 
         private void RotateView()
         {
             m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
-
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
