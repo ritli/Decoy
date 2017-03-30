@@ -24,13 +24,10 @@ public class LerpObject : MonoBehaviour
     {
         if (!targetReached)
         {
-            print(speed);
-
             transform.position = Vector3.Lerp(transform.position, m_Target, speed * Time.deltaTime);
 
             if(Vector3.Distance(m_Origin.position, m_Target) < m_thresholdDistance)
             {
-                print("yes");
                 targetReached = true;
             }
         }
