@@ -68,6 +68,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             Jump();
 
+            print(m_PreviouslyGrounded);
+
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
 
@@ -99,10 +101,24 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void Move()
         {
             float speed;
-            m_Input = GetInput();
+
+            m_Input = GetInput(); //Assigns a global input value the value of the current input
+
+            //Based on if player is pressing WASD or not, input is either the last input or current input to properly decay movement after release
             Vector2 Input = m_speedWindup > 0 && m_Input.magnitude < 0.1f ? m_lastInput : m_Input;
 
-            if (m_Input.magnitude > 0)
+            if (m_Jumping)
+            {
+                Input = m_lastInput * 0.95f;
+            }
+
+            //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
+            if (m_Jumping)
+            {
+                //Do nothing
+            }
+
+            else if (m_Input.magnitude > 0)
             {
                 m_speedWindup += m_WindupScale;
             }
@@ -113,12 +129,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             m_speedWindup = Mathf.Clamp01(m_speedWindup);
 
+
             speed = m_WalkSpeed * m_speedWindup;
 
-            // always move along the camera forward as it is the direction that it being aimed at
+            //Always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
-            // get a normal for the surface that is being touched to move along it
+            //Get a normal for the surface that is being touched to move along it
             RaycastHit hitInfo;
             Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo, m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 
@@ -146,12 +163,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
             UpdateCameraPosition(speed);
+            if (!m_Jumping)
+             m_MouseLook.UpdateCursorLock();
 
-            m_MouseLook.UpdateCursorLock();
-
-            m_lastInput = Input;
+            m_lastInput = Input; //Stores last input to determine if player has released the key.
         }
-
 
         private Vector2 GetInput()
         {
