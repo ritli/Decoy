@@ -30,6 +30,8 @@ GameObject:
   - 54: {fileID: 5468874}
   - 82: {fileID: 8220720}
   - 114: {fileID: 11439354}
+  - 23: {fileID: 2396706}
+  - 33: {fileID: 3350406}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -82,7 +84,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 85
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -98,6 +100,39 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!23 &2396706
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &3350406
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &5468874
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -205,11 +240,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffd85d4a56025b47b5728057fe4f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_WindupScale: 0.05
   m_WalkSpeed: 10
-  m_RunstepLenghten: 0
-  m_JumpForce: 4
+  m_JumpForce: 5
   m_StickToGroundForce: 0.3
-  m_GravityMultiplier: 1
+  m_GravityMultiplier: 2
   m_MouseLook:
     XSensitivity: 2
     YSensitivity: 2

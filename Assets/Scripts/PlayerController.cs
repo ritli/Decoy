@@ -75,7 +75,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         void Jump()
         {
-            if (!m_Jump)
+            if (!m_Jump && !m_Jumping)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             } 
@@ -163,7 +163,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
             UpdateCameraPosition(speed);
-            if (!m_Jumping)
+
              m_MouseLook.UpdateCursorLock();
 
             m_lastInput = Input; //Stores last input to determine if player has released the key.
