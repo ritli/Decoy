@@ -29,8 +29,6 @@ public class PlayerTeleport : MonoBehaviour {
         if(Input.GetButtonDown("Fire2"))
         {
             m_instanceOfSpotlight = Instantiate(spotlight, target.transform.position, Quaternion.Euler(90 ,0, 0));
-
-
         }
 
         // Teleport and remove indicator
@@ -47,15 +45,5 @@ public class PlayerTeleport : MonoBehaviour {
             Destroy(m_instanceOfSpotlight);
         }
 	}
-
-
-    void OnCollisionStay(Collision collision)
-    {
-        foreach (ContactPoint contact in collision.contacts)
-        {
-            print(contact.thisCollider.name + " hit " + contact.otherCollider.name);
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
-        }
-    }
 
 }
