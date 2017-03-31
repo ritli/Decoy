@@ -3,17 +3,24 @@ using System.Collections;
 
 public class PlayerTeleport : MonoBehaviour {
 
-    private LerpObject lerpObject;
+    private LerpObject m_lerpObject;
 
     public Transform target;
 
     public GameObject spotlight;
     private Object m_instanceOfSpotlight;
+    private Raycast m_raycaster;
+    private Camera m_playerCamera;
+    //private Caps
+    private Rigidbody m_rigidbody;
 
 	// Use this for initialization
 	void Start () {
-        lerpObject = GetComponent<LerpObject>();
-	}
+        m_lerpObject = GetComponent<LerpObject>();
+        m_raycaster = GetComponent<Raycast>();
+        m_playerCamera = GetComponentInChildren<Camera>();
+        m_rigidbody = GetComponent<Rigidbody>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -22,13 +29,33 @@ public class PlayerTeleport : MonoBehaviour {
         if(Input.GetButtonDown("Fire2"))
         {
             m_instanceOfSpotlight = Instantiate(spotlight, target.transform.position, Quaternion.Euler(90 ,0, 0));
+
+
         }
 
         // Teleport and remove indicator
 	    if (Input.GetButtonUp("Fire2"))
         {
-            lerpObject.beginLerp();
+            // Check for collision with raycast.
+            RaycastHit hit = new RaycastHit();
+            if (m_raycaster.doRaycast(out hit))
+            {
+                m_lerpObject.beginLerp(hit.point);
+            }
+
+           // m_lerpObject.beginLerp();
             Destroy(m_instanceOfSpotlight);
         }
 	}
+
+
+    void OnCollisionStay(Collision collision)
+    {
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            print(contact.thisCollider.name + " hit " + contact.otherCollider.name);
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
+    }
+
 }
