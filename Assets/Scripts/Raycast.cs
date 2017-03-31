@@ -5,27 +5,31 @@ public class Raycast : MonoBehaviour {
 
     public Transform raySource;
     public float maxDistance;
+    public int[] castingLayers;
 
     private RaycastHit hit;
+    private int layerMask = 0;
 
-	// Use this for initialization
-	void Start () {
-    	
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    void Start()
     {
-
-        //if (Physics.Raycast()) // Ray ray, out hit, float maxDistance, int layerMask
-        doRaycast();
+        // Create the layermask  for the layers on which the ray should be casted.
+        for (int i = 0; i < castingLayers.Length; i++)
+        {
+            layerMask += (int)Mathf.Pow(2, castingLayers[i]);
+        }
     }
 
-    void doRaycast()
+    // Raycast from source and forward a set distance. Returns true if ray hits a collider
+    bool doRaycast(RaycastHit inHit)
     {
         Ray ray = new Ray(raySource.position, raySource.forward);
 
-        if (Physics.Raycast(ray, out hit, maxDistance, 1))
-            Debug.DrawRay(ray.origin, ray.direction);
+        if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
+        {
+            Debug.DrawLine(ray.origin, hit.point, Color.red);
+            inHit = hit;
+            return true;
+        }
+        return false;
     }
 }
