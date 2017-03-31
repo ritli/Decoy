@@ -41,7 +41,6 @@ public class PlayerTeleport : MonoBehaviour {
                 m_lerpObject.beginLerp(hit.point);
             }
 
-           // m_lerpObject.beginLerp();
             Destroy(m_instanceOfSpotlight);
         }
 	}
