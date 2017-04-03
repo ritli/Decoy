@@ -1,0 +1,8 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class Tags : MonoBehaviour {
+
+    //Add your tags here and use these instead of writing manually
+    public static string player = "Player";
+}
