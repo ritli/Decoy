@@ -15,6 +15,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private float m_WalkSpeed;
         [Header("Jump Variables")]
         [SerializeField] private float m_JumpForce;
+        [SerializeField] private float m_JumpAirVelDecay;
+        [SerializeField] private float m_JumpAirControl;
+
         [SerializeField] private float m_StickToGroundForce;
         [SerializeField] private float m_GravityMultiplier;
         [SerializeField] private MouseLook m_MouseLook;
@@ -43,6 +46,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private AudioSource m_AudioSource;
         private float m_speedWindup;
         private Vector2 m_lastInput;
+        private Vector3 m_jumpVector;
+        private Vector3 m_jumpVectorR;
 
         // Use this for initialization
         private void Start()
@@ -109,15 +114,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             if (m_Jumping)
             {
-                Input = m_lastInput * 0.95f;
+                Input = m_lastInput;
+                m_speedWindup -= m_JumpAirVelDecay;
             }
 
             //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
-            if (m_Jumping)
-            {
-                //Do nothing
-            }
-
             else if (m_Input.magnitude > 0)
             {
                 m_speedWindup += m_WindupScale;
@@ -135,6 +136,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             //Always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
+            if (m_Jumping)
+            {
+                desiredMove = m_jumpVector;
+                m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+
+                //  * Input.y + m_jumpVectorR * Input.x;
+                //desiredMove = Vector3.Lerp(desiredMove, transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl, m_JumpAirControl);
+            }
+
             //Get a normal for the surface that is being touched to move along it
             RaycastHit hitInfo;
             Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo, m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
@@ -147,13 +157,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (m_CharacterController.isGrounded)
             {
                 m_MoveDir.y = -m_StickToGroundForce;
-
+                
                 if (m_Jump)
                 {
+                    m_jumpVector = transform.forward;
+                    m_jumpVectorR = transform.right;
                     m_MoveDir.y = m_JumpForce;
                     m_Jump = false;
                     m_Jumping = true;
                 }
+
             }
             else
             {
@@ -164,7 +177,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             UpdateCameraPosition(speed);
 
-             m_MouseLook.UpdateCursorLock();
+            m_MouseLook.UpdateCursorLock();
 
             m_lastInput = Input; //Stores last input to determine if player has released the key.
         }
@@ -186,7 +199,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void RotateView()
         {
-            m_MouseLook.LookRotation (transform, m_Camera.transform);
+            m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
         }
 
         private void PlayLandingSound()
