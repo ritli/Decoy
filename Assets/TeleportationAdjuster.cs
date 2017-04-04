@@ -3,20 +3,25 @@ using System.Collections;
 
 public class TeleportationAdjuster : MonoBehaviour {
 
-    public float threshold;
+    public float distance;
 
     private Vector3 m_offset;
 
     void OnCollisionStay(Collision terrain)
     {
-        Vector3 averageDirection = new Vector3();
-        foreach(ContactPoint contact in terrain.contacts)
+
+        if (terrain.transform.tag != "Player")
         {
-            Debug.DrawRay(contact.point, contact.normal * 10, Color.cyan);
-            averageDirection += contact.normal;
+            Vector3 averageDirection = new Vector3();
+            foreach (ContactPoint contact in terrain.contacts)
+            {
+                averageDirection += contact.normal;
+            }
+            
+            averageDirection /= terrain.contacts.Length;
+            Debug.DrawRay(terrain.contacts[0].point, averageDirection*10, Color.magenta);
+            m_offset = averageDirection * distance; 
         }
-        averageDirection /= terrain.contacts.Length;
-        m_offset = averageDirection * threshold;
     }
 
     //void OnCollisionExit()
