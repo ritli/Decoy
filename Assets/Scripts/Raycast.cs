@@ -12,6 +12,10 @@ public class Raycast : MonoBehaviour {
 
     void Start()
     {
+        if(raySource == null)
+        {
+            raySource = GetComponent<Transform>();
+        }
         // Create the layermask for the layers on which the ray should be casted.
         for (int i = 0; i < castingLayers.Length; i++)
         {
