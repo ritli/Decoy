@@ -32,6 +32,9 @@ GameObject:
   - 114: {fileID: 11439354}
   - 23: {fileID: 2396706}
   - 33: {fileID: 3350406}
+  - 114: {fileID: 11461662}
+  - 114: {fileID: 11455636}
+  - 114: {fileID: 11475678}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -243,6 +246,8 @@ MonoBehaviour:
   m_WindupScale: 0.05
   m_WalkSpeed: 10
   m_JumpForce: 5
+  m_JumpAirVelDecay: 0
+  m_JumpAirControl: 0
   m_StickToGroundForce: 0.3
   m_GravityMultiplier: 2
   m_MouseLook:
@@ -313,6 +318,47 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
   m_LandSound: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
+--- !u!114 &11455636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b58b312ff93968448d7a9b16016655b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 8
+  m_Origin: {fileID: 0}
+  m_thresholdDistance: 1
+--- !u!114 &11461662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b1745d408f43f47a95bcc8b56aa7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportTarget: {fileID: 170318, guid: adab26881bb1ae84e889364f72038e2a, type: 2}
+  teleportDistance: 14
+--- !u!114 &11475678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbba7cc5ce837494d98a1b6d11337944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raySource: {fileID: 453968}
+  maxDistance: 14
+  castingLayers: 00000000
 --- !u!124 &12441502
 Behaviour:
   m_ObjectHideFlags: 1
