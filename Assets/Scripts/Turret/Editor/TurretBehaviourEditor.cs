@@ -6,9 +6,11 @@ public class TurretBehaviourEditor : Editor
 {
     SerializedProperty viewDistance;
     SerializedProperty fieldOfView;
+    SerializedProperty turretState;
     Vector3 left, right;
     void OnEnable()
     {
+        turretState = serializedObject.FindProperty("turretState");
         viewDistance = serializedObject.FindProperty("viewDistance");
         fieldOfView = serializedObject.FindProperty("fieldOfView");
 
@@ -19,6 +21,7 @@ public class TurretBehaviourEditor : Editor
         //base.OnInspectorGUI();
         serializedObject.Update();
         //Add the fields to the editor
+        EditorGUILayout.PropertyField(turretState);
         EditorGUILayout.PropertyField(fieldOfView);
         EditorGUILayout.PropertyField(viewDistance);
         //apply values

@@ -4,8 +4,9 @@ using System.Collections;
 public class TurretBehaviour : MonoBehaviour
 {
 
-    enum TurretState { isIdle, isTargeting, isFiring };
-    TurretState m_TurretState = TurretState.isIdle;
+    public enum TurretState { isIdle, isTargeting, isFiring };
+    
+    public TurretState turretState;// = TurretState.isIdle;
     [HideInInspector]
     public float fieldOfView = 10;
     [HideInInspector]
@@ -20,29 +21,37 @@ public class TurretBehaviour : MonoBehaviour
     /*Change to object Managers reference of player*/
     GameObject m_Player;
 
+
+    RaycastHit hit;
     // Use this for initialization
     void Start()
     {
+        m_LookAt = GetComponent<LookAt>();
         m_FOVDrawer = GetComponent<FOVDrawer>();
         m_Raycast = GetComponent<Raycast>();
         m_Player = GameObject.FindGameObjectWithTag(Tags.player);
+        turretState = TurretState.isIdle;
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_TurretState = decideState();
+        turretState = decideState();
 
-        switch (m_TurretState)
+        switch (turretState)
         {
             case TurretState.isIdle:
-
+                if(m_LookAt.m_MovingAim)
+                m_LookAt.lookAtWaypoint();
                 break;
             case TurretState.isTargeting:
+
+                    m_LookAt.lookAtPosition(m_Player.transform.position);
 
                 break;
             case TurretState.isFiring:
 
+                    m_LookAt.lookAtPosition(m_Player.transform.position);
                 break;
         }
     }
@@ -56,7 +65,7 @@ public class TurretBehaviour : MonoBehaviour
         //decide if player is inside FoV
         if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < fieldOfView / 2)
         {
-            RaycastHit hit;
+
             //decide if view is obstructed with raycast
             if (m_Raycast.doRaycast(out hit, direction) && hit.transform.gameObject.tag == Tags.player)
                 return true;
@@ -70,9 +79,10 @@ public class TurretBehaviour : MonoBehaviour
         if(isPlayerVisible())
         {
             //check if player can be fired at. if yes, initiate fire. Else, target player
-            RaycastHit hit;
-            if(m_Raycast.doRaycast(out hit, transform.forward) && hit.transform.gameObject.tag == Tags.player)
+
+            if(m_Raycast.doRaycast(out hit, transform.forward))
             {
+                if( hit.transform.gameObject.tag == Tags.player)
                 return TurretState.isFiring;
             }
             return TurretState.isTargeting;
