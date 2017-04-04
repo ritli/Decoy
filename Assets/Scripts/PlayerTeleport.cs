@@ -51,15 +51,17 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 m_instanceOfteleportTarget.transform.position = transform.position + m_playerCamera.transform.forward * teleportDistance;
             }
+            Debug.DrawRay(m_instanceOfteleportTarget.transform.position, m_teleportAdjuster.getOffset() * 10);
             m_instanceOfteleportTarget.transform.position += m_teleportAdjuster.getOffset();
 
-            print(m_teleportAdjuster.getOffset());
+            //print(m_teleportAdjuster.getOffset());
         }
 
         // Move towards target when releasing button
 	    if (Input.GetButtonUp("Teleport"))
         {
             m_lerpObject.beginLerp(m_instanceOfteleportTarget.transform.position);
+            m_teleportAdjuster.clearCollisions();
             m_instanceOfteleportTarget.SetActive(false);
         }
 	}
