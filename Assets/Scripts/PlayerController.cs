@@ -4,22 +4,30 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 
-namespace UnityStandardAssets.Characters.FirstPerson
-{
+
     [RequireComponent(typeof (CharacterController))]
     [RequireComponent(typeof (AudioSource))]
     public class PlayerController : MonoBehaviour
     {
+        //Run vars
         [Header("Walk Variables")]
+        [Tooltip("For every fixed update the speed multiplier is increased or decreased by this value based on if you are starting or ending a movement.")]
         [SerializeField] private float m_WindupScale;
         [SerializeField] private float m_WalkSpeed;
+        //Jump vars
         [Header("Jump Variables")]
         [SerializeField] private float m_JumpForce;
+        [Tooltip("For every fixed update the speed multiplier is decreased by this value while airborne.")]
+        [Range(0, 0.1f)]
         [SerializeField] private float m_JumpAirVelDecay;
+        [Tooltip("How much of WASD movement is applied when airborne. (0 = 0%, 1 = 100%)")]
+        [Range(0,1)]
         [SerializeField] private float m_JumpAirControl;
-
+        //Gravity vars
+        [Header("Gravity Variables")]
         [SerializeField] private float m_StickToGroundForce;
         [SerializeField] private float m_GravityMultiplier;
+
         [SerializeField] private MouseLook m_MouseLook;
         [SerializeField] private bool m_UseFovKick;
         [SerializeField] private FOVKick m_FovKick = new FOVKick();
@@ -49,7 +57,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Vector3 m_jumpVector;
         private Vector3 m_jumpVectorR;
 
-        // Use this for initialization
         private void Start()
         {
             m_CharacterController = GetComponent<CharacterController>();
@@ -70,11 +77,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             RotateView();
             // the jump state needs to read here to make sure it is not missed
-
             Jump();
-
-            print(m_PreviouslyGrounded);
-
+        
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
 
@@ -112,6 +116,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             //Based on if player is pressing WASD or not, input is either the last input or current input to properly decay movement after release
             Vector2 Input = m_speedWindup > 0 && m_Input.magnitude < 0.1f ? m_lastInput : m_Input;
 
+            //If player jumps the last input he pressed is stored and applied until he lands again
             if (m_Jumping)
             {
                 Input = m_lastInput;
@@ -127,9 +132,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_speedWindup -= m_WindupScale;
             }
-
+            //Clamps the multiplier between 0-1
             m_speedWindup = Mathf.Clamp01(m_speedWindup);
-
 
             speed = m_WalkSpeed * m_speedWindup;
 
@@ -154,6 +158,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.x = desiredMove.x * speed;
             m_MoveDir.z = desiredMove.z * speed;
 
+            //If player is not on ground
             if (m_CharacterController.isGrounded)
             {
                 m_MoveDir.y = -m_StickToGroundForce;
@@ -271,7 +276,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Camera.transform.localPosition = newCameraPosition;
         }
 
-
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             Rigidbody body = hit.collider.attachedRigidbody;
@@ -288,4 +292,4 @@ namespace UnityStandardAssets.Characters.FirstPerson
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
         }
     }
-}
+
