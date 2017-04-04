@@ -73,7 +73,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             Jump();
 
-            print(m_PreviouslyGrounded);
+            //print(m_PreviouslyGrounded);
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }

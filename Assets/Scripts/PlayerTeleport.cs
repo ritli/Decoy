@@ -38,25 +38,22 @@ public class PlayerTeleport : MonoBehaviour {
         
         
         // Create visual indicator of where to teleport
-        if(Input.GetButtonDown("Teleport"))
+        if(Input.GetButton("Teleport"))
         {
             m_instanceOfteleportTarget.SetActive(true);
 
             // Set the target to the point of collision if ray hit, otherwise target is at set distance from player
             if (m_raycaster.doRaycast(out m_rayHit))
             {
-                m_instanceOfteleportTarget.transform.position = m_rayHit.point;
+                m_instanceOfteleportTarget.transform.position = m_rayHit.point + m_teleportAdjuster.getOffset();
             }
             else
             {
-                m_instanceOfteleportTarget.transform.position = transform.position + m_playerCamera.transform.forward * teleportDistance;
+                m_instanceOfteleportTarget.transform.position = transform.position + m_playerCamera.transform.forward * teleportDistance + m_teleportAdjuster.getOffset() * 2;
             }
-        }
+            //m_instanceOfteleportTarget.transform.position = m_instanceOfteleportTarget.transform.position ;
 
-        // Adjusts the target to where the aim is
-        if (Input.GetButton("Teleport"))
-        {
-            m_teleportAdjuster.adjustToAim(transform.position + m_playerCamera.transform.forward * teleportDistance);
+            print(m_teleportAdjuster.getOffset());
         }
 
         // Move towards target when releasing button

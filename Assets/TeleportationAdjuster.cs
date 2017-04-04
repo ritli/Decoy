@@ -5,6 +5,8 @@ public class TeleportationAdjuster : MonoBehaviour {
 
     public float threshold;
 
+    private Vector3 m_offset;
+
     void OnCollisionStay(Collision terrain)
     {
         Vector3 averageDirection = new Vector3();
@@ -14,12 +16,18 @@ public class TeleportationAdjuster : MonoBehaviour {
             averageDirection += contact.normal;
         }
         averageDirection /= terrain.contacts.Length;
-        transform.position += averageDirection * threshold;
+        m_offset = averageDirection * threshold;
     }
 
-    public void adjustToAim(Vector3 position)
+    //void OnCollisionExit()
+    //{
+    //    m_offset = Vector3.zero;
+    //    print("Exit");
+    //}
+
+    public Vector3 getOffset()
     {
-        transform.position = position;
+        return m_offset;
     }
 
 }
