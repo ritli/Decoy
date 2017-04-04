@@ -33,6 +33,8 @@ GameObject:
   - 23: {fileID: 2396706}
   - 33: {fileID: 3350406}
   - 114: {fileID: 11405990}
+  - 114: {fileID: 11489396}
+  - 114: {fileID: 11425924}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -93,7 +95,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 5.8829, y: 1.5, z: -2.8901153}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -324,6 +326,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teleportTarget: {fileID: 154494}
+  teleportDistance: 10.15
+--- !u!114 &11425924
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b58b312ff93968448d7a9b16016655b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  m_Origin: {fileID: 0}
+  m_thresholdDistance: 1.52
 --- !u!114 &11439354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -421,6 +438,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668b5da58e8dc15459fa86cd7799bd2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threshold: 0.18
+--- !u!114 &11489396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbba7cc5ce837494d98a1b6d11337944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raySource: {fileID: 487950}
+  maxDistance: 10
+  castingLayers: 01000000
 --- !u!124 &12441502
 Behaviour:
   m_ObjectHideFlags: 1
