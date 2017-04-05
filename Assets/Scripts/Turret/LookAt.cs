@@ -4,7 +4,7 @@ using System.Collections;
 public class LookAt : MonoBehaviour 
 {
     public Transform[] waypoints;
-    public bool m_MovingAim;
+    bool m_MovingAim;
     public float speed;
     Vector3 target;
     Vector3 direction;
@@ -12,7 +12,8 @@ public class LookAt : MonoBehaviour
 
     int waypointIndex = 0;
     float timeSinceChange = 0;
-    public float timebetweenChange;
+    public float inspectTime;
+
 	// Use this for initialization
 	void Start () 
     {
@@ -41,7 +42,7 @@ public class LookAt : MonoBehaviour
     void updateWaypointIndex()
     {
         timeSinceChange += Time.deltaTime;
-        if (timeSinceChange >= timebetweenChange && !m_MovingAim)
+        if (timeSinceChange >= inspectTime && !m_MovingAim)
         {
             timeSinceChange = 0;
             if(waypoints.Length-1 <= waypointIndex)
@@ -67,5 +68,8 @@ public class LookAt : MonoBehaviour
     {
         lookAtPosition(waypoints[waypointIndex].position);
     }
-
+    public bool isMovingAim()
+    {
+        return m_MovingAim;
+    }
 }

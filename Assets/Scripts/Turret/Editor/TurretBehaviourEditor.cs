@@ -4,15 +4,22 @@ using UnityEditor;
 [CustomEditor(typeof(TurretBehaviour))]
 public class TurretBehaviourEditor : Editor
 {
+    [Range(0, 300)]
     SerializedProperty viewDistance;
+    [Range(0,180)]
     SerializedProperty fieldOfView;
     SerializedProperty turretState;
+
+    SerializedProperty lightAngleOffset;
+
     Vector3 left, right;
     void OnEnable()
     {
+        lightAngleOffset = serializedObject.FindProperty("lightAngleOffset");
         turretState = serializedObject.FindProperty("turretState");
         viewDistance = serializedObject.FindProperty("viewDistance");
         fieldOfView = serializedObject.FindProperty("fieldOfView");
+        
 
     }
     public override void OnInspectorGUI()
@@ -24,6 +31,7 @@ public class TurretBehaviourEditor : Editor
         EditorGUILayout.PropertyField(turretState);
         EditorGUILayout.PropertyField(fieldOfView);
         EditorGUILayout.PropertyField(viewDistance);
+        EditorGUILayout.PropertyField(lightAngleOffset);
         //apply values
         serializedObject.ApplyModifiedProperties();
 

@@ -16,8 +16,9 @@ public class TurretBehaviour : MonoBehaviour
     LookAt m_LookAt;
     TurretFirepower m_TurretFirepower;
     FOVDrawer m_FOVDrawer;
+    public float lightAngleOffset;
 
-
+    Light foVLight;
     /*Change to object Managers reference of player*/
     GameObject m_Player;
 
@@ -26,6 +27,7 @@ public class TurretBehaviour : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        foVLight = GetComponentInChildren<Light>();
         m_LookAt = GetComponent<LookAt>();
         m_FOVDrawer = GetComponent<FOVDrawer>();
         m_Raycast = GetComponent<Raycast>();
@@ -36,12 +38,15 @@ public class TurretBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        m_Raycast.maxDistance = viewDistance;
+        foVLight.spotAngle = fieldOfView + lightAngleOffset;
+        foVLight.range = viewDistance * 0.7f;
         turretState = decideState();
 
         switch (turretState)
         {
             case TurretState.isIdle:
-                if(m_LookAt.m_MovingAim)
+                if(m_LookAt.isMovingAim())
                 m_LookAt.lookAtWaypoint();
                 break;
             case TurretState.isTargeting:
