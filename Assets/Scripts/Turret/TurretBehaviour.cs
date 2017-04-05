@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class TurretBehaviour : MonoBehaviour
 {
-
+    
     public enum TurretState { isIdle, isTargeting, isFiring };
     
     public TurretState turretState;// = TurretState.isIdle;
@@ -63,6 +64,7 @@ public class TurretBehaviour : MonoBehaviour
 
     bool isPlayerVisible()
     {
+        
         //Calculate direction to the player
         Vector3 direction = m_Player.transform.position - transform.position;
         direction.Normalize();
