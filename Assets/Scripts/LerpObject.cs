@@ -7,7 +7,6 @@ public class LerpObject : MonoBehaviour
     public float speed = 0;
     [Header("Uses this tranform if none is specified for origin.")]
     public Transform m_Origin;
-    public Transform m_Aim;
     private Vector3 m_Target;
     bool targetReached = true;
     public float m_thresholdDistance;
@@ -24,21 +23,23 @@ public class LerpObject : MonoBehaviour
     {
         if (!targetReached)
         {
-            print(speed);
-
             transform.position = Vector3.Lerp(transform.position, m_Target, speed * Time.deltaTime);
 
             if(Vector3.Distance(m_Origin.position, m_Target) < m_thresholdDistance)
             {
-                print("yes");
                 targetReached = true;
             }
         }
  
 	}
-    public void beginLerp()
+    public void beginLerp(Vector3 newTarget)
     {
-        m_Target = m_Aim.position;
+        m_Target = newTarget;
         targetReached = false;
+    }
+
+    public bool isTargetReached()
+    {
+        return targetReached;
     }
 }
