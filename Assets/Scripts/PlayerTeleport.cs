@@ -51,6 +51,7 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_raycaster.doRaycast(out m_rayHit))
             {
                 m_instanceOfteleportTarget.transform.position = m_rayHit.point;
+                Debug.DrawRay(m_rayHit.point, m_rayHit.normal * 10, Color.red);
             }
             else
             {
@@ -58,6 +59,7 @@ public class PlayerTeleport : MonoBehaviour {
             }
             Debug.DrawRay(m_instanceOfteleportTarget.transform.position, m_teleportAdjuster.getOffset() * 10);
             m_teleportPosition.transform.position = m_instanceOfteleportTarget.transform.position + m_teleportAdjuster.getOffset();
+            //m_instanceOfteleportTarget.transform.position += m_teleportAdjuster.getOffset();
 
             //print(m_teleportAdjuster.getOffset());
         }
@@ -65,7 +67,7 @@ public class PlayerTeleport : MonoBehaviour {
         // Move towards target when releasing button
 	    if (Input.GetButtonUp("Teleport"))
         {
-            m_lerpObject.beginLerp(m_teleportPosition.transform.position);
+            m_lerpObject.beginLerp(m_instanceOfteleportTarget.transform.position);
             m_teleportAdjuster.clearCollisions();
             m_instanceOfteleportTarget.SetActive(false);
             m_teleportPosition.SetActive(false);
