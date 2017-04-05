@@ -6,26 +6,47 @@ public class Indicator : MonoBehaviour {
     PlayerController m_player;
     public GameObject m_indi;
     float m_playerLength = 3f;
+    private bool m_cancelTeleport = false;
+    private bool ableToTeleport = true;
+    private Timer m_cooldownTimer;
 
     public float m_length;
 
 	void Start ()
     {
+        m_cooldownTimer = GetComponent<Timer>();
         m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
     }
-	
+
+    // Handle input for teleportation controls.
 	void Update () {
 
         if (Input.GetButton("Teleport"))
         {
-
-            ShowIndicator();
+            if (!m_cancelTeleport)
+            {
+                ShowIndicator();
+            }
         }
         if (Input.GetButtonUp("Teleport"))
         {
+            if (!m_cancelTeleport)
+            {
+                m_indi.SetActive(false);
+                transform.position = m_indi.transform.position;
+                m_cooldownTimer.resetTimer();
+            }
+            else
+                m_cancelTeleport = false;
+        }
+
+        // WHen right clicking, cancel teleportation.
+        if (Input.GetButtonDown("CancelTeleport"))
+        {
+            m_cancelTeleport = true;
             m_indi.SetActive(false);
-            transform.position = m_indi.transform.position;
+            m_cooldownTimer.resetTimer();
         }
     }
 
@@ -44,7 +65,7 @@ public class Indicator : MonoBehaviour {
 
         RaycastHit hit = new RaycastHit();
 
-        //Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
+        Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
 
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
