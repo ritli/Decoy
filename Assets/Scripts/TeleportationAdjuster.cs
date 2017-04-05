@@ -12,6 +12,7 @@ public class TeleportationAdjuster : MonoBehaviour {
     /*
      * Separat kollision och visuell
      * Flytta endast det visuella i riktningen av kontaktens normaler
+     * Räkna ut offset baserat på normalerna då den hämtas av playerteleport
      */
 
     void Start()
@@ -27,11 +28,6 @@ public class TeleportationAdjuster : MonoBehaviour {
             removeCollision(terrain);
             m_collisions.Add(terrain);
         }
-    }
-
-    void Update()
-    {
-        recaculcateNormal();
     }
 
     private void recaculcateNormal()
@@ -51,6 +47,7 @@ public class TeleportationAdjuster : MonoBehaviour {
         {
             averageNormal /= nrOfNormals;
         }
+        averageNormal.Normalize();
 
         averageNormal.x *= m_width;
         averageNormal.z *= m_width;
@@ -75,6 +72,7 @@ public class TeleportationAdjuster : MonoBehaviour {
 
     public Vector3 getOffset()
     {
+        recaculcateNormal();
         return m_offset;
     }
 

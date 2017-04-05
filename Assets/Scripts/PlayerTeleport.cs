@@ -13,6 +13,7 @@ public class PlayerTeleport : MonoBehaviour {
     private LerpObject m_lerpObject;
     private TeleportationAdjuster m_teleportAdjuster;
     private GameObject m_instanceOfteleportTarget;
+    private GameObject m_teleportPosition;
     private Raycast m_raycaster;
     private Camera m_playerCamera;
     private Rigidbody m_rigidbody;
@@ -20,6 +21,7 @@ public class PlayerTeleport : MonoBehaviour {
 
     // Parametersssz yes
     public GameObject teleportTarget;
+    public GameObject visualTarget;
     public float teleportDistance;
 
     void Start() {
@@ -32,6 +34,8 @@ public class PlayerTeleport : MonoBehaviour {
         m_instanceOfteleportTarget.SetActive(false);
         m_raycaster.maxDistance = teleportDistance;
         m_teleportAdjuster = m_instanceOfteleportTarget.GetComponent<TeleportationAdjuster>();
+        m_teleportPosition = Instantiate(visualTarget);
+        m_teleportPosition.SetActive(false);
     }
 	// Update is called once per frame
 	void Update () {
@@ -41,6 +45,7 @@ public class PlayerTeleport : MonoBehaviour {
         if(Input.GetButton("Teleport"))
         {
             m_instanceOfteleportTarget.SetActive(true);
+            m_teleportPosition.SetActive(true);
 
             // Set the target to the point of collision if ray hit, otherwise target is at set distance from player
             if (m_raycaster.doRaycast(out m_rayHit))
@@ -52,7 +57,7 @@ public class PlayerTeleport : MonoBehaviour {
                 m_instanceOfteleportTarget.transform.position = transform.position + m_playerCamera.transform.forward * teleportDistance;
             }
             Debug.DrawRay(m_instanceOfteleportTarget.transform.position, m_teleportAdjuster.getOffset() * 10);
-            m_instanceOfteleportTarget.transform.position += m_teleportAdjuster.getOffset();
+            m_teleportPosition.transform.position = m_instanceOfteleportTarget.transform.position + m_teleportAdjuster.getOffset();
 
             //print(m_teleportAdjuster.getOffset());
         }
@@ -60,9 +65,10 @@ public class PlayerTeleport : MonoBehaviour {
         // Move towards target when releasing button
 	    if (Input.GetButtonUp("Teleport"))
         {
-            m_lerpObject.beginLerp(m_instanceOfteleportTarget.transform.position);
+            m_lerpObject.beginLerp(m_teleportPosition.transform.position);
             m_teleportAdjuster.clearCollisions();
             m_instanceOfteleportTarget.SetActive(false);
+            m_teleportPosition.SetActive(false);
         }
 	}
 
