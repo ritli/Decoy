@@ -31,18 +31,13 @@ public class TeleportationAdjuster : MonoBehaviour {
         }
         averageDirection /= collision.contacts.Length;
 
-        averageDirection.Normalize();
+        //averageDirection.Normalize();
 
         averageDirection.x *= m_width;
         averageDirection.z *= m_width;
         averageDirection.y *= m_height;
 
         m_offset = averageDirection;
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        
     }
 
     //void OnCollisionStay(Collision terrain)
