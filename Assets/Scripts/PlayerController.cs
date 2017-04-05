@@ -6,10 +6,19 @@ using Random = UnityEngine.Random;
 
 
 
+
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
 public class PlayerController : MonoBehaviour
 {
+    //Decoy event
+    public delegate void DecoyAction();
+    public static event DecoyAction OnCreateDecoy;
+
+    //Decoy vars
+    public GameObject m_decoy;
+
+
     //Run vars
     [Header("Walk Variables")]
     [Tooltip("For every fixed update the speed multiplier is increased or decreased by this value based on if you are starting or ending a movement.")]
@@ -74,6 +83,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    void CreateDecoy()
+    {
+        GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
+
+        GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+
+        if (OnCreateDecoy != null)
+        {
+            OnCreateDecoy();
+        }
+    }
 
     // Update is called once per frame
     private void Update()

@@ -36,6 +36,21 @@ public class TurretBehaviour : MonoBehaviour
         turretState = TurretState.isIdle;
     }
 
+    void OnEnable()
+    {
+        PlayerController.OnCreateDecoy += SetDecoy;
+    }
+    void OnDisable()
+    {
+        PlayerController.OnCreateDecoy -= SetDecoy;
+    }
+
+    void SetDecoy()
+    {
+        //set the decoy
+        GameManager.GetDecoy();
+    }
+
     // Update is called once per frame
     void Update()
     {
