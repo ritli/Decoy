@@ -16,7 +16,6 @@ public class TurretBehaviour : MonoBehaviour
     Raycast m_Raycast;
     LookAt m_LookAt;
     TurretFirepower m_TurretFirepower;
-    FOVDrawer m_FOVDrawer;
     public float lightAngleOffset;
 
     Light foVLight;
@@ -30,7 +29,6 @@ public class TurretBehaviour : MonoBehaviour
     {
         foVLight = GetComponentInChildren<Light>();
         m_LookAt = GetComponent<LookAt>();
-        m_FOVDrawer = GetComponent<FOVDrawer>();
         m_Raycast = GetComponent<Raycast>();
         m_Player = GameObject.FindGameObjectWithTag(Tags.player);
         turretState = TurretState.isIdle;
