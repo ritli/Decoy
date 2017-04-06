@@ -12,9 +12,16 @@ public class TurretBehaviour : MonoBehaviour
     //[HideInInspector]
     public float viewDistance = 10;
     public float lightAngleOffset;
+    float m_currentAngle;
+    public float m_narrowAngle = 5f;
+    float m_narrowSpeed = 1f;
+    float m_narrowTime = 0f;
+    float m_wideTime = 0f;
 
     public float m_timeToKill = 3;
     float m_timeToKillElapsed = 0;
+
+    ParticleSystem m_fireParticles;
 
     IKillable m_Target;
 
@@ -29,10 +36,14 @@ public class TurretBehaviour : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        m_currentAngle = fieldOfView;
         m_FoVLight = GetComponentInChildren<Light>();
         m_LookAt = GetComponent<LookAt>();
         m_Raycast = GetComponent<Raycast>();
         turretState = TurretState.isIdle;
+        m_fireParticles = GetComponentInChildren<ParticleSystem>();
+        m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
+
     }
 
     void OnEnable()
@@ -55,9 +66,8 @@ public class TurretBehaviour : MonoBehaviour
     {
         //Update values if changed in editor
         m_Raycast.maxDistance = viewDistance;
-        m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
-        m_FoVLight.range = viewDistance * 0.7f;
         
+        m_FoVLight.range = viewDistance * 1.5f;
         
         turretState = decideState();
 
@@ -65,12 +75,21 @@ public class TurretBehaviour : MonoBehaviour
         {
             case TurretState.isIdle:
 
+                m_FoVLight.spotAngle = Mathf.Lerp(m_narrowAngle, fieldOfView, m_wideTime);
+                m_narrowTime = 0;
+                m_wideTime += Time.deltaTime * m_narrowSpeed * 2;
+
                 if (m_LookAt.isMovingAim())
                 { 
                     m_LookAt.lookAtWaypoint();
                 }
                 break;
             case TurretState.isTargeting:
+
+                m_FoVLight.spotAngle = Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime);
+                m_wideTime = 0f;
+                print(Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime));
+                m_narrowTime += Time.deltaTime * m_narrowSpeed;
 
                 //Reset timer
                 m_timeToKillElapsed = 0;
@@ -80,13 +99,15 @@ public class TurretBehaviour : MonoBehaviour
 
                 break;
             case TurretState.isFiring:
-                
+
+
                 aimAtTarget();
 
                 //Run timer until player is killed.
                 if (m_timeToKillElapsed > m_timeToKill) 
                 {
                     m_Target.Kill();
+                    m_fireParticles.Emit(20);
                 }
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;

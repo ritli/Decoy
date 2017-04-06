@@ -14,4 +14,9 @@ public class ExplosionEvent : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void Explode()
+    {
+
+    }
 }
