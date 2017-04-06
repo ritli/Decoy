@@ -4,12 +4,9 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 
-
-
-
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IKillable
 {
     //Decoy event
     public delegate void DecoyAction();
@@ -17,7 +14,6 @@ public class PlayerController : MonoBehaviour
 
     //Decoy vars
     public GameObject m_decoy;
-
 
     //Run vars
     [Header("Walk Variables")]
@@ -67,7 +63,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
-   
+    private bool m_controlsEnabled;
+    private bool m_alive;
+
     private void Start()
     {
         m_CharacterController = GetComponent<CharacterController>();
@@ -83,6 +81,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void Kill()
+    {
+        m_alive = false;
+        m_controlsEnabled = false;
+    }
 
     void CreateDecoy()
     {
