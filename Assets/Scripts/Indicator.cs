@@ -11,8 +11,14 @@ public class Indicator : MonoBehaviour {
     private Timer m_cooldownTimer;
 
     public float m_length;
+    [Header("Reset the timer after canceling teleport:")]
     public bool resetTimeOnCancel = false;
+    [Header("Overrides the value of timer.")]
     public float teleportCooldown = 0.0f;
+    public float teleportSpeed = 1.0f;
+
+    private Vector3 m_teleportTo = new Vector3(0,0,0);
+    private bool m_arrived = true;
 
 	void Start ()
     {
@@ -23,9 +29,25 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer.forwardTime(teleportCooldown);
     }
 
+    private void moveTo(Vector3 target)
+    {
+        m_teleportTo = target;
+        m_arrived = false;
+    }
+
     // Handle input for teleportation controls.
 	void Update () {
-        
+
+        // Move towards target position set when letting go of the "Teleport" button.
+        if (!m_arrived)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
+
+            // When the players position has arrived, stop moving.
+            if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+                m_arrived = true;
+        }
+
         if (Input.GetButton("Teleport"))
         {
             if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
@@ -38,7 +60,7 @@ public class Indicator : MonoBehaviour {
             if (!m_cancelTeleport && m_indi.activeSelf)
             {
                 m_indi.SetActive(false);
-                transform.position = m_indi.transform.position;
+                moveTo(m_indi.transform.position);
                 m_cooldownTimer.resetTimer();
             }
             else
@@ -74,7 +96,7 @@ public class Indicator : MonoBehaviour {
 
         RaycastHit hit = new RaycastHit();
 
-        Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
+        //Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
 
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
