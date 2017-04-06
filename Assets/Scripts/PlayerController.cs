@@ -4,10 +4,19 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 
+public enum PlayerState
+{
+    isAlive, isDead, isPause
+} 
+
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
 public class PlayerController : MonoBehaviour, IKillable
 {
+    private bool m_controlsEnabled = true;
+
+    public PlayerState m_playerState = PlayerState.isAlive;
+
     //Decoy event
     public delegate void DecoyAction();
     public static event DecoyAction OnCreateDecoy;
@@ -63,8 +72,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
-    private bool m_controlsEnabled;
-    private bool m_alive;
 
     private void Start()
     {
@@ -83,8 +90,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
     public void Kill()
     {
-        m_alive = false;
+        m_playerState = PlayerState.isDead;
         m_controlsEnabled = false;
+
+        //Application.LoadLevel(0);
     }
 
     void CreateDecoy()
@@ -99,14 +108,35 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
+    void EndLevel()
+    {
+        Application.LoadLevel(0);
+    }
+
     // Update is called once per frame
     private void Update()
     {
-        RotateView();
-        // the jump state needs to read here to make sure it is not missed
-        Jump();
+        switch (m_playerState)
+        {
+            case PlayerState.isAlive:
+                    RotateView();
+                    // the jump state needs to read here to make sure it is not missed
+                    Jump();
         
-        m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                    m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                break;
+            case PlayerState.isDead:
+                Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
+
+                Invoke("EndLevel", 3f);
+                break;
+            case PlayerState.isPause:
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     void Jump()

@@ -69,7 +69,7 @@ public class TurretBehaviour : MonoBehaviour
 
                 break;
             case TurretState.isFiring:
-
+                    GameManager.GetPlayer().Kill();
                     m_LookAt.lookAtPosition(m_Player.transform.position);
                 break;
         }
