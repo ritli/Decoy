@@ -6,6 +6,7 @@ public class Indicator : MonoBehaviour {
     PlayerController m_player;
     public GameObject m_indi;
     float m_playerLength = 3f;
+    private Vector3 m_hitNormal;
 
     public float m_length;
 
@@ -48,10 +49,11 @@ public class Indicator : MonoBehaviour {
 
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
-            print(Vector3.Angle(hit.normal, Vector3.down));
+            //print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
+                m_hitNormal = hit.normal;
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
                 return;
             }
@@ -111,4 +113,10 @@ public class Indicator : MonoBehaviour {
 
         m_indi.transform.position = transform.position + playerLook;
     }
+
+    public Vector3 getHitNormal()
+    {
+        return m_hitNormal;
+    }
+
 }
