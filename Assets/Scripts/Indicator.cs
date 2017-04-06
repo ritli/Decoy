@@ -11,27 +11,31 @@ public class Indicator : MonoBehaviour {
     private Timer m_cooldownTimer;
 
     public float m_length;
+    public bool resetTimeOnCancel = false;
+    public float teleportCooldown = 0.0f;
 
 	void Start ()
     {
         m_cooldownTimer = GetComponent<Timer>();
         m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
+        m_cooldownTimer.setTimeout(teleportCooldown);
+        m_cooldownTimer.forwardTime(teleportCooldown);
     }
 
     // Handle input for teleportation controls.
 	void Update () {
-
+        
         if (Input.GetButton("Teleport"))
         {
-            if (!m_cancelTeleport)
+            if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
             {
                 ShowIndicator();
             }
         }
         if (Input.GetButtonUp("Teleport"))
         {
-            if (!m_cancelTeleport)
+            if (!m_cancelTeleport && m_indi.activeSelf)
             {
                 m_indi.SetActive(false);
                 transform.position = m_indi.transform.position;
@@ -44,9 +48,14 @@ public class Indicator : MonoBehaviour {
         // WHen right clicking, cancel teleportation.
         if (Input.GetButtonDown("CancelTeleport"))
         {
-            m_cancelTeleport = true;
-            m_indi.SetActive(false);
-            m_cooldownTimer.resetTimer();
+            if (m_indi.activeSelf)
+            {
+                m_cancelTeleport = true;
+                m_indi.SetActive(false);
+            }
+
+            if (resetTimeOnCancel)
+                m_cooldownTimer.resetTimer();
         }
     }
 
@@ -69,7 +78,7 @@ public class Indicator : MonoBehaviour {
 
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
-            print(Vector3.Angle(hit.normal, Vector3.down));
+            //print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
