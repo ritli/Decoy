@@ -20,12 +20,15 @@ public class Indicator : MonoBehaviour {
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
 	private LedgeDetection m_ledgeCollDetection;
+    private Raycast m_raycaster;
 
 	void Start ()
-	{
+    {
 		m_ledgeCollDetection = m_indi.GetComponentInChildren<LedgeDetection>();
 		m_ledgeCollDetection.gameObject.SetActive(false);
 		m_cooldownTimer = GetComponent<Timer>();
+        m_raycaster = GetComponent<Raycast>();
+        m_raycaster.setDistance(m_length);
         m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
@@ -89,7 +92,6 @@ public class Indicator : MonoBehaviour {
     {
         m_indi.SetActive(true);
 
-
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
 
@@ -102,7 +104,7 @@ public class Indicator : MonoBehaviour {
 
         Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
-        if (Physics.Raycast(rayForward, out hit, m_length))
+        if (m_raycaster.doRaycast(out hit))
         {
             //print(Vector3.Angle(hit.normal, Vector3.down));
 
