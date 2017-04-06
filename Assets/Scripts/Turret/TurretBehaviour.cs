@@ -7,10 +7,11 @@ public class TurretBehaviour : MonoBehaviour
     public enum TurretState { isIdle, isTargeting, isFiring };
     
     public TurretState turretState;// = TurretState.isIdle;
-    [HideInInspector]
+    //[HideInInspector]
     public float fieldOfView = 10;
-    [HideInInspector]
+    //[HideInInspector]
     public float viewDistance = 10;
+    public float lightAngleOffset;
 
     public float m_timeToKill = 3;
     float m_timeToKillElapsed = 0;
@@ -20,24 +21,21 @@ public class TurretBehaviour : MonoBehaviour
     Raycast m_Raycast;
     LookAt m_LookAt;
     TurretFirepower m_TurretFirepower;
-    public float lightAngleOffset;
+    
 
-    Light foVLight;
-    /*Change to object Managers reference of player*/
-    GameObject m_Player;
+    Light m_FoVLight;
 
     Decoy m_Decoy;
 
-    RaycastHit hit;
-    Vector3 m_lookAtTarget;
+    RaycastHit m_Hit;
+    Vector3 m_TargetPosition;
 
     // Use this for initialization
     void Start()
     {
-        foVLight = GetComponentInChildren<Light>();
+        m_FoVLight = GetComponentInChildren<Light>();
         m_LookAt = GetComponent<LookAt>();
         m_Raycast = GetComponent<Raycast>();
-        m_Player = GameObject.FindGameObjectWithTag(Tags.player);
         turretState = TurretState.isIdle;
     }
 
@@ -59,9 +57,12 @@ public class TurretBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update values if changed in editor
         m_Raycast.maxDistance = viewDistance;
-        foVLight.spotAngle = fieldOfView + lightAngleOffset;
-        foVLight.range = viewDistance * 0.7f;
+        m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
+        m_FoVLight.range = viewDistance * 0.7f;
+        
+        
         turretState = decideState();
 
         switch (turretState)
@@ -75,8 +76,10 @@ public class TurretBehaviour : MonoBehaviour
                 break;
             case TurretState.isTargeting:
 
+                //Reset timer
                 m_timeToKillElapsed = 0;
                 
+                //Continue to aim at target
                 aimAtTarget();
 
                 break;
@@ -84,18 +87,19 @@ public class TurretBehaviour : MonoBehaviour
                 
                 aimAtTarget();
 
+                //Run timer until player is killed.
                 if (m_timeToKillElapsed > m_timeToKill) 
                 {
                     m_Target.Kill();
                 }
-
+                //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
                 break;
         }
     }
     void aimAtTarget()
     {
-        m_LookAt.lookAtPosition(m_lookAtTarget);
+        m_LookAt.lookAtPosition(m_TargetPosition);
     }
     
     bool isObjectVisible(Transform objectTransform, string tag)
@@ -110,7 +114,7 @@ public class TurretBehaviour : MonoBehaviour
         {
 
             //decide if view is obstructed with raycast
-            if (m_Raycast.doRaycast(out hit, direction) && hit.transform.gameObject.tag == tag)
+            if (m_Raycast.doRaycast(out m_Hit, direction) && m_Hit.transform.gameObject.tag == tag)
                 return true;
 
         }
@@ -119,17 +123,20 @@ public class TurretBehaviour : MonoBehaviour
 
     TurretState decideState()
     {
-        //Is decoy visible to the turret? 
+        //if a decoy is present then determine if we can aim at it. 
         if (m_Decoy != null)
         {
+            //
              if(isObjectVisible(m_Decoy.gameObject.transform, Tags.decoy))
              {
-                m_lookAtTarget = m_Decoy.transform.position;
+
+                m_TargetPosition = m_Decoy.transform.position;
                 m_Target = m_Decoy;
 
-                if (m_Raycast.doRaycast(out hit, transform.forward))
+                //is decoy infron of turret then fire
+                if (m_Raycast.doRaycast(out m_Hit, transform.forward))
                  {
-                     if (hit.transform.gameObject.tag == Tags.decoy)
+                     if (m_Hit.transform.gameObject.tag == Tags.decoy)
                      {
                          return TurretState.isFiring;
                      }
@@ -142,13 +149,13 @@ public class TurretBehaviour : MonoBehaviour
        //is player visible to the turret? if not the return to idle.
         if(isObjectVisible(GameManager.GetPlayer().gameObject.transform, Tags.player))
         {
-            m_lookAtTarget = GameManager.GetPlayer().transform.position;
+            m_TargetPosition = GameManager.GetPlayer().transform.position;
             m_Target = GameManager.GetPlayer();
 
             //check if player can be fired at. if yes, initiate fire. Else, target player
-            if (m_Raycast.doRaycast(out hit, transform.forward))
+            if (m_Raycast.doRaycast(out m_Hit, transform.forward))
             {
-                if (hit.transform.gameObject.tag == Tags.player)
+                if (m_Hit.transform.gameObject.tag == Tags.player)
                 {
                     return TurretState.isFiring;
                 }

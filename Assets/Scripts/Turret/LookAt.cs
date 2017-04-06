@@ -6,8 +6,8 @@ public class LookAt : MonoBehaviour
     public Transform[] waypoints;
     bool m_MovingAim;
     public float speed;
-    Vector3 target;
-    Vector3 direction;
+    Vector3 targetPosition;
+    Vector3 directionToTarget;
     Quaternion targetRotation;
 
     int waypointIndex = 0;
@@ -25,18 +25,22 @@ public class LookAt : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        //change index?
         if(lookRandom)
             setRandowmWaypointIndex();
         else 
             updateWaypointIndex();
         
+        //when the turret is not moving, allow a new position to look at.
         if (!m_MovingAim)
             lookAtWaypoint();
 
+        //Update the aim
         if (m_MovingAim)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed);
 
+            //When rotation has reached the target rotation, stop rotating
             if(Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 2)
             {
                 m_MovingAim = false;
@@ -44,6 +48,7 @@ public class LookAt : MonoBehaviour
         }
 
 	}
+    //increase index in sequence
     void updateWaypointIndex()
     {
         timeSinceChange += Time.deltaTime;
@@ -58,6 +63,7 @@ public class LookAt : MonoBehaviour
             waypointIndex++;
         }
     }
+    //Set index to random
     void setRandowmWaypointIndex()
     {
         timeSinceChange += Time.deltaTime;
@@ -67,17 +73,19 @@ public class LookAt : MonoBehaviour
             waypointIndex = Random.Range(0, waypoints.Length);
         }
     }
+    //Calculates a rotation to look at, initiates movement
     public void lookAtPosition(Vector3 newPosition)
     {
         m_MovingAim = true;
-        target = newPosition;
+        targetPosition = newPosition;
         //get direction between this object and target
-        direction = target - transform.position;
-        direction.Normalize();
+        directionToTarget = targetPosition - transform.position;
+        directionToTarget.Normalize();
         //get the target rotation
-        targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+        targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
 
     }
+
     public void lookAtWaypoint()
     {
         if(lookRandom)
