@@ -4,14 +4,10 @@ using UnityEditor;
 [CustomEditor(typeof(TurretBehaviour))]
 public class TurretBehaviourEditor : Editor
 {
-    [Range(0, 300)]
     SerializedProperty viewDistance;
-    [Range(0,180)]
     SerializedProperty fieldOfView;
     SerializedProperty turretState;
-
     SerializedProperty timeUntilFire;
-
     SerializedProperty lightAngleOffset;
 
     Vector3 left, right;
@@ -22,13 +18,9 @@ public class TurretBehaviourEditor : Editor
         viewDistance = serializedObject.FindProperty("viewDistance");
         fieldOfView = serializedObject.FindProperty("fieldOfView");
         timeUntilFire = serializedObject.FindProperty("m_timeToKill");
-        
-
     }
     public override void OnInspectorGUI()
     {
-        //edit properties
-        //base.OnInspectorGUI();
         serializedObject.Update();
         //Add the fields to the editor
         EditorGUILayout.PropertyField(turretState);

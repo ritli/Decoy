@@ -20,11 +20,7 @@ public class TurretBehaviour : MonoBehaviour
 
     Raycast m_Raycast;
     LookAt m_LookAt;
-    TurretFirepower m_TurretFirepower;
-    
-
     Light m_FoVLight;
-
     Decoy m_Decoy;
 
     RaycastHit m_Hit;

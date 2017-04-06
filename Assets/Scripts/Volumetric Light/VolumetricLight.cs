@@ -42,6 +42,7 @@ public class VolumetricLight : MonoBehaviour
     private CommandBuffer _commandBuffer;
     private CommandBuffer _cascadeShadowCommandBuffer;
 
+
     [Range(1, 64)]
     public int SampleCount = 8;
     [Range(0.0f, 1.0f)]
@@ -52,6 +53,8 @@ public class VolumetricLight : MonoBehaviour
     public float SkyboxExtinctionCoef = 0.9f;
     [Range(0.0f, 0.999f)]
     public float MieG = 0.1f;
+    [Range(1, 16)]
+    public float LightMultiplier = 1;
     public bool HeightFog = false;
     [Range(0, 0.5f)]
     public float HeightScale = 0.10f;
@@ -302,7 +305,7 @@ public class VolumetricLight : MonoBehaviour
         _material.SetMatrix("_WorldViewProj", viewProj * world);
 
         _material.SetVector("_LightPos", new Vector4(_light.transform.position.x, _light.transform.position.y, _light.transform.position.z, 1.0f / (_light.range * _light.range)));
-        _material.SetVector("_LightColor", _light.color * _light.intensity * 8);
+        _material.SetVector("_LightColor", _light.color * _light.intensity * LightMultiplier);
 
 
         Vector3 apex = transform.position;
