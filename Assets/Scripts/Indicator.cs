@@ -19,13 +19,15 @@ public class Indicator : MonoBehaviour {
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
+	private bool m_foundLedge = false;
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
+	private CharacterController m_charController;
 
 	void Start ()
     {
+		m_charController = GetComponent<CharacterController>();
 		m_ledgeCollDetection = m_indi.GetComponentInChildren<LedgeDetection>();
-		m_ledgeCollDetection.gameObject.SetActive(false);
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -37,7 +39,7 @@ public class Indicator : MonoBehaviour {
 
     private void moveTo(Vector3 target)
     {
-        m_teleportTo = target;
+		m_teleportTo = target;
         m_arrived = false;
     }
 
@@ -49,10 +51,13 @@ public class Indicator : MonoBehaviour {
         {
             transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
 
-            // When the players position has arrived, stop moving.
-            if (Vector3.Distance(transform.position, m_teleportTo) == 0)
-                m_arrived = true;
-        }
+			// When the players position has arrived, stop moving.
+			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+			{
+				m_arrived = true;
+				m_charController.detectCollisions = true;
+			}
+		}
 
         if (Input.GetButton("Teleport"))
         {
@@ -66,9 +71,16 @@ public class Indicator : MonoBehaviour {
             if (!m_cancelTeleport && m_indi.activeSelf)
             {
                 m_indi.SetActive(false);
-                //transform.position = m_indi.transform.position;
-                moveTo(m_indi.transform.position);
-                m_cooldownTimer.resetTimer();
+				//transform.position = m_indi.transform.position;
+				if (m_foundLedge)
+				{
+					moveTo(m_ledgeCollDetection.getNewPosition());
+					m_foundLedge = false;
+				} else
+				{
+					moveTo(m_indi.transform.position);
+				}
+				m_cooldownTimer.resetTimer();
             }
             else
                 m_cancelTeleport = false;
@@ -114,23 +126,24 @@ public class Indicator : MonoBehaviour {
                 return;
             }
 
-            //If true then surface is wall
-            if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-            {
-				m_ledgeCollDetection.findLedge(hit.normal);
-
-                m_indi.transform.position = hit.point + hit.normal;
+			//If true then surface is wall
+			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
+			{
 				// ## Start ledge detection ##
-				m_ledgeCollDetection.gameObject.SetActive(true);
+				if (m_ledgeCollDetection.findLedge(hit.normal))
+				{
+					m_foundLedge = true;
+					m_charController.detectCollisions = false;
+				}
+				m_indi.transform.position = hit.point + hit.normal;
 
 			}
 
-            //If true then normal is a ceiling
+			//If true then normal is a ceiling
 
-            //Else then surface is floor
-            else
+			//Else then surface is floor
+			else
             {
-				m_ledgeCollDetection.gameObject.SetActive(false);
 
 				for (int i = 0; i < 5; i++)
                 {

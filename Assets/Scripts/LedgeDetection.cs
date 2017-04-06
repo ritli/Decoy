@@ -7,6 +7,7 @@ public class LedgeDetection : MonoBehaviour {
     private bool m_wallTouched = false;
     private Vector3 m_wallNormal;
     private Ray m_rayDownTilt;
+	private Vector3 m_newPosition = new Vector3(0, 0, 0);
 
     public float ledgeThreshold;
 
@@ -23,6 +24,7 @@ public class LedgeDetection : MonoBehaviour {
 
     public bool findLedge(Vector3 wallNormal)
     {
+		// Creates new direction and position based on wall normal
         Vector3 direction = new Vector3(wallNormal.x * -1, wallNormal.y, wallNormal.z * -1);
         direction = Quaternion.AngleAxis(45f, transform.right) * direction;
         Vector3 higherPosition = transform.position + Vector3.up * ledgeThreshold;
@@ -33,18 +35,25 @@ public class LedgeDetection : MonoBehaviour {
 
         RaycastHit hit = new RaycastHit();
 
-        // If ray (let the bodies) hit the floor
+        Debug.DrawRay(higherPosition, direction * 2, Color.yellow);
+        
+		// If ray (let the bodies) hit the floor
         if (Physics.Raycast(m_rayDownTilt, out hit))
         {
             if (Vector3.Angle(hit.normal, Vector3.up) < 45)
             {
-                Debug.DrawRay(hit.point, hit.normal, Color.white, 10f); 
+                Debug.DrawRay(hit.point, hit.normal * 2, Color.white);
+
+				// Set the new position
+				m_newPosition = hit.point;
+				return true;
             }
         }
+		return false;
+	}
 
-        Debug.DrawRay(higherPosition, direction, Color.yellow, 10f);
-
-        return true;
-    }
-
+	public Vector3 getNewPosition()
+	{
+		return m_newPosition;
+	}
 }
