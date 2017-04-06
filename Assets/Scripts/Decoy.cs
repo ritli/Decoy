@@ -15,7 +15,7 @@ public class Decoy : MonoBehaviour, IKillable {
 
     void DestroyObject()
     {
-        Destroy(this);
+        Destroy(gameObject);
     }
 	
 	void Update () {
@@ -33,11 +33,12 @@ public class Decoy : MonoBehaviour, IKillable {
             default:
                 break;
         }
-
     }
 
     void DecayUpdate()
     {
+        m_decayTimeElapsed += Time.deltaTime;
+
         if (m_decayTimeElapsed > m_timeTillDeath)
         {
             Kill();

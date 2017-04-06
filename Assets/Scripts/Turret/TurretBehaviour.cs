@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 public class TurretBehaviour : MonoBehaviour
 {
     
@@ -16,6 +15,8 @@ public class TurretBehaviour : MonoBehaviour
     public float m_timeToKill = 3;
     float m_timeToKillElapsed = 0;
 
+    IKillable m_Target;
+
     Raycast m_Raycast;
     LookAt m_LookAt;
     TurretFirepower m_TurretFirepower;
@@ -28,6 +29,8 @@ public class TurretBehaviour : MonoBehaviour
     Decoy m_Decoy;
 
     RaycastHit hit;
+    Vector3 m_lookAtTarget;
+
     // Use this for initialization
     void Start()
     {
@@ -64,10 +67,14 @@ public class TurretBehaviour : MonoBehaviour
         switch (turretState)
         {
             case TurretState.isIdle:
-                if(m_LookAt.isMovingAim())
-                m_LookAt.lookAtWaypoint();
+
+                if (m_LookAt.isMovingAim())
+                { 
+                    m_LookAt.lookAtWaypoint();
+                }
                 break;
             case TurretState.isTargeting:
+
                 m_timeToKillElapsed = 0;
                 
                 aimAtTarget();
@@ -78,9 +85,8 @@ public class TurretBehaviour : MonoBehaviour
                 aimAtTarget();
 
                 if (m_timeToKillElapsed > m_timeToKill) 
-                { 
-                    GameManager.GetPlayer().Kill();
-                    
+                {
+                    m_Target.Kill();
                 }
 
                 m_timeToKillElapsed += Time.deltaTime;
@@ -89,33 +95,9 @@ public class TurretBehaviour : MonoBehaviour
     }
     void aimAtTarget()
     {
-        if(m_Decoy != null)
-        {
-            m_LookAt.lookAtPosition(m_Player.transform.position);
-        }
-        else
-        {
-            m_LookAt.lookAtPosition(m_Player.transform.position);
-        }
+        m_LookAt.lookAtPosition(m_lookAtTarget);
     }
-    bool isPlayerVisible()
-    {
-        
-        //Calculate direction to the player
-        Vector3 direction = m_Player.transform.position - transform.position;
-        direction.Normalize();
-
-        //decide if player is inside FoV
-        if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < fieldOfView / 2)
-        {
-
-            //decide if view is obstructed with raycast
-            if (m_Raycast.doRaycast(out hit, direction) && hit.transform.gameObject.tag == Tags.player)
-                return true;
-
-        }
-        return false;
-    }
+    
     bool isObjectVisible(Transform objectTransform, string tag)
     {
 
@@ -134,6 +116,7 @@ public class TurretBehaviour : MonoBehaviour
         }
         return false;
     }
+
     TurretState decideState()
     {
         //Is decoy visible to the turret? 
@@ -141,22 +124,29 @@ public class TurretBehaviour : MonoBehaviour
         {
              if(isObjectVisible(m_Decoy.gameObject.transform, Tags.decoy))
              {
-                 if (m_Raycast.doRaycast(out hit, transform.forward))
+                m_lookAtTarget = m_Decoy.transform.position;
+                m_Target = m_Decoy;
+
+                if (m_Raycast.doRaycast(out hit, transform.forward))
                  {
                      if (hit.transform.gameObject.tag == Tags.decoy)
                      {
                          return TurretState.isFiring;
                      }
                  }
-             }
-             return TurretState.isTargeting;
+
+                return TurretState.isTargeting;
+            }
         }
         
        //is player visible to the turret? if not the return to idle.
-        if(isPlayerVisible())
+        if(isObjectVisible(GameManager.GetPlayer().gameObject.transform, Tags.player))
         {
+            m_lookAtTarget = GameManager.GetPlayer().transform.position;
+            m_Target = GameManager.GetPlayer();
+
             //check if player can be fired at. if yes, initiate fire. Else, target player
-            if(m_Raycast.doRaycast(out hit, transform.forward))
+            if (m_Raycast.doRaycast(out hit, transform.forward))
             {
                 if (hit.transform.gameObject.tag == Tags.player)
                 {

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Indicator : MonoBehaviour {
 
-    PlayerController m_player;
+    public GameObject m_decoy;
     public GameObject m_indi;
     float m_playerLength = 3f;
     private bool m_cancelTeleport = false;
@@ -17,7 +17,6 @@ public class Indicator : MonoBehaviour {
 	void Start ()
     {
         m_cooldownTimer = GetComponent<Timer>();
-        m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
@@ -38,8 +37,14 @@ public class Indicator : MonoBehaviour {
             if (!m_cancelTeleport && m_indi.activeSelf)
             {
                 m_indi.SetActive(false);
+                Vector3 lastPos = transform.position;
                 transform.position = m_indi.transform.position;
                 m_cooldownTimer.resetTimer();
+
+                GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
+                GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+                GameManager.GetPlayer().CreateDecoy();
+
             }
             else
                 m_cancelTeleport = false;
@@ -74,12 +79,10 @@ public class Indicator : MonoBehaviour {
 
         RaycastHit hit = new RaycastHit();
 
-        Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
-
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
-            //print(Vector3.Angle(hit.normal, Vector3.down));
 
+            //If true then surface is a ceiling
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
@@ -91,7 +94,6 @@ public class Indicator : MonoBehaviour {
             {
                 m_indi.transform.position = hit.point + hit.normal;
             }
-            //If true then normal is a ceiling
 
             //Else then surface is floor
             else
@@ -118,6 +120,7 @@ public class Indicator : MonoBehaviour {
 
         }
 
+        //Checks if raycast is near walkable ground
         else if (Physics.Raycast(rayDown, m_playerLength))
         {
             m_indi.transform.position = hit.point + Vector3.up * 0.5f;

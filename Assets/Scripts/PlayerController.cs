@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public enum PlayerState
 {
@@ -72,9 +73,15 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
+    Vector3 initialCameraPos;
+    Vector3 initialPos;
+
 
     private void Start()
     {
+        initialCameraPos = Camera.main.transform.position;
+        initialPos = transform.position;
+
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -96,11 +103,11 @@ public class PlayerController : MonoBehaviour, IKillable
         //Application.LoadLevel(0);
     }
 
-    void CreateDecoy()
+    public void CreateDecoy()
     {
-        GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
+        //GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
 
-        GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+        //GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
         if (OnCreateDecoy != null)
         {
@@ -108,9 +115,12 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
-    void EndLevel()
+    void ResetPlayer()
     {
-        Application.LoadLevel(0);
+        transform.position = initialPos;
+        Camera.main.transform.position = initialCameraPos;
+        m_playerState = PlayerState.isAlive;
+
     }
 
     // Update is called once per frame
@@ -128,7 +138,7 @@ public class PlayerController : MonoBehaviour, IKillable
             case PlayerState.isDead:
                 Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
                 Camera.main.transform.Translate(Vector3.down * Time.deltaTime);
-                Invoke("EndLevel", 1.5f);
+                Invoke("ResetPlayer", 1.5f);
                 break;
             case PlayerState.isPause:
                 break;
