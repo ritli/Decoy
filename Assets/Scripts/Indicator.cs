@@ -11,8 +11,14 @@ public class Indicator : MonoBehaviour {
     private Timer m_cooldownTimer;
 
     public float m_length;
+    [Header("Reset the timer after canceling teleport:")]
     public bool resetTimeOnCancel = false;
+    [Header("Overrides the value of timer.")]
     public float teleportCooldown = 0.0f;
+    public float teleportSpeed = 1.0f;
+
+    private Vector3 m_teleportTo = new Vector3(0,0,0);
+    private bool m_arrived = true;
 
 	void Start ()
     {
@@ -23,9 +29,25 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer.forwardTime(teleportCooldown);
     }
 
+    private void moveTo(Vector3 target)
+    {
+        m_teleportTo = target;
+        m_arrived = false;
+    }
+
     // Handle input for teleportation controls.
 	void Update () {
-        
+
+        // Move towards target position set when letting go of the "Teleport" button.
+        if (!m_arrived)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
+
+            // When the players position has arrived, stop moving.
+            if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+                m_arrived = true;
+        }
+
         if (Input.GetButton("Teleport"))
         {
             if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
@@ -38,7 +60,8 @@ public class Indicator : MonoBehaviour {
             if (!m_cancelTeleport && m_indi.activeSelf)
             {
                 m_indi.SetActive(false);
-                transform.position = m_indi.transform.position;
+                //transform.position = m_indi.transform.position;
+                moveTo(m_indi.transform.position);
                 m_cooldownTimer.resetTimer();
             }
             else
@@ -70,15 +93,15 @@ public class Indicator : MonoBehaviour {
         Vector3 playerLook = forward * m_length;
 
         Ray rayForward = new Ray(Camera.main.transform.position, forward);
-        Ray rayDown = new Ray(playerLook, Vector3.down);
+        Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
 
         RaycastHit hit = new RaycastHit();
 
-        Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
+        Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
-            //print(Vector3.Angle(hit.normal, Vector3.down));
+            print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
@@ -117,10 +140,11 @@ public class Indicator : MonoBehaviour {
             return;
 
         }
-
-        else if (Physics.Raycast(rayDown, m_playerLength))
+        // Check for collision of floor when ray does not hit a surface.
+        else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
-            m_indi.transform.position = hit.point + Vector3.up * 0.5f;
+            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
+            print("Hitting the ground");
             return;
         }
 
@@ -138,7 +162,7 @@ public class Indicator : MonoBehaviour {
                 }
             }
         }
-
+        
         m_indi.transform.position = transform.position + playerLook;
     }
 }
