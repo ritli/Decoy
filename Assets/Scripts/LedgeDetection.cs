@@ -3,44 +3,80 @@ using System.Collections;
 
 public class LedgeDetection : MonoBehaviour {
 
-    private GameObject m_indObject;
-    private Indicator m_indClass;
-    private float m_maxDistance = 3f;
+    private GameObject m_parent;
+    private bool m_wallTouched = false;
+    private Vector3 m_wallNormal;
+    private Ray m_rayDownTilt;
+
+    public float ledgeThreshold;
+
 
     // Use this for initialization
     void Start () {
-        m_indObject = GameObject.Find("Ind");
-        m_indClass = m_indObject.GetComponent<Indicator>();
-	}
+        m_parent = transform.parent.gameObject;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (m_indObject.activeSelf)
+        if (m_parent.activeSelf)
         {
-            findLedge();
-            //print(m_indObject.transform.position);
+            if (m_wallTouched)
+            {
+                // Look for edge
+                
+            }
+        } else
+        {
+            m_wallTouched = false;
         }
-	}
+    }
+
+
+    void OnCollisionStay(Collision collision)
+    {
+        print("Collision");
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            if (Vector3.Angle(contact.normal, Vector3.up) > 45) 
+            {
+                m_wallNormal = contact.normal;
+                m_wallTouched = true;
+                findLedge();
+                print("Wall touched");
+            } else
+            {
+                m_wallTouched = false;
+            }
+        }
+    }
+
+    void OnCollisionExit()
+    {
+        print("Exit");
+        m_wallTouched = false;
+    }
 
     public bool findLedge()
     {
+        Vector3 direction = new Vector3(m_wallNormal.x * -1, m_wallNormal.y, m_wallNormal.z * -1);
+        direction = Quaternion.AngleAxis(45f, transform.right) * direction;
 
-        Vector3 forward = Camera.main.transform.forward;
-        Ray rayForward = new Ray(Camera.main.transform.position, forward);
+        // A ray facing down 45 degrees towards wall
+        m_rayDownTilt = new Ray(transform.position + Vector3.up * ledgeThreshold, direction);
+
         RaycastHit hit = new RaycastHit();
 
-        Vector3 hitNormal = m_indClass.getHitNormal();
-        Vector3 rayStartPosition = new Vector3( m_indObject.transform.position.x,
-                                                m_indObject.transform.position.y + 5,
-                                                m_indObject.transform.position.z);
-        rayStartPosition -= hitNormal;
-
-        Ray rayDown = new Ray(rayStartPosition, Vector3.down);
-
-        if (Physics.Raycast(rayDown, out hit, m_maxDistance))
+        if (Physics.Raycast(m_rayDownTilt, out hit))
         {
-            Debug.DrawLine(hit.point, hit.point + hit.normal * 5, Color.red);
+            if (Vector3.Angle(hit.normal, Vector3.up) < 45)
+            {
+                Debug.DrawRay(hit.point, hit.normal, Color.white, 10f); 
+            }
         }
+
+        Debug.DrawRay(transform.position, direction, Color.yellow, 10f);
+
         return true;
     }
 

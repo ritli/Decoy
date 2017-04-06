@@ -62,7 +62,9 @@ public class Indicator : MonoBehaviour {
             if (Vector3.Angle(hit.normal, Vector3.up) > 45)
             {
                 m_indi.transform.position = hit.point + hit.normal;
+                // ## Start ledge detection ##
             }
+
             //If true then normal is a ceiling
 
             //Else then surface is floor
