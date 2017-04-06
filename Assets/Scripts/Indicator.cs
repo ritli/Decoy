@@ -6,26 +6,56 @@ public class Indicator : MonoBehaviour {
     PlayerController m_player;
     public GameObject m_indi;
     float m_playerLength = 3f;
+    private bool m_cancelTeleport = false;
+    private bool ableToTeleport = true;
+    private Timer m_cooldownTimer;
 
     public float m_length;
+    public bool resetTimeOnCancel = false;
+    public float teleportCooldown = 0.0f;
 
 	void Start ()
     {
+        m_cooldownTimer = GetComponent<Timer>();
         m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
+        m_cooldownTimer.setTimeout(teleportCooldown);
+        m_cooldownTimer.forwardTime(teleportCooldown);
     }
-	
-	void Update () {
 
+    // Handle input for teleportation controls.
+	void Update () {
+        
         if (Input.GetButton("Teleport"))
         {
-
-            ShowIndicator();
+            if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
+            {
+                ShowIndicator();
+            }
         }
         if (Input.GetButtonUp("Teleport"))
         {
-            m_indi.SetActive(false);
-            transform.position = m_indi.transform.position;
+            if (!m_cancelTeleport && m_indi.activeSelf)
+            {
+                m_indi.SetActive(false);
+                transform.position = m_indi.transform.position;
+                m_cooldownTimer.resetTimer();
+            }
+            else
+                m_cancelTeleport = false;
+        }
+
+        // WHen right clicking, cancel teleportation.
+        if (Input.GetButtonDown("CancelTeleport"))
+        {
+            if (m_indi.activeSelf)
+            {
+                m_cancelTeleport = true;
+                m_indi.SetActive(false);
+            }
+
+            if (resetTimeOnCancel)
+                m_cooldownTimer.resetTimer();
         }
     }
 
@@ -44,11 +74,11 @@ public class Indicator : MonoBehaviour {
 
         RaycastHit hit = new RaycastHit();
 
-        //Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
+        Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
 
         if (Physics.Raycast(rayForward, out hit, m_length))
         {
-            print(Vector3.Angle(hit.normal, Vector3.down));
+            //print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
