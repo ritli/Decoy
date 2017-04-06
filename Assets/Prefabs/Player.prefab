@@ -64,9 +64,9 @@ GameObject:
   - 114: {fileID: 11439354}
   - 23: {fileID: 2396706}
   - 33: {fileID: 3350406}
-  - 114: {fileID: 11425924}
   - 114: {fileID: 11470492}
   - 114: {fileID: 11492416}
+  - 114: {fileID: 11402340}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -241,7 +241,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!81 &8155470
 AudioListener:
   m_ObjectHideFlags: 1
@@ -323,20 +323,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &11425924
+--- !u!114 &11402340
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b58b312ff93968448d7a9b16016655b, type: 3}
+  m_Script: {fileID: 11500000, guid: fbba7cc5ce837494d98a1b6d11337944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
-  m_Origin: {fileID: 0}
-  m_thresholdDistance: 3
+  raySource: {fileID: 453968}
+  maxDistance: 0
+  castingLayers: 00000000
 --- !u!114 &11439354
 MonoBehaviour:
   m_ObjectHideFlags: 1
