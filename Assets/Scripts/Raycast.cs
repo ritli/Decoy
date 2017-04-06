@@ -25,7 +25,12 @@ public class Raycast : MonoBehaviour {
     //    RaycastHit tempHit = new RaycastHit();
     //    if (doRaycast(out tempHit))
     //        print(tempHit.transform.gameObject.name);
-    //}
+    //} 
+
+    public void setDistance(float distance)
+    {
+        maxDistance = distance;
+    }
 
     // Raycast from source and forward a set distance. Returns true if ray hits a collider
     public bool doRaycast(out RaycastHit inHit)
