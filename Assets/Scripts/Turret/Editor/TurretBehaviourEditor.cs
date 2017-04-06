@@ -10,6 +10,8 @@ public class TurretBehaviourEditor : Editor
     SerializedProperty fieldOfView;
     SerializedProperty turretState;
 
+    SerializedProperty timeUntilFire;
+
     SerializedProperty lightAngleOffset;
 
     Vector3 left, right;
@@ -19,6 +21,7 @@ public class TurretBehaviourEditor : Editor
         turretState = serializedObject.FindProperty("turretState");
         viewDistance = serializedObject.FindProperty("viewDistance");
         fieldOfView = serializedObject.FindProperty("fieldOfView");
+        timeUntilFire = serializedObject.FindProperty("m_timeToKill");
         
 
     }
@@ -32,6 +35,7 @@ public class TurretBehaviourEditor : Editor
         EditorGUILayout.PropertyField(fieldOfView);
         EditorGUILayout.PropertyField(viewDistance);
         EditorGUILayout.PropertyField(lightAngleOffset);
+        EditorGUILayout.PropertyField(timeUntilFire);
         //apply values
         serializedObject.ApplyModifiedProperties();
 

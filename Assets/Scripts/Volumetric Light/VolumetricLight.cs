@@ -302,7 +302,7 @@ public class VolumetricLight : MonoBehaviour
         _material.SetMatrix("_WorldViewProj", viewProj * world);
 
         _material.SetVector("_LightPos", new Vector4(_light.transform.position.x, _light.transform.position.y, _light.transform.position.z, 1.0f / (_light.range * _light.range)));
-        _material.SetVector("_LightColor", _light.color * _light.intensity);
+        _material.SetVector("_LightColor", _light.color * _light.intensity * 8);
 
 
         Vector3 apex = transform.position;

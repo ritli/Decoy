@@ -13,6 +13,9 @@ public class TurretBehaviour : MonoBehaviour
     [HideInInspector]
     public float viewDistance = 10;
 
+    public float m_timeToKill = 3;
+    float m_timeToKillElapsed = 0;
+
     Raycast m_Raycast;
     LookAt m_LookAt;
     TurretFirepower m_TurretFirepower;
@@ -22,6 +25,7 @@ public class TurretBehaviour : MonoBehaviour
     /*Change to object Managers reference of player*/
     GameObject m_Player;
 
+    Decoy m_Decoy;
 
     RaycastHit hit;
     // Use this for initialization
@@ -46,7 +50,7 @@ public class TurretBehaviour : MonoBehaviour
     void SetDecoy()
     {
         //set the decoy
-        GameManager.GetDecoy();
+        m_Decoy = GameManager.GetDecoy();
     }
 
     // Update is called once per frame
@@ -64,17 +68,36 @@ public class TurretBehaviour : MonoBehaviour
                 m_LookAt.lookAtWaypoint();
                 break;
             case TurretState.isTargeting:
-
-                    m_LookAt.lookAtPosition(m_Player.transform.position);
+                m_timeToKillElapsed = 0;
+                
+                aimAtTarget();
 
                 break;
             case TurretState.isFiring:
+                
+                aimAtTarget();
+
+                if (m_timeToKillElapsed > m_timeToKill) 
+                { 
                     GameManager.GetPlayer().Kill();
-                    m_LookAt.lookAtPosition(m_Player.transform.position);
+                    
+                }
+
+                m_timeToKillElapsed += Time.deltaTime;
                 break;
         }
     }
-
+    void aimAtTarget()
+    {
+        if(m_Decoy != null)
+        {
+            m_LookAt.lookAtPosition(m_Player.transform.position);
+        }
+        else
+        {
+            m_LookAt.lookAtPosition(m_Player.transform.position);
+        }
+    }
     bool isPlayerVisible()
     {
         
@@ -93,17 +116,52 @@ public class TurretBehaviour : MonoBehaviour
         }
         return false;
     }
+    bool isObjectVisible(Transform objectTransform, string tag)
+    {
+
+        //Calculate direction to the player
+        Vector3 direction = objectTransform.transform.position - transform.position;
+        direction.Normalize();
+
+        //decide if player is inside FoV
+        if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < fieldOfView / 2)
+        {
+
+            //decide if view is obstructed with raycast
+            if (m_Raycast.doRaycast(out hit, direction) && hit.transform.gameObject.tag == tag)
+                return true;
+
+        }
+        return false;
+    }
     TurretState decideState()
     {
-        //Is player visible to the turret? if no the state is idle.
+        //Is decoy visible to the turret? 
+        if (m_Decoy != null)
+        {
+             if(isObjectVisible(m_Decoy.gameObject.transform, Tags.decoy))
+             {
+                 if (m_Raycast.doRaycast(out hit, transform.forward))
+                 {
+                     if (hit.transform.gameObject.tag == Tags.decoy)
+                     {
+                         return TurretState.isFiring;
+                     }
+                 }
+             }
+             return TurretState.isTargeting;
+        }
+        
+       //is player visible to the turret? if not the return to idle.
         if(isPlayerVisible())
         {
             //check if player can be fired at. if yes, initiate fire. Else, target player
-
             if(m_Raycast.doRaycast(out hit, transform.forward))
             {
-                if( hit.transform.gameObject.tag == Tags.player)
-                return TurretState.isFiring;
+                if (hit.transform.gameObject.tag == Tags.player)
+                {
+                    return TurretState.isFiring;
+                }
             }
             return TurretState.isTargeting;
         }

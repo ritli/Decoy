@@ -127,8 +127,8 @@ public class PlayerController : MonoBehaviour, IKillable
                 break;
             case PlayerState.isDead:
                 Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-
-                Invoke("EndLevel", 3f);
+                Camera.main.transform.Translate(Vector3.down * Time.deltaTime);
+                Invoke("EndLevel", 1.5f);
                 break;
             case PlayerState.isPause:
                 break;
