@@ -13,6 +13,7 @@ public class LookAt : MonoBehaviour
     int waypointIndex = 0;
     float timeSinceChange = 0;
     public float inspectTime;
+    public bool lookRandom = false;
 
 	// Use this for initialization
 	void Start () 
@@ -24,7 +25,11 @@ public class LookAt : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        updateWaypointIndex();
+        if(lookRandom)
+            setRandowmWaypointIndex();
+        else 
+            updateWaypointIndex();
+        
         if (!m_MovingAim)
             lookAtWaypoint();
 
@@ -53,6 +58,15 @@ public class LookAt : MonoBehaviour
             waypointIndex++;
         }
     }
+    void setRandowmWaypointIndex()
+    {
+        timeSinceChange += Time.deltaTime;
+        if (timeSinceChange >= inspectTime && !m_MovingAim)
+        {
+            timeSinceChange = 0;
+            waypointIndex = Random.Range(0, waypoints.Length);
+        }
+    }
     public void lookAtPosition(Vector3 newPosition)
     {
         m_MovingAim = true;
@@ -66,6 +80,10 @@ public class LookAt : MonoBehaviour
     }
     public void lookAtWaypoint()
     {
+        if(lookRandom)
+        {
+            setRandowmWaypointIndex();
+        }
         lookAtPosition(waypoints[waypointIndex].position);
     }
     public bool isMovingAim()
