@@ -24,7 +24,6 @@ public class Indicator : MonoBehaviour {
 	void Start ()
     {
         m_cooldownTimer = GetComponent<Timer>();
-
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
         m_indi.SetActive(false);
@@ -175,89 +174,4 @@ public class Indicator : MonoBehaviour {
         m_indi.transform.position = transform.position + playerLook;
     }
 
-    /*void ShowIndicator()
-    {
-        m_indi.SetActive(true);
-
-        Vector3 forward = Camera.main.transform.forward;
-        Vector3 right = Camera.main.transform.right;
-
-        Vector3 playerLook = forward * m_length;
-
-        Ray rayForward = new Ray(Camera.main.transform.position, forward);
-        Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
-
-        RaycastHit hit = new RaycastHit();
-
-        Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
-
-        if (m_raycaster.doRaycast(out hit))
-        {
-            print(Vector3.Angle(hit.normal, Vector3.down));
-
-            //If true then surface is a ceiling
-            if (Vector3.Angle(hit.normal, Vector3.down) == 0)
-            {
-                m_indi.transform.position = hit.point + hit.normal * m_playerLength;
-                return;
-            }
-
-            //If true then surface is wall
-            if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-            {
-                m_indi.transform.position = hit.point + hit.normal;
-            }
-
-            //Else then surface is floor
-            else
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    Vector3 centerpos = hit.point + Vector3.up * 0.5f;
-                    Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
-
-                    if (Physics.Raycast(centerpos, dir, out hit, 1f))
-                    {
-                        
-                        if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-                        {
-                            m_indi.transform.position = hit.point + hit.normal;
-                            return;
-                        }
-                    }
-                }
-                m_indi.transform.position = hit.point + Vector3.up * 0.2f;
-                
-            }
-            return;
-
-        }
-
-        // Check for collision of floor when ray does not hit a surface.
-        else if (Physics.Raycast(rayDown, out hit, 1.5f))
-
-        {
-            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
-            print("Hitting the ground");
-            return;
-        }
-
-        for (int i = 0; i < 5; i++)
-        {
-            Vector3 centerpos = transform.position + playerLook;
-            Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
-
-            if (Physics.Raycast(centerpos, dir, out hit, 0.5f))
-            {
-                if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-                {
-                    m_indi.transform.position = hit.point + hit.normal;
-                    return;
-                }
-            }
-        }
-        
-        m_indi.transform.position = transform.position + playerLook;
-    }
-    */
 }

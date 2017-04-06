@@ -415,7 +415,7 @@ Light:
   m_Type: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 8
-  m_Range: 100
+  m_Range: 111.33
   m_SpotAngle: 90
   m_CookieSize: 10
   m_Shadows:
@@ -509,6 +509,8 @@ MonoBehaviour:
   fieldOfView: 90
   viewDistance: 15
   lightAngleOffset: 0
+  m_narrowAngle: 2
+  m_zoomSpeed: 2
   m_timeToKill: 1
 --- !u!136 &13624314
 CapsuleCollider:
@@ -603,7 +605,7 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     startLifetime:
-      scalar: 5
+      scalar: 1.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -638,7 +640,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 0
     startSpeed:
-      scalar: 17.88
+      scalar: 40
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -935,7 +937,7 @@ ParticleSystem:
     serializedVersion: 2
     m_Type: 0
     rate:
-      scalar: 4.46
+      scalar: 0
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1413,7 +1415,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 0
   ForceModule:
-    enabled: 0
+    enabled: 1
     x:
       scalar: 0
       maxCurve:
@@ -1485,7 +1487,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 0
     z:
-      scalar: 0
+      scalar: -12.66
       maxCurve:
         serializedVersion: 2
         m_Curve:

@@ -14,7 +14,7 @@ public class TurretBehaviour : MonoBehaviour
     public float lightAngleOffset;
     float m_currentAngle;
     public float m_narrowAngle = 5f;
-    float m_narrowSpeed = 1f;
+    public float m_zoomSpeed = 1f;
     float m_narrowTime = 0f;
     float m_wideTime = 0f;
 
@@ -77,7 +77,8 @@ public class TurretBehaviour : MonoBehaviour
 
                 m_FoVLight.spotAngle = Mathf.Lerp(m_narrowAngle, fieldOfView, m_wideTime);
                 m_narrowTime = 0;
-                m_wideTime += Time.deltaTime * m_narrowSpeed * 2;
+
+                m_wideTime += Time.deltaTime * m_zoomSpeed * 2;
 
                 if (m_LookAt.isMovingAim())
                 { 
@@ -89,7 +90,7 @@ public class TurretBehaviour : MonoBehaviour
                 m_FoVLight.spotAngle = Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime);
                 m_wideTime = 0f;
                 print(Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime));
-                m_narrowTime += Time.deltaTime * m_narrowSpeed;
+                m_narrowTime += Time.deltaTime * m_zoomSpeed;
 
                 //Reset timer
                 m_timeToKillElapsed = 0;
