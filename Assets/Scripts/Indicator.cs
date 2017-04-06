@@ -19,10 +19,13 @@ public class Indicator : MonoBehaviour {
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
+	private LedgeDetection m_ledgeCollDetection;
 
 	void Start ()
-    {
-        m_cooldownTimer = GetComponent<Timer>();
+	{
+		m_ledgeCollDetection = m_indi.GetComponentInChildren<LedgeDetection>();
+		m_ledgeCollDetection.gameObject.SetActive(false);
+		m_cooldownTimer = GetComponent<Timer>();
         m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
@@ -112,16 +115,22 @@ public class Indicator : MonoBehaviour {
             //If true then surface is wall
             if (Vector3.Angle(hit.normal, Vector3.up) > 45)
             {
+				m_ledgeCollDetection.findLedge(hit.normal);
+
                 m_indi.transform.position = hit.point + hit.normal;
-                // ## Start ledge detection ##
-            }
+				// ## Start ledge detection ##
+				m_ledgeCollDetection.gameObject.SetActive(true);
+
+			}
 
             //If true then normal is a ceiling
 
             //Else then surface is floor
             else
             {
-                for (int i = 0; i < 5; i++)
+				m_ledgeCollDetection.gameObject.SetActive(false);
+
+				for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;
                     Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
