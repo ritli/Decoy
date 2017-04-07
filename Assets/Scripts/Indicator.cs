@@ -130,7 +130,7 @@ public class Indicator : MonoBehaviour {
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
 				// ## Start ledge detection ##
-				if (m_ledgeCollDetection.findLedge(hit.normal))
+				if (m_ledgeCollDetection.findLedge(hit))
 				{
 					m_foundLedge = true;
 					m_charController.detectCollisions = false;
@@ -170,7 +170,7 @@ public class Indicator : MonoBehaviour {
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
             m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
-            print("Hitting the ground");
+            //print("Hitting the ground");
             return;
         }
 
