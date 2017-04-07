@@ -23,6 +23,7 @@ public class Indicator : MonoBehaviour {
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
+	private bool m_ledgeFound = false;
 
 	void Start ()
     {
@@ -45,6 +46,7 @@ public class Indicator : MonoBehaviour {
 
     // Handle input for teleportation controls.
 	void Update () {
+		
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
