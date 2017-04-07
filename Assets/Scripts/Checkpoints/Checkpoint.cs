@@ -4,16 +4,21 @@ using System.Collections;
 [ExecuteInEditMode]
 public class Checkpoint : MonoBehaviour {
 
-    public Transform m_ForcedSpawn;
-    public bool m_UseForcedSpawn = true;
+    [Tooltip("place an empty gameobject as a child to use a forced spawnposition. \nIf not the Checkpoints center will be used.")]
+    public Transform m_SpawnPosition;
     private int m_Index = 0;
-    private bool m_Used = false;
+
 	// Use this for initialization
 	void Start () 
     {
         
         CheckpointEditorManager.UpdateCheckpoints();
-	    m_ForcedSpawn = GetComponentInChildren<Transform>();
+        //loads forced position if one is present
+	    //m_SpawnPosition = GetComponentInChildren<Transform>();
+        //set spawn to checkpoint center
+        if (m_SpawnPosition == null)
+            m_SpawnPosition = transform;
+
         print("Checkpoint index: " + m_Index);
 	}
     void OnDisable()
@@ -32,33 +37,16 @@ public class Checkpoint : MonoBehaviour {
             PlayerPrefs.SetInt("CheckpointIndex", m_Index);
             print("Index set to " + m_Index);
 
-            if (m_UseForcedSpawn)
-            {
-                
+            PlayerPrefs.SetFloat("PositionX", m_SpawnPosition.position.x);
+            PlayerPrefs.SetFloat("PositionY", m_SpawnPosition.position.y);
+            PlayerPrefs.SetFloat("PositionZ", m_SpawnPosition.position.z);
 
-                PlayerPrefs.SetFloat("PositionX", m_ForcedSpawn.position.x);
-                PlayerPrefs.SetFloat("PositionY", m_ForcedSpawn.position.y);
-                PlayerPrefs.SetFloat("PositionZ", m_ForcedSpawn.position.z);
+            PlayerPrefs.SetFloat("RotationX", m_SpawnPosition.rotation.x);
+            PlayerPrefs.SetFloat("RotationY", m_SpawnPosition.rotation.y);
+            PlayerPrefs.SetFloat("RotationZ", m_SpawnPosition.rotation.z);
+            PlayerPrefs.SetFloat("RotationW", m_SpawnPosition.rotation.w);
 
-                PlayerPrefs.SetFloat("RotationX", m_ForcedSpawn.rotation.x);
-                PlayerPrefs.SetFloat("RotationY", m_ForcedSpawn.rotation.y);
-                PlayerPrefs.SetFloat("RotationZ", m_ForcedSpawn.rotation.z);
-                PlayerPrefs.SetFloat("RotationW", m_ForcedSpawn.rotation.w);
-
-            }
-            else
-            {
-                PlayerPrefs.SetFloat("PositionX", collider.transform.position.x);
-                PlayerPrefs.SetFloat("PositionY", collider.transform.position.y);
-                PlayerPrefs.SetFloat("PositionZ", collider.transform.position.z);
-
-                PlayerPrefs.SetFloat("RotationX", collider.transform.rotation.x);
-                PlayerPrefs.SetFloat("RotationY", collider.transform.rotation.y);
-                PlayerPrefs.SetFloat("RotationZ", collider.transform.rotation.z);
-                PlayerPrefs.SetFloat("RotationW", collider.transform.rotation.w);
-            }
             PlayerPrefs.Save();
-            m_Used = true;
         }
     }
     public static bool isPreviouslySaved()
