@@ -25,6 +25,11 @@ public class ParticleController : MonoBehaviour {
 
     }
 
+    public void PlayBurst(int count)
+    {
+        m_particleSystem.Emit(count);
+    }
+
     IEnumerator LerpOverTime(float a, float b, float time)
     {
         float timeElapsed = 0;
