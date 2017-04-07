@@ -11,6 +11,16 @@ public class InteractionTrigger : MonoBehaviour {
     private Raycast m_raycaster;
     private RaycastHit hit;
 
+    public interface ActivationObject
+    {
+        // Function to be called when activating the object, toggling on.
+        void activate();
+        // Function to be called when deactivating the objcet, toggling off.
+        void deactivate();
+        // Check if the object is activated or not.
+        bool isActivated();
+    }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -30,9 +40,24 @@ public class InteractionTrigger : MonoBehaviour {
                 Debug.DrawLine(m_playerTransform.position, hit.point, Color.green);
                 if (Input.GetButtonDown("Activate"))
                 {
-                    foreach (GameObject gameObject in activationObjects)
+                    foreach (GameObject actObject in activationObjects)
                     {
-
+                        ActivationObject objectActivation = actObject.GetComponent<ActivationObject>();
+                        // Only activate the object if the object is an interface of type ActivationObject
+                        if (objectActivation != null)
+                        {
+                            if (!toggle && !objectActivation.isActivated())
+                            {
+                                objectActivation.activate();
+                            }
+                            else if (toggle)
+                            {
+                                if (!objectActivation.isActivated())
+                                    objectActivation.activate();
+                                else
+                                    objectActivation.deactivate();
+                            }
+                        }
                     }
                 }
             }
