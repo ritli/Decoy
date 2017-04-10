@@ -4,6 +4,7 @@ using System.Collections;
 public class Indicator : MonoBehaviour {
 
     public GameObject m_decoy;
+    PlayerController m_player;
     public GameObject m_indi;
     float m_playerLength = 3f;
     private bool m_cancelTeleport = false;
@@ -34,6 +35,7 @@ public class Indicator : MonoBehaviour {
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
+        m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
@@ -59,8 +61,7 @@ public class Indicator : MonoBehaviour {
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
         {
-            float step = teleportSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
+            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
 
 			// When the players position has arrived, stop moving.
 			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
@@ -127,7 +128,10 @@ public class Indicator : MonoBehaviour {
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
 
+        //print(forward);
         Vector3 playerLook = Vector3.Scale(forward, teleportLimits) * m_length;
+
+        Ray rayForward = new Ray(Camera.main.transform.position, forward);
         Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
         Ray rayForward = new Ray(Camera.main.transform.position, forward);
 
@@ -137,7 +141,7 @@ public class Indicator : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-            //print(Vector3.Angle(hit.normal, Vector3.down));
+            print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
@@ -195,6 +199,7 @@ public class Indicator : MonoBehaviour {
             m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
             //print("Hitting the ground");
 			m_foundLedge = false;
+            print("Hitting the ground");
             return;
         }
 
