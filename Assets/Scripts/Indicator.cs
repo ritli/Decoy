@@ -16,9 +16,11 @@ public class Indicator : MonoBehaviour {
     public bool resetTimeOnCancel = false;
     [Header("Overrides the value of timer.")]
     public float teleportCooldown = 0.0f;
+    [Header("Adjusts speed of teleportation.")]
     public float teleportSpeed = 1.0f;
-    [Header("Scale the distance of teleportation in each axis.")]
-    public Vector3 teleportLimits = new Vector3(1, 1, 1);
+    [Header("Set limits of teleportation.")]
+    public float heightLimit = 1.0f;
+    public float lengthLimit = 1.0f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
@@ -39,6 +41,7 @@ public class Indicator : MonoBehaviour {
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
+        //m_raycaster.setRayScale(teleportLimits);
     }
 
     private void moveTo(Vector3 target)
@@ -130,7 +133,8 @@ public class Indicator : MonoBehaviour {
         Vector3 right = Camera.main.transform.right;
 
         //print(forward);
-        Vector3 playerLook = Vector3.Scale(forward, teleportLimits) * m_length;
+        Vector3 playerLook = forward * m_length;
+        print(playerLook);
 
         Ray rayForward = new Ray(Camera.main.transform.position, forward);
         Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
