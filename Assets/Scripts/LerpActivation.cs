@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LerpActivation : MonoBehaviour, InteractionTrigger.ActivationObject {
+public class LerpActivation : ActivationObject {
 
     public Transform startPos, destPos;
     public float deltaTime;
-    [Header("Determine if the object returns or stops.")]
+    [Header("Determine if the object returns or stops on toggle.")]
     public bool returnToStart = false;
     public float threshold = 0.5f;
 
@@ -14,7 +14,7 @@ public class LerpActivation : MonoBehaviour, InteractionTrigger.ActivationObject
     private bool m_isLerping = false;
 
     // Function to be called when activating the object, toggling on.
-    public void activate()
+    public override void activate()
     {
         m_lerpAim = destPos.transform.position;
         m_isLerping = true;
@@ -22,7 +22,7 @@ public class LerpActivation : MonoBehaviour, InteractionTrigger.ActivationObject
     }
 
     // Function to be called when deactivating the objcet, toggling off.
-    public void deactivate()
+    public override void deactivate()
     {
         m_isActive = false;
         if (returnToStart)
@@ -33,9 +33,27 @@ public class LerpActivation : MonoBehaviour, InteractionTrigger.ActivationObject
     }
 
     // Check if the object is activated or not.
-    public bool isActivated()
+    public override bool isActivated()
     {
         return m_isActive;
+    }
+
+    protected override void checkActivationEvent(int index)
+    {
+        if (checkIndex <= index)
+            transform.position = destPos.transform.position;
+    }
+
+    void OnEnable()
+    {
+        // Subscribe checkActivationEvent to the event
+        //InteractionTrigger.OnClicked += checkActivationEvent;
+    }
+
+    void OnDisable()
+    {
+        // Desubscribe checkActivationEvent to the event
+        //InteractionTrigger.OnClicked -= checkActivationEvent;
     }
 
     // Update is called once per frame
@@ -49,9 +67,4 @@ public class LerpActivation : MonoBehaviour, InteractionTrigger.ActivationObject
         if (Vector3.Distance(transform.position, m_lerpAim) <= threshold)
             m_isLerping = false;
 	}
-
-    public void setFinished()
-    {
-        transform.position = destPos.transform.position;
-    }
 }

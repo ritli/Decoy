@@ -1,44 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Abstract class implemented by objects which are to be activated by this kind of object.
 public abstract class ActivationObject : MonoBehaviour
 {
-    // Constructor
-    public ActivationObject(int index)
-    {
-        checkIndex = index;
-    }
-
-    protected int checkIndex;
+    [Header("Indicates corresponding checkpoint.")]
+    public int checkIndex;
     // Function to be called when activating the object, toggling on.
-    abstract protected void activate();
+    abstract public void activate();
     // Function to be called when deactivating the objcet, toggling off.
-    abstract protected void deactivate();
+    abstract public void deactivate();
     // Check if the object is activated or not.
-    abstract protected bool isActivated();
+    abstract public bool isActivated();
+    // Function which should be subscribed to an eventrigger.
+    abstract protected void checkActivationEvent(int index);
 }
 
 public class InteractionTrigger : MonoBehaviour {
 
+    // USED FOR TESTING EVENTS
+    //public delegate void ClickAction(int index);
+    //public static event ClickAction OnClicked;
+
     public float activationDistance = 1.0f;
-    public GameObject[] activationObjects;
+    public ActivationObject[] activationObjects;
     public bool toggle = false;
 
     private Transform m_playerTransform;
     private Raycast m_raycaster;
     private RaycastHit hit;
-
-    public interface ActivationObject
-    {
-        // Function to be called when activating the object, toggling on.
-        void activate();
-        // Function to be called when deactivating the objcet, toggling off.
-        void deactivate();
-        // Check if the object is activated or not.
-        bool isActivated();
-        // Check if the object should set its finished state or not.
-        void setFinished();
-    }
 
 	// Use this for initialization
 	void Start ()
@@ -59,23 +49,23 @@ public class InteractionTrigger : MonoBehaviour {
                 Debug.DrawLine(m_playerTransform.position, hit.point, Color.green);
                 if (Input.GetButtonDown("Activate"))
                 {
-                    foreach (GameObject actObject in activationObjects)
+                    foreach (ActivationObject actObject in activationObjects)
                     {
-                        ActivationObject objectActivation = actObject.GetComponent<ActivationObject>();
                         // Only activate the object if the object is an interface of type ActivationObject
-                        if (objectActivation != null)
+                        if (actObject != null)
                         {
-                            if (!toggle && !objectActivation.isActivated())
+                            //OnClicked(0);
+                            if (!toggle && !actObject.isActivated())
                             {
-                                objectActivation.activate();
+                                actObject.activate();
                             }
                             else if (toggle)
                             {
 
-                                if (!objectActivation.isActivated())
-                                    objectActivation.activate();
+                                if (!actObject.isActivated())
+                                    actObject.activate();
                                 else
-                                    objectActivation.deactivate();
+                                    actObject.deactivate();
                             }
                         }
                     }
