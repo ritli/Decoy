@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.Utility;
 
 public class Indicator : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class Indicator : MonoBehaviour {
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
+
+    public FOVKick m_fovKick;
 
     public float m_length;
     [Header("Reset the timer after canceling teleport:")]
@@ -22,12 +25,16 @@ public class Indicator : MonoBehaviour {
 	private bool m_foundLedge = false;
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
-	private CharacterController m_charController;
-	private bool m_ledgeFound = false;
+    private ParticleController m_partController;
+    private CharacterController m_charController;
+    private bool m_ledgeFound = false;
+
 
 	void Start ()
     {
-		m_charController = GetComponent<CharacterController>();
+        m_partController = Camera.main.GetComponent<ParticleController>();
+        m_cooldownTimer = GetComponent<Timer>();
+        m_charController = GetComponent<CharacterController>();
 		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
@@ -35,6 +42,7 @@ public class Indicator : MonoBehaviour {
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
+        m_fovKick.Setup(Camera.main);
     }
 
     private void moveTo(Vector3 target)
@@ -90,6 +98,9 @@ public class Indicator : MonoBehaviour {
 				}
 
                 Vector3 lastPos = transform.position;
+                PlayVisualEffects();
+
+                moveTo(m_indi.transform.position);
 
                 m_cooldownTimer.resetTimer();
 
@@ -115,6 +126,21 @@ public class Indicator : MonoBehaviour {
             if (resetTimeOnCancel)
                 m_cooldownTimer.resetTimer();
         }
+    }
+
+    void PlayVisualEffects()
+    {
+        StartCoroutine(m_fovKick.FOVKickUp());
+        m_partController.LerpAlpha(0, 0.7f, 0.05f);
+        m_partController.PlayBurst(50);
+
+        Invoke("CancelVisualEffects", 0.1f);
+    }
+
+    void CancelVisualEffects()
+    {
+        StartCoroutine(m_fovKick.FOVKickDown());
+        m_partController.LerpAlpha(0.5f, 0, 0.05f);
     }
 
     void ShowIndicator()
