@@ -28,7 +28,7 @@ public class Indicator : MonoBehaviour {
 	void Start ()
     {
 		m_charController = GetComponent<CharacterController>();
-		m_ledgeCollDetection = m_indi.GetComponentInChildren<LedgeDetection>();
+		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -46,6 +46,14 @@ public class Indicator : MonoBehaviour {
     // Handle input for teleportation controls.
 	void Update () {
 		
+
+		if (m_foundLedge) 
+		{
+			m_ledgeCollDetection.setIndicator (true);
+		} else 
+		{
+			m_ledgeCollDetection.setIndicator (false);
+		}
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
@@ -102,6 +110,7 @@ public class Indicator : MonoBehaviour {
             {
                 m_cancelTeleport = true;
                 m_indi.SetActive(false);
+				m_foundLedge = false;
             }
 
             if (resetTimeOnCancel)
@@ -139,10 +148,14 @@ public class Indicator : MonoBehaviour {
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
 				// ## Start ledge detection ##
-				if (m_ledgeCollDetection.findLedge(hit))
+				if (m_ledgeCollDetection.findLedge (hit)) 
 				{
+					print ("Found ledge");
 					m_foundLedge = true;
 					m_charController.detectCollisions = false;
+				} else 
+				{
+					m_foundLedge = false;	
 				}
 				m_indi.transform.position = hit.point + hit.normal;
 
@@ -179,6 +192,7 @@ public class Indicator : MonoBehaviour {
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
             m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+			m_foundLedge = false;
             print("Hitting the ground");
             return;
         }
@@ -197,7 +211,7 @@ public class Indicator : MonoBehaviour {
                 }
             }
         }
-
+		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
     }
 
