@@ -104,8 +104,6 @@ public class Indicator : MonoBehaviour {
                 Vector3 lastPos = transform.position;
                 PlayVisualEffects();
 
-                //moveTo(m_indi.transform.position);
-
                 m_cooldownTimer.resetTimer();
 
                 GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
