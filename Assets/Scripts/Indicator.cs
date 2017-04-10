@@ -22,6 +22,8 @@ public class Indicator : MonoBehaviour {
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
+	private bool m_foundLedge = false;
+	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
     private ParticleController m_partController;
 
@@ -30,6 +32,14 @@ public class Indicator : MonoBehaviour {
         m_partController = Camera.main.GetComponent<ParticleController>();
         
         m_cooldownTimer = GetComponent<Timer>();
+	private CharacterController m_charController;
+	private bool m_ledgeFound = false;
+
+	void Start ()
+    {
+		m_charController = GetComponent<CharacterController>();
+		m_ledgeCollDetection = GetComponent<LedgeDetection>();
+		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
         m_indi.SetActive(false);
@@ -40,22 +50,33 @@ public class Indicator : MonoBehaviour {
 
     private void moveTo(Vector3 target)
     {
-        m_teleportTo = target;
+		m_teleportTo = target;
         m_arrived = false;
     }
 
     // Handle input for teleportation controls.
 	void Update () {
+		
+		/*if (m_foundLedge) 
+		{
+			m_ledgeCollDetection.setIndicator (true);
+		} else 
+		{
+			m_ledgeCollDetection.setIndicator (false);
+		}*/
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
         {
             transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
 
-            // When the players position has arrived, stop moving.
-            if (Vector3.Distance(transform.position, m_teleportTo) == 0)
-                m_arrived = true;
-        }
+			// When the players position has arrived, stop moving.
+			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+			{
+				m_arrived = true;
+				m_charController.detectCollisions = true;
+			}
+		}
 
         if (Input.GetButton("Teleport"))
         {
@@ -69,6 +90,15 @@ public class Indicator : MonoBehaviour {
             if (!m_cancelTeleport && m_indi.activeSelf)
             {
                 m_indi.SetActive(false);
+				//transform.position = m_indi.transform.position;
+				if (m_foundLedge)
+				{
+					moveTo(m_ledgeCollDetection.getNewPosition());
+					m_foundLedge = false;
+				} else
+				{
+					moveTo(m_indi.transform.position);
+				}
 
                 Vector3 lastPos = transform.position;
                 PlayVisualEffects();
@@ -93,6 +123,7 @@ public class Indicator : MonoBehaviour {
             {
                 m_cancelTeleport = true;
                 m_indi.SetActive(false);
+				m_foundLedge = false;
             }
 
             if (resetTimeOnCancel)
@@ -133,7 +164,7 @@ public class Indicator : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-            print(Vector3.Angle(hit.normal, Vector3.down));
+            //print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
@@ -141,17 +172,30 @@ public class Indicator : MonoBehaviour {
                 return;
             }
 
-            //If true then surface is wall
-            if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-            {
-                m_indi.transform.position = hit.point + hit.normal;
-            }
-            //If true then normal is a ceiling
+			//If true then surface is wall
+			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
+			{
+				// ## Start ledge detection ##
+				if (m_ledgeCollDetection.findLedge (hit)) 
+				{
+					print ("Found ledge");
+					m_foundLedge = true;
+					m_charController.detectCollisions = false;
+				} else 
+				{
+					m_foundLedge = false;	
+				}
+				m_indi.transform.position = hit.point + hit.normal;
 
-            //Else then surface is floor
-            else
+			}
+
+			//If true then normal is a ceiling
+
+			//Else then surface is floor
+			else
             {
-                for (int i = 0; i < 5; i++)
+
+				for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;
                     Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
@@ -176,6 +220,7 @@ public class Indicator : MonoBehaviour {
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
             m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+			m_foundLedge = false;
             print("Hitting the ground");
             return;
         }
@@ -194,7 +239,7 @@ public class Indicator : MonoBehaviour {
                 }
             }
         }
-
+		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
     }
 
