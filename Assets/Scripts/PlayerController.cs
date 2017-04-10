@@ -10,6 +10,11 @@ public enum PlayerState
     isAlive, isDead, isPause
 } 
 
+enum AnimationState
+{
+    idle, moving, jumping
+}
+
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
 public class PlayerController : MonoBehaviour, IKillable
@@ -17,6 +22,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_controlsEnabled = true;
 
     public PlayerState m_playerState = PlayerState.isAlive;
+    AnimationState m_aniState = AnimationState.idle;
+    Animator m_animator;
 
     //Decoy event
     public delegate void DecoyAction();
@@ -78,8 +85,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
-
-
+        m_animator = Camera.main.GetComponentInChildren<Animator>();
 
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
@@ -93,8 +99,9 @@ public class PlayerController : MonoBehaviour, IKillable
         }
 
         else
+        { 
             transform.position = initialPos;
-
+        }
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -114,6 +121,38 @@ public class PlayerController : MonoBehaviour, IKillable
         //Application.LoadLevel(0);
     }
 
+
+    void UpdateAnimator()
+    {
+        switch (m_aniState)
+        {
+            case AnimationState.idle:
+                break;
+            case AnimationState.moving:
+                break;
+            case AnimationState.jumping:
+                break;
+            default:
+                break;
+        }
+
+        m_animator.SetInteger("State", (int)m_aniState);
+    }
+
+    void ReadAnimationState()
+    {
+        if (Mathf.Abs(m_Input.magnitude) > 0 && !m_Jumping) 
+        {
+            m_aniState = AnimationState.moving;
+        }
+        else
+        {
+            m_aniState = AnimationState.idle;
+        }
+
+        UpdateAnimator();
+    }
+
     public void CreateDecoy()
     {
         //GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
@@ -126,9 +165,13 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
-    void ResetPlayer()
+    void Crouch()
     {
 
+    }
+
+    void ResetPlayer()
+    {
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
         Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
         if(Checkpoint.isPreviouslySaved())
@@ -147,8 +190,6 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
-
-
         switch (m_playerState)
         {
             case PlayerState.isAlive:
@@ -157,6 +198,7 @@ public class PlayerController : MonoBehaviour, IKillable
                     Jump();
         
                     m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                    ReadAnimationState();
                 break;
             case PlayerState.isDead:
                 Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
