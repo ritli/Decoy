@@ -1,6 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public abstract class ActivationObject : MonoBehaviour
+{
+    // Constructor
+    public ActivationObject(int index)
+    {
+        checkIndex = index;
+    }
+
+    protected int checkIndex;
+    // Function to be called when activating the object, toggling on.
+    abstract protected void activate();
+    // Function to be called when deactivating the objcet, toggling off.
+    abstract protected void deactivate();
+    // Check if the object is activated or not.
+    abstract protected bool isActivated();
+}
+
 public class InteractionTrigger : MonoBehaviour {
 
     public float activationDistance = 1.0f;
@@ -19,6 +36,8 @@ public class InteractionTrigger : MonoBehaviour {
         void deactivate();
         // Check if the object is activated or not.
         bool isActivated();
+        // Check if the object should set its finished state or not.
+        void setFinished();
     }
 
 	// Use this for initialization
@@ -52,6 +71,7 @@ public class InteractionTrigger : MonoBehaviour {
                             }
                             else if (toggle)
                             {
+
                                 if (!objectActivation.isActivated())
                                     objectActivation.activate();
                                 else

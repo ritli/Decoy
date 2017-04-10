@@ -161,9 +161,12 @@ public class Indicator : MonoBehaviour {
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
 
-        //print(forward);
+        forward.y *= heightLimit;
+        forward.x *= lengthLimit;
+        forward.z *= lengthLimit;
+
         Vector3 playerLook = forward * m_length;
-        print(playerLook);
+        
 
         Ray rayForward = new Ray(Camera.main.transform.position, forward);
         Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
@@ -172,7 +175,7 @@ public class Indicator : MonoBehaviour {
 
         Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
-        if (m_raycaster.doRaycast(out hit))
+        if (m_raycaster.doRaycast(out hit, playerLook))
         {
             //print(Vector3.Angle(hit.normal, Vector3.down));
 

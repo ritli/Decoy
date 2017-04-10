@@ -49,4 +49,9 @@ public class LerpActivation : MonoBehaviour, InteractionTrigger.ActivationObject
         if (Vector3.Distance(transform.position, m_lerpAim) <= threshold)
             m_isLerping = false;
 	}
+
+    public void setFinished()
+    {
+        transform.position = destPos.transform.position;
+    }
 }
