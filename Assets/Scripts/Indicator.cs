@@ -26,18 +26,15 @@ public class Indicator : MonoBehaviour {
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
     private ParticleController m_partController;
+    private CharacterController m_charController;
+    private bool m_ledgeFound = false;
+
 
 	void Start ()
     {
         m_partController = Camera.main.GetComponent<ParticleController>();
-        
         m_cooldownTimer = GetComponent<Timer>();
-	private CharacterController m_charController;
-	private bool m_ledgeFound = false;
-
-	void Start ()
-    {
-		m_charController = GetComponent<CharacterController>();
+        m_charController = GetComponent<CharacterController>();
 		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
