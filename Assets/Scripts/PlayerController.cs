@@ -72,12 +72,14 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_StepCycle;
     private float m_NextStep;
     private bool m_Jumping;
+    private bool m_crouching = false;
     private AudioSource m_AudioSource;
     private float m_speedWindup;
     private Vector2 m_lastInput;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
+    private float m_initalHeight;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -111,6 +113,8 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
+        m_initalHeight = m_CharacterController.height;
+
     }
 
     public void Kill()
@@ -167,6 +171,23 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Crouch()
     {
+        if (CrossPlatformInputManager.GetButton("Crouch"))
+        {
+            m_crouching = true;
+        }
+        else
+        {
+            m_crouching = false;
+        }
+
+        if (m_crouching)
+        {
+            m_CharacterController.height = m_initalHeight * 0.2f;
+        }
+        else
+        {
+            m_CharacterController.height = m_initalHeight;
+        }
 
     }
 
@@ -196,7 +217,7 @@ public class PlayerController : MonoBehaviour, IKillable
                     RotateView();
                     // the jump state needs to read here to make sure it is not missed
                     Jump();
-        
+                    Crouch();
                     m_PreviouslyGrounded = m_CharacterController.isGrounded;
                     ReadAnimationState();
                 break;
