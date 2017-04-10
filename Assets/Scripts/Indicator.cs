@@ -61,7 +61,8 @@ public class Indicator : MonoBehaviour {
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
         {
-            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
+            float step = teleportSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
 			// When the players position has arrived, stop moving.
 			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
@@ -140,7 +141,7 @@ public class Indicator : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-            print(Vector3.Angle(hit.normal, Vector3.down));
+            //print(Vector3.Angle(hit.normal, Vector3.down));
 
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
@@ -154,7 +155,7 @@ public class Indicator : MonoBehaviour {
 				// ## Start ledge detection ##
 				if (m_ledgeCollDetection.findLedge (hit)) 
 				{
-					print ("Found ledge");
+					//print ("Found ledge");
 					m_foundLedge = true;
 					m_charController.detectCollisions = false;
 				} else 
@@ -198,7 +199,7 @@ public class Indicator : MonoBehaviour {
             m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
             //print("Hitting the ground");
 			m_foundLedge = false;
-            print("Hitting the ground");
+            //print("Hitting the ground");
             return;
         }
 
