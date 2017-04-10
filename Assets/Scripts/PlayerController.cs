@@ -3,13 +3,28 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
-
+public enum PlayerState
+{
+    isAlive, isDead, isPause
+} 
 
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IKillable
 {
+    private bool m_controlsEnabled = true;
+
+    public PlayerState m_playerState = PlayerState.isAlive;
+
+    //Decoy event
+    public delegate void DecoyAction();
+    public static event DecoyAction OnCreateDecoy;
+
+    //Decoy vars
+    public GameObject m_decoy;
+
     //Run vars
     [Header("Walk Variables")]
     [Tooltip("For every fixed update the speed multiplier is increased or decreased by this value based on if you are starting or ending a movement.")]
@@ -58,9 +73,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
-   
+    Vector3 initialCameraPos;
+    Vector3 initialPos;
+
+
     private void Start()
     {
+        initialCameraPos = Camera.main.transform.position;
+        initialPos = transform.position;
+
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -74,15 +95,58 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void Kill()
+    {
+        m_playerState = PlayerState.isDead;
+        m_controlsEnabled = false;
+
+        //Application.LoadLevel(0);
+    }
+
+    public void CreateDecoy()
+    {
+        //GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
+
+        //GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+
+        if (OnCreateDecoy != null)
+        {
+            OnCreateDecoy();
+        }
+    }
+
+    void ResetPlayer()
+    {
+        transform.position = initialPos;
+        Camera.main.transform.position = initialCameraPos;
+        m_playerState = PlayerState.isAlive;
+
+    }
 
     // Update is called once per frame
     private void Update()
     {
-        RotateView();
-        // the jump state needs to read here to make sure it is not missed
-        Jump();
+        switch (m_playerState)
+        {
+            case PlayerState.isAlive:
+                    RotateView();
+                    // the jump state needs to read here to make sure it is not missed
+                    Jump();
         
-        m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                    m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                break;
+            case PlayerState.isDead:
+                Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
+                Camera.main.transform.Translate(Vector3.down * Time.deltaTime);
+                Invoke("ResetPlayer", 1.5f);
+                break;
+            case PlayerState.isPause:
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     void Jump()

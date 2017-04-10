@@ -11,6 +11,7 @@ GameObject:
   - 20: {fileID: 2037190}
   - 81: {fileID: 8155470}
   - 124: {fileID: 12441502}
+  - 114: {fileID: 11446192}
   m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
@@ -86,9 +87,9 @@ GameObject:
   - 114: {fileID: 11470492}
   - 114: {fileID: 11492416}
   - 114: {fileID: 11402340}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -429,6 +430,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffd85d4a56025b47b5728057fe4f3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_playerState: 0
+  m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_WindupScale: 0.05
   m_WalkSpeed: 10
   m_JumpForce: 10
@@ -504,17 +507,19 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
   m_LandSound: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
---- !u!114 &11452320
+--- !u!114 &11446192
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147030}
+  m_GameObject: {fileID: 120282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecbfc1293592c7240b6af8866c80fdc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a036ac295913984aa7fbcfaa61e4638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Resolution: 1
+  DefaultSpotCookie: {fileID: 2800000, guid: e746ba60c8ce2864f9118588c90f3a77, type: 3}
   ledgeThreshold: 2.5
 --- !u!114 &11470492
 MonoBehaviour:
@@ -527,6 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f168c249259ca45b4770ec38f4cc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_indi: {fileID: 187996}
   m_length: 16.33
   resetTimeOnCancel: 0

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Indicator : MonoBehaviour {
 
-    PlayerController m_player;
+    public GameObject m_decoy;
     public GameObject m_indi;
     float m_playerLength = 3f;
     private bool m_cancelTeleport = false;
@@ -32,7 +32,6 @@ public class Indicator : MonoBehaviour {
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
-        m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
@@ -82,7 +81,15 @@ public class Indicator : MonoBehaviour {
 				{
 					moveTo(m_indi.transform.position);
 				}
-				m_cooldownTimer.resetTimer();
+
+                Vector3 lastPos = transform.position;
+
+                m_cooldownTimer.resetTimer();
+
+                GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
+                GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+                GameManager.GetPlayer().CreateDecoy();
+
             }
             else
                 m_cancelTeleport = false;
@@ -112,7 +119,7 @@ public class Indicator : MonoBehaviour {
         Vector3 playerLook = forward * m_length;
 
         Ray rayForward = new Ray(Camera.main.transform.position, forward);
-        Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
+        Ray rayDown = new Ray(transform.position + playerLook + (new Vector3(0, 1.0f, 0)), Vector3.down);
 
         RaycastHit hit = new RaycastHit();
 
@@ -154,7 +161,7 @@ public class Indicator : MonoBehaviour {
 
                     if (Physics.Raycast(centerpos, dir, out hit, 1f))
                     {
-                        
+
                         if (Vector3.Angle(hit.normal, Vector3.up) > 45)
                         {
                             m_indi.transform.position = hit.point + hit.normal;
@@ -163,7 +170,7 @@ public class Indicator : MonoBehaviour {
                     }
                 }
                 m_indi.transform.position = hit.point + Vector3.up * 0.2f;
-                
+
             }
             return;
 
@@ -171,8 +178,8 @@ public class Indicator : MonoBehaviour {
         // Check for collision of floor when ray does not hit a surface.
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
-            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
-            //print("Hitting the ground");
+            m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+            print("Hitting the ground");
             return;
         }
 
@@ -190,7 +197,7 @@ public class Indicator : MonoBehaviour {
                 }
             }
         }
-        
+
         m_indi.transform.position = transform.position + playerLook;
     }
 
