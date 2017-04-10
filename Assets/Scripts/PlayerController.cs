@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector2 m_lastInput;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
+    private bool m_resetCalled = false;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -77,8 +78,22 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
+
+
+
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
+
+
+        //get previous location and rotation
+        if (Checkpoint.isPreviouslySaved())
+        {
+            transform.position = Checkpoint.getSavedPlayerPosition();
+            transform.rotation = Checkpoint.getSavedPlayerRotation();
+        }
+
+        else
+            transform.position = initialPos;
 
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
@@ -113,9 +128,19 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void ResetPlayer()
     {
-        transform.position = initialPos;
-        Camera.main.transform.position = initialCameraPos;
+
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
+        Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
+        if(Checkpoint.isPreviouslySaved())
+        {
+            transform.position = Checkpoint.getSavedPlayerPosition();
+            transform.rotation = Checkpoint.getSavedPlayerRotation();
+        }      
+        else
+            transform.position = initialPos;
+
         m_playerState = PlayerState.isAlive;
+        m_resetCalled = false;
 
     }
 
@@ -135,8 +160,12 @@ public class PlayerController : MonoBehaviour, IKillable
                 break;
             case PlayerState.isDead:
                 Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-                Camera.main.transform.Translate(Vector3.down * Time.deltaTime);
-                Invoke("ResetPlayer", 1.5f);
+                Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+                if (!m_resetCalled)
+                {
+                    m_resetCalled = true;
+                    Invoke("ResetPlayer", 1.5f);
+                }
                 break;
             case PlayerState.isPause:
                 break;
