@@ -3,12 +3,14 @@ using System.Collections;
 
 public class LookAt : MonoBehaviour 
 {
-    public Transform[] waypoints;
+    Transform[] waypoints;
     bool m_MovingAim;
     public float speed;
     Vector3 targetPosition;
     Vector3 directionToTarget;
     Quaternion targetRotation;
+
+    Transform m_waypointParent;
 
     int waypointIndex = 0;
     float timeSinceChange = 0;
@@ -18,10 +20,30 @@ public class LookAt : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
+        GetWaypoints();
+
         lookAtWaypoint();
-        //m_MovingAim = false;
 	}
 	
+    //Dynamically allocates waypoints based on the amount of children the gameobject waypoint has
+    void GetWaypoints()
+    {
+        if (m_waypointParent = transform.parent.transform.FindChild("Waypoints"))
+        {
+            waypoints = new Transform[m_waypointParent.childCount];
+
+            for (int i = 0; i < waypoints.Length; i++)
+            {
+                waypoints[i] = m_waypointParent.GetChild(i);
+            }
+        }
+
+        else
+        {
+            Debug.LogError("ERROR: Turret must have gameobject named 'Waypoints' as a child.");
+        }
+    }
+
 	// Update is called once per frame
 	void Update ()
     {
