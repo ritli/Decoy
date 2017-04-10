@@ -2245,30 +2245,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 198842473959753938, guid: 4d041c3e539ffd1459a5d8213a778764,
-        type: 2}
-      propertyPath: InitialModule.startSpeed.scalar
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 198842473959753938, guid: 4d041c3e539ffd1459a5d8213a778764,
-        type: 2}
-      propertyPath: randomSeed
-      value: 196180303
-      objectReference: {fileID: 0}
-    - target: {fileID: 198842473959753938, guid: 4d041c3e539ffd1459a5d8213a778764,
-        type: 2}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198842473959753938, guid: 4d041c3e539ffd1459a5d8213a778764,
-        type: 2}
-      propertyPath: ShapeModule.angle
-      value: 28.041237
-      objectReference: {fileID: 0}
-    - target: {fileID: 12028502, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
   m_IsPrefabParent: 0
@@ -24518,42 +24494,6 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
---- !u!1 &1534278336 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 120282, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
-  m_PrefabInternal: {fileID: 143833176}
---- !u!114 &1534278343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1534278336}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97e9b95cf609d96409b6c40519432957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filterType: 2
-  preview: 0
-  previewScale: {x: 1, y: 1, z: 1}
-  movementScale: 0
-  rotationScale: 1
-  maxVelocity: 4.7
-  minVelocity: 0.1
-  velocityScale: 1.46
-  softZDistance: 0.005
-  velocityDownsample: 1
-  excludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  shader: {fileID: 4800000, guid: 85a88efa8c871af4a9d17c64791b6f4f, type: 3}
-  dx11MotionBlurShader: {fileID: 4800000, guid: f1b13d7a80660504a858ea24cfa418c6,
-    type: 3}
-  replacementClear: {fileID: 4800000, guid: 7699c5fbfa27745a1abe111ab7bf9785, type: 3}
-  noiseTexture: {fileID: 2800000, guid: 31f5a8611c4ed1245b18456206e798dc, type: 3}
-  jitter: 0.05
-  showVelocity: 0
-  showVelocityScale: 1
 --- !u!43 &1538943052
 Mesh:
   m_ObjectHideFlags: 0
@@ -27689,6 +27629,21 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1888700849 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 170274, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+  m_PrefabInternal: {fileID: 1868302284}
+--- !u!114 &1888700852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1888700849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf09379a174103442828de85a9eafc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1898580713
 GameObject:
   m_ObjectHideFlags: 0
