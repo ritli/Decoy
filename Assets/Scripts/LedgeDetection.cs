@@ -3,12 +3,10 @@ using System.Collections;
 
 public class LedgeDetection : MonoBehaviour {
 
-	//private GameObject m_indicator;
-    private bool m_wallTouched = false;
     private Vector3 m_wallNormal;
     private Ray m_rayDown;
 	private Vector3 m_newPosition = new Vector3(0, 0, 0);
-	private SpriteRenderer m_spriteRenderer;
+	//private SpriteRenderer m_spriteRenderer;
 
     public float ledgeThreshold;
 	public float positionOffset;
@@ -16,21 +14,11 @@ public class LedgeDetection : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		//m_indicator = transform.FindChild("LedgeIndicator").gameObject;
-		m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-		//setIndicator(false);
+		//m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 	}
-
-    void OnCollisionExit()
-    {
-		//setIndicator(false);
-		m_wallTouched = false;
-    }
 
 	public bool findLedge(RaycastHit wallHit)
     {
-
-		//setIndicator (false);
 
 		// Creates new direction and position based on wall hit
 		Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
@@ -62,9 +50,6 @@ public class LedgeDetection : MonoBehaviour {
 		// Ray moved up and looking down based on wallNormal
 		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
 
-		print ("Yellow position: " + m_rayDown.origin);
-		//print("Yellow ray direction: " + m_rayDown.direction);
-
 		// If ray hit the floor
 		if (Physics.Raycast(m_rayDown, out hit))
 		{
@@ -81,8 +66,6 @@ public class LedgeDetection : MonoBehaviour {
 					// Set the new position
 					m_newPosition = hit.point;
 
-					//setIndicator(true);
-
 					return true;
 				}
 				// Else set the position to the point on the wall
@@ -97,7 +80,6 @@ public class LedgeDetection : MonoBehaviour {
 		else
 		{
 			//print("No floor found");
-			//setIndicator(false);
 			m_newPosition = wallHit.point;
 		}
 		return false;
@@ -110,14 +92,13 @@ public class LedgeDetection : MonoBehaviour {
 
 	public void setIndicator(bool state) 
 	{
-		if (state) 
+		/*if (state) 
 		{
 			m_spriteRenderer.color = Color.red;
 		} else 
 		{
 			m_spriteRenderer.color = Color.white;
-		}
-		//m_indicator.SetActive (state);	
+		}*/	
 	}
 
 }

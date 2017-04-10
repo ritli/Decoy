@@ -46,14 +46,13 @@ public class Indicator : MonoBehaviour {
     // Handle input for teleportation controls.
 	void Update () {
 		
-
-		if (m_foundLedge) 
+		/*if (m_foundLedge) 
 		{
 			m_ledgeCollDetection.setIndicator (true);
 		} else 
 		{
 			m_ledgeCollDetection.setIndicator (false);
-		}
+		}*/
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
