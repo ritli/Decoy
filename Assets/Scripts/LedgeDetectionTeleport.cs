@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LedgeDetection : MonoBehaviour {
+public class LedgeDetectionTeleport : MonoBehaviour {
 
     private Vector3 m_wallNormal;
     private Ray m_rayDown;
@@ -54,7 +54,6 @@ public class LedgeDetection : MonoBehaviour {
 
 		// Ray moved up and looking down based on wallNormal
 		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
-
 		Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		Vector3 rayDownNormal;
@@ -68,7 +67,7 @@ public class LedgeDetection : MonoBehaviour {
 				// Ray from the floor above ledge
 				Debug.DrawRay(hit.point, hit.normal * 5, Color.white);
 
-				// If the point is above where the aim is
+				// If the floor is above where the aim is
 				if (hit.point.y >= wallHit.point.y)
 				{
 					// Store the normal for later use

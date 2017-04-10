@@ -9,7 +9,7 @@ using System.Collections;
 
 public class PlayerTeleport : MonoBehaviour {
 
-    private LedgeDetection m_ledgeDetection;
+	private LedgeDetectionTeleport m_ledgeDetection;
     private LerpObject m_lerpObject;
     private TeleportationAdjuster m_teleportAdjuster;
     private GameObject m_instanceOfteleportTarget;
@@ -23,7 +23,7 @@ public class PlayerTeleport : MonoBehaviour {
     public float teleportDistance;
 
     void Start() {
-        m_ledgeDetection = GetComponent<LedgeDetection>();
+		m_ledgeDetection = GetComponent<LedgeDetectionTeleport>();
         m_lerpObject = GetComponent<LerpObject>();
         m_raycaster = GetComponent<Raycast>();
         m_playerCamera = GetComponentInChildren<Camera>();

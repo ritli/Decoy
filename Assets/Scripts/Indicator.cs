@@ -23,7 +23,7 @@ public class Indicator : MonoBehaviour {
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
 	private bool m_foundLedge = false;
-	private LedgeDetection m_ledgeCollDetection;
+	private LedgeDetectionTeleport m_ledgeDetectTele;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
 	private SpriteRenderer m_spriteRenderer;
@@ -36,7 +36,7 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
         m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_charController = GetComponent<CharacterController>();
-		m_ledgeCollDetection = GetComponent<LedgeDetection>();
+		m_ledgeDetectTele = GetComponent<LedgeDetectionTeleport>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -94,7 +94,7 @@ public class Indicator : MonoBehaviour {
 				//transform.position = m_indi.transform.position;
 				if (m_foundLedge)
 				{
-					moveTo(m_ledgeCollDetection.getNewPosition());
+					moveTo(m_ledgeDetectTele.getNewPosition());
 					m_foundLedge = false;
 				} else
 				{
@@ -175,7 +175,7 @@ public class Indicator : MonoBehaviour {
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
 				// ## Start ledge detection ##
-				if (m_ledgeCollDetection.findLedge (hit)) 
+				if (m_ledgeDetectTele.findLedge (hit)) 
 				{
 					print ("Found ledge");
 					m_foundLedge = true;
