@@ -133,7 +133,6 @@ public class Indicator : MonoBehaviour {
 
         Ray rayForward = new Ray(Camera.main.transform.position, forward);
         Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
-        Ray rayForward = new Ray(Camera.main.transform.position, forward);
 
         RaycastHit hit = new RaycastHit();
 
