@@ -23,10 +23,11 @@ public class Indicator : MonoBehaviour {
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
-	private bool m_ledgeFound = false;
+	private SpriteRenderer m_spriteRenderer;
 
 	void Start ()
     {
+		m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 		m_charController = GetComponent<CharacterController>();
 		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
@@ -46,13 +47,16 @@ public class Indicator : MonoBehaviour {
     // Handle input for teleportation controls.
 	void Update () {
 		
-		/*if (m_foundLedge) 
+		if (m_indi.activeSelf) 
 		{
-			m_ledgeCollDetection.setIndicator (true);
-		} else 
-		{
-			m_ledgeCollDetection.setIndicator (false);
-		}*/
+			if (m_foundLedge) 
+			{
+				m_spriteRenderer.color = Color.red;
+			} else 
+			{
+				m_spriteRenderer.color = Color.white;
+			}
+		}
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
@@ -213,5 +217,4 @@ public class Indicator : MonoBehaviour {
 		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
     }
-
 }

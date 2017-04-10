@@ -6,15 +6,15 @@ public class LedgeDetection : MonoBehaviour {
     private Vector3 m_wallNormal;
     private Ray m_rayDown;
 	private Vector3 m_newPosition = new Vector3(0, 0, 0);
-	//private SpriteRenderer m_spriteRenderer;
 
+	[Header("Distance from ledge:")]
     public float ledgeThreshold;
 	public float positionOffset;
 
 
     // Use this for initialization
     void Start () {
-		//m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+		
 	}
 
 	public bool findLedge(RaycastHit wallHit)
@@ -88,17 +88,6 @@ public class LedgeDetection : MonoBehaviour {
 	public Vector3 getNewPosition()
 	{
 		return m_newPosition;
-	}
-
-	public void setIndicator(bool state) 
-	{
-		/*if (state) 
-		{
-			m_spriteRenderer.color = Color.red;
-		} else 
-		{
-			m_spriteRenderer.color = Color.white;
-		}*/	
 	}
 
 }
