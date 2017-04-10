@@ -3,13 +3,28 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
-
+public enum PlayerState
+{
+    isAlive, isDead, isPause
+} 
 
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IKillable
 {
+    private bool m_controlsEnabled = true;
+
+    public PlayerState m_playerState = PlayerState.isAlive;
+
+    //Decoy event
+    public delegate void DecoyAction();
+    public static event DecoyAction OnCreateDecoy;
+
+    //Decoy vars
+    public GameObject m_decoy;
+
     //Run vars
     [Header("Walk Variables")]
     [Tooltip("For every fixed update the speed multiplier is increased or decreased by this value based on if you are starting or ending a movement.")]
@@ -57,10 +72,31 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_lastInput;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
+    private bool m_resetCalled = false;
 
-   
+    Vector3 initialCameraPos;
+    Vector3 initialPos;
+
+
     private void Start()
     {
+
+
+
+        initialCameraPos = Camera.main.transform.position;
+        initialPos = transform.position;
+
+
+        //get previous location and rotation
+        if (Checkpoint.isPreviouslySaved())
+        {
+            transform.position = Checkpoint.getSavedPlayerPosition();
+            transform.rotation = Checkpoint.getSavedPlayerRotation();
+        }
+
+        else
+            transform.position = initialPos;
+
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -74,15 +110,72 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void Kill()
+    {
+        m_playerState = PlayerState.isDead;
+        m_controlsEnabled = false;
+
+        //Application.LoadLevel(0);
+    }
+
+    public void CreateDecoy()
+    {
+        //GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
+
+        //GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+
+        if (OnCreateDecoy != null)
+        {
+            OnCreateDecoy();
+        }
+    }
+
+    void ResetPlayer()
+    {
+
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
+        Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
+        if(Checkpoint.isPreviouslySaved())
+        {
+            transform.position = Checkpoint.getSavedPlayerPosition();
+            transform.rotation = Checkpoint.getSavedPlayerRotation();
+        }      
+        else
+            transform.position = initialPos;
+
+        m_playerState = PlayerState.isAlive;
+        m_resetCalled = false;
+
+    }
 
     // Update is called once per frame
     private void Update()
     {
-        RotateView();
-        // the jump state needs to read here to make sure it is not missed
-        Jump();
+        switch (m_playerState)
+        {
+            case PlayerState.isAlive:
+                    RotateView();
+                    // the jump state needs to read here to make sure it is not missed
+                    Jump();
         
-        m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                    m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                break;
+            case PlayerState.isDead:
+                Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
+                Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+                if (!m_resetCalled)
+                {
+                    m_resetCalled = true;
+                    Invoke("ResetPlayer", 1.5f);
+                }
+                break;
+            case PlayerState.isPause:
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     void Jump()
