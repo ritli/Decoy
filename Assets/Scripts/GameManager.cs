@@ -3,10 +3,14 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
+    // Event for telling all ActivationObjects to be reset.
+    public delegate void ActivationReset(int index);
+    public static event ActivationReset OnActivationReset;
+
     static GameManager m_instance;
     PlayerController m_player;
     Decoy m_decoy;
-
+    
     float m_MusicVolume = 0;
     float m_FXVolume = 0;
     float m_MouseSensitivity = 0;
@@ -29,7 +33,7 @@ public class GameManager : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-
+        resetActivations();
     }
 
     bool CheckForSingleton()
@@ -68,5 +72,11 @@ public class GameManager : MonoBehaviour {
         m_instance.m_MusicVolume = musicVol;
         m_instance.m_FXVolume = fxVol;
         m_instance.m_MouseSensitivity = mouseSense;
+    }
+
+    // Called when activation objects are to be reset based on the checkpoint the player has reached.
+    public static void resetActivations()
+    {
+        OnActivationReset(PlayerPrefs.GetInt("CheckpointIndex"));
     }
 }

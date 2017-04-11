@@ -4,7 +4,7 @@ using System.Collections;
 public class LerpActivation : ActivationObject {
 
     public Transform startPos, destPos;
-    public float deltaTime;
+    public float speed;
     [Header("Determine if the object returns or stops on toggle.")]
     public bool returnToStart = false;
     public float threshold = 0.5f;
@@ -41,19 +41,23 @@ public class LerpActivation : ActivationObject {
     protected override void checkActivationEvent(int index)
     {
         if (checkIndex <= index)
+        {
             transform.position = destPos.transform.position;
+            m_isActive = true;
+        }
+
     }
 
+    // Subscribe and desubscribe
     void OnEnable()
     {
-        // Subscribe checkActivationEvent to the event
-        //InteractionTrigger.OnClicked += checkActivationEvent;
+        // Subscribe OnActivationReset to the event
+        GameManager.OnActivationReset += checkActivationEvent;
     }
-
     void OnDisable()
     {
-        // Desubscribe checkActivationEvent to the event
-        //InteractionTrigger.OnClicked -= checkActivationEvent;
+        // Desubscribe OnActivationReset to the event
+        GameManager.OnActivationReset -= checkActivationEvent;
     }
 
     // Update is called once per frame
@@ -61,7 +65,7 @@ public class LerpActivation : ActivationObject {
     {
 	    if (m_isLerping)
         {
-            transform.position = Vector3.Lerp(transform.position, m_lerpAim, deltaTime);
+            transform.position = Vector3.Lerp(transform.position, m_lerpAim, speed * Time.deltaTime);
         }
 
         if (Vector3.Distance(transform.position, m_lerpAim) <= threshold)

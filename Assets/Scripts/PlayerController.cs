@@ -78,12 +78,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
-
-
-
+        
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
-
 
         //get previous location and rotation
         if (Checkpoint.isPreviouslySaved())
@@ -142,6 +139,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
 
+        GameManager.resetActivations();
     }
 
     // Update is called once per frame
