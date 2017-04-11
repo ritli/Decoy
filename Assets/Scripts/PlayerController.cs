@@ -80,6 +80,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
     private float m_initalHeight;
+    private float m_crouchSpeed = 0.5f;
+    private float m_crouchTime;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -171,24 +173,31 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Crouch()
     {
-        if (CrossPlatformInputManager.GetButton("Crouch"))
+        if (CrossPlatformInputManager.GetButtonDown("Crouch"))
         {
             m_crouching = true;
+            m_crouchTime = 0;
         }
-        else
+        else if (CrossPlatformInputManager.GetButtonUp("Crouch"))
         {
             m_crouching = false;
+            m_crouchTime = 0;
         }
 
         if (m_crouching)
         {
-            m_CharacterController.height = m_initalHeight * 0.2f;
+            m_CharacterController.height =  Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTime);
+
+
         }
         else
         {
-            m_CharacterController.height = m_initalHeight;
+            m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTime);
+
         }
 
+        m_crouchTime += Time.deltaTime * m_crouchSpeed;
+        m_crouchTime = Mathf.Clamp01(m_crouchTime);
     }
 
     void ResetPlayer()

@@ -70,7 +70,8 @@ GameObject:
   - component: {fileID: 11470492}
   - component: {fileID: 11492416}
   - component: {fileID: 11402340}
-  m_Layer: 0
+  - component: {fileID: 114844760666094824}
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -158,7 +159,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -112.39249, y: 18, z: -29.266361}
+  m_LocalPosition: {x: -122.77974, y: 9.52, z: -23.772106}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -478,7 +479,9 @@ MonoBehaviour:
   m_length: 7
   resetTimeOnCancel: 0
   teleportCooldown: 1
-  teleportSpeed: 4
+  teleportSpeed: 60
+  heightLimit: 1
+  lengthLimit: 1
 --- !u!114 &11492416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4133,7 +4136,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ledgeThreshold: 2
-  positionOffset: 1
+--- !u!114 &114844760666094824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecbfc1293592c7240b6af8866c80fdc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ledgeThreshold: 2
 --- !u!114 &114882374167312562
 MonoBehaviour:
   m_ObjectHideFlags: 1
