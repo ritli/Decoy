@@ -7,6 +7,7 @@ public class LedgeDetectionTeleport : MonoBehaviour {
     private Ray m_rayDown;
 	private Ray m_rayDown2;
 	private Vector3 m_newPosition = new Vector3(0, 0, 0);
+	private Raycast m_raycaster;
 
 	[Header("Distance from ledge:")]
     public float ledgeThreshold;
@@ -16,7 +17,7 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+		m_raycaster = GetComponent<Raycast> ();
 	}
 
 	public bool findLedge(RaycastHit wallHit)
@@ -59,7 +60,7 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 		Vector3 rayDownNormal;
 
 		// If ray hit the floor
-		if (Physics.Raycast(m_rayDown, out hit))
+		if (m_raycaster.doRaycast(out hit, m_rayDown.direction, m_rayDown.origin))
 		{
 			if (Vector3.Angle(hit.normal, Vector3.up) <= 45)
 			{
@@ -77,7 +78,7 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 					m_newPosition = hit.point;
 
 					// Raycast again to check if the first was inside an object
-					if (Physics.Raycast(m_rayDown2, out hit)) 
+					if (m_raycaster.doRaycast(out hit, m_rayDown2.direction, m_rayDown2.origin)) 
 					{
 						
 //						Debug.DrawRay(hit.point, hit.normal * 5, Color.red);
@@ -95,7 +96,6 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 				// Else set the position to the point on the wall
 				else
 				{
-					//setIndicator(false);
 					m_newPosition = wallHit.point;
 				}
 			}

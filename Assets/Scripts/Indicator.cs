@@ -26,7 +26,7 @@ public class Indicator : MonoBehaviour {
 	private LedgeDetectionTeleport m_ledgeDetectTele;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
-	private SpriteRenderer m_spriteRenderer;
+	private LedgeIndicator m_ledgeIndicator;
     private ParticleController m_partController;
 
 
@@ -34,7 +34,7 @@ public class Indicator : MonoBehaviour {
     {
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
-        m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+		m_ledgeIndicator = GetComponent<LedgeIndicator> ();
         m_charController = GetComponent<CharacterController>();
 		m_ledgeDetectTele = GetComponent<LedgeDetectionTeleport>();
 		m_cooldownTimer = GetComponent<Timer>();
@@ -57,13 +57,7 @@ public class Indicator : MonoBehaviour {
 		
 		if (m_indi.activeSelf) 
 		{
-			if (m_foundLedge) 
-			{
-				m_spriteRenderer.color = Color.red;
-			} else 
-			{
-				m_spriteRenderer.color = Color.white;
-			}
+			m_ledgeIndicator.setLedgeIndicator (m_foundLedge);
 		}
 
         // Move towards target position set when letting go of the "Teleport" button.
@@ -168,24 +162,31 @@ public class Indicator : MonoBehaviour {
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
+				m_foundLedge = false;
                 return;
             }
 
 			//If true then surface is wall
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
-				// ## Start ledge detection ##
-				if (m_ledgeDetectTele.findLedge (hit)) 
+				// Only looks for ledge if hit isn't on NoGrab area
+				if (hit.collider.tag != Tags.noGrab) 
 				{
-					print ("Found ledge");
-					m_foundLedge = true;
-					m_charController.detectCollisions = false;
+					// ## Start ledge detection ##
+					if (m_ledgeDetectTele.findLedge (hit)) 
+					{
+						print ("Found ledge");
+						m_foundLedge = true;
+						m_charController.detectCollisions = false;
+					} else 
+					{
+						m_foundLedge = false;	
+					}
 				} else 
 				{
-					m_foundLedge = false;	
+					m_foundLedge = false;
 				}
 				m_indi.transform.position = hit.point + hit.normal;
-
 			}
 
 			//If true then normal is a ceiling
@@ -193,7 +194,7 @@ public class Indicator : MonoBehaviour {
 			//Else then surface is floor
 			else
             {
-
+				m_foundLedge = false;
 				for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;
