@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_controlsEnabled = true;
 
     public PlayerState m_playerState = PlayerState.isAlive;
+    private PlayerState m_stateBeforePause;
 
     //Decoy event
     public delegate void DecoyAction();
@@ -78,9 +79,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
-
-
-
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
 
@@ -195,7 +193,14 @@ public class PlayerController : MonoBehaviour, IKillable
             m_MoveDir.y = 0f;
         }
     }
-
+    void OnEnable()
+    {
+        PauseManager.OnPause += pausePlayer;
+    }
+    private void OnDisable()
+    {
+        PauseManager.OnPause -= pausePlayer;
+    }
     private void FixedUpdate()
     {
         Move();
@@ -384,6 +389,18 @@ public class PlayerController : MonoBehaviour, IKillable
             return;
         }
         body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+    }
+    void pausePlayer(bool isPaused)
+    {
+        if(isPaused && m_playerState == PlayerState.isPause)
+        {
+            m_playerState = m_stateBeforePause;
+        }
+        else
+        {
+            m_stateBeforePause = m_playerState;
+            m_playerState = PlayerState.isPause;
+        }
     }
 }
 

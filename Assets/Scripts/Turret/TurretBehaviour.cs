@@ -4,9 +4,10 @@ using System.Collections;
 public class TurretBehaviour : MonoBehaviour
 {
     
-    public enum TurretState { isIdle, isTargeting, isFiring };
+    public enum TurretState { isIdle, isTargeting, isFiring, isPaused };
     
     public TurretState turretState;// = TurretState.isIdle;
+    private TurretState m_StateBeforePause;
     //[HideInInspector]
     public float fieldOfView = 10;
     //[HideInInspector]
@@ -52,10 +53,12 @@ public class TurretBehaviour : MonoBehaviour
     void OnEnable()
     {
         PlayerController.OnCreateDecoy += SetDecoy;
+        PauseManager.OnPause += pauseTurret;
     }
     void OnDisable()
     {
         PlayerController.OnCreateDecoy -= SetDecoy;
+        PauseManager.OnPause -= pauseTurret;
     }
 
     void SetDecoy()
@@ -71,8 +74,8 @@ public class TurretBehaviour : MonoBehaviour
         m_Raycast.maxDistance = viewDistance;
         
         m_FoVLight.range = viewDistance * 1.5f;
-        
-        turretState = decideState();
+        if(turretState != TurretState.isPaused)
+            turretState = decideState();
 
         switch (turretState)
         {
@@ -117,6 +120,8 @@ public class TurretBehaviour : MonoBehaviour
                 }
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
+                break;
+            case TurretState.isPaused:
                 break;
         }
     }
@@ -186,5 +191,17 @@ public class TurretBehaviour : MonoBehaviour
             return TurretState.isTargeting;
         }
         return TurretState.isIdle;
+    }
+    void pauseTurret(bool isPaused)
+    {
+        if(turretState == TurretState.isPaused && !isPaused)
+        {
+            turretState = m_StateBeforePause;
+        }
+        else
+        {
+            m_StateBeforePause = turretState;
+            turretState = TurretState.isPaused;
+        }
     }
 }
