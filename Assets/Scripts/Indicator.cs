@@ -5,6 +5,7 @@ using UnityStandardAssets.Utility;
 public class Indicator : MonoBehaviour {
 
     public GameObject m_decoy;
+    PlayerController m_player;
     public GameObject m_indi;
     float m_playerLength = 3f;
     private bool m_cancelTeleport = false;
@@ -18,31 +19,41 @@ public class Indicator : MonoBehaviour {
     public bool resetTimeOnCancel = false;
     [Header("Overrides the value of timer.")]
     public float teleportCooldown = 0.0f;
+    [Header("Adjusts speed of teleportation.")]
     public float teleportSpeed = 1.0f;
+    [Header("Set limits of teleportation.")]
+    public float heightLimit = 1.0f;
+    public float lengthLimit = 1.0f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
 	private bool m_foundLedge = false;
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
+	private CharacterController m_charController;
+	private SpriteRenderer m_spriteRenderer;
     private ParticleController m_partController;
-    private CharacterController m_charController;
-    private bool m_ledgeFound = false;
 
 
 	void Start ()
     {
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
+        m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_charController = GetComponent<CharacterController>();
 		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
+        m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
+
+        //m_raycaster.setRayScale(teleportLimits);
+
         m_fovKick.Setup(Camera.main);
+
     }
 
     private void moveTo(Vector3 target)
@@ -54,18 +65,22 @@ public class Indicator : MonoBehaviour {
     // Handle input for teleportation controls.
 	void Update () {
 		
-		/*if (m_foundLedge) 
+		if (m_indi.activeSelf) 
 		{
-			m_ledgeCollDetection.setIndicator (true);
-		} else 
-		{
-			m_ledgeCollDetection.setIndicator (false);
-		}*/
+			if (m_foundLedge) 
+			{
+				m_spriteRenderer.color = Color.red;
+			} else 
+			{
+				m_spriteRenderer.color = Color.white;
+			}
+		}
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
         {
-            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, teleportSpeed);
+            float step = teleportSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
 			// When the players position has arrived, stop moving.
 			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
@@ -99,8 +114,6 @@ public class Indicator : MonoBehaviour {
 
                 Vector3 lastPos = transform.position;
                 PlayVisualEffects();
-
-                moveTo(m_indi.transform.position);
 
                 m_cooldownTimer.resetTimer();
 
@@ -149,10 +162,23 @@ public class Indicator : MonoBehaviour {
 
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
+        Vector3 axisLimitedForward = new Vector3();
 
-        Vector3 playerLook = forward * m_length;
+        // Limit the vector based on the defined variables
+        axisLimitedForward.y = forward.y * heightLimit;
+        axisLimitedForward.x = forward.x * lengthLimit;
+        axisLimitedForward.z = forward.z * lengthLimit;
 
-        Ray rayForward = new Ray(Camera.main.transform.position, forward);
+        // Adjust based on weight.
+        axisLimitedForward *= m_length;
+
+        float actualLength = Vector3.Magnitude(axisLimitedForward);
+
+        // Set length of raycasting based on the limited axis of the teleportation vector.
+        m_raycaster.setDistance(actualLength);
+
+        // Create ray for casting when no terrain was hit
+        Vector3 playerLook = forward * actualLength;
         Ray rayDown = new Ray(transform.position + playerLook + (new Vector3(0, 1.0f, 0)), Vector3.down);
 
         RaycastHit hit = new RaycastHit();
@@ -175,7 +201,7 @@ public class Indicator : MonoBehaviour {
 				// ## Start ledge detection ##
 				if (m_ledgeCollDetection.findLedge (hit)) 
 				{
-					print ("Found ledge");
+					//print ("Found ledge");
 					m_foundLedge = true;
 					m_charController.detectCollisions = false;
 				} else 
@@ -216,9 +242,10 @@ public class Indicator : MonoBehaviour {
         // Check for collision of floor when ray does not hit a surface.
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
-            m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
+            //print("Hitting the ground");
 			m_foundLedge = false;
-            print("Hitting the ground");
+            //print("Hitting the ground");
             return;
         }
 
@@ -239,5 +266,4 @@ public class Indicator : MonoBehaviour {
 		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
     }
-
 }
