@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.Utility;
 
 public class Indicator : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class Indicator : MonoBehaviour {
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
+
+    public FOVKick m_fovKick;
 
     public float m_length;
     [Header("Reset the timer after canceling teleport:")]
@@ -23,11 +26,16 @@ public class Indicator : MonoBehaviour {
 	private LedgeDetection m_ledgeCollDetection;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
-	private bool m_ledgeFound = false;
+	private SpriteRenderer m_spriteRenderer;
+    private ParticleController m_partController;
+
 
 	void Start ()
     {
-		m_charController = GetComponent<CharacterController>();
+        m_partController = Camera.main.GetComponent<ParticleController>();
+        m_cooldownTimer = GetComponent<Timer>();
+        m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        m_charController = GetComponent<CharacterController>();
 		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
@@ -35,6 +43,7 @@ public class Indicator : MonoBehaviour {
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
+        m_fovKick.Setup(Camera.main);
     }
 
     private void moveTo(Vector3 target)
@@ -46,13 +55,16 @@ public class Indicator : MonoBehaviour {
     // Handle input for teleportation controls.
 	void Update () {
 		
-		/*if (m_foundLedge) 
+		if (m_indi.activeSelf) 
 		{
-			m_ledgeCollDetection.setIndicator (true);
-		} else 
-		{
-			m_ledgeCollDetection.setIndicator (false);
-		}*/
+			if (m_foundLedge) 
+			{
+				m_spriteRenderer.color = Color.red;
+			} else 
+			{
+				m_spriteRenderer.color = Color.white;
+			}
+		}
 
         // Move towards target position set when letting go of the "Teleport" button.
         if (!m_arrived)
@@ -90,6 +102,7 @@ public class Indicator : MonoBehaviour {
 				}
 
                 Vector3 lastPos = transform.position;
+                PlayVisualEffects();
 
                 m_cooldownTimer.resetTimer();
 
@@ -115,6 +128,21 @@ public class Indicator : MonoBehaviour {
             if (resetTimeOnCancel)
                 m_cooldownTimer.resetTimer();
         }
+    }
+
+    void PlayVisualEffects()
+    {
+        StartCoroutine(m_fovKick.FOVKickUp());
+        m_partController.LerpAlpha(0, 0.7f, 0.05f);
+        m_partController.PlayBurst(50);
+
+        Invoke("CancelVisualEffects", 0.1f);
+    }
+
+    void CancelVisualEffects()
+    {
+        StartCoroutine(m_fovKick.FOVKickDown());
+        m_partController.LerpAlpha(0.5f, 0, 0.05f);
     }
 
     void ShowIndicator()
@@ -213,5 +241,4 @@ public class Indicator : MonoBehaviour {
 		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
     }
-
 }

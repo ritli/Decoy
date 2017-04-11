@@ -45,8 +45,6 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_GravityMultiplier;
 
     [SerializeField] private MouseLook m_MouseLook;
-    [SerializeField] private bool m_UseFovKick;
-    [SerializeField] private FOVKick m_FovKick = new FOVKick();
     [SerializeField] private bool m_UseHeadBob;
     [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
@@ -100,14 +98,12 @@ public class PlayerController : MonoBehaviour, IKillable
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
-        m_FovKick.Setup(m_Camera);
         m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle/2f;
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
-
     }
 
     public void Kill()
@@ -151,6 +147,8 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
+
+
         switch (m_playerState)
         {
             case PlayerState.isAlive:
