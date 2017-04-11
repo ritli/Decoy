@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class PauseManager : MonoBehaviour
 {
+    public static PauseManager instance;
+
     public delegate void PauseAction(bool isPaused);
     public static event PauseAction OnPause;
 
 
     private bool isPaused = false;
-	// Use this for initialization
-	void Start () {
-		
+    // Use this for initialization
+    void Start()
+    {
+        instance = FindObjectOfType<PauseManager>();
+
 	}
 	
 	// Update is called once per frame
@@ -31,4 +35,8 @@ public class PauseManager : MonoBehaviour
             }
         }
 	}
+    public void pauseGame(bool pause)
+    {
+        OnPause(pause);
+    }
 }

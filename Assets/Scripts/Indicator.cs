@@ -11,7 +11,7 @@ public class Indicator : MonoBehaviour {
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
-
+    private bool m_isPaused = false;
     public FOVKick m_fovKick;
 
     public float m_length;
@@ -55,7 +55,14 @@ public class Indicator : MonoBehaviour {
         m_fovKick.Setup(Camera.main);
 
     }
-
+    private void OnEnable()
+    {
+        PauseManager.OnPause += pauseIndicator;
+    }
+    private void OnDisable()
+    {
+        PauseManager.OnPause -= pauseIndicator;
+    }
     private void moveTo(Vector3 target)
     {
 		m_teleportTo = target;
@@ -265,5 +272,9 @@ public class Indicator : MonoBehaviour {
         }
 		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
+    }
+    void pauseIndicator(bool isPaused)
+    {
+        m_isPaused = isPaused;
     }
 }

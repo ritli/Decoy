@@ -30,4 +30,8 @@ public class MenuManager : MonoBehaviour
     {
          
     }
+    public void pauseGame(bool pause)
+    {
+        PauseManager.instance.pauseGame(pause);
+    }
 }
