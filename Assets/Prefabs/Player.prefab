@@ -70,8 +70,7 @@ GameObject:
   - component: {fileID: 11470492}
   - component: {fileID: 11492416}
   - component: {fileID: 11402340}
-  - component: {fileID: 114782915934398864}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -88,6 +87,7 @@ GameObject:
   - component: {fileID: 470846}
   - component: {fileID: 21222788}
   - component: {fileID: 12028502}
+  - component: {fileID: 114571988201625022}
   m_Layer: 2
   m_Name: Ind
   m_TagString: Untagged
@@ -157,7 +157,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.8829, y: 7.76, z: -2.8901153}
+  m_LocalPosition: {x: -137, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -476,10 +476,8 @@ MonoBehaviour:
       m_RotationOrder: 4
   m_length: 7
   resetTimeOnCancel: 0
-  teleportCooldown: 0
-  teleportSpeed: 50
-  heightLimit: 1
-  lengthLimit: 4
+  teleportCooldown: 1
+  teleportSpeed: 4
 --- !u!114 &11492416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -769,18 +767,19 @@ Transform:
   m_Father: {fileID: 453968}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 165, y: -0.000015258789, z: -0.000015258789}
---- !u!114 &114782915934398864
+--- !u!114 &114571988201625022
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149630}
+  m_GameObject: {fileID: 187996}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecbfc1293592c7240b6af8866c80fdc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ledgeThreshold: 2.5
+  ledgeThreshold: 2
+  positionOffset: 1
 --- !u!114 &114882374167312562
 MonoBehaviour:
   m_ObjectHideFlags: 1
