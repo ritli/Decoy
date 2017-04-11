@@ -160,22 +160,30 @@ public class Indicator : MonoBehaviour {
 
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
+        Vector3 axisLimitedForward = new Vector3();
 
-        forward.y *= heightLimit;
-        forward.x *= lengthLimit;
-        forward.z *= lengthLimit;
+        // Limit the vector based on the defined variables
+        axisLimitedForward.y = forward.y * heightLimit;
+        axisLimitedForward.x = forward.x * lengthLimit;
+        axisLimitedForward.z = forward.z * lengthLimit;
 
-        Vector3 playerLook = forward * m_length;
-        
+        // Adjust based on weight.
+        axisLimitedForward *= m_length;
 
-        Ray rayForward = new Ray(Camera.main.transform.position, forward);
-        Ray rayDown = new Ray(transform.position+playerLook + (new Vector3(0,1.0f,0)), Vector3.down);
+        float actualLength = Vector3.Magnitude(axisLimitedForward);
+
+        // Set length of raycasting based on the limited axis of the teleportation vector.
+        m_raycaster.setDistance(actualLength);
+
+        // Create ray for casting when no terrain was hit
+        Vector3 playerLook = forward * actualLength;
+        Ray rayDown = new Ray(transform.position + playerLook + (new Vector3(0, 1.0f, 0)), Vector3.down);
 
         RaycastHit hit = new RaycastHit();
 
         Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
-        if (m_raycaster.doRaycast(out hit, playerLook))
+        if (m_raycaster.doRaycast(out hit))
         {
             //print(Vector3.Angle(hit.normal, Vector3.down));
 
