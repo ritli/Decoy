@@ -37,6 +37,11 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("For every fixed update the speed multiplier is increased or decreased by this value based on if you are starting or ending a movement.")]
     [SerializeField] private float m_WindupScale;
     [SerializeField] private float m_WalkSpeed;
+    [Tooltip("Walk speed is multiplied by this when crouching, prefer value between 1 and 0.")]
+    [SerializeField] private float m_crouchSpeedMultiplier;
+    [Tooltip("How fast the player reaches full crouch or stands up.")]
+    [SerializeField] private float m_speedToReachCrouch = 2f;
+
     //Jump vars
     [Header("Jump Variables")]
     [SerializeField] private float m_JumpForce;
@@ -80,7 +85,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
     private float m_initalHeight;
-    private float m_crouchSpeed = 0.5f;
+
     private float m_crouchTime;
 
     Vector3 initialCameraPos;
@@ -187,8 +192,6 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_crouching)
         {
             m_CharacterController.height =  Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTime);
-
-
         }
         else
         {
@@ -196,7 +199,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
         }
 
-        m_crouchTime += Time.deltaTime * m_crouchSpeed;
+        m_crouchTime += Time.deltaTime * m_speedToReachCrouch;
         m_crouchTime = Mathf.Clamp01(m_crouchTime);
     }
 
@@ -301,18 +304,22 @@ public class PlayerController : MonoBehaviour, IKillable
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
 
+
+
         speed = m_WalkSpeed * m_speedWindup;
 
-        //Always move along the camera forward as it is the direction that it being aimed at
-        Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
+        if (m_crouching)
+        {
+            speed *= m_crouchSpeedMultiplier;
+        }
+
+            //Always move along the camera forward as it is the direction that it being aimed at
+            Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         if (m_Jumping)
         {
             desiredMove = m_jumpVector;
             m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
-
-            //  * Input.y + m_jumpVectorR * Input.x;
-            //desiredMove = Vector3.Lerp(desiredMove, transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl, m_JumpAirControl);
         }
 
         //Get a normal for the surface that is being touched to move along it
