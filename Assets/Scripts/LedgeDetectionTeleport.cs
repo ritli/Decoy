@@ -8,11 +8,11 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 	private Ray m_rayDown2;
 	private Vector3 m_newPosition = new Vector3(0, 0, 0);
 	private Raycast m_raycaster;
+	private float positionOffset = 0.5f;
 
-	[Header("Distance from ledge:")]
+	[Header("Ledge sensitivity:")]
     public float ledgeThreshold;
 
-	private float positionOffset = 0.5f;
 
 
     // Use this for initialization
@@ -36,8 +36,13 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 //		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.grey);
 	
+
+		//#####################################################
 		// Creates a point above and a little bit inside the wall to look for floor
-		Vector3 newPosition = wallHit.point + Vector3.up * ledgeThreshold - wallHit.normal * positionOffset;
+
+		//Vector3 localUp = cross wallhit.normal, hitRight
+
+		Vector3 newPosition = wallHit.point + Vector3.Cross(wallHit.normal, hitRight) * ledgeThreshold - wallHit.normal * positionOffset;
 
         // A ray above target position and facing towards the wall's floor
 		m_rayDown.origin = newPosition;
@@ -45,17 +50,19 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 
 		// Another ray used to determine if other ray is inside terrain
 		m_rayDown2.origin = newPosition + Vector3.up * 2;
+		//m_rayDown2.origin = newPosition + Vector3.Cross(wallHit.normal, hitRight) * 2;
 		m_rayDown2.direction = direction;
-
+		//###################################
 
         RaycastHit hit = new RaycastHit();
 
 		// Ray based on given wallNormal
-//		Debug.DrawRay(wallHit.point, wallHit.normal * 4, Color.green);
+		Debug.DrawRay(wallHit.point, wallHit.normal * 4, Color.green);
+		Debug.DrawRay(wallHit.point, wallHit.normal * -4, Color.red);
 
 		// Ray moved up and looking down based on wallNormal
 		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
-		Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
+		//Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		Vector3 rayDownNormal;
 
@@ -71,7 +78,7 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 				// If the floor is above where the aim is
 				if (hit.point.y >= wallHit.point.y)
 				{
-					// Store the normal for later use
+					// Store the found normal to compare with the other ray
 					rayDownNormal = hit.normal;
 
 					// Set the new position
@@ -90,22 +97,13 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 							m_newPosition = hit.point;
 						}
 					}
-
 					return true;
-				}
-				// Else set the position to the point on the wall
-				else
-				{
-					m_newPosition = wallHit.point;
 				}
 			}
 		}
 		// If ray doesn't find floor, set position to point on wall
-		else
-		{
-			//print("No floor found");
-			m_newPosition = wallHit.point;
-		}
+		//print("No floor found");
+		m_newPosition = wallHit.point;
 		return false;
 	}
 
