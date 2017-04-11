@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
 
-    [SerializeField] private MouseLook m_MouseLook;
+    [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
     [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
     private float m_initalHeight;
+    bool m_standObstructed = false;
 
     private float m_crouchTime;
 
@@ -121,6 +122,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
         m_initalHeight = m_CharacterController.height;
+
 
     }
 
@@ -166,10 +168,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     public void CreateDecoy()
     {
-        //GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
-
-        //GameManager.SetDecoy(decoy.GetComponent<Decoy>());
-
         if (OnCreateDecoy != null)
         {
             OnCreateDecoy();
@@ -183,24 +181,68 @@ public class PlayerController : MonoBehaviour, IKillable
             m_crouching = true;
             m_crouchTime = 0;
         }
+
         else if (CrossPlatformInputManager.GetButtonUp("Crouch"))
         {
-            m_crouching = false;
-            m_crouchTime = 0;
+            if (CheckForObstruction())
+            {
+                m_standObstructed = true;
+            }
+            else
+            {
+                m_crouching = false;
+                m_crouchTime = 0;
+            }
         }
 
         if (m_crouching)
         {
-            m_CharacterController.height =  Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTime);
+            float currentHeight = m_CharacterController.height;
+            float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTime);
+
+            transform.Translate(Vector3.down * (currentHeight - newHeight) / 2.5f);
+            m_CharacterController.height = newHeight;
+
         }
         else
         {
             m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTime);
+        }
 
+        //If player has tried to stand up and can't due to an obstruction, starts checking for obstruction each frame.
+        if (m_standObstructed)
+        {
+            //If no obstruction is detected the player is allowed to stand up again
+            if(!CheckForObstruction())
+            {
+                m_standObstructed = false;
+                m_crouching = false;
+                m_crouchTime = 0;
+            }
         }
 
         m_crouchTime += Time.deltaTime * m_speedToReachCrouch;
         m_crouchTime = Mathf.Clamp01(m_crouchTime);
+    }
+
+    bool CheckForObstruction()
+    {
+        Vector3 dir = Vector3.up;
+        Vector3 offset = transform.forward * 0.4f;
+
+        for (int i = 0; i < 4; i++)
+        {
+            Ray ray = new Ray(transform.position + offset, dir);
+
+            if (Physics.Raycast(ray))
+            {
+                return true;
+            }
+
+            offset = Quaternion.AngleAxis(90 * i, Vector3.up) * offset;
+        }
+
+        return false;
     }
 
     void ResetPlayer()

@@ -132,6 +132,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.696, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4428195336625364}
   - {fileID: 4999855610325106}
   - {fileID: 4210128886760922}
   m_Father: {fileID: 487950}
@@ -191,7 +192,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294965247
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -241,7 +242,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &5468874
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -373,7 +374,7 @@ MonoBehaviour:
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_WindupScale: 0.05
   m_WalkSpeed: 10
-  m_crouchSpeedMultiplier: 0.7
+  m_crouchSpeedMultiplier: 0.4
   m_speedToReachCrouch: 2
   m_JumpForce: 10
   m_JumpAirVelDecay: 0.0033
@@ -385,7 +386,7 @@ MonoBehaviour:
     YSensitivity: 2
     clampVerticalRotation: 1
     MinimumX: -80
-    MaximumX: 90
+    MaximumX: 80
     smooth: 0
     smoothTime: 5
     lockCursor: 1
@@ -607,7 +608,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1.8
   m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_SlopeLimit: 25
   m_StepOffset: 0.1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
@@ -751,7 +752,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4776558215911554}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +767,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4773026946557408}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +782,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4868596044483940}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -796,7 +797,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4557912229724504}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -811,7 +812,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4730300465766784}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +827,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4225559043914274}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_forearm_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +842,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4627714211338950}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -856,7 +857,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4007166453845950}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +872,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4648064957112982}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -886,7 +887,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4668998300226422}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -901,7 +902,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4637386993124756}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkyFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -916,7 +917,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4941651509278882}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -931,7 +932,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4701534888905144}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_wrist_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -946,7 +947,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4937781393512530}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_elbow_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -961,7 +962,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4649774783232644}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkeyFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -976,7 +977,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4614431810676326}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -991,7 +992,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4627987552178274}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +1007,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4061355517716244}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1021,7 +1022,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4226252108911918}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_elbow_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1036,7 +1037,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4801879193243348}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1051,7 +1052,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4522443405162120}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1066,7 +1067,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4115084363049466}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_elbow_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1081,8 +1082,24 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4273561485663644}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_ctrl_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1203224973639540
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4428195336625364}
+  - component: {fileID: 20623083625837246}
+  m_Layer: 11
+  m_Name: Arm Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1096,7 +1113,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4957094813298058}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1111,7 +1128,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4821525314278712}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1126,7 +1143,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4807488083008052}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_shoulder_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1141,7 +1158,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4082538852322934}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1156,7 +1173,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4471118369463818}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1171,7 +1188,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4577680650532398}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkeyFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1186,7 +1203,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4068344134185044}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1201,7 +1218,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4704873372916896}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1216,7 +1233,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4705329297333848}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1231,7 +1248,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4863841095983948}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1246,7 +1263,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4581426288874066}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1261,7 +1278,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4192497547185010}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1276,7 +1293,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4890091448764004}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1291,7 +1308,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4872432732350798}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkeyFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1306,7 +1323,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4777685933520218}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middle_finger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1321,7 +1338,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4888641997967212}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_forearm_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1336,7 +1353,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4672163225886052}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1351,7 +1368,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4278903261409222}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_wrist_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1366,7 +1383,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4477271004389504}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1381,7 +1398,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4606449093650288}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1396,7 +1413,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4537756527978254}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1411,7 +1428,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4432189241133582}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1426,7 +1443,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4831576717815488}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1441,7 +1458,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4223411016212518}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkyFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1456,7 +1473,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4880922111011772}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_shoulder_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1471,7 +1488,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4354184894662462}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1486,7 +1503,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4856118504895900}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_ctrl_group_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1502,8 +1519,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4999855610325106}
   - component: {fileID: 95761752070325620}
-  m_Layer: 2
-  m_Name: First_person_rig
+  - component: {fileID: 114537474849806510}
+  m_Layer: 11
+  m_Name: Arms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1517,7 +1535,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4855649908506370}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1532,7 +1550,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4182713416227992}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1547,7 +1565,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4162016238952554}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1562,7 +1580,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4795668413857388}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_shoulder_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1577,7 +1595,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4320444153390680}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1592,7 +1610,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4580207483162750}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_wrist_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1607,7 +1625,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4232749797723920}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1622,7 +1640,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4706539851687650}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_elbow_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1637,7 +1655,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4802609238672966}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1652,7 +1670,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4079898490255154}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1667,7 +1685,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4415092074187712}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_elbow_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1682,7 +1700,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4111680614367280}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1714,7 +1732,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4829141484868956}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_shoulder_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1729,7 +1747,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4473755329664018}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1744,7 +1762,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4043472878083564}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1759,7 +1777,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4053162148609198}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1774,7 +1792,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4888150119329824}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_wrist_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1789,7 +1807,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4338169834791536}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1804,7 +1822,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4682809182555296}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumb_finger_crl_group_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1819,7 +1837,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4096351219350422}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkeyFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1834,7 +1852,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4783915732707218}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1849,7 +1867,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4048265568096920}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1864,7 +1882,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4633318868890286}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1879,7 +1897,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4288985625467934}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1894,7 +1912,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4804873776266910}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1909,7 +1927,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4918880064460552}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:Full_body_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1924,7 +1942,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4200210572152046}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1939,7 +1957,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4857062414867060}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1954,7 +1972,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4136603416984954}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_thumbFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1969,7 +1987,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4464818726782966}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1984,7 +2002,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4971754664406100}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkyFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1999,7 +2017,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4291636506111844}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2014,7 +2032,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4815333758920618}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2029,7 +2047,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4591826402291424}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_ctrl_02_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2044,7 +2062,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4797745082966382}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkeyFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2060,7 +2078,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4256602082271156}
   - component: {fileID: 137241886757411878}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:Arm_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2075,7 +2093,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4698276283203266}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2090,7 +2108,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4834923928869286}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2105,7 +2123,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4453743434227686}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_indexFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2120,7 +2138,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4559068493147552}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_pinkyFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2135,7 +2153,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4907807328244590}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2150,7 +2168,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4832815232173104}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2165,7 +2183,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4711543562799402}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_elbow_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2180,7 +2198,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4988799119805846}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_wrist_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2195,7 +2213,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4566278595856202}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:root_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2210,7 +2228,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4112891207757594}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_pinkyFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2225,7 +2243,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4973106712453802}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2240,7 +2258,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4922413508591554}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:master_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2255,7 +2273,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4621949302965616}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_ctrl_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2270,7 +2288,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4668912480373594}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2285,7 +2303,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4453467735893036}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_wrist_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2300,7 +2318,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4489944612245708}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_shoulder_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2315,7 +2333,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4801805254282050}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2330,7 +2348,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4149596823328412}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2345,7 +2363,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4038786754462974}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_03_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2360,7 +2378,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4782405370114234}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_ringFinger_01_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2375,7 +2393,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4461188934121774}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_middleFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2390,7 +2408,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4264444590912648}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_ctrl_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2405,7 +2423,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4344564056119328}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2420,7 +2438,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4180867816021190}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_thumbFinger_02_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2435,7 +2453,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4436978261440992}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_middleFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2450,7 +2468,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4149198179580088}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:R_ringFinger_ctrl_03_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2465,7 +2483,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4437732861805400}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_indexFinger_ctrl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2480,7 +2498,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4628725356753262}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: handrigg_lowpoly_skinned:L_shoulder_ctrl_group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2789,7 +2807,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 453968}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 165, y: -0.000015258789, z: -0.000015258789}
 --- !u!4 &4223411016212518
 Transform:
@@ -3002,6 +3020,19 @@ Transform:
   m_Father: {fileID: 4829141484868956}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 12.628668, y: 49.7094, z: -7.4020696}
+--- !u!4 &4428195336625364
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1203224973639540}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 453968}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4432189241133582
 Transform:
   m_ObjectHideFlags: 1
@@ -4099,16 +4130,52 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1451826456313142}
-  m_LocalRotation: {x: -0.11528394, y: 0, z: 0, w: 0.9933326}
-  m_LocalPosition: {x: 0, y: -5.69, z: 1.17}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -5.69, z: 0.17}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 4256602082271156}
   - {fileID: 4918880064460552}
   - {fileID: 4566278595856202}
   m_Father: {fileID: 453968}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -13.24, y: 0, z: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &20623083625837246
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1203224973639540}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!95 &95761752070325620
 Animator:
   serializedVersion: 3
@@ -4126,6 +4193,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114537474849806510
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1451826456313142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6689ad60dc980da4695d3eed6d04667e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_offsetAmount: 0.5
 --- !u!114 &114571988201625022
 MonoBehaviour:
   m_ObjectHideFlags: 1
