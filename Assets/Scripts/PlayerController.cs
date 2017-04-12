@@ -43,8 +43,8 @@ public class PlayerController : MonoBehaviour, IKillable
     [Header("Gravity Variables")]
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
-    [SerializeField] private float m_originGravity;
-    [SerializeField] private bool m_usingGravity = true;
+    private float m_originGravity;
+    private bool m_usingGravity = true;
 
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
@@ -403,6 +403,11 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_GravityMultiplier = m_originGravity;
         m_usingGravity = true;
+    }
+    public void modifyVelocity(Vector3 velocityScale)
+    {
+        //m_CharacterController.SimpleMove(Vector3.zero);
+        //m_CharacterController.SimpleMove(velocityScale*10000);
     }
 }
 
