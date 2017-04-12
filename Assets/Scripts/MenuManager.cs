@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject m_DefaultMenu;
+    private GameObject m_DefaultMenu;
     public bool m_StartActive;
     private void Start()
     {
+        transform.root.SetAsFirstSibling();
+        m_DefaultMenu = transform.root.GetChild(1).gameObject;
         m_DefaultMenu.SetActive(m_StartActive);
     }
     private void OnEnable()
