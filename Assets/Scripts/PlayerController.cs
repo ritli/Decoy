@@ -16,7 +16,6 @@ enum AnimationState
 }
 
 [RequireComponent(typeof (CharacterController))]
-[RequireComponent(typeof (AudioSource))]
 public class PlayerController : MonoBehaviour, IKillable
 {
     private bool m_controlsEnabled = true;
@@ -307,7 +306,6 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
         {
             StartCoroutine(m_JumpBob.DoBobCycle());
-            PlayLandingSound();
             m_MoveDir.y = 0f;
             m_Jumping = false;
         }
@@ -349,8 +347,6 @@ public class PlayerController : MonoBehaviour, IKillable
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
-
-
 
         speed = m_WalkSpeed * m_speedWindup;
 

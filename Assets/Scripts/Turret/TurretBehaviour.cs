@@ -3,7 +3,8 @@ using System.Collections;
 
 public class TurretBehaviour : MonoBehaviour
 {
-    
+
+    AudioPlayer m_audio;
     public enum TurretState { isIdle, isTargeting, isFiring };
     
     public TurretState turretState;// = TurretState.isIdle;
@@ -36,9 +37,14 @@ public class TurretBehaviour : MonoBehaviour
     Color m_activeColor = Color.red;
     Color m_idleColor = Color.white;
 
+    bool m_shotAudioPlayed = false;
+    bool m_switchTargetPlayed = false;
+
+
     // Use this for initialization
     void Start()
     {
+        m_audio = GetComponent<AudioPlayer>();
         m_currentAngle = fieldOfView;
         m_FoVLight = GetComponentInChildren<Light>();
         m_LookAt = GetComponent<LookAt>();
@@ -47,15 +53,24 @@ public class TurretBehaviour : MonoBehaviour
         m_fireParticles = GetComponentInChildren<ParticleSystem>();
         m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
 
+        m_audio.PlayEvent(2, false);
     }
 
     void OnEnable()
     {
+        m_LookAt = GetComponent<LookAt>();
+        m_LookAt.onTargetSwitched += PlayRotateSound;
         PlayerController.OnCreateDecoy += SetDecoy;
     }
     void OnDisable()
     {
+        m_LookAt.onTargetSwitched -= PlayRotateSound;
         PlayerController.OnCreateDecoy -= SetDecoy;
+    }
+
+    void PlayRotateSound()
+    {
+        m_audio.PlayEvent(1, true);
     }
 
     void SetDecoy()
@@ -78,6 +93,7 @@ public class TurretBehaviour : MonoBehaviour
         {
             case TurretState.isIdle:
 
+
                 m_FoVLight.color = Color.Lerp(m_activeColor, m_idleColor, m_wideTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_wideTime);
                 m_narrowTime = 0;
@@ -97,7 +113,8 @@ public class TurretBehaviour : MonoBehaviour
 
                 //Reset timer
                 m_timeToKillElapsed = 0;
-                
+                m_shotAudioPlayed = false;
+
                 //Continue to aim at target
                 aimAtTarget();
 
@@ -108,6 +125,11 @@ public class TurretBehaviour : MonoBehaviour
                 //Run timer until player is killed.
                 if (m_timeToKillElapsed > m_timeToKill) 
                 {
+                    if (!m_shotAudioPlayed)
+                    {
+                        m_shotAudioPlayed = true;
+                        m_audio.PlayEventTimed(0, 3, 0.4f, true);
+                    }
                     m_Target.Kill();
                     m_fireParticles.Emit(20);
                 }
@@ -183,4 +205,6 @@ public class TurretBehaviour : MonoBehaviour
         }
         return TurretState.isIdle;
     }
+
+
 }
