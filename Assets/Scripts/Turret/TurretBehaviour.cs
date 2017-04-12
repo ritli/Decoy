@@ -33,6 +33,9 @@ public class TurretBehaviour : MonoBehaviour
     RaycastHit m_Hit;
     Vector3 m_TargetPosition;
 
+    Color m_activeColor = Color.red;
+    Color m_idleColor = Color.white;
+
     // Use this for initialization
     void Start()
     {
@@ -75,10 +78,11 @@ public class TurretBehaviour : MonoBehaviour
         {
             case TurretState.isIdle:
 
-                m_FoVLight.spotAngle = Mathf.Lerp(m_narrowAngle, fieldOfView, m_wideTime);
+                m_FoVLight.color = Color.Lerp(m_activeColor, m_idleColor, m_wideTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_wideTime);
                 m_narrowTime = 0;
 
-                m_wideTime += Time.deltaTime * m_zoomSpeed * 2;
+                m_wideTime += Time.deltaTime * m_zoomSpeed;
 
                 if (m_LookAt.isMovingAim())
                 { 
@@ -86,10 +90,9 @@ public class TurretBehaviour : MonoBehaviour
                 }
                 break;
             case TurretState.isTargeting:
-
-                m_FoVLight.spotAngle = Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime);
+                m_FoVLight.color = Color.Lerp(m_idleColor, m_activeColor, m_narrowTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_narrowTime);
                 m_wideTime = 0f;
-                print(Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime));
                 m_narrowTime += Time.deltaTime * m_zoomSpeed;
 
                 //Reset timer
@@ -100,8 +103,6 @@ public class TurretBehaviour : MonoBehaviour
 
                 break;
             case TurretState.isFiring:
-
-
                 aimAtTarget();
 
                 //Run timer until player is killed.

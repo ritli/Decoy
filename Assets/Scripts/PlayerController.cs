@@ -10,6 +10,11 @@ public enum PlayerState
     isAlive, isDead, isPause
 } 
 
+enum AnimationState
+{
+    idle, moving, jumping
+}
+
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
 public class PlayerController : MonoBehaviour, IKillable
@@ -17,6 +22,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_controlsEnabled = true;
 
     public PlayerState m_playerState = PlayerState.isAlive;
+    AnimationState m_aniState = AnimationState.idle;
+    Animator m_animator;
 
     //Decoy event
     public delegate void DecoyAction();
@@ -30,6 +37,11 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("For every fixed update the speed multiplier is increased or decreased by this value based on if you are starting or ending a movement.")]
     [SerializeField] private float m_WindupScale;
     [SerializeField] private float m_WalkSpeed;
+    [Tooltip("Walk speed is multiplied by this when crouching, prefer value between 1 and 0.")]
+    [SerializeField] private float m_crouchSpeedMultiplier;
+    [Tooltip("How fast the player reaches full crouch or stands up.")]
+    [SerializeField] private float m_speedToReachCrouch = 2f;
+
     //Jump vars
     [Header("Jump Variables")]
     [SerializeField] private float m_JumpForce;
@@ -44,9 +56,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
 
-    [SerializeField] private MouseLook m_MouseLook;
-    [SerializeField] private bool m_UseFovKick;
-    [SerializeField] private FOVKick m_FovKick = new FOVKick();
+    [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
     [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
@@ -67,12 +77,17 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_StepCycle;
     private float m_NextStep;
     private bool m_Jumping;
+    private bool m_crouching = false;
     private AudioSource m_AudioSource;
     private float m_speedWindup;
     private Vector2 m_lastInput;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
+    private float m_initalHeight;
+    bool m_standObstructed = false;
+
+    private float m_crouchTime;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -80,8 +95,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
-
-
+        m_animator = Camera.main.GetComponentInChildren<Animator>();
 
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
@@ -95,18 +109,20 @@ public class PlayerController : MonoBehaviour, IKillable
         }
 
         else
+        { 
             transform.position = initialPos;
-
+        }
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
-        m_FovKick.Setup(m_Camera);
         m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle/2f;
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
+        m_initalHeight = m_CharacterController.height;
+
 
     }
 
@@ -118,21 +134,123 @@ public class PlayerController : MonoBehaviour, IKillable
         //Application.LoadLevel(0);
     }
 
+
+    void UpdateAnimator()
+    {
+        switch (m_aniState)
+        {
+            case AnimationState.idle:
+                break;
+            case AnimationState.moving:
+                break;
+            case AnimationState.jumping:
+                break;
+            default:
+                break;
+        }
+
+        m_animator.SetInteger("State", (int)m_aniState);
+    }
+
+    void ReadAnimationState()
+    {
+        if (Mathf.Abs(m_Input.magnitude) > 0 && !m_Jumping) 
+        {
+            m_aniState = AnimationState.moving;
+        }
+        else if (m_Jumping)
+        {
+            m_aniState = AnimationState.jumping;
+        }
+        else
+        {
+            m_aniState = AnimationState.idle;
+        }
+
+        UpdateAnimator();
+    }
+
     public void CreateDecoy()
     {
-        //GameObject decoy = (GameObject)Instantiate(m_decoy, transform.position, Quaternion.identity);
-
-        //GameManager.SetDecoy(decoy.GetComponent<Decoy>());
-
         if (OnCreateDecoy != null)
         {
             OnCreateDecoy();
         }
     }
 
+    void Crouch()
+    {
+        if (CrossPlatformInputManager.GetButtonDown("Crouch"))
+        {
+            m_crouching = true;
+            m_crouchTime = 0;
+        }
+
+        else if (CrossPlatformInputManager.GetButtonUp("Crouch"))
+        {
+            if (CheckForObstruction())
+            {
+                m_standObstructed = true;
+            }
+            else
+            {
+                m_crouching = false;
+                m_crouchTime = 0;
+            }
+        }
+
+        if (m_crouching)
+        {
+            float currentHeight = m_CharacterController.height;
+            float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTime);
+
+            transform.Translate(Vector3.down * (currentHeight - newHeight) / 2.5f);
+            m_CharacterController.height = newHeight;
+
+        }
+        else
+        {
+            m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTime);
+        }
+
+        //If player has tried to stand up and can't due to an obstruction, starts checking for obstruction each frame.
+        if (m_standObstructed)
+        {
+            //If no obstruction is detected the player is allowed to stand up again
+            if(!CheckForObstruction())
+            {
+                m_standObstructed = false;
+                m_crouching = false;
+                m_crouchTime = 0;
+            }
+        }
+
+        m_crouchTime += Time.deltaTime * m_speedToReachCrouch;
+        m_crouchTime = Mathf.Clamp01(m_crouchTime);
+    }
+
+    bool CheckForObstruction()
+    {
+        Vector3 dir = Vector3.up;
+        Vector3 offset = transform.forward * 0.4f;
+
+        for (int i = 0; i < 4; i++)
+        {
+            Ray ray = new Ray(transform.position + offset, dir);
+
+            if (Physics.Raycast(ray))
+            {
+                return true;
+            }
+
+            offset = Quaternion.AngleAxis(90 * i, Vector3.up) * offset;
+        }
+
+        return false;
+    }
+
     void ResetPlayer()
     {
-
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
         Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
         if(Checkpoint.isPreviouslySaved())
@@ -157,8 +275,9 @@ public class PlayerController : MonoBehaviour, IKillable
                     RotateView();
                     // the jump state needs to read here to make sure it is not missed
                     Jump();
-        
+                    Crouch();
                     m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                    ReadAnimationState();
                 break;
             case PlayerState.isDead:
                 Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
@@ -231,18 +350,22 @@ public class PlayerController : MonoBehaviour, IKillable
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
 
+
+
         speed = m_WalkSpeed * m_speedWindup;
 
-        //Always move along the camera forward as it is the direction that it being aimed at
-        Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
+        if (m_crouching)
+        {
+            speed *= m_crouchSpeedMultiplier;
+        }
+
+            //Always move along the camera forward as it is the direction that it being aimed at
+            Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         if (m_Jumping)
         {
             desiredMove = m_jumpVector;
             m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
-
-            //  * Input.y + m_jumpVectorR * Input.x;
-            //desiredMove = Vector3.Lerp(desiredMove, transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl, m_JumpAirControl);
         }
 
         //Get a normal for the surface that is being touched to move along it
