@@ -63,9 +63,10 @@ public class Indicator : MonoBehaviour {
 
     private void moveTo(Vector3 target)
     {
+        target += new Vector3(0, m_playerLength / 2, 0);
 		m_teleportTo = target;
         m_arrived = false;
-        m_player.setGravityMultiplier(0);
+        m_player.disableGravity();
     }
 
     // Handle input for teleportation controls.
@@ -87,13 +88,12 @@ public class Indicator : MonoBehaviour {
         {
             float step = teleportSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
-
 			// When the players position has arrived, stop moving.
 			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
 			{
 				m_arrived = true;
 				m_charController.detectCollisions = true;
-                m_player.resetGravity();
+                m_player.enableGravity();
 			}
 		}
 

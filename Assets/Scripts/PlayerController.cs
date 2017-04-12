@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
     [SerializeField] private float m_originGravity;
+    [SerializeField] private bool m_usingGravity = true;
 
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
@@ -386,17 +387,22 @@ public class PlayerController : MonoBehaviour, IKillable
         body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
     }
 
-    // Hard set the gravitymultiplier. Also save the gravity in order to be able to reset it afterhand.
-    public void setGravityMultiplier(float gravity)
+    // Hard set the gravitymultiplier to zero. Also save the gravity in order to be able to reset it afterhand.
+    public void disableGravity()
     {
-        m_originGravity = m_GravityMultiplier;
-        m_GravityMultiplier = gravity;
+        if (m_usingGravity)
+        {
+            m_originGravity = m_GravityMultiplier;
+            m_usingGravity = false;
+            m_GravityMultiplier = 0.0f;
+        }
     }
 
     // Set the gravity to what it was before the last set.
-    public void resetGravity()
+    public void enableGravity()
     {
         m_GravityMultiplier = m_originGravity;
+        m_usingGravity = true;
     }
 }
 
