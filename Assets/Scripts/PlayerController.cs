@@ -158,6 +158,10 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.moving;
         }
+        else if (m_Jumping)
+        {
+            m_aniState = AnimationState.jumping;
+        }
         else
         {
             m_aniState = AnimationState.idle;
