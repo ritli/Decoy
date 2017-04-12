@@ -82,7 +82,7 @@ public class TurretBehaviour : MonoBehaviour
             case TurretState.isIdle:
 
                 m_FoVLight.color = Color.Lerp(m_activeColor, m_idleColor, m_wideTime);
-                m_FoVLight.spotAngle = Mathf.Lerp(m_narrowAngle, fieldOfView, m_wideTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_wideTime);
                 m_narrowTime = 0;
 
                 m_wideTime += Time.deltaTime * m_zoomSpeed;
@@ -94,10 +94,8 @@ public class TurretBehaviour : MonoBehaviour
                 break;
             case TurretState.isTargeting:
                 m_FoVLight.color = Color.Lerp(m_idleColor, m_activeColor, m_narrowTime);
-                print(m_FoVLight.color);
-                m_FoVLight.spotAngle = Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_narrowTime);
                 m_wideTime = 0f;
-                print(Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime));
                 m_narrowTime += Time.deltaTime * m_zoomSpeed;
 
                 //Reset timer

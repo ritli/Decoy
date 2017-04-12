@@ -155,16 +155,16 @@ public class Indicator : MonoBehaviour {
 
     void PlayVisualEffects()
     {
-        StartCoroutine(m_fovKick.FOVKickUp());
+        //StartCoroutine(m_fovKick.FOVKickUp());
         m_partController.LerpAlpha(0, 0.7f, 0.05f);
         m_partController.PlayBurst(50);
 
-        Invoke("CancelVisualEffects", 0.1f);
+        Invoke("CancelVisualEffects", 0.5f);
     }
 
     void CancelVisualEffects()
     {
-        StartCoroutine(m_fovKick.FOVKickDown());
+        //StartCoroutine(m_fovKick.FOVKickDown());
         m_partController.LerpAlpha(0.5f, 0, 0.05f);
     }
 

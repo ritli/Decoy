@@ -67,6 +67,11 @@ using UnityStandardAssets.CrossPlatformInput;
             UpdateCursorLock();
         }
 
+        public Quaternion GetCameraRotation()
+        {
+            return m_CameraTargetRot;
+        }
+
         public void SetCursorLock(bool value)
         {
             lockCursor = value;
