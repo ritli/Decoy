@@ -5,8 +5,9 @@ public class LerpActivation : ActivationObject {
 
     public Transform startPos, destPos;
     public float speed;
-    [Header("Determine if the object returns or stops on toggle.")]
+    [Tooltip("Determines whether the object returns to its original position when toggled off.")]
     public bool returnToStart = false;
+    [Tooltip("Determines how close the position and target position has to be before the lerp ends.")]
     public float threshold = 0.5f;
 
     private Vector3 m_lerpAim;

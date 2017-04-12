@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [Header("Gravity Variables")]
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
+    [SerializeField] private float m_originGravity;
 
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
+        m_originGravity = m_GravityMultiplier;
     }
 
     public void Kill()
@@ -382,6 +384,19 @@ public class PlayerController : MonoBehaviour, IKillable
             return;
         }
         body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+    }
+
+    // Hard set the gravitymultiplier. Also save the gravity in order to be able to reset it afterhand.
+    public void setGravityMultiplier(float gravity)
+    {
+        m_originGravity = m_GravityMultiplier;
+        m_GravityMultiplier = gravity;
+    }
+
+    // Set the gravity to what it was before the last set.
+    public void resetGravity()
+    {
+        m_GravityMultiplier = m_originGravity;
     }
 }
 

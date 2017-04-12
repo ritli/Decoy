@@ -2,6 +2,11 @@
 using System.Collections;
 using UnityStandardAssets.Utility;
 
+/* TODO:
+ * Fix bug with gravity not reseting.
+ * Fix positioning when teleporting to a target destination
+     */
+
 public class Indicator : MonoBehaviour {
 
     public GameObject m_decoy;
@@ -22,7 +27,9 @@ public class Indicator : MonoBehaviour {
     [Header("Adjusts speed of teleportation.")]
     public float teleportSpeed = 1.0f;
     [Header("Set limits of teleportation.")]
+    [Tooltip("Scales the range of teleportation in the y-axis. 1 equals an unchanged scale.")]
     public float heightLimit = 1.0f;
+    [Tooltip("Scales the range of teleportation in the 2D plane (x and z-axis). 1 equals an unchanged scale.")]
     public float lengthLimit = 1.0f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
@@ -41,7 +48,7 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
         m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_charController = GetComponent<CharacterController>();
-		m_ledgeCollDetection = GetComponent<LedgeDetection>();
+        m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -49,8 +56,6 @@ public class Indicator : MonoBehaviour {
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
-
-        //m_raycaster.setRayScale(teleportLimits);
 
         m_fovKick.Setup(Camera.main);
 
@@ -60,6 +65,7 @@ public class Indicator : MonoBehaviour {
     {
 		m_teleportTo = target;
         m_arrived = false;
+        m_player.setGravityMultiplier(0);
     }
 
     // Handle input for teleportation controls.
@@ -87,6 +93,7 @@ public class Indicator : MonoBehaviour {
 			{
 				m_arrived = true;
 				m_charController.detectCollisions = true;
+                m_player.resetGravity();
 			}
 		}
 
@@ -204,6 +211,7 @@ public class Indicator : MonoBehaviour {
 					//print ("Found ledge");
 					m_foundLedge = true;
 					m_charController.detectCollisions = false;
+                    
 				} else 
 				{
 					m_foundLedge = false;	
