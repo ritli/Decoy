@@ -23,7 +23,7 @@ public class Indicator : MonoBehaviour {
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
 	private bool m_foundLedge = false;
-	private LedgeDetectionTeleport m_ledgeDetectTele;
+	private LedgeDetection m_ledgeDetectTele;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
 	private LedgeIndicator m_ledgeIndicator;
@@ -36,7 +36,7 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
 		m_ledgeIndicator = GetComponent<LedgeIndicator> ();
         m_charController = GetComponent<CharacterController>();
-		m_ledgeDetectTele = GetComponent<LedgeDetectionTeleport>();
+		m_ledgeDetectTele = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -83,7 +83,7 @@ public class Indicator : MonoBehaviour {
         if (Input.GetButtonUp("Teleport"))
         {
             if (!m_cancelTeleport && m_indi.activeSelf)
-            {
+			{
                 m_indi.SetActive(false);
 				//transform.position = m_indi.transform.position;
 				if (m_foundLedge)
@@ -94,6 +94,8 @@ public class Indicator : MonoBehaviour {
 				{
 					moveTo(m_indi.transform.position);
 				}
+
+				m_ledgeIndicator.setLedgeIndicator (false);
 
                 Vector3 lastPos = transform.position;
                 PlayVisualEffects();

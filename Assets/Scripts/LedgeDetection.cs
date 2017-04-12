@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LedgeDetectionTeleport : MonoBehaviour {
+public class LedgeDetection : MonoBehaviour {
 
     private Vector3 m_wallNormal;
     private Ray m_rayDown;
@@ -10,8 +10,8 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 	private Raycast m_raycaster;
 	private float positionOffset = 0.5f;
 
-	[Header("Ledge sensitivity:")]
-    public float ledgeThreshold;
+	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
+    public float ledgeSensitivity;
 
 
 
@@ -30,29 +30,26 @@ public class LedgeDetectionTeleport : MonoBehaviour {
 		// Creates a right vector based on wallNormal and up
 		Vector3 hitRight = Vector3.Cross(Vector3.up, wallHit.normal);
 
-		// Rotates around the right vector to face downward
+		// Rotates around the right vector to face toward the floor
         direction = Quaternion.AngleAxis(-90f, hitRight) * direction.normalized;
 		
-//		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
+		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.grey);
 	
 
-		//#####################################################
 		// Creates a point above and a little bit inside the wall to look for floor
 
-		//Vector3 localUp = cross wallhit.normal, hitRight
+		Vector3 localUp = Vector3.Cross (wallHit.normal, hitRight);
 
-		Vector3 newPosition = wallHit.point + Vector3.Cross(wallHit.normal, hitRight) * ledgeThreshold - wallHit.normal * positionOffset;
+		Vector3 newPosition = wallHit.point + localUp * ledgeSensitivity - wallHit.normal * positionOffset;
 
         // A ray above target position and facing towards the wall's floor
 		m_rayDown.origin = newPosition;
         m_rayDown.direction = direction;
 
 		// Another ray used to determine if other ray is inside terrain
-		m_rayDown2.origin = newPosition + Vector3.up * 2;
-		//m_rayDown2.origin = newPosition + Vector3.Cross(wallHit.normal, hitRight) * 2;
+		m_rayDown2.origin = newPosition + localUp * 2;
 		m_rayDown2.direction = direction;
-		//###################################
 
         RaycastHit hit = new RaycastHit();
 
