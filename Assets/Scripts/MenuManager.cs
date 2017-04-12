@@ -6,6 +6,20 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
+    public GameObject m_DefaultMenu;
+    public bool m_StartActive;
+    private void Start()
+    {
+        m_DefaultMenu.SetActive(m_StartActive);
+    }
+    private void OnEnable()
+    {
+        PauseManager.OnPause += pauseGame;
+    }
+    private void OnDisable()
+    {
+        PauseManager.OnPause -= pauseGame;
+    }
     public void changeScene(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);
@@ -26,12 +40,8 @@ public class MenuManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-    public void LoadFromCheckpoint(int index)
-    {
-         
-    }
     public void pauseGame(bool pause)
     {
-        PauseManager.instance.pauseGame(pause);
+        m_DefaultMenu.SetActive(pause);
     }
 }

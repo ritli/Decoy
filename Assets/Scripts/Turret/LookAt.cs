@@ -54,7 +54,7 @@ public class LookAt : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (m_IsPaused)
+        if (!m_IsPaused)
         {
             //change index?
             if (lookRandom)

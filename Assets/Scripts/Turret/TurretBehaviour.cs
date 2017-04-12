@@ -109,7 +109,6 @@ public class TurretBehaviour : MonoBehaviour
                 break;
             case TurretState.isFiring:
 
-
                 aimAtTarget();
 
                 //Run timer until player is killed.
@@ -197,9 +196,12 @@ public class TurretBehaviour : MonoBehaviour
         if(turretState == TurretState.isPaused && !isPaused)
         {
             turretState = m_StateBeforePause;
+            m_fireParticles.Play();
         }
-        else
+        else if(turretState != TurretState.isPaused && isPaused)
         {
+            m_fireParticles.Pause(true);
+
             m_StateBeforePause = turretState;
             turretState = TurretState.isPaused;
         }

@@ -146,7 +146,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private void Update()
     {
 
-
         switch (m_playerState)
         {
             case PlayerState.isAlive:
@@ -166,6 +165,11 @@ public class PlayerController : MonoBehaviour, IKillable
                 }
                 break;
             case PlayerState.isPause:
+                if (IsInvoking("ResetPlayer"))
+                {
+                    m_resetCalled = false;
+                    CancelInvoke();
+                }
                 break;
             default:
                 break;
@@ -203,7 +207,8 @@ public class PlayerController : MonoBehaviour, IKillable
     }
     private void FixedUpdate()
     {
-        Move();
+        if(m_playerState != PlayerState.isPause)
+            Move();
     }
 
     private void Move()
@@ -390,17 +395,26 @@ public class PlayerController : MonoBehaviour, IKillable
         }
         body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
     }
-    void pausePlayer(bool isPaused)
+    public void pausePlayer(bool isPaused)
     {
-        if(isPaused && m_playerState == PlayerState.isPause)
+
+        m_MouseLook.SetCursorLock(!isPaused);
+
+        if (!isPaused && m_playerState == PlayerState.isPause)
         {
+            if (!Cursor.visible)
+            {
+                print("Cursor is hidden");
+            }
             m_playerState = m_stateBeforePause;
         }
-        else
+        else if(isPaused && m_playerState != PlayerState.isPause)
         {
+            //Cursor.visible = true;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }
+
     }
 }
 
