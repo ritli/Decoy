@@ -3,6 +3,9 @@ using System.Collections;
 
 public class LookAt : MonoBehaviour 
 {
+    public delegate void targetSwitched();
+    public targetSwitched onTargetSwitched;
+
     Transform[] waypoints;
     bool m_MovingAim;
     public float speed;
@@ -24,6 +27,16 @@ public class LookAt : MonoBehaviour
 
         lookAtWaypoint();
 	}
+
+	
+    void SwitchTarget()
+    {
+        if (onTargetSwitched != null)
+        {
+            onTargetSwitched();
+        }
+    }
+
     private void OnEnable()
     {
         PauseManager.OnPause += pauseLookAt;
@@ -32,6 +45,7 @@ public class LookAt : MonoBehaviour
     {
         PauseManager.OnPause -= pauseLookAt;
     }
+
     //Dynamically allocates waypoints based on the amount of children the gameobject waypoint has
     void GetWaypoints()
     {
@@ -89,9 +103,12 @@ public class LookAt : MonoBehaviour
             timeSinceChange = 0;
             if(waypoints.Length-1 <= waypointIndex)
             {
+                SwitchTarget();
                 waypointIndex = 0;
                 return;
             }
+
+            SwitchTarget();
             waypointIndex++;
         }
     }
