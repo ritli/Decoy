@@ -11,7 +11,7 @@ public class Indicator : MonoBehaviour {
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
-
+    private bool m_isPaused = false;
     public FOVKick m_fovKick;
 
     public float m_length;
@@ -55,7 +55,14 @@ public class Indicator : MonoBehaviour {
         m_fovKick.Setup(Camera.main);
 
     }
-
+    private void OnEnable()
+    {
+        PauseManager.OnPause += pauseIndicator;
+    }
+    private void OnDisable()
+    {
+        PauseManager.OnPause -= pauseIndicator;
+    }
     private void moveTo(Vector3 target)
     {
 		m_teleportTo = target;
@@ -64,80 +71,85 @@ public class Indicator : MonoBehaviour {
 
     // Handle input for teleportation controls.
 	void Update () {
-		
-		if (m_indi.activeSelf) 
-		{
-			if (m_foundLedge) 
-			{
-				m_spriteRenderer.color = Color.red;
-			} else 
-			{
-				m_spriteRenderer.color = Color.white;
-			}
-		}
 
-        // Move towards target position set when letting go of the "Teleport" button.
-        if (!m_arrived)
-        {
-            float step = teleportSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
-
-			// When the players position has arrived, stop moving.
-			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
-			{
-				m_arrived = true;
-				m_charController.detectCollisions = true;
-			}
-		}
-
-        if (Input.GetButton("Teleport"))
-        {
-            if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
-            {
-                ShowIndicator();
-            }
-        }
-        if (Input.GetButtonUp("Teleport"))
-        {
-            if (!m_cancelTeleport && m_indi.activeSelf)
-            {
-                m_indi.SetActive(false);
-				//transform.position = m_indi.transform.position;
-				if (m_foundLedge)
-				{
-					moveTo(m_ledgeCollDetection.getNewPosition());
-					m_foundLedge = false;
-				} else
-				{
-					moveTo(m_indi.transform.position);
-				}
-
-                Vector3 lastPos = transform.position;
-                PlayVisualEffects();
-
-                m_cooldownTimer.resetTimer();
-
-                GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
-                GameManager.SetDecoy(decoy.GetComponent<Decoy>());
-                GameManager.GetPlayer().CreateDecoy();
-
-            }
-            else
-                m_cancelTeleport = false;
-        }
-
-        // WHen right clicking, cancel teleportation.
-        if (Input.GetButtonDown("CancelTeleport"))
+        if (!m_isPaused)
         {
             if (m_indi.activeSelf)
             {
-                m_cancelTeleport = true;
-                m_indi.SetActive(false);
-				m_foundLedge = false;
+                if (m_foundLedge)
+                {
+                    m_spriteRenderer.color = Color.red;
+                }
+                else
+                {
+                    m_spriteRenderer.color = Color.white;
+                }
             }
 
-            if (resetTimeOnCancel)
-                m_cooldownTimer.resetTimer();
+            // Move towards target position set when letting go of the "Teleport" button.
+            if (!m_arrived)
+            {
+                float step = teleportSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
+
+                // When the players position has arrived, stop moving.
+                if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+                {
+                    m_arrived = true;
+                    m_charController.detectCollisions = true;
+                }
+            }
+
+            if (Input.GetButton("Teleport"))
+            {
+                if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
+                {
+                    ShowIndicator();
+                }
+            }
+            if (Input.GetButtonUp("Teleport"))
+            {
+                if (!m_cancelTeleport && m_indi.activeSelf)
+                {
+                    m_indi.SetActive(false);
+                    //transform.position = m_indi.transform.position;
+                    if (m_foundLedge)
+                    {
+                        moveTo(m_ledgeCollDetection.getNewPosition());
+                        m_foundLedge = false;
+                    }
+                    else
+                    {
+                        moveTo(m_indi.transform.position);
+                    }
+
+                    Vector3 lastPos = transform.position;
+                    PlayVisualEffects();
+
+                    m_cooldownTimer.resetTimer();
+
+                    GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
+                    GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+                    GameManager.GetPlayer().CreateDecoy();
+
+                }
+                else
+                    m_cancelTeleport = false;
+            }
+
+            // WHen right clicking, cancel teleportation.
+            if (Input.GetButtonDown("CancelTeleport"))
+            {
+                if (m_indi.activeSelf)
+                {
+                    m_cancelTeleport = true;
+                    m_indi.SetActive(false);
+                    m_foundLedge = false;
+                }
+
+                if (resetTimeOnCancel)
+                    m_cooldownTimer.resetTimer();
+            }
         }
     }
 
@@ -265,5 +277,14 @@ public class Indicator : MonoBehaviour {
         }
 		m_foundLedge = false;
         m_indi.transform.position = transform.position + playerLook;
+    }
+    void pauseIndicator(bool isPaused)
+    {
+        //enabled = !isPaused;
+        if(isPaused)
+        {
+            m_indi.SetActive(false);
+        }
+        m_isPaused = isPaused;
     }
 }
