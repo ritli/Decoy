@@ -31,8 +31,10 @@ public class Indicator : MonoBehaviour {
     public float heightLimit = 1.0f;
     [Tooltip("Scales the range of teleportation in the 2D plane (x and z-axis). 1 equals an unchanged scale.")]
     public float lengthLimit = 1.0f;
-    [Tooltip("Scales the velocity when arrived at destination after a teleport. Ex: 1 indicates an unchanged velocity after a teleportation.")]
-    public float velocityAfterTeleport = 1.0f;
+    [Tooltip("Scales the velocity when arrived at destination after a teleport. Ex: -100, indicates a -100% decrease in velocity. -100 combined with a value of zero on the decay results in a total stop.")]
+    public float velocityAfterTeleport = 0.0f;
+    [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
+    public float velocityDecayOnTeleport = 0.1f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
@@ -60,7 +62,7 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer.forwardTime(teleportCooldown);
 
         m_fovKick.Setup(Camera.main);
-
+        m_player.setScaleDecay(velocityDecayOnTeleport);
     }
 
     private void moveTo(Vector3 target)
@@ -96,7 +98,7 @@ public class Indicator : MonoBehaviour {
 				m_arrived = true;
 				m_charController.detectCollisions = true;
                 m_player.enableGravity();
-                m_player.modifyVelocity(velocityAfterTeleport);
+                m_player.modifyVelocity(velocityAfterTeleport/100);
 			}
 		}
 

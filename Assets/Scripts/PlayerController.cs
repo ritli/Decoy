@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool m_scalingVelocity = false;
     private float m_velocityScale;
-    private float m_scalingDecay = 0.1f;
+    private float m_scalingStepAfterTeleport = 0.1f;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -236,20 +236,26 @@ public class PlayerController : MonoBehaviour, IKillable
 
         speed = m_WalkSpeed * m_speedWindup;
 
-        // Used for setting scale of velocity when modifyVelocity() has been called
+        // Used for setting scale of velocity when modifyVelocity() has been called.
+        // The velocity increase/decrease decays at a chosen rate.
         if (m_scalingVelocity)
         {
-            speed += m_velocityScale;
+            speed += (m_velocityScale * speed);
 
-            if (Mathf.Sign(m_velocityScale) == 1)
-                m_velocityScale -= m_scalingDecay;
-            else
-                m_velocityScale += m_scalingDecay;
+            m_velocityScale = Mathf.MoveTowards(m_velocityScale, 0, m_scalingStepAfterTeleport);
+
+            if (m_velocityScale == 0)
+            {
+                m_scalingVelocity = false;
+            }
+
+            if (m_CharacterController.isGrounded)
+            {
+                m_velocityScale = 0.0f;
+                m_scalingVelocity = false;
+            }
 
             print(m_velocityScale);
-
-            if (Mathf.Abs(m_velocityScale) <= 0)
-                m_scalingVelocity = false;
         }
 
 
@@ -429,6 +435,10 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_velocityScale = velocityScale;
         m_scalingVelocity = true;
+    }
+    public void setScaleDecay(float decay)
+    {
+        m_scalingStepAfterTeleport = decay;
     }
 }
 
