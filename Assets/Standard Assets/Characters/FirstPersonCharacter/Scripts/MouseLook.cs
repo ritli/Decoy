@@ -33,23 +33,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
             m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
             m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
-            /*
-            if (rotateChar)
-            {
-                if (rotationReset)
-                { 
-                    m_CharacterTargetRot = Quaternion.Euler(0f, m_CameraTargetRot.y, 0f);
-                    rotationReset = true;
-                }
-                m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
 
-            }
-            else
-            {
-                rotationReset = false;
-                m_CameraTargetRot *= Quaternion.Euler(0f, yRot, 0f);
-            }
-            */
             if(clampVerticalRotation)
                 m_CameraTargetRot = ClampRotationAroundXAxis (m_CameraTargetRot);
 

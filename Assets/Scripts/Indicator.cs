@@ -281,6 +281,10 @@ public class Indicator : MonoBehaviour {
     void pauseIndicator(bool isPaused)
     {
         //enabled = !isPaused;
+        if(isPaused)
+        {
+            m_indi.SetActive(false);
+        }
         m_isPaused = isPaused;
     }
 }

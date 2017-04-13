@@ -9,18 +9,26 @@ public class PauseManager : MonoBehaviour
     public delegate void PauseAction(bool isPaused);
     public static event PauseAction OnPause;
 
-
-    private bool isPaused = false;
+     
+    static bool isPaused = false;
     // Use this for initialization
     void Start()
     {
         instance = FindObjectOfType<PauseManager>();
-
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void OnEnable()
     {
+        OnPause += pauseGame;
+    }
+    private void OnDisable()
+    {
+        OnPause -= pauseGame;
+    }
+    // Update is called once per frame
+    void Update ()
+    {
+        //Pauses the game if input is pressed
 		if(Input.GetKeyDown(KeyCode.Escape))
         {
             if(OnPause != null && !isPaused)
@@ -37,15 +45,19 @@ public class PauseManager : MonoBehaviour
 	}
     public void pauseGame(bool pause)
     {
-        if(pause)
+        //pause all Physics
+        if (pause)
         {
-            Time.timeScale = 0;
+            Time.timeScale = 0f;
         }
         else
         {
             Time.timeScale = 1;
         }
-
-        OnPause(pause);
+    }
+    public static void resumeGame()
+    {
+        isPaused = false;
+        OnPause(false);
     }
 }

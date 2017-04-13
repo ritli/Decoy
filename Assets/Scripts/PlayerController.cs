@@ -104,17 +104,6 @@ public class PlayerController : MonoBehaviour, IKillable
         initialPos = transform.position;
 
 
-        //get previous location and rotation
-        if (Checkpoint.isPreviouslySaved())
-        {
-            transform.position = Checkpoint.getSavedPlayerPosition();
-            transform.rotation = Checkpoint.getSavedPlayerRotation();
-        }
-
-        else
-        { 
-            transform.position = initialPos;
-        }
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -123,8 +112,10 @@ public class PlayerController : MonoBehaviour, IKillable
         m_NextStep = m_StepCycle/2f;
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
-		m_MouseLook.Init(transform , m_Camera.transform);
+        m_MouseLook.Init(transform, m_Camera.transform);
         m_initalHeight = m_CharacterController.height;
+
+        ResetPlayer();
 
 
     }
@@ -254,15 +245,20 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void ResetPlayer()
     {
-        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
-        Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
-        if(Checkpoint.isPreviouslySaved())
+        //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
+        //Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
+        
+        //Apply saved values if they exist
+        if (Checkpoint.isPreviouslySaved())
         {
+
             transform.position = Checkpoint.getSavedPlayerPosition();
             transform.rotation = Checkpoint.getSavedPlayerRotation();
         }      
         else
             transform.position = initialPos;
+
+        m_MouseLook.Init(transform, m_Camera.transform);
 
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
@@ -275,16 +271,16 @@ public class PlayerController : MonoBehaviour, IKillable
         switch (m_playerState)
         {
             case PlayerState.isAlive:
-                    RotateView();
-                    // the jump state needs to read here to make sure it is not missed
-                    Jump();
-                    Crouch();
-                    m_PreviouslyGrounded = m_CharacterController.isGrounded;
-                    ReadAnimationState();
+                RotateView();
+                // the jump state needs to read here to make sure it is not missed
+                Jump();
+                Crouch();
+                m_PreviouslyGrounded = m_CharacterController.isGrounded;
+                ReadAnimationState();
                 break;
             case PlayerState.isDead:
-                Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-                Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+                //Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
+                //Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
                 if (!m_resetCalled)
                 {
                     m_resetCalled = true;
@@ -533,15 +529,13 @@ public class PlayerController : MonoBehaviour, IKillable
 
         if (!isPaused && m_playerState == PlayerState.isPause)
         {
-            if (!Cursor.visible)
-            {
-                print("Cursor is hidden");
-            }
             m_playerState = m_stateBeforePause;
+            m_animator.speed = 1;
         }
         else if(isPaused && m_playerState != PlayerState.isPause)
         {
-            //Cursor.visible = true;
+            
+            m_animator.speed = 0;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }

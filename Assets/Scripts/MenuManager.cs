@@ -46,4 +46,8 @@ public class MenuManager : MonoBehaviour
     {
         m_DefaultMenu.SetActive(pause);
     }
+    public void resume()
+    {
+        PauseManager.resumeGame();
+    }
 }
