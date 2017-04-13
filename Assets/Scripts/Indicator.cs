@@ -32,7 +32,7 @@ public class Indicator : MonoBehaviour {
     [Tooltip("Scales the range of teleportation in the 2D plane (x and z-axis). 1 equals an unchanged scale.")]
     public float lengthLimit = 1.0f;
     [Tooltip("Scales the velocity when arrived at destination after a teleport. Ex: 1 indicates an unchanged velocity after a teleportation.")]
-    public Vector3 velocityAfterTeleport = new Vector3(1, 1, 1);
+    public float velocityAfterTeleport = 1.0f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;

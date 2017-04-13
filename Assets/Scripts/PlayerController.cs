@@ -74,6 +74,10 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
 
+    private bool m_scalingVelocity = false;
+    private float m_velocityScale;
+    private float m_scalingDecay = 0.1f;
+
     Vector3 initialCameraPos;
     Vector3 initialPos;
 
@@ -231,6 +235,23 @@ public class PlayerController : MonoBehaviour, IKillable
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
 
         speed = m_WalkSpeed * m_speedWindup;
+
+        // Used for setting scale of velocity when modifyVelocity() has been called
+        if (m_scalingVelocity)
+        {
+            speed += m_velocityScale;
+
+            if (Mathf.Sign(m_velocityScale) == 1)
+                m_velocityScale -= m_scalingDecay;
+            else
+                m_velocityScale += m_scalingDecay;
+
+            print(m_velocityScale);
+
+            if (Mathf.Abs(m_velocityScale) <= 0)
+                m_scalingVelocity = false;
+        }
+
 
         //Always move along the camera forward as it is the direction that it being aimed at
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
@@ -404,10 +425,10 @@ public class PlayerController : MonoBehaviour, IKillable
         m_GravityMultiplier = m_originGravity;
         m_usingGravity = true;
     }
-    public void modifyVelocity(Vector3 velocityScale)
+    public void modifyVelocity(float velocityScale)
     {
-        //m_CharacterController.SimpleMove(Vector3.zero);
-        //m_CharacterController.SimpleMove(velocityScale*10000);
+        m_velocityScale = velocityScale;
+        m_scalingVelocity = true;
     }
 }
 
