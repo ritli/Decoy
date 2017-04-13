@@ -71,6 +71,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
+	private LedgeDetectionGrab m_ledgeDetectGrab;
+	private bool m_ledgeInRange = false;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -104,6 +106,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
+		m_ledgeDetectGrab = GetComponent<LedgeDetectionGrab>();
     }
 
     public void Kill()
@@ -178,27 +181,28 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Jump()
     {
-        if (!m_Jump && !m_Jumping)
-        {
-            m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-        } 
+		if (!m_Jump && !m_Jumping) 
+		{
+			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
+		}
+		
+		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
+		{
+			StartCoroutine (m_JumpBob.DoBobCycle ());
+			PlayLandingSound ();
+			m_MoveDir.y = 0f;
+			m_Jumping = false;
+		}
+		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
+		{
+			m_MoveDir.y = 0f;
+		}
 
-        if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
-        {
-            StartCoroutine(m_JumpBob.DoBobCycle());
-            PlayLandingSound();
-            m_MoveDir.y = 0f;
-            m_Jumping = false;
-        }
-        if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
-        {
-            m_MoveDir.y = 0f;
-        }
-    }
-
+		print("playerController: " + m_ledgeDetectGrab.canGrab());
+	}
     private void FixedUpdate()
     {
-        Move();
+		Move();	
     }
 
     private void Move()
