@@ -12,7 +12,7 @@ public enum PlayerState
 
 enum AnimationState
 {
-    idle, moving, jumping
+    idle, moving, jumping, falling, crouching, aiming, blinking
 }
 
 [RequireComponent(typeof (CharacterController))]
@@ -89,19 +89,22 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_initalHeight;
     bool m_standObstructed = false;
 
+    private PlayerTeleport m_teleport;
     private float m_crouchTime;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
 
+    bool m_inBlinkState = false;
+
 
     private void Start()
     {
+        m_teleport = GetComponent<PlayerTeleport>();
         m_animator = Camera.main.GetComponentInChildren<Animator>();
 
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
-
 
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
@@ -115,8 +118,6 @@ public class PlayerController : MonoBehaviour, IKillable
         m_initalHeight = m_CharacterController.height;
 
         ResetPlayer();
-
-
     }
 
     public void Kill()
@@ -145,11 +146,39 @@ public class PlayerController : MonoBehaviour, IKillable
         m_animator.SetInteger("State", (int)m_aniState);
     }
 
+    bool GetBlinkState(out int val)
+    {
+        //Returns blink state offset by four, to sync up with teleport enum
+        val = (int)m_teleport.GetBlinkState() + 4;
+
+        print((int)m_teleport.GetBlinkState());
+        if (m_teleport.GetBlinkState() != 0)
+        {
+            m_inBlinkState = true;
+            return true;
+        }
+        else
+        {
+            m_inBlinkState = false;
+            return false;
+        }
+
+    }
+
     void ReadAnimationState()
     {
-        if (Mathf.Abs(m_Input.magnitude) > 0 && !m_Jumping) 
+        int tempStateVal = 0;
+        if (GetBlinkState(out tempStateVal))
+        {
+            m_aniState = (AnimationState)tempStateVal;
+        }
+        else if (Mathf.Abs(m_Input.y) > 0 && !m_Jumping && !m_crouching) 
         {
             m_aniState = AnimationState.moving;
+        }
+        else if (m_crouching)
+        {
+            m_aniState = AnimationState.crouching;
         }
         else if (m_Jumping)
         {
