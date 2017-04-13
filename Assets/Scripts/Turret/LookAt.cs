@@ -14,7 +14,7 @@ public class LookAt : MonoBehaviour
     Quaternion targetRotation;
 
     Transform m_waypointParent;
-
+    private bool m_IsPaused = false;
     int waypointIndex = 0;
     float timeSinceChange = 0;
     public float inspectTime;
@@ -27,6 +27,7 @@ public class LookAt : MonoBehaviour
 
         lookAtWaypoint();
 	}
+
 	
     void SwitchTarget()
     {
@@ -34,6 +35,15 @@ public class LookAt : MonoBehaviour
         {
             onTargetSwitched();
         }
+    }
+
+    private void OnEnable()
+    {
+        PauseManager.OnPause += pauseLookAt;
+    }
+    private void OnDisable()
+    {
+        PauseManager.OnPause -= pauseLookAt;
     }
 
     //Dynamically allocates waypoints based on the amount of children the gameobject waypoint has
@@ -58,25 +68,28 @@ public class LookAt : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        //change index?
-        if(lookRandom)
-            setRandowmWaypointIndex();
-        else 
-            updateWaypointIndex();
-        
-        //when the turret is not moving, allow a new position to look at.
-        if (!m_MovingAim)
-            lookAtWaypoint();
-
-        //Update the aim
-        if (m_MovingAim)
+        if (!m_IsPaused)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed);
+            //change index?
+            if (lookRandom)
+                setRandowmWaypointIndex();
+            else
+                updateWaypointIndex();
 
-            //When rotation has reached the target rotation, stop rotating
-            if(Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 2)
+            //when the turret is not moving, allow a new position to look at.
+            if (!m_MovingAim)
+                lookAtWaypoint();
+
+            //Update the aim
+            if (m_MovingAim)
             {
-                m_MovingAim = false;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed);
+
+                //When rotation has reached the target rotation, stop rotating
+                if (Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 2)
+                {
+                    m_MovingAim = false;
+                }
             }
         }
 
@@ -133,5 +146,9 @@ public class LookAt : MonoBehaviour
     public bool isMovingAim()
     {
         return m_MovingAim;
+    }
+    void pauseLookAt(bool isPaused)
+    {
+        m_IsPaused = isPaused;
     }
 }
