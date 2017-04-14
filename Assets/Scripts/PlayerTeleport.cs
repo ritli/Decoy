@@ -26,9 +26,10 @@ public class PlayerTeleport : MonoBehaviour {
     public float teleportCooldown = 0.0f;
     [Header("Adjusts speed of teleportation.")]
     public float teleportSpeed = 1.0f;
-    [Header("Set limits of teleportation.")]
-    public float heightLimit = 1.0f;
-    public float lengthLimit = 1.0f;
+    [Header("Multiply vertical length of teleport with this value")]
+    public float heightScale = 1.0f;
+    [Header("Multiply horizontal length of teleport with this value")]
+    public float lengthScale = 1.0f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrived = true;
@@ -40,6 +41,8 @@ public class PlayerTeleport : MonoBehaviour {
     private ParticleController m_partController;
     private BlinkState m_blinkState;
 
+    private Vector3 m_lastPosition;
+
 	void Start ()
     {
         m_partController = Camera.main.GetComponent<ParticleController>();
@@ -49,13 +52,12 @@ public class PlayerTeleport : MonoBehaviour {
 		m_ledgeCollDetection = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
+
         m_raycaster.setDistance(m_length);
         m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
-
-        //m_raycaster.setRayScale(teleportLimits);
 
         m_fovKick.Setup(Camera.main);
 
@@ -66,7 +68,7 @@ public class PlayerTeleport : MonoBehaviour {
     }
     private void OnDisable()
     {
-        PauseManager.OnPause -= pauseIndicator;
+        PauseManager.OnPause -= pauseIndicator; 
     }
     private void moveTo(Vector3 target)
     {
@@ -118,9 +120,8 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (!m_cancelTeleport && m_indi.activeSelf)
                 {
-
                     m_indi.SetActive(false);
-                    //transform.position = m_indi.transform.position;
+
                     if (m_foundLedge)
                     {
                         moveTo(m_ledgeCollDetection.getNewPosition());
@@ -138,15 +139,18 @@ public class PlayerTeleport : MonoBehaviour {
                     m_cooldownTimer.resetTimer();
 
                     GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
-                    GameManager.SetDecoy(decoy.GetComponent<Decoy>());
-                    GameManager.GetPlayer().CreateDecoy();
 
+                    //Inherit player velocity
+                    decoy.GetComponent<Rigidbody>().velocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+
+                    GameManager.GetPlayer().CreateDecoy();
                 }
                 else
                     m_cancelTeleport = false;
             }
 
-            // WHen right clicking, cancel teleportation.
+            // When right clicking, cancel teleportation.
             if (Input.GetButtonDown("CancelTeleport"))
             {
                 if (m_indi.activeSelf)
@@ -161,6 +165,8 @@ public class PlayerTeleport : MonoBehaviour {
                     m_cooldownTimer.resetTimer();
             }
         }
+
+        m_lastPosition = transform.position;
     }
 
     public BlinkState GetBlinkState()
@@ -170,7 +176,7 @@ public class PlayerTeleport : MonoBehaviour {
 
     void PlayVisualEffects()
     {
-        //StartCoroutine(m_fovKick.FOVKickUp());
+        StartCoroutine(m_fovKick.FOVKickUp());
         m_partController.LerpAlpha(0, 0.7f, 0.05f);
         m_partController.PlayBurst(50);
 
@@ -192,9 +198,9 @@ public class PlayerTeleport : MonoBehaviour {
         Vector3 axisLimitedForward = new Vector3();
 
         // Limit the vector based on the defined variables
-        axisLimitedForward.y = forward.y * heightLimit;
-        axisLimitedForward.x = forward.x * lengthLimit;
-        axisLimitedForward.z = forward.z * lengthLimit;
+        axisLimitedForward.y = forward.y * heightScale;
+        axisLimitedForward.x = forward.x * lengthScale;
+        axisLimitedForward.z = forward.z * lengthScale;
 
         // Adjust based on weight.
         axisLimitedForward *= m_length;
