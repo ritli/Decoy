@@ -3,10 +3,11 @@ using System.Collections;
 
 public class TurretBehaviour : MonoBehaviour
 {
-    
-    public enum TurretState { isIdle, isTargeting, isFiring };
-    
+
+    AudioPlayer m_audio;
+    public enum TurretState { isIdle, isTargeting, isFiring, isPaused };   
     public TurretState turretState;// = TurretState.isIdle;
+    private TurretState m_StateBeforePause;
     //[HideInInspector]
     public float fieldOfView = 10;
     //[HideInInspector]
@@ -36,9 +37,14 @@ public class TurretBehaviour : MonoBehaviour
     Color m_activeColor = Color.red;
     Color m_idleColor = Color.white;
 
+    bool m_shotAudioPlayed = false;
+    bool m_switchTargetPlayed = false;
+
+
     // Use this for initialization
     void Start()
     {
+        m_audio = GetComponent<AudioPlayer>();
         m_currentAngle = fieldOfView;
         m_FoVLight = GetComponentInChildren<Light>();
         m_LookAt = GetComponent<LookAt>();
@@ -47,15 +53,26 @@ public class TurretBehaviour : MonoBehaviour
         m_fireParticles = GetComponentInChildren<ParticleSystem>();
         m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
 
+        m_audio.PlayEvent(2, false);
     }
 
     void OnEnable()
     {
+        m_LookAt = GetComponent<LookAt>();
+        m_LookAt.onTargetSwitched += PlayRotateSound;
         PlayerController.OnCreateDecoy += SetDecoy;
+        PauseManager.OnPause += pauseTurret;
     }
     void OnDisable()
     {
+        m_LookAt.onTargetSwitched -= PlayRotateSound;
         PlayerController.OnCreateDecoy -= SetDecoy;
+        PauseManager.OnPause -= pauseTurret;
+    }
+
+    void PlayRotateSound()
+    {
+        m_audio.PlayEvent(1, true);
     }
 
     void SetDecoy()
@@ -71,15 +88,16 @@ public class TurretBehaviour : MonoBehaviour
         m_Raycast.maxDistance = viewDistance;
         
         m_FoVLight.range = viewDistance * 1.5f;
-        
-        turretState = decideState();
+        if(turretState != TurretState.isPaused)
+            turretState = decideState();
 
         switch (turretState)
         {
             case TurretState.isIdle:
 
+
                 m_FoVLight.color = Color.Lerp(m_activeColor, m_idleColor, m_wideTime);
-                m_FoVLight.spotAngle = Mathf.Lerp(m_narrowAngle, fieldOfView, m_wideTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_wideTime);
                 m_narrowTime = 0;
 
                 m_wideTime += Time.deltaTime * m_zoomSpeed;
@@ -91,32 +109,37 @@ public class TurretBehaviour : MonoBehaviour
                 break;
             case TurretState.isTargeting:
                 m_FoVLight.color = Color.Lerp(m_idleColor, m_activeColor, m_narrowTime);
-                print(m_FoVLight.color);
-                m_FoVLight.spotAngle = Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_narrowTime);
                 m_wideTime = 0f;
-                print(Mathf.Lerp(fieldOfView, m_narrowAngle, m_narrowTime));
                 m_narrowTime += Time.deltaTime * m_zoomSpeed;
 
                 //Reset timer
                 m_timeToKillElapsed = 0;
-                
+                m_shotAudioPlayed = false;
+
                 //Continue to aim at target
                 aimAtTarget();
 
                 break;
             case TurretState.isFiring:
 
-
                 aimAtTarget();
 
                 //Run timer until player is killed.
                 if (m_timeToKillElapsed > m_timeToKill) 
                 {
+                    if (!m_shotAudioPlayed)
+                    {
+                        m_shotAudioPlayed = true;
+                        m_audio.PlayEventTimed(0, 3, 0.4f, true);
+                    }
                     m_Target.Kill();
                     m_fireParticles.Emit(20);
                 }
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
+                break;
+            case TurretState.isPaused:
                 break;
         }
     }
@@ -187,4 +210,21 @@ public class TurretBehaviour : MonoBehaviour
         }
         return TurretState.isIdle;
     }
+
+    void pauseTurret(bool isPaused)
+    {
+        if(turretState == TurretState.isPaused && !isPaused)
+        {
+            turretState = m_StateBeforePause;
+            m_fireParticles.Play();
+        }
+        else if(turretState != TurretState.isPaused && isPaused)
+        {
+            m_fireParticles.Pause(true);
+
+            m_StateBeforePause = turretState;
+            turretState = TurretState.isPaused;
+        }
+    }
+
 }
