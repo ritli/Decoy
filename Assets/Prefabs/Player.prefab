@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 11446192}
   - component: {fileID: 114882374167312562}
   - component: {fileID: 114963365164098156}
+  - component: {fileID: 114682819518071866}
   m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
@@ -160,7 +161,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -122.77974, y: 9.52, z: -23.772106}
+  m_LocalPosition: {x: 6, y: -55, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -358,7 +359,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raySource: {fileID: 453968}
   maxDistance: 0
-  castingLayers: 00000000
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!114 &11439354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -375,7 +378,7 @@ MonoBehaviour:
   m_WindupScale: 0.05
   m_WalkSpeed: 10
   m_crouchSpeedMultiplier: 0.4
-  m_speedToReachCrouch: 2
+  m_speedToReachCrouch: 4
   m_JumpForce: 10
   m_JumpAirVelDecay: 0.0033
   m_JumpAirControl: 0.1
@@ -468,17 +471,29 @@ MonoBehaviour:
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_indi: {fileID: 187996}
   m_fovKick:
-    Camera: {fileID: 0}
+    Camera: {fileID: 2037190}
     originalFov: 0
-    FOVIncrease: 3
-    TimeToIncrease: 1
-    TimeToDecrease: 1
+    FOVIncrease: 2
+    TimeToIncrease: 0.5
+    TimeToDecrease: 0.5
     IncreaseCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 2
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+      - serializedVersion: 2
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_RotationOrder: 0
   m_length: 7
   resetTimeOnCancel: 0
   teleportCooldown: 1
@@ -4131,7 +4146,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1451826456313142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -5.69, z: 0.17}
+  m_LocalPosition: {x: 0, y: -5.67, z: -0.1}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 4256602082271156}
@@ -4217,6 +4232,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ledgeThreshold: 2
+--- !u!114 &114682819518071866
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 120282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListenerNumber: 0
 --- !u!114 &114844760666094824
 MonoBehaviour:
   m_ObjectHideFlags: 1

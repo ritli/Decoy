@@ -51,7 +51,7 @@ public class Checkpoint : MonoBehaviour {
     }
     public static bool isPreviouslySaved()
     {
-        if(PlayerPrefs.HasKey("PositionX"))
+        if(PlayerPrefs.HasKey("PositionX") && PlayerPrefs.HasKey("RotationX"))
         {
             return true;
         }
@@ -59,7 +59,6 @@ public class Checkpoint : MonoBehaviour {
     }
     public static Vector3 getSavedPlayerPosition()
     {
-        print("Position acquired");
         Vector3 spawnPosition = new Vector3(PlayerPrefs.GetFloat("PositionX"), PlayerPrefs.GetFloat("PositionY"), PlayerPrefs.GetFloat("PositionZ"));
         
         return spawnPosition;
