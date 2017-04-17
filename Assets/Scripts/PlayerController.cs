@@ -71,8 +71,10 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
     private bool m_resetCalled = false;
-	private LedgeDetectionGrab m_ledgeDetectGrab;
+	private LedgeDetection m_ledgeDetect;
 	private bool m_ledgeInRange = false;
+    private bool m_arrived = true;
+    private Vector3 m_moveTo = new Vector3(0, 0, 0);
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -106,7 +108,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
-		m_ledgeDetectGrab = GetComponent<LedgeDetectionGrab>();
+		m_ledgeDetect = GetComponent<LedgeDetection>();
     }
 
     public void Kill()
@@ -150,7 +152,7 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
-
+        m_ledgeInRange = m_ledgeDetect.canGrab();
 
         switch (m_playerState)
         {
@@ -179,13 +181,45 @@ public class PlayerController : MonoBehaviour, IKillable
 
     }
 
+    void moveTowards(Vector3 destination)
+    {
+        m_moveTo = destination;
+        m_arrived = false;
+    }
+
     void Jump()
     {
+
 		if (!m_Jump && !m_Jumping) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
 		}
 		
+        if (m_ledgeInRange)
+        {
+            if (CrossPlatformInputManager.GetButton("Jump"))
+            {
+                moveTowards(m_ledgeDetect.getNewPosition());
+            }
+            if (m_Jump)
+            {
+                m_Jump = false;
+            }
+        }
+        
+		// ### Grab ledge ###
+        // Move towards target position set when pressing "Jump" when near a ledge
+        if (!m_arrived)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, m_moveTo, 0.8f);
+
+            // When the players position has arrived, stop moving.
+            if (Vector3.Distance(transform.position, m_moveTo) == 0)
+            {
+                m_arrived = true;
+            }
+        }
+
 		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
 		{
 			StartCoroutine (m_JumpBob.DoBobCycle ());
@@ -198,7 +232,7 @@ public class PlayerController : MonoBehaviour, IKillable
 			m_MoveDir.y = 0f;
 		}
 
-		print("playerController: " + m_ledgeDetectGrab.canGrab());
+//		print("playerController: " + m_ledgeDetect.canGrab());
 	}
     private void FixedUpdate()
     {

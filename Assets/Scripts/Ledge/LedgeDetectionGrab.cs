@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine;
 
 public class LedgeDetectionGrab : MonoBehaviour {
@@ -37,7 +38,7 @@ public class LedgeDetectionGrab : MonoBehaviour {
 			bool raySuccess = m_raycaster.doRaycast (out m_hit, -direction, transform.position);
 			bool foundLedge = m_ledgeDetect.findLedge (m_hit);
 			
-			print ("angleOk: " + angleOk);
+//			print ("angleOk: " + angleOk);
 			
 			if (angleOk && foundLedge) 
 			{	
@@ -47,9 +48,9 @@ public class LedgeDetectionGrab : MonoBehaviour {
 			{
 				m_canGrab = false;
 			}
-			m_collider.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
-			
-			print ("ledgeDetectionGrab: " + m_canGrab);
+			//m_collider.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
+
+//			print ("ledgeDetectionGrab: " + m_canGrab);
 		}
 	}
 
@@ -66,7 +67,7 @@ public class LedgeDetectionGrab : MonoBehaviour {
 	{
 		m_canGrab = false;
 		m_inTrigger = false;
-		other.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
+		//other.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
 	}
 
 	public bool canGrab() 

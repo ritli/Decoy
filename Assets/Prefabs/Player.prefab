@@ -70,8 +70,9 @@ GameObject:
   - component: {fileID: 11470492}
   - component: {fileID: 11492416}
   - component: {fileID: 11402340}
-  - component: {fileID: 114231231356303562}
   - component: {fileID: 114504372731668422}
+  - component: {fileID: 135055980927178638}
+  - component: {fileID: 114824890279118802}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -158,7 +159,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.5027633, y: 6.74, z: -4.4729705}
+  m_LocalPosition: {x: -27.4, y: 2.68, z: 0.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -475,7 +476,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  m_length: 7
+  m_length: 16
   resetTimeOnCancel: 0
   teleportCooldown: 1
   teleportSpeed: 4
@@ -768,18 +769,6 @@ Transform:
   m_Father: {fileID: 453968}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 165, y: -0.000015258789, z: -0.000015258789}
---- !u!114 &114231231356303562
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecbfc1293592c7240b6af8866c80fdc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ledgeThreshold: 2.5
 --- !u!114 &114504372731668422
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -791,6 +780,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5988f22a3b87e4e1f8eedddd19ed6fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114824890279118802
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 029c19cb0b0d54b99b36d25bad306c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ledgeSensitivity: 2
+  directionSensitivity: 45
 --- !u!114 &114882374167312562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -834,6 +836,18 @@ MonoBehaviour:
   jitter: 0.05
   showVelocity: 0
   showVelocityScale: 1
+--- !u!135 &135055980927178638
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!198 &198842473959753938
 ParticleSystem:
   m_ObjectHideFlags: 1

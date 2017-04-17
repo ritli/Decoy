@@ -8,11 +8,18 @@ public class LedgeDetection : MonoBehaviour {
 	private Ray m_rayDown2;
 	private Vector3 m_newPosition = new Vector3(0, 0, 0);
 	private Raycast m_raycaster;
-	private float positionOffset = 0.5f;
+    private float positionOffset = 0.5f;
+
+    // Variables for nearby ledge detection
+    private bool m_inTrigger = false;
+    private Collider m_collider;
+    private bool m_canGrab = false;
 
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
     public float ledgeSensitivity;
 
+    [Tooltip("Determines the angle you need to grab the ledge while looking at the wall")]
+    public float directionSensitivity = 0f;
 
 
     // Use this for initialization
@@ -20,11 +27,74 @@ public class LedgeDetection : MonoBehaviour {
 		m_raycaster = GetComponent<Raycast> ();
 	}
 
-	public bool findLedge(RaycastHit wallHit)
+
+    /*
+     * Update is used for finding ledge on a wall near the player
+     */
+    void Update()
+    {
+        if (m_inTrigger)
+        {
+            Vector3 direction = new Vector3(0, 0, 0);
+            direction = m_collider.ClosestPointOnBounds(transform.position);
+            direction = transform.position - direction;
+            Vector3 cameraDirection = Camera.main.transform.forward;
+
+            Debug.DrawRay(transform.position, direction * 20, Color.yellow);
+
+            RaycastHit hit = new RaycastHit();
+
+            bool angleOk = Vector3.Angle(cameraDirection, direction) > 180 - directionSensitivity ? true : false;
+            bool isWall = Vector3.Angle(direction, Vector3.up) > 45 ? true : false;
+            bool raySuccess = m_raycaster.doRaycast(out hit, -direction, transform.position);
+            bool foundLedge = findLedge(hit);
+
+//          print("angleOk: " + angleOk);
+
+            if (angleOk && foundLedge)
+            {
+                m_canGrab = true;
+                m_newPosition = getNewPosition();
+            }
+            else
+            {
+                m_canGrab = false;
+            }
+
+            //m_collider.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
+//          print("ledgeDetection: " + m_canGrab);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag != Tags.noGrab)
+        {
+            m_inTrigger = true;
+            m_collider = other;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        m_canGrab = false;
+        m_inTrigger = false;
+        //other.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
+    }
+    public bool canGrab()
+    {
+        return m_canGrab;
+    }
+
+
+    /* 
+     * Finds a ledge given a raycastHit from the wall
+     */
+    public bool findLedge(RaycastHit wallHit)
     {
 
-		// Creates new direction and position based on wall hit
-		Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
+        // Creates new direction and position based on wall hit
+        Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.blue);
 
 		// Creates a right vector based on wallNormal and up
@@ -108,5 +178,4 @@ public class LedgeDetection : MonoBehaviour {
 	{
 		return m_newPosition;
 	}
-
 }
