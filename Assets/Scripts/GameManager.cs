@@ -77,6 +77,12 @@ public class GameManager : MonoBehaviour {
     // Called when activation objects are to be reset based on the checkpoint the player has reached.
     public static void resetActivations()
     {
-        OnActivationReset(PlayerPrefs.GetInt("CheckpointIndex"));
+        if (PlayerPrefs.HasKey("CheckpointIndex"))
+        {
+            if (OnActivationReset != null)
+                OnActivationReset(PlayerPrefs.GetInt("CheckpointIndex"));
+            Debug.LogWarning("No Previous save was made. No reset is done");
+        }
+        
     }
 }
