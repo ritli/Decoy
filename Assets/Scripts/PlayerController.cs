@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour, IKillable
 	private bool m_ledgeInRange = false;
     private bool m_arrived = true;
     private Vector3 m_moveTo = new Vector3(0, 0, 0);
+	private LedgeLerp m_ledgeLerp;
 
     Vector3 initialCameraPos;
     Vector3 initialPos;
@@ -104,11 +105,12 @@ public class PlayerController : MonoBehaviour, IKillable
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
         m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
-        m_NextStep = m_StepCycle/2f;
+        m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
 		m_ledgeDetect = GetComponent<LedgeDetection>();
+		m_ledgeLerp = GetComponent<LedgeLerp>();
     }
 
     public void Kill()
@@ -156,26 +158,27 @@ public class PlayerController : MonoBehaviour, IKillable
 
         switch (m_playerState)
         {
-            case PlayerState.isAlive:
-                    RotateView();
-                    // the jump state needs to read here to make sure it is not missed
-                    Jump();
-        
-                    m_PreviouslyGrounded = m_CharacterController.isGrounded;
-                break;
-            case PlayerState.isDead:
-                Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-                Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
-                if (!m_resetCalled)
-                {
-                    m_resetCalled = true;
-                    Invoke("ResetPlayer", 1.5f);
-                }
-                break;
-            case PlayerState.isPause:
-                break;
-            default:
-                break;
+		case PlayerState.isAlive:
+			RotateView ();
+            // the jump state needs to read here to make sure it is not missed
+			if (!m_ledgeLerp.isLerping ()) 
+				Jump ();
+
+            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+            break;
+        case PlayerState.isDead:
+            Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
+            Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+            if (!m_resetCalled)
+            {
+                m_resetCalled = true;
+                Invoke("ResetPlayer", 1.5f);
+            }
+            break;
+        case PlayerState.isPause:
+            break;
+        default:
+            break;
         }
 
 
@@ -199,7 +202,8 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
-                moveTowards(m_ledgeDetect.getNewPosition());
+				//moveTowards(m_ledgeDetect.getNewPosition());
+				m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
             }
             if (m_Jump)
             {
@@ -211,7 +215,7 @@ public class PlayerController : MonoBehaviour, IKillable
         // Move towards target position set when pressing "Jump" when near a ledge
         if (!m_arrived)
         {
-            transform.position = Vector3.MoveTowards(transform.position, m_moveTo, 0.8f);
+            transform.position = Vector3.MoveTowards(transform.position, m_moveTo, 0.9f);
 
             // When the players position has arrived, stop moving.
             if (Vector3.Distance(transform.position, m_moveTo) == 0)
@@ -236,7 +240,10 @@ public class PlayerController : MonoBehaviour, IKillable
 	}
     private void FixedUpdate()
     {
-		Move();	
+		if (!m_ledgeLerp.isLerping()) 
+		{
+			Move ();
+		}	
     }
 
     private void Move()

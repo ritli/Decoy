@@ -15,6 +15,8 @@ public class LedgeDetection : MonoBehaviour {
     private Collider m_collider;
     private bool m_canGrab = false;
 
+	private Vector3 m_wallPoint = new Vector3(0, 0, 0);
+
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
     public float ledgeSensitivity;
 
@@ -70,8 +72,8 @@ public class LedgeDetection : MonoBehaviour {
     {
         if (other.transform.tag != Tags.noGrab)
         {
+			m_collider = other;
             m_inTrigger = true;
-            m_collider = other;
         }
     }
 
@@ -93,6 +95,8 @@ public class LedgeDetection : MonoBehaviour {
     public bool findLedge(RaycastHit wallHit)
     {
 
+		m_wallPoint = wallHit.point + wallHit.normal;
+
         // Creates new direction and position based on wall hit
         Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.blue);
@@ -103,7 +107,7 @@ public class LedgeDetection : MonoBehaviour {
 		// Rotates around the right vector to face toward the floor
         direction = Quaternion.AngleAxis(-90f, hitRight) * direction.normalized;
 		
-		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
+//		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.grey);
 	
 
@@ -124,11 +128,11 @@ public class LedgeDetection : MonoBehaviour {
         RaycastHit hit = new RaycastHit();
 
 		// Ray based on given wallNormal
-		Debug.DrawRay(wallHit.point, wallHit.normal * 4, Color.green);
-		Debug.DrawRay(wallHit.point, wallHit.normal * -4, Color.red);
+//		Debug.DrawRay(wallHit.point, wallHit.normal * 4, Color.green);
+//		Debug.DrawRay(wallHit.point, wallHit.normal * -4, Color.red);
 
 		// Ray moved up and looking down based on wallNormal
-		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
+//		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
 		//Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		Vector3 rayDownNormal;
@@ -177,5 +181,9 @@ public class LedgeDetection : MonoBehaviour {
 	public Vector3 getNewPosition()
 	{
 		return m_newPosition;
+	}
+
+	public Vector3 getWallPoint() {
+		return m_wallPoint;
 	}
 }
