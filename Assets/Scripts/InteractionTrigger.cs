@@ -4,7 +4,7 @@ using System.Collections;
 // Abstract class implemented by objects which are to be activated by this kind of object.
 public abstract class ActivationObject : MonoBehaviour
 {
-    [Header("Indicates corresponding checkpoint.")]
+    [Tooltip("This index corresponds to what checkpoint the object belongs to. If player has reached checkpoint 2, all objects with index 2 or less will be set to a finished state when reloading the game.")]
     public int checkIndex;
     // Function to be called when activating the object, toggling on.
     abstract public void activate();
@@ -18,12 +18,11 @@ public abstract class ActivationObject : MonoBehaviour
 
 public class InteractionTrigger : MonoBehaviour {
 
-    // USED FOR TESTING EVENTS
-    //public delegate void ClickAction(int index);
-    //public static event ClickAction OnClicked;
-
+    [Tooltip("Determines how close the player has to be in order to activate the button.")]
     public float activationDistance = 1.0f;
+    [Tooltip("List of activation objects that are to be activated by this trigger.")]
     public ActivationObject[] activationObjects;
+    [Tooltip("Determines if the object can be activated and deactivated back and forth.")]
     public bool toggle = false;
 
     private Transform m_playerTransform;

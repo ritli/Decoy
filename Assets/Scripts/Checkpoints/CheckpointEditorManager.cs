@@ -10,7 +10,13 @@ public class CheckpointEditorManager : MonoBehaviour {
     public bool m_ClearPlayerPrefs = false;
     public static CheckpointEditorManager instance;
     public string m_NamePrefix = "Checkpoint_";
-	// Use this for initialization
+    // Use this for initialization
+
+    private void Start()
+    {
+        m_ClearPlayerPrefs = false;
+    }
+
 	void OnEnable()
     {
         instance = this;
@@ -73,6 +79,7 @@ public class CheckpointEditorManager : MonoBehaviour {
             m_ClearPlayerPrefs = false;
 
             PlayerPrefs.DeleteAll();
+            print("DELETING PREFS");
         }
     }
 }

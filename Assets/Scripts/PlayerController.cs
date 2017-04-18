@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour, IKillable
     [Header("Gravity Variables")]
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
+    private float m_originGravity;
+    private bool m_usingGravity = true;
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
@@ -77,6 +79,11 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
+    private bool m_scalingVelocity = false;
+    private float m_velocityScale;
+    private float m_scalingStepAfterTeleport = 0.1f;
+
+
     private float m_crouchTimeElapsed;
     private float m_YRotation;
     private float m_initalHeight;
@@ -92,6 +99,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
+
+        m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
         m_animator = Camera.main.GetComponentInChildren<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
@@ -106,6 +115,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_MouseLook.Init(transform, m_Camera.transform);
 
         ResetPlayer();
+
     }
 
     public void Kill()
@@ -276,6 +286,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
 
+        GameManager.resetActivations();
     }
 
     // Update is called once per frame
@@ -377,13 +388,36 @@ public class PlayerController : MonoBehaviour, IKillable
 
         speed = m_WalkSpeed * m_speedWindup;
 
+        // Used for setting scale of velocity when modifyVelocity() has been called.
+        // The velocity increase/decrease decays at a chosen rate.
+        if (m_scalingVelocity)
+        {
+            speed += (m_velocityScale * speed);
+
+            m_velocityScale = Mathf.MoveTowards(m_velocityScale, 0, m_scalingStepAfterTeleport);
+
+            if (m_velocityScale == 0)
+            {
+                m_scalingVelocity = false;
+            }
+
+            if (m_CharacterController.isGrounded)
+            {
+                m_velocityScale = 0.0f;
+                m_scalingVelocity = false;
+            }
+
+            print(m_velocityScale);
+        }
+
         if (m_crouching)
         {
             speed *= m_crouchSpeedMultiplier;
         }
 
-            //Always move along the camera forward as it is the direction that it being aimed at
-            Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
+        //Always move along the camera forward as it is the direction that it being aimed at
+        Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
+
 
         if (m_Jumping)
         {
@@ -487,6 +521,34 @@ public class PlayerController : MonoBehaviour, IKillable
         }
         body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
     }
+
+    // Hard set the gravitymultiplier to zero. Also save the gravity in order to be able to reset it afterhand.
+    public void disableGravity()
+    {
+        if (m_usingGravity)
+        {
+            m_originGravity = m_GravityMultiplier;
+            m_usingGravity = false;
+            m_GravityMultiplier = 0.0f;
+        }
+    }
+
+    // Set the gravity to what it was before the last set.
+    public void enableGravity()
+    {
+        m_GravityMultiplier = m_originGravity;
+        m_usingGravity = true;
+    }
+    public void modifyVelocity(float velocityScale)
+    {
+        m_velocityScale = velocityScale;
+        m_scalingVelocity = true;
+    }
+    public void setScaleDecay(float decay)
+    {
+        m_scalingStepAfterTeleport = decay;
+    }
+
     public void pausePlayer(bool isPaused)
     {
 
@@ -504,6 +566,7 @@ public class PlayerController : MonoBehaviour, IKillable
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }
+
     }
 }
 
