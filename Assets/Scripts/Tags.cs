@@ -7,4 +7,6 @@ public class Tags : MonoBehaviour {
     public static string player = "Player";
     public static string decoy = "Decoy";
 	public static string noGrab = "NoGrab";
+    public static string trigger = "Trigger";
+    public static string button = "Button";
 }

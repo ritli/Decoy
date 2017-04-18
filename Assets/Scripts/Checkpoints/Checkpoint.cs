@@ -45,13 +45,13 @@ public class Checkpoint : MonoBehaviour {
             PlayerPrefs.SetFloat("RotationY", m_SpawnPosition.rotation.y);
             PlayerPrefs.SetFloat("RotationZ", m_SpawnPosition.rotation.z);
             PlayerPrefs.SetFloat("RotationW", m_SpawnPosition.rotation.w);
-
+            
             PlayerPrefs.Save();
         }
     }
     public static bool isPreviouslySaved()
     {
-        if(PlayerPrefs.HasKey("PositionX"))
+        if(PlayerPrefs.HasKey("PositionX") && PlayerPrefs.HasKey("RotationX"))
         {
             return true;
         }
@@ -59,7 +59,6 @@ public class Checkpoint : MonoBehaviour {
     }
     public static Vector3 getSavedPlayerPosition()
     {
-        print("Position acquired");
         Vector3 spawnPosition = new Vector3(PlayerPrefs.GetFloat("PositionX"), PlayerPrefs.GetFloat("PositionY"), PlayerPrefs.GetFloat("PositionZ"));
         
         return spawnPosition;

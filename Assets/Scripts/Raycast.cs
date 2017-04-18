@@ -5,10 +5,9 @@ public class Raycast : MonoBehaviour {
 
     public Transform raySource;
     public float maxDistance;
-    public int[] castingLayers;
 
     private RaycastHit hit;
-    private int layerMask = 0;
+    public LayerMask layerMask = 0;
 
     void Start()
     {
@@ -17,10 +16,11 @@ public class Raycast : MonoBehaviour {
             raySource = GetComponent<Transform>();
         }
         // Create the layermask for the layers on which the ray should be casted.
-        for (int i = 0; i < castingLayers.Length; i++)
+        /*for (int i = 0; i < castingLayers.Length; i++)
         {
             layerMask += (int)Mathf.Pow(2, castingLayers[i]);
         }
+        */
     }
 
 

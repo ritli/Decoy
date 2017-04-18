@@ -2,9 +2,15 @@
 using System.Collections;
 using UnityStandardAssets.Utility;
 
+/* TODO:
+ * Fix bug with gravity not reseting.
+ * Fix positioning when teleporting to a target destination
+     */
+
 public class Indicator : MonoBehaviour {
 
     public GameObject m_decoy;
+    PlayerController m_player;
     public GameObject m_indi;
     float m_playerLength = 3f;
     private bool m_cancelTeleport = false;
@@ -18,7 +24,17 @@ public class Indicator : MonoBehaviour {
     public bool resetTimeOnCancel = false;
     [Header("Overrides the value of timer.")]
     public float teleportCooldown = 0.0f;
+    [Header("Adjusts speed of teleportation.")]
     public float teleportSpeed = 1.0f;
+    [Header("Set limits of teleportation.")]
+    [Tooltip("Scales the range of teleportation in the y-axis. 1 equals an unchanged scale.")]
+    public float heightLimit = 1.0f;
+    [Tooltip("Scales the range of teleportation in the 2D plane (x and z-axis). 1 equals an unchanged scale.")]
+    public float lengthLimit = 1.0f;
+    [Tooltip("Scales the velocity when arrived at destination after a teleport. Ex: -100, indicates a -100% decrease in velocity. -100 combined with a value of zero on the decay results in a total stop.")]
+    public float velocityAfterTeleport = 0.0f;
+    [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
+    public float velocityDecayOnTeleport = 0.1f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
     private bool m_arrivedAtWall = true;
@@ -40,20 +56,33 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
 		m_ledgeIndicator = GetComponent<LedgeIndicator> ();
         m_charController = GetComponent<CharacterController>();
+<<<<<<< HEAD
 		m_ledgeDetect = GetComponent<LedgeDetection>();
+=======
+        m_ledgeCollDetection = GetComponent<LedgeDetection>();
+>>>>>>> master
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
+        m_player = GameManager.GetPlayer();
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
+
         m_fovKick.Setup(Camera.main);
+        m_player.setScaleDecay(velocityDecayOnTeleport);
     }
 
     private void moveTo(Vector3 target)
     {
+        target += new Vector3(0, m_playerLength / 2, 0);
 		m_teleportTo = target;
+<<<<<<< HEAD
         m_arrivedAtWall = false;
+=======
+        m_arrived = false;
+        m_player.disableGravity();
+>>>>>>> master
     }
 
     // Handle input for teleportation controls.
@@ -68,20 +97,34 @@ public class Indicator : MonoBehaviour {
 		}
 
         // Move towards target position set when letting go of the "Teleport" button.
+<<<<<<< HEAD
 		if (!m_arrivedAtWall) 
 		{
 			transform.position = Vector3.MoveTowards (transform.position, m_teleportTo, teleportSpeed);
 
 			// When the player's position has arrived, stop moving.
 			if (Vector3.Distance (transform.position, m_teleportTo) == 0) 
+=======
+        if (!m_arrived)
+        {
+            float step = teleportSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
+			// When the players position has arrived, stop moving.
+			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+>>>>>>> master
 			{
 				m_arrivedAtWall = true;
 				m_charController.detectCollisions = true;
+<<<<<<< HEAD
 
 				if (m_beginLedgeLerp) {
 					m_ledgeLerp.lerp(m_ledgeLerpTo);
 					m_beginLedgeLerp = false;
 				}
+=======
+                m_player.enableGravity();
+                m_player.modifyVelocity(velocityAfterTeleport/100);
+>>>>>>> master
 			}
 		}
 
@@ -157,10 +200,23 @@ public class Indicator : MonoBehaviour {
 
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
+        Vector3 axisLimitedForward = new Vector3();
 
-        Vector3 playerLook = forward * m_length;
+        // Limit the vector based on the defined variables
+        axisLimitedForward.y = forward.y * heightLimit;
+        axisLimitedForward.x = forward.x * lengthLimit;
+        axisLimitedForward.z = forward.z * lengthLimit;
 
-        Ray rayForward = new Ray(Camera.main.transform.position, forward);
+        // Adjust based on weight.
+        axisLimitedForward *= m_length;
+
+        float actualLength = Vector3.Magnitude(axisLimitedForward);
+
+        // Set length of raycasting based on the limited axis of the teleportation vector.
+        m_raycaster.setDistance(actualLength);
+
+        // Create ray for casting when no terrain was hit
+        Vector3 playerLook = forward * actualLength;
         Ray rayDown = new Ray(transform.position + playerLook + (new Vector3(0, 1.0f, 0)), Vector3.down);
 
         RaycastHit hit = new RaycastHit();
@@ -184,6 +240,7 @@ public class Indicator : MonoBehaviour {
 				// Only looks for ledge if hit isn't on NoGrab area
 				if (hit.collider.tag != Tags.noGrab) 
 				{
+<<<<<<< HEAD
 					// ## Start ledge detection ##
 					if (m_ledgeDetect.findLedge (hit)) 
 					{
@@ -196,6 +253,12 @@ public class Indicator : MonoBehaviour {
 					{
 						m_foundLedge = false;	
 					}
+=======
+					//print ("Found ledge");
+					m_foundLedge = true;
+					m_charController.detectCollisions = false;
+                    
+>>>>>>> master
 				} else 
 				{
 					m_foundLedge = false;
@@ -233,7 +296,8 @@ public class Indicator : MonoBehaviour {
         // Check for collision of floor when ray does not hit a surface.
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
-            m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
+            //print("Hitting the ground");
 			m_foundLedge = false;
             //print("Hitting the ground");
             return;
