@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityStandardAssets.Utility;
-
+using System;
 public enum BlinkState
 {
     nah, aiming, blinking
@@ -54,7 +54,15 @@ public class PlayerTeleport : MonoBehaviour {
         m_raycaster = GetComponent<Raycast>();
 
         m_raycaster.setDistance(m_length);
-        m_player = GameManager.GetPlayer();
+        try
+        {
+            m_player = GameManager.GetPlayer();
+        }
+        catch (NullReferenceException msg)
+        {
+            Debug.LogError("Error, null player: " + msg.Message);
+            Debug.LogError(msg.StackTrace);
+        }
         m_indi.SetActive(false);
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
