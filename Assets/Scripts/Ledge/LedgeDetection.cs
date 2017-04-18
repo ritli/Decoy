@@ -35,7 +35,7 @@ public class LedgeDetection : MonoBehaviour {
      */
     void Update()
     {
-        if (m_inTrigger)
+		if (m_inTrigger && m_collider != null)
         {
             Vector3 direction = new Vector3(0, 0, 0);
             direction = m_collider.ClosestPointOnBounds(transform.position);
@@ -91,6 +91,7 @@ public class LedgeDetection : MonoBehaviour {
 
     /* 
      * Finds a ledge given a raycastHit from the wall
+     * Used by both teleport and regular grab
      */
     public bool findLedge(RaycastHit wallHit)
     {
