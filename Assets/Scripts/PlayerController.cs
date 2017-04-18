@@ -65,6 +65,11 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
 
+	[SerializeField] private float m_StepInterval;
+	[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
+	[SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
+	[SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+
     private CharacterController m_CharacterController;
     private PlayerTeleport m_teleport;
     private Camera m_Camera;
@@ -102,7 +107,11 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_standObstructed = false;
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
-    private bool m_resetCalled = false;
+
+
+	private float m_StepCycle;
+	private float m_NextStep;
+	private AudioSource m_AudioSource;
 
     private void Start()
     {
@@ -156,8 +165,8 @@ public class PlayerController : MonoBehaviour, IKillable
             default:
                 break;
         }
-
-        m_animator.SetInteger("State", (int)m_aniState);
+		if (m_animator != null)
+        	m_animator.SetInteger("State", (int)m_aniState);
     }
 
     bool GetBlinkState(out int val)
@@ -393,7 +402,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
 		{
 			StartCoroutine (m_JumpBob.DoBobCycle ());
-			PlayLandingSound ();
+			//PlayLandingSound ();
 			m_MoveDir.y = 0f;
 			m_Jumping = false;
 		}
@@ -619,12 +628,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!isPaused && m_playerState == PlayerState.isPause)
         {
             m_playerState = m_stateBeforePause;
-            m_animator.speed = 1;
+			if (m_animator != null)
+            	m_animator.speed = 1;
         }
         else if(isPaused && m_playerState != PlayerState.isPause)
         {
-            
-            m_animator.speed = 0;
+			if (m_animator != null)
+            	m_animator.speed = 0;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }

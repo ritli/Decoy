@@ -56,11 +56,7 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
 		m_ledgeIndicator = GetComponent<LedgeIndicator> ();
         m_charController = GetComponent<CharacterController>();
-<<<<<<< HEAD
 		m_ledgeDetect = GetComponent<LedgeDetection>();
-=======
-        m_ledgeCollDetection = GetComponent<LedgeDetection>();
->>>>>>> master
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -77,12 +73,8 @@ public class Indicator : MonoBehaviour {
     {
         target += new Vector3(0, m_playerLength / 2, 0);
 		m_teleportTo = target;
-<<<<<<< HEAD
         m_arrivedAtWall = false;
-=======
-        m_arrived = false;
         m_player.disableGravity();
->>>>>>> master
     }
 
     // Handle input for teleportation controls.
@@ -97,34 +89,23 @@ public class Indicator : MonoBehaviour {
 		}
 
         // Move towards target position set when letting go of the "Teleport" button.
-<<<<<<< HEAD
 		if (!m_arrivedAtWall) 
 		{
-			transform.position = Vector3.MoveTowards (transform.position, m_teleportTo, teleportSpeed);
+			float step = teleportSpeed * Time.deltaTime;
+			transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
 			// When the player's position has arrived, stop moving.
-			if (Vector3.Distance (transform.position, m_teleportTo) == 0) 
-=======
-        if (!m_arrived)
-        {
-            float step = teleportSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
-			// When the players position has arrived, stop moving.
-			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
->>>>>>> master
+			if (Vector3.Distance (transform.position, m_teleportTo) == 0)
 			{
 				m_arrivedAtWall = true;
 				m_charController.detectCollisions = true;
-<<<<<<< HEAD
 
 				if (m_beginLedgeLerp) {
 					m_ledgeLerp.lerp(m_ledgeLerpTo);
 					m_beginLedgeLerp = false;
 				}
-=======
                 m_player.enableGravity();
                 m_player.modifyVelocity(velocityAfterTeleport/100);
->>>>>>> master
 			}
 		}
 
@@ -240,7 +221,6 @@ public class Indicator : MonoBehaviour {
 				// Only looks for ledge if hit isn't on NoGrab area
 				if (hit.collider.tag != Tags.noGrab) 
 				{
-<<<<<<< HEAD
 					// ## Start ledge detection ##
 					if (m_ledgeDetect.findLedge (hit)) 
 					{
@@ -253,12 +233,6 @@ public class Indicator : MonoBehaviour {
 					{
 						m_foundLedge = false;	
 					}
-=======
-					//print ("Found ledge");
-					m_foundLedge = true;
-					m_charController.detectCollisions = false;
-                    
->>>>>>> master
 				} else 
 				{
 					m_foundLedge = false;

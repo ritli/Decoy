@@ -11,7 +11,7 @@ public class PauseEffects : MonoBehaviour {
 
 
         m_Blur = GetComponent<BlurOptimized>();
-        m_Blur.enabled = false;
+		m_Blur.enabled = false;
     }
     private void OnEnable()
     {
