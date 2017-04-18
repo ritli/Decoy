@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114102617088429716}
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   EditorEvents:
   - {fileID: 114146514106496068}
   - {fileID: 114114173591437120}
@@ -23,9 +23,9 @@ MonoBehaviour:
   - {fileID: 114061482955222704}
   - {fileID: 114269311275486408}
   - {fileID: 114415513003297120}
-  MasterBankRef: {fileID: 114843479501022098}
+  MasterBankRef: {fileID: 114866232105401212}
   StringsBankRef: {fileID: 114102617088429716}
-  stringsBankWriteTime: 636276931511847092
+  stringsBankWriteTime: 636281185027726340
   cacheVersion: 2
 --- !u!114 &114061482955222704
 MonoBehaviour:
@@ -41,12 +41,12 @@ MonoBehaviour:
   Path: event:/SFX/Avatar/AvatarBlinkIdle
   guid: d3d3366bf2583e4cb1f51a97c0262f30
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114742322409059032}
+  - {fileID: 114540137350339990}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114102617088429716
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636276931511847092
+  lastModified: 636281185027726340
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -81,7 +81,7 @@ MonoBehaviour:
   Path: event:/SFX/Avatar/AvatarDecoyDeath
   guid: 92bda5adcb8f2042afc35c54d57327a2
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -102,7 +102,7 @@ MonoBehaviour:
   Path: event:/SFX/Turret/TurretRotate
   guid: 509ae321d3c61343be63878904f5bb9e
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -138,7 +138,7 @@ MonoBehaviour:
   Path: event:/AMB/AMB/HangarRoomtone
   guid: de4aa5d62e879b4f9f63724322ed6036
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
   Path: event:/SFX/Turret/TurretIdle
   guid: ccfbbd8f60760c46a636709a57ae7988
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   Path: event:/Memes/EventMeme
   guid: b544b1f67921cb478115ce57008ea2c0
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -203,6 +203,21 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114476252763917098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: BlinkUsage
+  Min: 0
+  Max: 2
+  Default: 0
+--- !u!114 &114540137350339990
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -231,7 +246,7 @@ MonoBehaviour:
   Path: event:/SFX/Turret/TurretShoot
   guid: cdde407ccd2aaf4bb273b23579572332
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 1
   Is3D: 1
   IsOneShot: 1
@@ -286,6 +301,25 @@ MonoBehaviour:
   - Name: Desktop
     Value: 2639424
   Exists: 1
+--- !u!114 &114866232105401212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: \\hsnas6\StudentHome\2015\b15ponha\Documents\SP2\Decoy\Assets\FMOD\Build\Desktop\Master
+    Bank.bank
+  lastModified: 636281185027482940
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 2639424
+  Exists: 1
 --- !u!114 &114979719575739474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,7 +334,7 @@ MonoBehaviour:
   Path: event:/AMB/AMB/LabRoomtone
   guid: b59d285e1fc0474d8a024895c7b19b01
   Banks:
-  - {fileID: 114843479501022098}
+  - {fileID: 114866232105401212}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
