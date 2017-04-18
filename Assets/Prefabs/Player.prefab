@@ -14,8 +14,7 @@ GameObject:
   - component: {fileID: 11446192}
   - component: {fileID: 114882374167312562}
   - component: {fileID: 114300794588411738}
-  - component: {fileID: 114193330476441726}
-  - component: {fileID: 95292395719658078}
+  - component: {fileID: 114164667205807124}
   m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
@@ -66,12 +65,14 @@ GameObject:
   - component: {fileID: 14385088}
   - component: {fileID: 5468874}
   - component: {fileID: 8220720}
-  - component: {fileID: 11439354}
   - component: {fileID: 2396706}
   - component: {fileID: 3350406}
+  - component: {fileID: 135489145939978978}
+  - component: {fileID: 11439354}
   - component: {fileID: 11492416}
   - component: {fileID: 11402340}
-  - component: {fileID: 114782915934398864}
+  - component: {fileID: 114638914860175162}
+  - component: {fileID: 114908024422846402}
   - component: {fileID: 114508373021751664}
   m_Layer: 8
   m_Name: Player
@@ -159,7 +160,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.77, y: 0.441, z: -11.193864}
+  m_LocalPosition: {x: 4, y: 0.64, z: 15.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -435,13 +436,17 @@ MonoBehaviour:
   m_JumpBob:
     BobDuration: 0
     BobAmount: 0
+  m_StepInterval: 0
+  m_FootstepSounds: []
+  m_JumpSound: {fileID: 0}
+  m_LandSound: {fileID: 0}
 --- !u!114 &11446192
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120282}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a036ac295913984aa7fbcfaa61e4638, type: 3}
   m_Name: 
@@ -737,24 +742,7 @@ Transform:
   m_Father: {fileID: 453968}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 165, y: -0.000015258789, z: -0.000015258789}
---- !u!95 &95292395719658078
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 120282}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f80562943282f8249a6a531a7b6409d5, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114193330476441726
+--- !u!114 &114164667205807124
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -811,10 +799,10 @@ MonoBehaviour:
   teleportCooldown: 0
   teleportSpeed: 80
   heightScale: 1
-  lengthScale: 1
-  velocityAfterTeleport: 0
-  velocityDecayOnTeleport: 0.05
---- !u!114 &114782915934398864
+  lengthScale: 4
+  velocityAfterTeleport: -100
+  velocityDecayOnTeleport: 0
+--- !u!114 &114638914860175162
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -822,10 +810,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 149630}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecbfc1293592c7240b6af8866c80fdc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 029c19cb0b0d54b99b36d25bad306c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ledgeThreshold: 2.5
+  ledgeSensitivity: 2
+  directionSensitivity: 45
 --- !u!114 &114882374167312562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -837,6 +826,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cdbf0fb392365419beaa31a8ff21d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114908024422846402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c4215710ca01f94c824f8ba363b3674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 2
+  lerpSpeed: 4
+--- !u!135 &135489145939978978
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!198 &198842473959753938
 ParticleSystem:
   m_ObjectHideFlags: 1

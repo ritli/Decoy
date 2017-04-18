@@ -65,6 +65,11 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
 
+	[SerializeField] private float m_StepInterval;
+	[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
+	[SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
+	[SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+
     private CharacterController m_CharacterController;
     private PlayerTeleport m_teleport;
     private Camera m_Camera;
@@ -78,6 +83,13 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 initialPos;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
+
+    private bool m_resetCalled = false;
+	private LedgeDetection m_ledgeDetect;
+	private bool m_ledgeInRange = false;
+    private bool m_arrived = true;
+    private Vector3 m_moveTo = new Vector3(0, 0, 0);
+	private LedgeLerp m_ledgeLerp;
 
     private bool m_scalingVelocity = false;
     private float m_velocityScale;
@@ -95,7 +107,11 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_standObstructed = false;
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
-    private bool m_resetCalled = false;
+
+
+	private float m_StepCycle;
+	private float m_NextStep;
+	private AudioSource m_AudioSource;
 
     private void Start()
     {
@@ -116,6 +132,17 @@ public class PlayerController : MonoBehaviour, IKillable
 
         ResetPlayer();
 
+        m_CharacterController = GetComponent<CharacterController>();
+        m_Camera = Camera.main;
+        m_OriginalCameraPosition = m_Camera.transform.localPosition;
+        m_HeadBob.Setup(m_Camera, m_StepInterval);
+        m_StepCycle = 0f;
+        m_NextStep = m_StepCycle / 2f;
+        m_Jumping = false;
+        m_AudioSource = GetComponent<AudioSource>();
+		m_MouseLook.Init(transform , m_Camera.transform);
+		m_ledgeDetect = GetComponent<LedgeDetection>();
+		m_ledgeLerp = GetComponent<LedgeLerp>();
     }
 
     public void Kill()
@@ -138,8 +165,8 @@ public class PlayerController : MonoBehaviour, IKillable
             default:
                 break;
         }
-
-        m_animator.SetInteger("State", (int)m_aniState);
+		if (m_animator != null)
+        	m_animator.SetInteger("State", (int)m_aniState);
     }
 
     bool GetBlinkState(out int val)
@@ -292,57 +319,106 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
+        m_ledgeInRange = m_ledgeDetect.canGrab();
+
         switch (m_playerState)
         {
-            case PlayerState.isAlive:
-                RotateView();
-                // the jump state needs to read here to make sure it is not missed
-                Jump();
-                Crouch();
-                m_PreviouslyGrounded = m_CharacterController.isGrounded;
-                ReadAnimationState();
-                break;
-            case PlayerState.isDead:
-                //Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-                //Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
-                if (!m_resetCalled)
-                {
-                    m_resetCalled = true;
-                    Invoke("ResetPlayer", 1.5f);
-                }
-                break;
-            case PlayerState.isPause:
-                if (IsInvoking("ResetPlayer"))
-                {
-                    m_resetCalled = false;
-                    CancelInvoke();
-                }
-                break;
-            default:
-                break;
+		case PlayerState.isAlive:
+			RotateView ();
+            // the jump state needs to read here to make sure it is not missed
+			if (!m_ledgeLerp.isLerping ()) 
+				Jump ();
+
+            Crouch();
+            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+            ReadAnimationState();
+            break;
+        case PlayerState.isDead:
+            //Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
+            //Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+            if (!m_resetCalled)
+            {
+                m_resetCalled = true;
+                Invoke("ResetPlayer", 1.5f);
+            }
+            break;
+        case PlayerState.isPause:
+            if (IsInvoking("ResetPlayer"))
+            {
+                m_resetCalled = false;
+                CancelInvoke();
+            }
+            break;
+        default:
+            break;
         }
 
 
     }
 
+    void moveTowards(Vector3 destination)
+    {
+        m_moveTo = destination;
+        m_arrived = false;
+    }
+
     void Jump()
     {
-        if (!m_Jump && !m_Jumping)
-        {
-            m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-        } 
 
-        if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
+		if (!m_Jump && !m_Jumping) 
+		{
+			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
+		}
+		
+        if (m_ledgeInRange)
         {
+            if (CrossPlatformInputManager.GetButton("Jump"))
+            {
+				//moveTowards(m_ledgeDetect.getNewPosition());
+				m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
+            }
+            if (m_Jump)
+            {
+                m_Jump = false;
+            }
             StartCoroutine(m_JumpBob.DoBobCycle());
             m_MoveDir.y = 0f;
-            m_Jump = false;
             m_Jumping = false;
         }
-        if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
+        
+		// ### Grab ledge ###
+        // Move towards target position set when pressing "Jump" when near a ledge
+        if (!m_arrived)
         {
-            m_MoveDir.y = 0f;
+            transform.position = Vector3.MoveTowards(transform.position, m_moveTo, 0.9f);
+
+            // When the players position has arrived, stop moving.
+            if (Vector3.Distance(transform.position, m_moveTo) == 0)
+            {
+                m_arrived = true;
+            }
         }
+
+		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
+		{
+			StartCoroutine (m_JumpBob.DoBobCycle ());
+			//PlayLandingSound ();
+			m_MoveDir.y = 0f;
+			m_Jumping = false;
+		}
+		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
+		{
+			m_MoveDir.y = 0f;
+		}
+
+//		print("playerController: " + m_ledgeDetect.canGrab());
+	}
+    private void FixedUpdate()
+    {
+		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping()) 
+		{
+			Move ();
+		}	
     }
     void OnEnable()
     {
@@ -351,11 +427,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnDisable()
     {
         PauseManager.OnPause -= pausePlayer;
-    }
-    private void FixedUpdate()
-    {
-        if(m_playerState != PlayerState.isPause)
-            Move();
     }
 
     private void Move()
@@ -557,12 +628,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!isPaused && m_playerState == PlayerState.isPause)
         {
             m_playerState = m_stateBeforePause;
-            m_animator.speed = 1;
+			if (m_animator != null)
+            	m_animator.speed = 1;
         }
         else if(isPaused && m_playerState != PlayerState.isPause)
         {
-            
-            m_animator.speed = 0;
+			if (m_animator != null)
+            	m_animator.speed = 0;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }
