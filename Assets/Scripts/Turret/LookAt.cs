@@ -3,13 +3,18 @@ using System.Collections;
 
 public class LookAt : MonoBehaviour 
 {
-    public Transform[] waypoints;
+    public delegate void targetSwitched();
+    public targetSwitched onTargetSwitched;
+
+    Transform[] waypoints;
     bool m_MovingAim;
     public float speed;
     Vector3 targetPosition;
     Vector3 directionToTarget;
     Quaternion targetRotation;
 
+    Transform m_waypointParent;
+    private bool m_IsPaused = false;
     int waypointIndex = 0;
     float timeSinceChange = 0;
     public float inspectTime;
@@ -18,32 +23,73 @@ public class LookAt : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
+        GetWaypoints();
+
         lookAtWaypoint();
-        //m_MovingAim = false;
 	}
+
 	
+    void SwitchTarget()
+    {
+        if (onTargetSwitched != null)
+        {
+            onTargetSwitched();
+        }
+    }
+
+    private void OnEnable()
+    {
+        PauseManager.OnPause += pauseLookAt;
+    }
+    private void OnDisable()
+    {
+        PauseManager.OnPause -= pauseLookAt;
+    }
+
+    //Dynamically allocates waypoints based on the amount of children the gameobject waypoint has
+    void GetWaypoints()
+    {
+        if (m_waypointParent = transform.parent.transform.FindChild("Waypoints"))
+        {
+            waypoints = new Transform[m_waypointParent.childCount];
+
+            for (int i = 0; i < waypoints.Length; i++)
+            {
+                waypoints[i] = m_waypointParent.GetChild(i);
+            }
+        }
+
+        else
+        {
+            Debug.LogError("ERROR: Turret must have gameobject named 'Waypoints' as a child.");
+        }
+    }
+
 	// Update is called once per frame
 	void Update ()
     {
-        //change index?
-        if(lookRandom)
-            setRandowmWaypointIndex();
-        else 
-            updateWaypointIndex();
-        
-        //when the turret is not moving, allow a new position to look at.
-        if (!m_MovingAim)
-            lookAtWaypoint();
-
-        //Update the aim
-        if (m_MovingAim)
+        if (!m_IsPaused)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed);
+            //change index?
+            if (lookRandom)
+                setRandowmWaypointIndex();
+            else
+                updateWaypointIndex();
 
-            //When rotation has reached the target rotation, stop rotating
-            if(Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 2)
+            //when the turret is not moving, allow a new position to look at.
+            if (!m_MovingAim)
+                lookAtWaypoint();
+
+            //Update the aim
+            if (m_MovingAim)
             {
-                m_MovingAim = false;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed);
+
+                //When rotation has reached the target rotation, stop rotating
+                if (Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 2)
+                {
+                    m_MovingAim = false;
+                }
             }
         }
 
@@ -57,9 +103,12 @@ public class LookAt : MonoBehaviour
             timeSinceChange = 0;
             if(waypoints.Length-1 <= waypointIndex)
             {
+                SwitchTarget();
                 waypointIndex = 0;
                 return;
             }
+
+            SwitchTarget();
             waypointIndex++;
         }
     }
@@ -97,5 +146,9 @@ public class LookAt : MonoBehaviour
     public bool isMovingAim()
     {
         return m_MovingAim;
+    }
+    void pauseLookAt(bool isPaused)
+    {
+        m_IsPaused = isPaused;
     }
 }

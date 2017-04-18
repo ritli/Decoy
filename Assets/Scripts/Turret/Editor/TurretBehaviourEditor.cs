@@ -9,6 +9,8 @@ public class TurretBehaviourEditor : Editor
     SerializedProperty turretState;
     SerializedProperty timeUntilFire;
     SerializedProperty lightAngleOffset;
+    SerializedProperty narrowAngle;
+    SerializedProperty zoomSpeed;
 
     Vector3 left, right;
     void OnEnable()
@@ -18,7 +20,11 @@ public class TurretBehaviourEditor : Editor
         viewDistance = serializedObject.FindProperty("viewDistance");
         fieldOfView = serializedObject.FindProperty("fieldOfView");
         timeUntilFire = serializedObject.FindProperty("m_timeToKill");
+        narrowAngle = serializedObject.FindProperty("m_narrowAngle");
+        zoomSpeed = serializedObject.FindProperty("m_zoomSpeed");
+
     }
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -28,6 +34,9 @@ public class TurretBehaviourEditor : Editor
         EditorGUILayout.PropertyField(viewDistance);
         EditorGUILayout.PropertyField(lightAngleOffset);
         EditorGUILayout.PropertyField(timeUntilFire);
+        EditorGUILayout.PropertyField(narrowAngle);
+        EditorGUILayout.PropertyField(zoomSpeed);
+
         //apply values
         serializedObject.ApplyModifiedProperties();
 
