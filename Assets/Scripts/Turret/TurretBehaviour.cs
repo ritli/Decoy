@@ -34,8 +34,9 @@ public class TurretBehaviour : MonoBehaviour
     RaycastHit m_Hit;
     Vector3 m_TargetPosition;
 
-    Color m_activeColor = Color.red;
-    Color m_idleColor = Color.white;
+    public Color m_activeColor = Color.red;
+    public Color m_idleColor = Color.white;
+    public float m_intensity = 1;
 
     bool m_shotAudioPlayed = false;
     bool m_switchTargetPlayed = false;
@@ -86,7 +87,7 @@ public class TurretBehaviour : MonoBehaviour
     {
         //Update values if changed in editor
         m_Raycast.maxDistance = viewDistance;
-        
+        m_FoVLight.intensity = m_intensity;
         m_FoVLight.range = viewDistance * 1.5f;
         if(turretState != TurretState.isPaused)
             turretState = decideState();

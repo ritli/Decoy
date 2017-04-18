@@ -336,6 +336,7 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             StartCoroutine(m_JumpBob.DoBobCycle());
             m_MoveDir.y = 0f;
+            m_Jump = false;
             m_Jumping = false;
         }
         if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
@@ -421,7 +422,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_Jumping)
         {
             desiredMove = m_jumpVector;
-            m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+            m_jumpVector += m_MoveDir.normalized * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
         }
 
         //Get a normal for the surface that is being touched to move along it
@@ -440,7 +441,7 @@ public class PlayerController : MonoBehaviour, IKillable
                 
             if (m_Jump)
             {
-                m_jumpVector = transform.forward;
+                m_jumpVector = m_MoveDir;
                 m_jumpVectorR = transform.right;
                 m_MoveDir.y = m_JumpForce;
                 m_Jump = false;
