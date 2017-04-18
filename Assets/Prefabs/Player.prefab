@@ -67,10 +67,10 @@ GameObject:
   - component: {fileID: 11439354}
   - component: {fileID: 2396706}
   - component: {fileID: 3350406}
-  - component: {fileID: 11470492}
   - component: {fileID: 11492416}
   - component: {fileID: 11402340}
   - component: {fileID: 114782915934398864}
+  - component: {fileID: 114508373021751664}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -156,15 +156,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.8829, y: 7.76, z: -2.8901153}
+  m_LocalRotation: {x: -0, y: -0.3318389, z: -0, w: 0.9433361}
+  m_LocalPosition: {x: 9.838423, y: 7.76, z: -11.210596}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
   - {fileID: 470846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -38.761, z: 0}
 --- !u!20 &2037190
 Camera:
   m_ObjectHideFlags: 1
@@ -355,7 +355,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raySource: {fileID: 453968}
   maxDistance: 0
-  castingLayers: 00000000
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!114 &11439354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -371,6 +373,8 @@ MonoBehaviour:
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_WindupScale: 0.05
   m_WalkSpeed: 10
+  m_crouchSpeedMultiplier: 0
+  m_speedToReachCrouch: 2
   m_JumpForce: 10
   m_JumpAirVelDecay: 0.0033
   m_JumpAirControl: 0.1
@@ -429,13 +433,6 @@ MonoBehaviour:
   m_JumpBob:
     BobDuration: 0
     BobAmount: 0
-  m_StepInterval: 0
-  m_FootstepSounds:
-  - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
-  - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
-  - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
-  m_JumpSound: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
-  m_LandSound: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
 --- !u!114 &11446192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -449,39 +446,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Resolution: 1
   DefaultSpotCookie: {fileID: 2800000, guid: e746ba60c8ce2864f9118588c90f3a77, type: 3}
---- !u!114 &11470492
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8f168c249259ca45b4770ec38f4cc08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
-  m_indi: {fileID: 187996}
-  m_fovKick:
-    Camera: {fileID: 0}
-    originalFov: 0
-    FOVIncrease: 3
-    TimeToIncrease: 1
-    TimeToDecrease: 1
-    IncreaseCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_length: 7
-  resetTimeOnCancel: 0
-  teleportCooldown: 0
-  teleportSpeed: 50
-  heightLimit: 1
-  lengthLimit: 4
-  velocityAfterTeleport: 0
-  velocityDecayOnTeleport: 0.05
 --- !u!114 &11492416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -771,6 +735,39 @@ Transform:
   m_Father: {fileID: 453968}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 165, y: -0.000015258789, z: -0.000015258789}
+--- !u!114 &114508373021751664
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b1745d408f43f47a95bcc8b56aa7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
+  m_indi: {fileID: 187996}
+  m_fovKick:
+    Camera: {fileID: 0}
+    originalFov: 0
+    FOVIncrease: 3
+    TimeToIncrease: 1
+    TimeToDecrease: 1
+    IncreaseCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_length: 7
+  resetTimeOnCancel: 0
+  teleportCooldown: 0
+  teleportSpeed: 80
+  heightScale: 1
+  lengthScale: 1
+  velocityAfterTeleport: 0
+  velocityDecayOnTeleport: 0.05
 --- !u!114 &114782915934398864
 MonoBehaviour:
   m_ObjectHideFlags: 1
