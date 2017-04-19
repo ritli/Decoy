@@ -174,7 +174,6 @@ public class PlayerController : MonoBehaviour, IKillable
         //Returns blink state offset by four, to sync up with teleport enum
         val = (int)m_teleport.GetBlinkState() + 4;
 
-        print((int)m_teleport.GetBlinkState());
         if (m_teleport.GetBlinkState() != 0)
         {
             m_inBlinkState = true;
@@ -222,7 +221,7 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
-    void Crouch()
+    void Crouch()   
     {
         if (CrossPlatformInputManager.GetButtonDown("Crouch"))
         {
