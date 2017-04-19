@@ -23,7 +23,6 @@ public class DoorBehaviour : ActivationObject{
     void Start () {
 
         lockLights = GetComponentsInChildren<Light>();
-
         m_Animator = GetComponent<Animator>();
 
         if (m_Animator == null)
@@ -57,18 +56,8 @@ public class DoorBehaviour : ActivationObject{
         //if both m_IsOpen and m_DisableAfterState 
         //is true/open or false/close then the door wont react to player interction
 
+        setLights();
 
-        foreach (Light light in lockLights)
-        {
-            if (m_DisableDoor)
-            {
-                light.color = m_LockedColor;
-            }
-            else
-            {
-                light.color = m_UnlockedColor;
-            }
-        }
     }
     // Subscribe and desubscribe
     void OnEnable()
@@ -140,8 +129,10 @@ public class DoorBehaviour : ActivationObject{
     // Enable or disable the door from opening.
     public void setDoorEnable(bool enable)
     {
+        print("running setDoorEnable");
         if (enable)
         {
+            
             m_DisableDoor = false;
             // If the player is in the doors collider while enabling, also activate the door.
             if (m_IsOpen)
@@ -151,6 +142,25 @@ public class DoorBehaviour : ActivationObject{
         {
             m_DisableDoor = true;
             deactivate();
+        }
+
+        setLights();
+    }
+    void setLights()
+    {
+        if (lockLights != null)
+        {
+            foreach (Light light in lockLights)
+            {
+                if (m_DisableDoor)
+                {
+                    light.color = m_LockedColor;
+                }
+                else
+                {
+                    light.color = m_UnlockedColor;
+                }
+            }
         }
     }
 }
