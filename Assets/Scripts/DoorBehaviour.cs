@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DoorBehaviour : ActivationObject{
 
-    public enum DoorStates { Open, OpenIdle, Close,CloseIdle};
+    public enum DoorStates {None, Open, OpenIdle, Close,CloseIdle};
 
     public bool m_SaveDoor = false;
     public bool m_DisableDoor = false;
