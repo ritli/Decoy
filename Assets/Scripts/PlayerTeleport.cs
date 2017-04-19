@@ -45,7 +45,6 @@ public class PlayerTeleport : MonoBehaviour {
 	private Vector3 m_teleportTo = new Vector3(0,0,0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private bool m_arrivedAtWall = true;
-	private bool m_beginLedgeLerp = false;
 	private bool m_foundLedge = false;
 
     private Raycast m_raycaster;
@@ -108,13 +107,9 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_indi.activeSelf)
             {
                 if (m_foundLedge)
-                {
                     m_spriteRenderer.color = Color.red;
-                }
                 else
-                {
                     m_spriteRenderer.color = Color.white;
-                }
             }
 
             // Move towards target position set when letting go of the "Teleport" button.
@@ -128,12 +123,13 @@ public class PlayerTeleport : MonoBehaviour {
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
 					m_arrivedAtWall = true;
+                    m_ledgeDetection.arrivedAtWall();
 					m_charController.detectCollisions = true;
 
 					if (m_foundLedge) {
 						m_ledgeLerp.lerp(m_ledgeLerpTo);
-						m_foundLedge = false;
-					}
+						m_foundLedge = false;  
+                    }
 					m_player.enableGravity();
 					m_player.modifyVelocity(velocityAfterTeleport / 100);
                 }
@@ -157,6 +153,10 @@ public class PlayerTeleport : MonoBehaviour {
                     {
 						moveTo(m_ledgeDetection.getWallPoint());
                         //m_foundLedge = false;
+                    }
+                    else if (m_ledgeDetection.isLedgeBlocked()) 
+                    {
+                        moveTo(m_ledgeDetection.getNewPosition());
                     }
                     else
                     {
@@ -266,12 +266,11 @@ public class PlayerTeleport : MonoBehaviour {
 				if (hit.collider.tag != Tags.noGrab) 
 				{
 					// ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge (hit)) 
+					if (m_ledgeDetection.findLedge(hit)) 
 					{
 						//print ("Found ledge");
 						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
-						m_beginLedgeLerp = true;
+						m_ledgeLerpTo = m_ledgeDetection.getNewPosition();
 						m_charController.detectCollisions = false;
 					} else 
 					{
@@ -321,6 +320,8 @@ public class PlayerTeleport : MonoBehaviour {
             return;
         }
 
+
+
         for (int i = 0; i < 5; i++)
         {
             Vector3 centerpos = transform.position + playerLook;
@@ -331,11 +332,11 @@ public class PlayerTeleport : MonoBehaviour {
                 if (Vector3.Angle(hit.normal, Vector3.up) > 45)
                 {
                     m_indi.transform.position = hit.point + hit.normal;
+                    m_foundLedge = false;
                     return;
                 }
             }
         }
-        m_beginLedgeLerp = false;
 		m_foundLedge = false;
 
         m_indi.transform.position = transform.position + playerLook;

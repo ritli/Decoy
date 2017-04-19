@@ -13,13 +13,12 @@ public class LedgeDetection : MonoBehaviour {
 	private Raycast m_raycaster;
     private float positionOffset = 0.5f;
 	private Vector3 m_wallPoint = new Vector3(0, 0, 0);
+	private bool m_isLedgeBlocked = false;
 
     // Variables for nearby ledge detection
     private bool m_inTrigger = false;
     private Collider m_collider;
     private bool m_canGrab = false;
-
-	private Rigidbody m_rb;
 
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
     public float ledgeSensitivity;
@@ -31,7 +30,6 @@ public class LedgeDetection : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		m_raycaster = GetComponent<Raycast>();
-		m_rb = GetComponent<Rigidbody>();
 	}
 
 
@@ -40,6 +38,7 @@ public class LedgeDetection : MonoBehaviour {
      */
     void Update()
     {
+
 		if (m_inTrigger && m_collider != null)
         {
             Vector3 direction = new Vector3(0, 0, 0);
@@ -52,21 +51,16 @@ public class LedgeDetection : MonoBehaviour {
             RaycastHit hit = new RaycastHit();
 
             bool angleOk = Vector3.Angle(cameraDirection, direction) > 180 - directionSensitivity ? true : false;
-            bool isWall = Vector3.Angle(direction, Vector3.up) > 45 ? true : false;
-            bool raySuccess = m_raycaster.doRaycast(out hit, -direction, transform.position);
+            //bool isWall = Vector3.Angle(direction, Vector3.up) > 45 ? true : false;
+            /*bool raySuccess =*/m_raycaster.doRaycast(out hit, -direction, transform.position);
 			bool foundLedge = findLedge(hit);
 
 //          print("angleOk: " + angleOk);
 
             if (angleOk && foundLedge)
-            {
                 m_canGrab = true;
-                m_newPosition = getNewPosition();
-            }
             else
-            {
                 m_canGrab = false;
-            }
 
             //m_collider.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
 //          print("ledgeDetection: " + m_canGrab);
@@ -85,7 +79,7 @@ public class LedgeDetection : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         m_canGrab = false;
-        m_inTrigger = false;
+		m_inTrigger = false;
         //other.GetComponent<MeshRenderer> ().enabled = !m_canGrab;
     }
     public bool canGrab()
@@ -134,7 +128,7 @@ public class LedgeDetection : MonoBehaviour {
         m_rayDown.direction = direction;
 
 		// Another ray used to determine if other ray is inside terrain
-		m_rayDown2.origin = newPosition + localUp * 2;
+		m_rayDown2.origin = newPosition + localUp * 2.5f;
 		m_rayDown2.direction = direction;
 
         RaycastHit hit = new RaycastHit();
@@ -150,12 +144,13 @@ public class LedgeDetection : MonoBehaviour {
 		// Sweeptest using rays
 		Debug.DrawRay (m_raySweepUp.origin, m_raySweepUp.direction, Color.red);
 		Debug.DrawRay (m_raySweepForward.origin, m_raySweepForward.direction, Color.white);
+
 		// Sweeping upward
-		if (m_raycaster.doRaycast(out hit, m_raySweepUp.direction, m_raySweepUp.origin, ledgeSensitivity * 1f))
+		if (m_raycaster.doRaycast(out hit, m_raySweepUp.direction, m_raySweepUp.origin, ledgeSensitivity))
 		{
-			Debug.DrawRay (hit.point, hit.normal, Color.cyan, 3f);
-//			print ("Hit ceiling when sweepin'");
-			m_newPosition = wallHit.point;
+			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
+			m_newPosition = m_wallPoint + hit.normal * 2;
+			m_isLedgeBlocked = true;
 			return false;
 		}
 
@@ -164,10 +159,11 @@ public class LedgeDetection : MonoBehaviour {
 		{
 			if (Vector3.Angle (hit.normal, Vector3.up) > 45) 
 			{
-				Debug.DrawRay (hit.point, hit.normal, Color.black, 3f);
+				Debug.DrawRay (hit.point, hit.normal, Color.black);
 				// There is a wall where floor might be...
 //				print("Hit wall after sweepin'");
 				m_newPosition = wallHit.point;
+				m_isLedgeBlocked = true;
 				return false;
 			}
 		}
@@ -214,6 +210,16 @@ public class LedgeDetection : MonoBehaviour {
 		//print("No floor found");
 		m_newPosition = wallHit.point;
 		return false;
+	}
+
+	public bool isLedgeBlocked() 
+	{
+		return m_isLedgeBlocked;
+	}
+
+	public void arrivedAtWall() 
+	{
+		m_isLedgeBlocked = false;
 	}
 
 	public Vector3 getNewPosition()
