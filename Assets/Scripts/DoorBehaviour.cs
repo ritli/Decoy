@@ -6,7 +6,7 @@ using UnityEngine;
 public class DoorBehaviour : ActivationObject{
 
     private Animator m_Animator;
-
+    private bool m_IsActivated = false;
 	// Use this for initialization
 	void Start () {
         m_Animator = GetComponent<Animator>();
@@ -14,7 +14,7 @@ public class DoorBehaviour : ActivationObject{
         {
             Debug.LogError("No Animator found.");
         }
-        m_Animator.Play("Open");
+        //m_Animator.Play("Open");
 
     }
 	
@@ -24,17 +24,19 @@ public class DoorBehaviour : ActivationObject{
 	}
     public override void activate()
     {
+        m_IsActivated = true;
         m_Animator.Play("Open");
-        throw new NotImplementedException();
+        
     }
     public override void deactivate()
     {
+        m_IsActivated = false;
         m_Animator.Play("Close");
-        throw new NotImplementedException();
+        
     }
     public override bool isActivated()
     {
-        throw new NotImplementedException();
+        return m_IsActivated;   
     }
 
     protected override void checkActivationEvent(int index)
