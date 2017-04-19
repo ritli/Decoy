@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-        resetActivations();
+        //resetActivations();
     }
 
     bool CheckForSingleton()
