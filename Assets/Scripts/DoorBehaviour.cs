@@ -25,14 +25,17 @@ public class DoorBehaviour : ActivationObject{
     public override void activate()
     {
         m_IsActivated = true;
-        m_Animator.Play("Open");
-        
+        if(!m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Close"))
+            m_Animator.Play("Open");
+        m_Animator.SetBool("IsOpen", true);
+
     }
     public override void deactivate()
     {
         m_IsActivated = false;
-        m_Animator.Play("Close");
-        
+        if (!m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Open"))
+            m_Animator.Play("Close");
+        m_Animator.SetBool("IsOpen", false);
     }
     public override bool isActivated()
     {
