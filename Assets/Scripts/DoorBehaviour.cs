@@ -84,9 +84,9 @@ public class DoorBehaviour : ActivationObject{
     
     public override void activate()
     {
+        m_IsOpen = true;
         if (!m_DisableDoor)
         {
-            m_IsOpen = true;
             m_Animator.SetBool("IsOpen", m_IsOpen);
             
             if (m_DisableAfterState == DoorStates.Open)
@@ -97,9 +97,9 @@ public class DoorBehaviour : ActivationObject{
     }
     public override void deactivate()
     {
+        m_IsOpen = false;
         if (!m_DisableDoor)
         {
-            m_IsOpen = false;
             m_Animator.SetBool("IsOpen", m_IsOpen);
 
             if (m_DisableAfterState == DoorStates.Close)
@@ -110,7 +110,7 @@ public class DoorBehaviour : ActivationObject{
     }
     public override bool isActivated()
     {
-        return m_IsOpen;   
+        return m_IsOpen;
     }
 
     protected override void checkActivationEvent(int index)
@@ -135,5 +135,22 @@ public class DoorBehaviour : ActivationObject{
             m_IsOpen = !m_IsOpen;
         }
         m_initialState = DoorStates.None;
+    }
+
+    // Enable or disable the door from opening.
+    public void setDoorEnable(bool enable)
+    {
+        if (enable)
+        {
+            m_DisableDoor = false;
+            // If the player is in the doors collider while enabling, also activate the door.
+            if (m_IsOpen)
+                activate();
+        }
+        else
+        {
+            m_DisableDoor = true;
+            deactivate();
+        }
     }
 }
