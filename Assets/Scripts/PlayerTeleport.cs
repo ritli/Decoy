@@ -9,6 +9,13 @@ public enum BlinkState
 
 public class PlayerTeleport : MonoBehaviour {
 
+
+	private LedgeDetection m_ledgeDetection;
+    private LerpObject m_lerpObject;
+    private TeleportationAdjuster m_teleportAdjuster;
+	private GameObject m_instanceOfteleportTarget;
+	private LedgeLerp m_ledgeLerp;
+
     public GameObject m_decoy;
     PlayerController m_player;
     public GameObject m_indi;
@@ -35,10 +42,12 @@ public class PlayerTeleport : MonoBehaviour {
     [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
     public float velocityDecayOnTeleport = 0.1f;
 
-    private Vector3 m_teleportTo = new Vector3(0,0,0);
-    private bool m_arrived = true;
+	private Vector3 m_teleportTo = new Vector3(0,0,0);
+	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
+	private bool m_arrivedAtWall = true;
+	private bool m_beginLedgeLerp = false;
 	private bool m_foundLedge = false;
-	private LedgeDetection m_ledgeCollDetection;
+
     private Raycast m_raycaster;
 	private CharacterController m_charController;
 	private SpriteRenderer m_spriteRenderer;
@@ -53,7 +62,8 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
         m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_charController = GetComponent<CharacterController>();
-		m_ledgeCollDetection = GetComponent<LedgeDetection>();
+		m_ledgeDetection = GetComponent<LedgeDetection>();
+		m_ledgeLerp = GetComponent<LedgeLerp>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
 
@@ -86,7 +96,7 @@ public class PlayerTeleport : MonoBehaviour {
     {
         target += new Vector3(0, m_playerLength / 2, 0);
         m_teleportTo = target;
-        m_arrived = false;
+		m_arrivedAtWall = false;
         m_player.disableGravity();
     }
 
@@ -108,7 +118,7 @@ public class PlayerTeleport : MonoBehaviour {
             }
 
             // Move towards target position set when letting go of the "Teleport" button.
-            if (!m_arrived)
+			if (!m_arrivedAtWall)
             {
                 m_blinkState = BlinkState.nah;
                 float step = teleportSpeed * Time.deltaTime;
@@ -117,10 +127,15 @@ public class PlayerTeleport : MonoBehaviour {
                 // When the players position has arrived, stop moving.
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
-                    m_arrived = true;
-                    m_charController.detectCollisions = true;
-                    m_player.enableGravity();
-                    m_player.modifyVelocity(velocityAfterTeleport / 100);
+					m_arrivedAtWall = true;
+					m_charController.detectCollisions = true;
+
+					if (m_beginLedgeLerp) {
+						m_ledgeLerp.lerp(m_ledgeLerpTo);
+						m_beginLedgeLerp = false;
+					}
+					m_player.enableGravity();
+					m_player.modifyVelocity(velocityAfterTeleport/100);
                 }
             }
 
@@ -140,7 +155,7 @@ public class PlayerTeleport : MonoBehaviour {
 
                     if (m_foundLedge)
                     {
-                        moveTo(m_ledgeCollDetection.getNewPosition());
+						moveTo(m_ledgeDetection.getWallPoint());
                         m_foundLedge = false;
                     }
                     else
@@ -247,18 +262,26 @@ public class PlayerTeleport : MonoBehaviour {
 			//If true then surface is wall
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
-				// ## Start ledge detection ##
-				if (m_ledgeCollDetection.findLedge (hit)) 
+				// Only looks for ledge if hit isn't on NoGrab area
+				if (hit.collider.tag != Tags.noGrab) 
 				{
-					//print ("Found ledge");
-					m_foundLedge = true;
-					m_charController.detectCollisions = false;
+					// ## Start ledge detection ##
+					if (m_ledgeDetection.findLedge (hit)) 
+					{
+						//print ("Found ledge");
+						m_foundLedge = true;
+						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
+						m_beginLedgeLerp = true;
+						m_charController.detectCollisions = false;
+					} else 
+					{
+						m_foundLedge = false;	
+					}
+					m_indi.transform.position = hit.point + hit.normal;
 				} else 
 				{
-					m_foundLedge = false;	
+					m_foundLedge = false;
 				}
-				m_indi.transform.position = hit.point + hit.normal;
-
 			}
 
 			//If true then normal is a ceiling
@@ -266,7 +289,7 @@ public class PlayerTeleport : MonoBehaviour {
 			//Else then surface is floor
 			else
             {
-
+				m_foundLedge = false;
 				for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;
