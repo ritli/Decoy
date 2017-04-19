@@ -43,9 +43,8 @@ public class ActivationSequence : MonoBehaviour {
 	void Update ()
     {
         // Wait for each timeout
-	    if (m_timer.isTimeUp())
+	    if (m_timer.isTimeUp() && activations[m_objectIndex].activationObject != null)
         {
-            print("Activating");
             // Activate or deactivate the object based on the setState variable.
             if (activations[m_objectIndex].setState)
                 activations[m_objectIndex].activationObject.activate();
