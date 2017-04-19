@@ -5,6 +5,7 @@ using UnityEngine;
 public class DoorEnableActivation : ActivationObject {
 
     private bool m_isActive = false;
+    [Tooltip("List of doors to be enabled or disabled by this object's activate/deactivate.")]
     public DoorBehaviour[] doors;
 
     // Use this for initialization
@@ -13,7 +14,7 @@ public class DoorEnableActivation : ActivationObject {
         foreach (DoorBehaviour door in doors)
         {
             if (door != null)
-                print("temp_(Enable activation of door)");
+                door.setDoorEnable(true);
         }
         m_isActive = true;
     }
@@ -24,7 +25,7 @@ public class DoorEnableActivation : ActivationObject {
         foreach (DoorBehaviour door in doors)
         {
             if (door != null)
-                print("temp_(Disable activation of door)");
+                door.setDoorEnable(false);
         }
         m_isActive = false;
     }
