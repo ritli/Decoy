@@ -130,12 +130,12 @@ public class PlayerTeleport : MonoBehaviour {
 					m_arrivedAtWall = true;
 					m_charController.detectCollisions = true;
 
-					if (m_beginLedgeLerp) {
+					if (m_foundLedge) {
 						m_ledgeLerp.lerp(m_ledgeLerpTo);
-						m_beginLedgeLerp = false;
+						m_foundLedge = false;
 					}
 					m_player.enableGravity();
-					m_player.modifyVelocity(velocityAfterTeleport/100);
+					m_player.modifyVelocity(velocityAfterTeleport / 100);
                 }
             }
 
@@ -156,7 +156,7 @@ public class PlayerTeleport : MonoBehaviour {
                     if (m_foundLedge)
                     {
 						moveTo(m_ledgeDetection.getWallPoint());
-                        m_foundLedge = false;
+                        //m_foundLedge = false;
                     }
                     else
                     {
@@ -277,11 +277,11 @@ public class PlayerTeleport : MonoBehaviour {
 					{
 						m_foundLedge = false;	
 					}
-					m_indi.transform.position = hit.point + hit.normal;
 				} else 
 				{
 					m_foundLedge = false;
 				}
+                m_indi.transform.position = hit.point + hit.normal;
 			}
 
 			//If true then normal is a ceiling
@@ -335,7 +335,9 @@ public class PlayerTeleport : MonoBehaviour {
                 }
             }
         }
+        m_beginLedgeLerp = false;
 		m_foundLedge = false;
+
         m_indi.transform.position = transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)
