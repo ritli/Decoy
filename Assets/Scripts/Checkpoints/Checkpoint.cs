@@ -45,7 +45,7 @@ public class Checkpoint : MonoBehaviour {
             PlayerPrefs.SetFloat("RotationY", m_SpawnPosition.rotation.y);
             PlayerPrefs.SetFloat("RotationZ", m_SpawnPosition.rotation.z);
             PlayerPrefs.SetFloat("RotationW", m_SpawnPosition.rotation.w);
-
+            
             PlayerPrefs.Save();
         }
     }
