@@ -11,10 +11,16 @@ public class TurretBehaviourEditor : Editor
     SerializedProperty lightAngleOffset;
     SerializedProperty narrowAngle;
     SerializedProperty zoomSpeed;
+    SerializedProperty activeColor;
+    SerializedProperty idleColor;
+    SerializedProperty lightIntensity;
 
     Vector3 left, right;
     void OnEnable()
     {
+        activeColor = serializedObject.FindProperty("m_activeColor");
+        idleColor = serializedObject.FindProperty("m_idleColor");
+        lightIntensity = serializedObject.FindProperty("m_intensity");
         lightAngleOffset = serializedObject.FindProperty("lightAngleOffset");
         turretState = serializedObject.FindProperty("turretState");
         viewDistance = serializedObject.FindProperty("viewDistance");
@@ -33,6 +39,9 @@ public class TurretBehaviourEditor : Editor
         EditorGUILayout.PropertyField(fieldOfView);
         EditorGUILayout.PropertyField(viewDistance);
         EditorGUILayout.PropertyField(lightAngleOffset);
+        EditorGUILayout.PropertyField(activeColor);
+        EditorGUILayout.PropertyField(idleColor);
+        EditorGUILayout.PropertyField(lightIntensity);
         EditorGUILayout.PropertyField(timeUntilFire);
         EditorGUILayout.PropertyField(narrowAngle);
         EditorGUILayout.PropertyField(zoomSpeed);
