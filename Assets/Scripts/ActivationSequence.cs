@@ -1,16 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[Serializable]
+public struct ActivationEvent
+{
+    public ActivationObject activationObject;
+    public bool setState;
+    public float delay;
+}
 
 [RequireComponent(typeof(Timer))]
 public class ActivationSequence : MonoBehaviour {
 
-    [Tooltip("List of objects to be activated. The order of the list corresponds to the order in which the objects will be activated.")]
-    public ActivationObject[] activations;
-    [Tooltip("Decides the delay before the activation of each object. Index 0 in this list decides the delay before the activation of object 0 in the previous list.")]
-    public float[] activationTimers;
     [Tooltip("Determine whether the list should loop or if the script should end when the list is done.")]
     public bool loopList = false;
+
+    [Tooltip("List of events that should occurr. Object: the object affected; setState: If the object should be activated or deactivated; delay: Determine the time in seconds before the event is executed.")]
+    public ActivationEvent[] activations;
 
     private Timer m_timer;
     private int m_objectIndex = 0;
@@ -21,7 +29,7 @@ public class ActivationSequence : MonoBehaviour {
         m_timer = GetComponent<Timer>();
         try
         {
-            m_timer.setTimeout(activationTimers[0]);
+            m_timer.setTimeout(activations[0].delay);
         }
         catch
         {
@@ -37,20 +45,27 @@ public class ActivationSequence : MonoBehaviour {
         // Wait for each timeout
 	    if (m_timer.isTimeUp())
         {
-            activations[m_objectIndex].activate();
+            print("Activating");
+            // Activate or deactivate the object based on the setState variable.
+            if (activations[m_objectIndex].setState)
+                activations[m_objectIndex].activationObject.activate();
+            else
+                activations[m_objectIndex].activationObject.deactivate();
 
-            if (m_objectIndex <= activations.Length - 1)
+            // Check the list of events has come to an end or not.
+            if (m_objectIndex < activations.Length - 1)
                 m_objectIndex++;
             else
             {
+                // Check looplist to determine if the list should loop or if the sequence is finished.
                 if (!loopList)
-                    Destroy(this);
+                    Destroy(gameObject);
                 else
                     m_objectIndex = 0;
             }
 
-
-            m_timer.setTimeout(activationTimers[m_objectIndex]);
+            // Set delay for the next activation in the sequence
+            m_timer.setTimeout(activations[m_objectIndex].delay);
             m_timer.resetTimer();
         }
 	}

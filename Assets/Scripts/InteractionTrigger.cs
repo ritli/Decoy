@@ -41,12 +41,12 @@ public class InteractionTrigger : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-	    if (m_raycaster.doRaycast(out hit))
+        if (Input.GetButtonDown("Activate"))
         {
-            if (hit.transform.tag == "Button")
+            if (m_raycaster.doRaycast(out hit))
             {
                 Debug.DrawLine(m_playerTransform.position, hit.point, Color.green);
-                if (Input.GetButtonDown("Activate"))
+                if (hit.transform.tag == "Button")
                 {
                     foreach (ActivationObject actObject in activationObjects)
                     {
