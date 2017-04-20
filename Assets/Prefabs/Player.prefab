@@ -161,15 +161,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 58.1, y: 19.87, z: 27.67}
+  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
+  m_LocalPosition: {x: 60.998, y: 25.12, z: 29.535}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
   - {fileID: 470846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &2037190
 Camera:
   m_ObjectHideFlags: 1
@@ -194,7 +194,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294966271
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1566,6 +1566,7 @@ GameObject:
   - component: {fileID: 124631472197992442}
   - component: {fileID: 92927511043685312}
   - component: {fileID: 81584584740657114}
+  - component: {fileID: 114645807170923446}
   m_Layer: 2
   m_Name: Arm Camera
   m_TagString: Untagged
@@ -4043,7 +4044,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -4100,7 +4101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6689ad60dc980da4695d3eed6d04667e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_offsetAmount: 0.25
+  m_offsetAmount: 0.5
 --- !u!114 &114164667205807124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4153,7 +4154,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  m_length: 7
+  m_length: 5
   resetTimeOnCancel: 0
   teleportCooldown: 0
   teleportSpeed: 80
@@ -4174,6 +4175,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ledgeSensitivity: 2
   directionSensitivity: 45
+--- !u!114 &114645807170923446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1520927747172846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0602d97a864f784ebcba29d0a1eb39c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114707980694823172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4235,7 +4247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 2
-  lerpSpeed: 4
+  lerpSpeed: 8
 --- !u!124 &124631472197992442
 Behaviour:
   m_ObjectHideFlags: 1
@@ -4397,7 +4409,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 2032853463
+  randomSeed: 949087188
   InitialModule:
     serializedVersion: 3
     enabled: 1
