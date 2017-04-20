@@ -26,7 +26,6 @@ public class LedgeLerp : MonoBehaviour
             transform.position = lerpPos;
 //			print ("Lerping");
 
-			//if (Mathf.Abs(transform.position.y - m_targetPos.y) < m_distanceThreshold) 
 			if (Vector3.Distance(transform.position, m_targetPos) < m_distanceThreshold)
 			{
 	            m_incrementor = 0;
@@ -34,8 +33,8 @@ public class LedgeLerp : MonoBehaviour
 //				print ("Finished lerping");
 	        }
 		}
-		Debug.DrawRay (m_startPos, Vector3.up, Color.yellow, 5f);
-		Debug.DrawRay (m_targetPos, Vector3.up, Color.cyan, 5f);
+//		Debug.DrawRay (m_startPos, Vector3.up, Color.yellow, 5f);
+//		Debug.DrawRay (m_targetPos, Vector3.up, Color.cyan, 5f);
     }
 
     public void lerp(Vector3 destination)

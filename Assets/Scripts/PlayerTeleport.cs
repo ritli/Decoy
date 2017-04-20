@@ -151,12 +151,14 @@ public class PlayerTeleport : MonoBehaviour {
 
                     if (m_foundLedge)
                     {
-						moveTo(m_ledgeDetection.getWallPoint());
+						print ("Found ledge");
+						moveTo(m_ledgeDetection.getNewPosition());
                         //m_foundLedge = false;
                     }
-                    else if (m_ledgeDetection.isLedgeBlocked()) 
+                    else if (m_ledgeDetection.isLedgeBlocked())
                     {
-                        moveTo(m_ledgeDetection.getNewPosition());
+						print ("Ledge blocked");
+						moveTo(m_ledgeDetection.getNewPosition());
                     }
                     else
                     {
@@ -253,9 +255,10 @@ public class PlayerTeleport : MonoBehaviour {
         {
             //print(Vector3.Angle(hit.normal, Vector3.down));
 
-            if (Vector3.Angle(hit.normal, Vector3.down) == 0)
+            if (Vector3.Angle(hit.normal, Vector3.down) < 45)
             {
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
+				m_foundLedge = false;
                 return;
             }
 
@@ -281,6 +284,7 @@ public class PlayerTeleport : MonoBehaviour {
 					m_foundLedge = false;
 				}
                 m_indi.transform.position = hit.point + hit.normal;
+				return;
 			}
 
 			//If true then normal is a ceiling

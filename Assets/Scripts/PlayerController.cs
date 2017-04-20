@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_animator = Camera.main.GetComponentInChildren<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
 
+
         m_Camera = Camera.main;
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
@@ -174,7 +175,7 @@ public class PlayerController : MonoBehaviour, IKillable
         //Returns blink state offset by four, to sync up with teleport enum
         val = (int)m_teleport.GetBlinkState() + 4;
 
-        print((int)m_teleport.GetBlinkState());
+//      print((int)m_teleport.GetBlinkState());
         if (m_teleport.GetBlinkState() != 0)
         {
             m_inBlinkState = true;
@@ -356,12 +357,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     }
 
-    void moveTowards(Vector3 destination)
-    {
-        m_moveTo = destination;
-        m_arrived = false;
-    }
-
     void Jump()
     {
 
@@ -374,7 +369,6 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
-				//moveTowards(m_ledgeDetect.getNewPosition());
 				m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
             }
             if (m_Jump)
@@ -384,19 +378,6 @@ public class PlayerController : MonoBehaviour, IKillable
             StartCoroutine(m_JumpBob.DoBobCycle());
             m_MoveDir.y = 0f;
             m_Jumping = false;
-        }
-        
-		// ### Grab ledge ###
-        // Move towards target position set when pressing "Jump" when near a ledge
-        if (!m_arrived)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, m_moveTo, 0.9f);
-
-            // When the players position has arrived, stop moving.
-            if (Vector3.Distance(transform.position, m_moveTo) == 0)
-            {
-                m_arrived = true;
-            }
         }
 
 		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
@@ -478,7 +459,7 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_scalingVelocity = false;
             }
 
-            print(m_velocityScale);
+//          print(m_velocityScale);
         }
 
         if (m_crouching)
