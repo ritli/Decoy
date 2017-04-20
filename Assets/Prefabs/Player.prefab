@@ -161,15 +161,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
-  m_LocalPosition: {x: 60.998, y: 25.12, z: 29.535}
+  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 5.04, y: 2, z: -10.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
   - {fileID: 470846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
 --- !u!20 &2037190
 Camera:
   m_ObjectHideFlags: 1
@@ -378,11 +378,11 @@ MonoBehaviour:
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_WindupScale: 0.05
   m_WalkSpeed: 10
-  m_crouchSpeedMultiplier: 0
+  m_crouchSpeedMultiplier: 0.8
   m_speedToReachCrouch: 2
   m_JumpForce: 10
-  m_JumpAirVelDecay: 0.0033
-  m_JumpAirControl: 0.1
+  m_JumpAirVelDecay: 0
+  m_JumpAirControl: 0.25
   m_StickToGroundForce: 0.3
   m_GravityMultiplier: 2
   m_MouseLook:
@@ -448,7 +448,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120282}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a036ac295913984aa7fbcfaa61e4638, type: 3}
   m_Name: 
@@ -4154,13 +4154,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  m_length: 5
+  m_length: 2
   resetTimeOnCancel: 0
-  teleportCooldown: 0
-  teleportSpeed: 80
+  teleportCooldown: 1.5
+  teleportSpeed: 60
   heightScale: 1
   lengthScale: 4
-  velocityAfterTeleport: -100
+  velocityAfterTeleport: -10
   velocityDecayOnTeleport: 0
 --- !u!114 &114638914860175162
 MonoBehaviour:

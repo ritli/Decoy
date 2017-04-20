@@ -143,15 +143,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183626}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 49.56649, y: -58.78, z: -41.346912}
+  m_LocalRotation: {x: 0.22293575, y: -0.6710437, z: 0.2229358, w: 0.67104375}
+  m_LocalPosition: {x: 127.87776, y: 27.368008, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400060}
   - {fileID: 445384}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 36.755, y: -90.00001, z: 0}
 --- !u!4 &430922
 Transform:
   m_ObjectHideFlags: 1
@@ -186,7 +186,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151466}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -45.1, y: -6.7, z: 70}
+  m_LocalPosition: {x: -8.3, y: -7.1, z: 35.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 445384}
@@ -361,8 +361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284f3f276a8951b4588a095f768ff160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  inspectTime: 4
+  speed: 2.5
+  inspectTime: 2.7
   lookRandom: 0
 --- !u!114 &11463476
 MonoBehaviour:
@@ -402,12 +402,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turretState: 0
-  fieldOfView: 30
-  viewDistance: 70
+  fieldOfView: 25
+  viewDistance: 66
   lightAngleOffset: 0
   m_narrowAngle: 5
   m_zoomSpeed: 9
-  m_timeToKill: 1
+  m_timeToKill: 1.5
+  m_activeColor: {r: 1, g: 0, b: 0, a: 1}
+  m_idleColor: {r: 1, g: 1, b: 1, a: 1}
+  m_intensity: 3
 --- !u!136 &13624334
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -3452,8 +3455,8 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: e4efe88b4cc53494285ab467feab97e0, type: 2}
-  - {fileID: 2100000, guid: e4efe88b4cc53494285ab467feab97e0, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3523,7 +3526,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1627026756400046}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.3, y: -40.3, z: 70}
+  m_LocalPosition: {x: 10.4, y: -8, z: 36.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 445384}
@@ -3547,8 +3550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af1450474031dd4ea9bbc8f3728a971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalescale: 100
-  xyScale: 1
 --- !u!114 &114174931425733160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3576,8 +3577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af1450474031dd4ea9bbc8f3728a971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalescale: 100
-  xyScale: 1
 --- !u!114 &114830622362779078
 MonoBehaviour:
   m_ObjectHideFlags: 1
