@@ -9,17 +9,18 @@ public class TimedInteractionTrigger : ActivationTrigger {
     public float timeUp = 1.0f;
 
     private Timer m_timer;
+    private bool isPushed = false;
 
     // Update is called once per frame
     protected override void buttonHit()
     {
-        print("Activating TimedInteractionTrigger");
         foreach (ActivationObject actObject in activationObjects)
         {
             if (actObject != null)
                 actObject.activate();
-            m_timer.resetTimer();
         }
+        m_timer.resetTimer();
+        isPushed = true;
     }
 
     protected override void Start()
@@ -35,13 +36,14 @@ public class TimedInteractionTrigger : ActivationTrigger {
         base.Update();
 
         // Deactivate all listed objects when the time is up.
-        if (m_timer.isTimeUp())
+        if (m_timer.isTimeUp() && isPushed)
         {
             foreach (ActivationObject actObject in activationObjects)
             {
                 if (actObject != null)
                     actObject.deactivate();
             }
+            isPushed = false;
         }
     }
 }

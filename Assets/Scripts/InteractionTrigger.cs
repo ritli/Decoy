@@ -45,7 +45,7 @@ public class ActivationTrigger : MonoBehaviour
             if (m_raycaster.doRaycast(out hit))
             {
                 Debug.DrawLine(m_playerTransform.position, hit.point, Color.green);
-                if (hit.transform.tag == "Button")
+                if (hit.transform == transform)
                 {
                     buttonHit();
                 }
@@ -72,7 +72,6 @@ public class InteractionTrigger : ActivationTrigger {
             // Only activate the object if the object is an interface of type ActivationObject
             if (actObject != null)
             {
-                print("Activating object from InteractionTrigger");
                 if (!toggle && !actObject.isActivated())
                 {
                     actObject.activate();
@@ -81,9 +80,14 @@ public class InteractionTrigger : ActivationTrigger {
                 {
 
                     if (!actObject.isActivated())
+                    {
                         actObject.activate();
+                    }
                     else
+                    {
                         actObject.deactivate();
+                    }
+
                 }
             }
         }

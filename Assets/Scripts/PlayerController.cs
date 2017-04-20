@@ -476,8 +476,6 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_velocityScale = 0.0f;
                 m_scalingVelocity = false;
             }
-
-            print(m_velocityScale);
         }
 
         if (m_crouching)
