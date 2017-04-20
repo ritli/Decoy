@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
-    void Crouch()
+    void Crouch()   
     {
         if (CrossPlatformInputManager.GetButtonDown("Crouch"))
         {
