@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114853615210509840}
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   EditorEvents:
   - {fileID: 114238446178430540}
   - {fileID: 114058435656404044}
@@ -23,9 +23,9 @@ MonoBehaviour:
   - {fileID: 114365959641836950}
   - {fileID: 114803563658228388}
   - {fileID: 114159721571446566}
-  MasterBankRef: {fileID: 114912275991453720}
+  MasterBankRef: {fileID: 114251517743008246}
   StringsBankRef: {fileID: 114853615210509840}
-  stringsBankWriteTime: 636276931511847092
+  stringsBankWriteTime: 636280639762933555
   cacheVersion: 2
 --- !u!114 &114058435656404044
 MonoBehaviour:
@@ -41,7 +41,7 @@ MonoBehaviour:
   Path: event:/SFX/Avatar/AvatarDecoyDeath
   guid: 92bda5adcb8f2042afc35c54d57327a2
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -70,6 +70,21 @@ MonoBehaviour:
   - {fileID: 114902698960208878}
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114076262618858716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: BlinkUsage
+  Min: 0
+  Max: 2
+  Default: 0
 --- !u!114 &114102617088429716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +159,7 @@ MonoBehaviour:
   Path: event:/AMB/AMB/HangarRoomtone
   guid: de4aa5d62e879b4f9f63724322ed6036
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -165,7 +180,7 @@ MonoBehaviour:
   Path: event:/Memes/EventMeme
   guid: b544b1f67921cb478115ce57008ea2c0
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -201,13 +216,31 @@ MonoBehaviour:
   Path: event:/SFX/Turret/TurretRotate
   guid: 509ae321d3c61343be63878904f5bb9e
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114251517743008246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: E:\workspace\Decoy\Decoy\Assets\FMOD\Build\Desktop\Master Bank.bank
+  lastModified: 636280639762883552
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 2639424
+  Exists: 1
 --- !u!114 &114269311275486408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +312,7 @@ MonoBehaviour:
   Path: event:/SFX/Turret/TurretShoot
   guid: cdde407ccd2aaf4bb273b23579572332
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 1
   Is3D: 1
   IsOneShot: 1
@@ -336,7 +369,7 @@ MonoBehaviour:
   Path: event:/SFX/Turret/TurretIdle
   guid: ccfbbd8f60760c46a636709a57ae7988
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -408,7 +441,7 @@ MonoBehaviour:
   Path: event:/AMB/AMB/LabRoomtone
   guid: b59d285e1fc0474d8a024895c7b19b01
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -463,12 +496,12 @@ MonoBehaviour:
   Path: event:/SFX/Avatar/AvatarBlinkIdle
   guid: d3d3366bf2583e4cb1f51a97c0262f30
   Banks:
-  - {fileID: 114912275991453720}
+  - {fileID: 114251517743008246}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114386939238511724}
+  - {fileID: 114076262618858716}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114841573917381996
@@ -516,7 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636276931511847092
+  lastModified: 636280639762933555
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -554,7 +587,7 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 2639424
-  Exists: 1
+  Exists: 0
 --- !u!114 &114954455886674432
 MonoBehaviour:
   m_ObjectHideFlags: 0
