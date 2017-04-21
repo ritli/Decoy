@@ -16,6 +16,15 @@ public class PlayerTeleport : MonoBehaviour {
 	private GameObject m_instanceOfteleportTarget;
 	private LedgeLerp m_ledgeLerp;
 
+    public Material m_emissionMat;
+
+    public Color m_rechargeColor;
+    public Color m_activeColor;
+    public Color m_canBlinkColor;
+    Color m_currentColor;
+    Color m_lastColor;
+
+
     public GameObject m_decoy;
     PlayerController m_player;
     public GameObject m_indi;
@@ -45,7 +54,6 @@ public class PlayerTeleport : MonoBehaviour {
 	private Vector3 m_teleportTo = new Vector3(0,0,0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private bool m_arrivedAtWall = true;
-	private bool m_beginLedgeLerp = false;
 	private bool m_foundLedge = false;
 
     private Raycast m_raycaster;
@@ -108,13 +116,19 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_indi.activeSelf)
             {
                 if (m_foundLedge)
-                {
                     m_spriteRenderer.color = Color.red;
-                }
                 else
-                {
                     m_spriteRenderer.color = Color.white;
-                }
+            }
+
+            if (m_cooldownTimer.isTimeUp())
+            {
+                m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+
+            }
+            else
+            {
+                m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
             }
 
             // Move towards target position set when letting go of the "Teleport" button.
@@ -128,14 +142,15 @@ public class PlayerTeleport : MonoBehaviour {
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
 					m_arrivedAtWall = true;
+                    m_ledgeDetection.arrivedAtWall();
 					m_charController.detectCollisions = true;
 
-					if (m_beginLedgeLerp) {
+					if (m_foundLedge) {
 						m_ledgeLerp.lerp(m_ledgeLerpTo);
-						m_beginLedgeLerp = false;
-					}
+						m_foundLedge = false;  
+                    }
 					m_player.enableGravity();
-					m_player.modifyVelocity(velocityAfterTeleport/100);
+					m_player.modifyVelocity(velocityAfterTeleport / 100);
                 }
             }
 
@@ -143,6 +158,8 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
                 {
+                    m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
+
                     ShowIndicator();
                     m_blinkState = BlinkState.aiming;
                 }
@@ -155,8 +172,14 @@ public class PlayerTeleport : MonoBehaviour {
 
                     if (m_foundLedge)
                     {
-						moveTo(m_ledgeDetection.getWallPoint());
-                        m_foundLedge = false;
+						print ("Found ledge");
+						moveTo(m_ledgeDetection.getNewPosition());
+                        //m_foundLedge = false;
+                    }
+                    else if (m_ledgeDetection.isLedgeBlocked())
+                    {
+						print ("Ledge blocked");
+						moveTo(m_ledgeDetection.getNewPosition());
                     }
                     else
                     {
@@ -179,6 +202,8 @@ public class PlayerTeleport : MonoBehaviour {
                 }
                 else
                     m_cancelTeleport = false;
+
+
             }
 
             // When right clicking, cancel teleportation.
@@ -197,6 +222,13 @@ public class PlayerTeleport : MonoBehaviour {
             }
         }
 
+        //Checks if color has changed since last frame to avoid needless material changes
+        if (m_currentColor != m_lastColor)
+        {
+            m_emissionMat.SetColor("_EmissionColor", m_currentColor);
+        }
+
+        m_lastColor = m_currentColor;
         m_lastPosition = transform.position;
     }
 
@@ -253,9 +285,10 @@ public class PlayerTeleport : MonoBehaviour {
         {
             //print(Vector3.Angle(hit.normal, Vector3.down));
 
-            if (Vector3.Angle(hit.normal, Vector3.down) == 0)
+            if (Vector3.Angle(hit.normal, Vector3.down) < 45)
             {
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
+				m_foundLedge = false;
                 return;
             }
 
@@ -266,22 +299,22 @@ public class PlayerTeleport : MonoBehaviour {
 				if (hit.collider.tag != Tags.noGrab) 
 				{
 					// ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge (hit)) 
+					if (m_ledgeDetection.findLedge(hit)) 
 					{
 						//print ("Found ledge");
 						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
-						m_beginLedgeLerp = true;
+						m_ledgeLerpTo = m_ledgeDetection.getNewPosition();
 						m_charController.detectCollisions = false;
 					} else 
 					{
 						m_foundLedge = false;	
 					}
-					m_indi.transform.position = hit.point + hit.normal;
 				} else 
 				{
 					m_foundLedge = false;
 				}
+                m_indi.transform.position = hit.point + hit.normal;
+				return;
 			}
 
 			//If true then normal is a ceiling
@@ -321,6 +354,8 @@ public class PlayerTeleport : MonoBehaviour {
             return;
         }
 
+
+
         for (int i = 0; i < 5; i++)
         {
             Vector3 centerpos = transform.position + playerLook;
@@ -331,11 +366,13 @@ public class PlayerTeleport : MonoBehaviour {
                 if (Vector3.Angle(hit.normal, Vector3.up) > 45)
                 {
                     m_indi.transform.position = hit.point + hit.normal;
+                    m_foundLedge = false;
                     return;
                 }
             }
         }
 		m_foundLedge = false;
+
         m_indi.transform.position = transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)
