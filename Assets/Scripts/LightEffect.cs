@@ -18,9 +18,11 @@ public class LightEffect : MonoBehaviour {
 
     float m_internalMax;
     float m_internalMin;
+    float m_internalRandomTime;
 
     bool m_maxReached;
     float m_tVal;
+
 
 	void Start () {
         m_internalMax = m_max;
@@ -28,6 +30,8 @@ public class LightEffect : MonoBehaviour {
 
         if (!m_lights[0])
         {
+            m_lights = new Light[1];
+
             m_lights[0] = GetComponent<Light>();
         }
 	}
@@ -35,29 +39,45 @@ public class LightEffect : MonoBehaviour {
 	void Update () {
         float intensity = 0;
 
+        m_tVal += Time.deltaTime / m_time;
+
         switch (m_Type)
         {
             case LightEffectType.Pulsating:
                 
-                intensity = Mathf.Lerp(m_min, m_max, m_tVal);
+                intensity = Mathf.Lerp(m_internalMin, m_internalMax, m_tVal);
 
                 break;
             case LightEffectType.Strobe:
+
+                if (m_tVal > m_time)
+                {
+                    intensity = m_internalMax;
+                }
+
                 break;
             case LightEffectType.Flicker:
+
+                if (m_tVal > m_internalRandomTime)
+                {
+                    m_internalRandomTime = Random.Range(0, m_time);
+                    float randIntensity = Random.Range(-1, 1);
+
+                    intensity = m_internalMax + randIntensity;
+                }
+
+
                 break;
             default:
                 break;
         }
-
-        m_tVal += Time.deltaTime / m_time;
 
         if (m_tVal > 1)
         {
             float temp = m_internalMax;
 
             m_internalMax = m_internalMin;
-            m_internalMin = m_internalMax;
+            m_internalMin = temp;
 
             m_tVal = 0;
         }
