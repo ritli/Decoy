@@ -2,6 +2,11 @@
 using System.Collections;
 using UnityStandardAssets.Utility;
 
+/* TODO:
+ * Fix bug with gravity not reseting.
+ * Fix positioning when teleporting to a target destination
+     */
+
 public class Indicator : MonoBehaviour {
 
     public GameObject m_decoy;
@@ -22,26 +27,36 @@ public class Indicator : MonoBehaviour {
     [Header("Adjusts speed of teleportation.")]
     public float teleportSpeed = 1.0f;
     [Header("Set limits of teleportation.")]
+    [Tooltip("Scales the range of teleportation in the y-axis. 1 equals an unchanged scale.")]
     public float heightLimit = 1.0f;
+    [Tooltip("Scales the range of teleportation in the 2D plane (x and z-axis). 1 equals an unchanged scale.")]
     public float lengthLimit = 1.0f;
+    [Tooltip("Scales the velocity when arrived at destination after a teleport. Ex: -100, indicates a -100% decrease in velocity. -100 combined with a value of zero on the decay results in a total stop.")]
+    public float velocityAfterTeleport = 0.0f;
+    [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
+    public float velocityDecayOnTeleport = 0.1f;
 
     private Vector3 m_teleportTo = new Vector3(0,0,0);
-    private bool m_arrived = true;
+    private bool m_arrivedAtWall = true;
+	private bool m_beginLedgeLerp = false;
 	private bool m_foundLedge = false;
-	private LedgeDetection m_ledgeCollDetection;
+	private LedgeDetection m_ledgeDetect;
     private Raycast m_raycaster;
 	private CharacterController m_charController;
-	private SpriteRenderer m_spriteRenderer;
+	private LedgeIndicator m_ledgeIndicator;
     private ParticleController m_partController;
+	private LedgeLerp m_ledgeLerp;
+	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 
 
 	void Start ()
     {
+		m_ledgeLerp = GetComponent<LedgeLerp>();
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
-        m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+		m_ledgeIndicator = GetComponent<LedgeIndicator> ();
         m_charController = GetComponent<CharacterController>();
-		m_ledgeCollDetection = GetComponent<LedgeDetection>();
+		m_ledgeDetect = GetComponent<LedgeDetection>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
         m_raycaster.setDistance(m_length);
@@ -50,45 +65,50 @@ public class Indicator : MonoBehaviour {
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
 
-        //m_raycaster.setRayScale(teleportLimits);
-
         m_fovKick.Setup(Camera.main);
-
+        m_player.setScaleDecay(velocityDecayOnTeleport);
     }
 
     private void moveTo(Vector3 target)
     {
+        target += new Vector3(0, m_playerLength / 2, 0);
 		m_teleportTo = target;
-        m_arrived = false;
+        m_arrivedAtWall = false;
+        m_player.disableGravity();
     }
 
     // Handle input for teleportation controls.
 	void Update () {
-		
+
+		//print ("wall: " + m_arrivedAtWall);
+		//print ("floor: " + m_arrivedOnFloor);
+
 		if (m_indi.activeSelf) 
 		{
-			if (m_foundLedge) 
-			{
-				m_spriteRenderer.color = Color.red;
-			} else 
-			{
-				m_spriteRenderer.color = Color.white;
-			}
+			m_ledgeIndicator.setLedgeIndicator (m_foundLedge);
 		}
 
         // Move towards target position set when letting go of the "Teleport" button.
-        if (!m_arrived)
-        {
-            float step = teleportSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
+		if (!m_arrivedAtWall) 
+		{
+			float step = teleportSpeed * Time.deltaTime;
+			transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
-			// When the players position has arrived, stop moving.
-			if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+			// When the player's position has arrived, stop moving.
+			if (Vector3.Distance (transform.position, m_teleportTo) == 0)
 			{
-				m_arrived = true;
+				m_arrivedAtWall = true;
 				m_charController.detectCollisions = true;
+
+				if (m_beginLedgeLerp) {
+					m_ledgeLerp.lerp(m_ledgeLerpTo);
+					m_beginLedgeLerp = false;
+				}
+                m_player.enableGravity();
+                m_player.modifyVelocity(velocityAfterTeleport/100);
 			}
 		}
+
 
         if (Input.GetButton("Teleport"))
         {
@@ -100,17 +120,16 @@ public class Indicator : MonoBehaviour {
         if (Input.GetButtonUp("Teleport"))
         {
             if (!m_cancelTeleport && m_indi.activeSelf)
-            {
+			{
                 m_indi.SetActive(false);
 				//transform.position = m_indi.transform.position;
-				if (m_foundLedge)
-				{
-					moveTo(m_ledgeCollDetection.getNewPosition());
+				if (m_foundLedge) {
+					moveTo (m_ledgeDetect.getWallPoint());
 					m_foundLedge = false;
 				} else
-				{
-					moveTo(m_indi.transform.position);
-				}
+					moveTo (m_indi.transform.position);
+
+				m_ledgeIndicator.setLedgeIndicator (false);
 
                 Vector3 lastPos = transform.position;
                 PlayVisualEffects();
@@ -126,7 +145,7 @@ public class Indicator : MonoBehaviour {
                 m_cancelTeleport = false;
         }
 
-        // WHen right clicking, cancel teleportation.
+        // When right clicking, cancel teleportation.
         if (Input.GetButtonDown("CancelTeleport"))
         {
             if (m_indi.activeSelf)
@@ -143,16 +162,16 @@ public class Indicator : MonoBehaviour {
 
     void PlayVisualEffects()
     {
-        //StartCoroutine(m_fovKick.FOVKickUp());
+        StartCoroutine(m_fovKick.FOVKickUp());
         m_partController.LerpAlpha(0, 0.7f, 0.05f);
         m_partController.PlayBurst(50);
 
-        Invoke("CancelVisualEffects", 0.5f);
+        Invoke("CancelVisualEffects", 0.1f);
     }
 
     void CancelVisualEffects()
     {
-        //StartCoroutine(m_fovKick.FOVKickDown());
+        StartCoroutine(m_fovKick.FOVKickDown());
         m_partController.LerpAlpha(0.5f, 0, 0.05f);
     }
 
@@ -192,24 +211,33 @@ public class Indicator : MonoBehaviour {
             if (Vector3.Angle(hit.normal, Vector3.down) == 0)
             {
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
+				m_foundLedge = false;
                 return;
             }
 
 			//If true then surface is wall
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
-				// ## Start ledge detection ##
-				if (m_ledgeCollDetection.findLedge (hit)) 
+				// Only looks for ledge if hit isn't on NoGrab area
+				if (hit.collider.tag != Tags.noGrab) 
 				{
-					//print ("Found ledge");
-					m_foundLedge = true;
-					m_charController.detectCollisions = false;
+					// ## Start ledge detection ##
+					if (m_ledgeDetect.findLedge (hit)) 
+					{
+//						print("Found ledge");
+						m_foundLedge = true;
+						m_ledgeLerpTo = m_ledgeDetect.getNewPosition();
+						m_beginLedgeLerp = true;
+						m_charController.detectCollisions = false;
+					} else 
+					{
+						m_foundLedge = false;	
+					}
 				} else 
 				{
-					m_foundLedge = false;	
+					m_foundLedge = false;
 				}
 				m_indi.transform.position = hit.point + hit.normal;
-
 			}
 
 			//If true then normal is a ceiling
@@ -217,7 +245,7 @@ public class Indicator : MonoBehaviour {
 			//Else then surface is floor
 			else
             {
-
+				m_foundLedge = false;
 				for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;

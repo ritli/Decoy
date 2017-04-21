@@ -50,6 +50,7 @@ public class Raycast : MonoBehaviour {
         inHit = new RaycastHit();
         return false;
     }
+
     public bool doRaycast(out RaycastHit inHit, Vector3 newDirection)
     {
         Ray ray = new Ray(raySource.position, newDirection);
@@ -63,4 +64,33 @@ public class Raycast : MonoBehaviour {
         inHit = new RaycastHit();
         return false;
     }
+
+	public bool doRaycast(out RaycastHit inHit, Vector3 newDirection, Vector3 newOrigin) 
+	{
+		Ray ray = new Ray (newOrigin, newDirection);
+
+		if (Physics.Raycast (ray, out hit, maxDistance, layerMask)) 
+		{
+			Debug.DrawLine (ray.origin, hit.point, Color.blue);
+			inHit = hit;
+			return true;
+		}
+		inHit = new RaycastHit ();
+		return false;
+	}
+
+	public bool doRaycast(out RaycastHit inHit, Vector3 newDirection, Vector3 newOrigin, float distance) 
+	{
+		Ray ray = new Ray (newOrigin, newDirection);
+
+		if (Physics.Raycast (ray, out hit, distance, layerMask)) 
+		{
+			Debug.DrawLine (ray.origin, hit.point, Color.blue);
+			inHit = hit;
+			return true;
+		}
+		inHit = new RaycastHit ();
+		return false;
+	}
+
 }
