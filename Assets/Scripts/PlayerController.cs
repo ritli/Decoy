@@ -281,9 +281,11 @@ public class PlayerController : MonoBehaviour, IKillable
 
         for (int i = 0; i < 4; i++)
         {
-            Ray ray = new Ray(transform.position + offset, dir);
+            Ray ray = new Ray(transform.position + offset, dir * 0.1f);
 
-            if (Physics.Raycast(ray))
+            Debug.DrawRay(ray.origin, ray.direction);
+
+            if (Physics.Raycast(ray, 0.1f, 0))
             {
                 return true;
             }
@@ -359,7 +361,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Jump()
     {
-
 		if (!m_Jump && !m_Jumping) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");

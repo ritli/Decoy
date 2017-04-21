@@ -44949,7 +44949,7 @@ ReflectionProbe:
   serializedVersion: 2
   m_Type: 0
   m_Mode: 1
-  m_RefreshMode: 0
+  m_RefreshMode: 1
   m_TimeSlicingMode: 0
   m_Resolution: 128
   m_UpdateFrequency: 0
@@ -45235,6 +45235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1498815588}
   - component: {fileID: 1498815589}
+  - component: {fileID: 1498815590}
   m_Layer: 0
   m_Name: Point light (7)
   m_TagString: Untagged
@@ -45291,6 +45292,24 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1498815590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1498815587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f9e2904f8df78546a0207114347ecb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Type: 0
+  m_lights:
+  - {fileID: 1498815589}
+  - {fileID: 529398299}
+  m_time: 4
+  m_max: 5
+  m_min: 2
 --- !u!4 &1502781109 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4970847112388954, guid: 223a391a66049b449bc6c5499e9b12c8,
