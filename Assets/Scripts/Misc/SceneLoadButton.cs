@@ -24,6 +24,6 @@ public class SceneLoadButton : MonoBehaviour {
             SceneLoader.UnloadSceneAsync(SceneLoader.Scenes.MainMenu);
         }
         GameManager.GetPlayer().enabled = true;
-        SceneLoader.LoadSingleScene(m_SelectedScene);
+        SceneLoader.LoadSceneSync(m_SelectedScene);
     }
 }
