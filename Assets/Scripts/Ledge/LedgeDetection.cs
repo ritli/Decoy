@@ -21,6 +21,7 @@ public class LedgeDetection : MonoBehaviour {
     private bool m_inTrigger = false;
     private Collider m_collider;
     private bool m_canGrab = false;
+	private bool m_isTeleporting = false;
 
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
     public float ledgeSensitivity;
@@ -42,7 +43,7 @@ public class LedgeDetection : MonoBehaviour {
 	{
 		m_isLedgeBlocked = false;
 
-		if (m_inTrigger && m_collider != null)
+		if (m_inTrigger && m_collider != null && !m_isTeleporting)
         {
             Vector3 direction = new Vector3(0, 0, 0);
             direction = m_collider.ClosestPointOnBounds(transform.position);
@@ -50,6 +51,12 @@ public class LedgeDetection : MonoBehaviour {
             Vector3 cameraDirection = Camera.main.transform.forward;
 
 //          Debug.DrawRay(transform.position, direction * 20, Color.yellow);
+
+			/*
+			 * 
+			 * Normal från taket ska göras något åt
+			 */
+
 
             RaycastHit hit = new RaycastHit();
 
@@ -100,7 +107,7 @@ public class LedgeDetection : MonoBehaviour {
 
         // Creates new direction and position based on wall hit
         Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
-//		Debug.DrawRay(wallHit.point, direction * 4, Color.blue);
+//		Debug.DrawRay(wallHit.point, direction * 4, Color.§);
 
 		// Creates a right vector based on wallNormal and up
 		Vector3 hitRight = Vector3.Cross(Vector3.up, wallHit.normal);
@@ -150,17 +157,18 @@ public class LedgeDetection : MonoBehaviour {
 		m_isLedgeBlocked = false;
 
 		// Sweeping upward
-		if (m_raycaster.doRaycast(out hit, m_raySweepUp.direction, m_raySweepUp.origin, ledgeSensitivity))
+		if (m_raycaster.doRaycast(out hit, m_raySweepUp.direction, m_raySweepUp.origin, ledgeSensitivity + m_playerLength))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
 			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
+			m_newPosition.y = hit.point.y + hit.normal.y * m_playerLength;
 			m_isLedgeBlocked = true;
 			print ("Roof in the way");
 			return false;
 		}
 
 		// Sweeping forward
-		if (m_raycaster.doRaycast (out hit, m_raySweepForward.direction, m_raySweepForward.origin, ledgeSensitivity)) 
+		if (m_raycaster.doRaycast (out hit, m_raySweepForward.direction, m_raySweepForward.origin, ledgeSensitivity * 3f)) 
 		{
 			if (Vector3.Angle (hit.normal, Vector3.up) > 45) 
 			{
@@ -183,7 +191,6 @@ public class LedgeDetection : MonoBehaviour {
 		{
 			if (Vector3.Angle(hit.normal, Vector3.up) <= 45)
 			{
-
 				// Ray from the floor above ledge
 //				Debug.DrawRay(hit.point, hit.normal * 5, Color.white);
 
@@ -195,15 +202,16 @@ public class LedgeDetection : MonoBehaviour {
 
 					// Set the new position
 					m_newPosition = hit.point;
-
 					// Raycast again to check if the first was inside an object
 					if (m_raycaster.doRaycast(out hit, m_rayDown2.direction, m_rayDown2.origin)) 
 					{
-						
-//						Debug.DrawRay(hit.point, hit.normal * 5, Color.red);
+						print ("Y difference: " + (rayDownNormal.y - hit.normal.y));
+						Debug.DrawRay(hit.point, hit.normal * 3, Color.blue);
 
-						// If the angle between the two rays is different, then the first ray was inside an object
-						if (Vector3.Angle (rayDownNormal, hit.normal) > 0) 
+						/* If the angle between the two rays is different, 
+						 * or the difference in Y between the two normals is larger than zero,
+						 * then the first ray was inside an object */
+						if (Vector3.Angle (rayDownNormal, hit.normal) > 0 && !(Mathf.Abs(hit.normal.y - rayDownNormal.y) > 0))
 						{
 							// Update the position to the higher point
 							m_newPosition = hit.point;
@@ -227,6 +235,12 @@ public class LedgeDetection : MonoBehaviour {
 	public void arrivedAtWall() 
 	{
 		m_isLedgeBlocked = false;
+		m_isTeleporting = false;
+	}
+
+	public void isTeleporting() 
+	{
+		m_isTeleporting = true;	
 	}
 
 	public Vector3 getNewPosition()

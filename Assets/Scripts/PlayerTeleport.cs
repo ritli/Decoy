@@ -44,7 +44,7 @@ public class PlayerTeleport : MonoBehaviour {
 
 	private Vector3 m_teleportTo = new Vector3(0,0,0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
-	private bool m_arrivedAtWall = true;
+	private bool m_arrived = true;
 	private bool m_foundLedge = false;
 
     private Raycast m_raycaster;
@@ -95,7 +95,7 @@ public class PlayerTeleport : MonoBehaviour {
     {
         target += new Vector3(0, m_playerLength / 2, 0);
         m_teleportTo = target;
-		m_arrivedAtWall = false;
+		m_arrived = false;
         m_player.disableGravity();
     }
 
@@ -113,7 +113,7 @@ public class PlayerTeleport : MonoBehaviour {
             }
 
             // Move towards target position set when letting go of the "Teleport" button.
-			if (!m_arrivedAtWall)
+			if (!m_arrived)
             {
                 m_blinkState = BlinkState.nah;
                 float step = teleportSpeed * Time.deltaTime;
@@ -122,7 +122,7 @@ public class PlayerTeleport : MonoBehaviour {
                 // When the players position has arrived, stop moving.
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
-					m_arrivedAtWall = true;
+					m_arrived = true;
                     m_ledgeDetection.arrivedAtWall();
 					m_charController.detectCollisions = true;
 
@@ -162,6 +162,7 @@ public class PlayerTeleport : MonoBehaviour {
                     }
                     else
                     {
+						m_ledgeDetection.isTeleporting();
                         moveTo(m_indi.transform.position);
                     }
 
@@ -265,24 +266,20 @@ public class PlayerTeleport : MonoBehaviour {
 			//If true then surface is wall
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
-				// Only looks for ledge if hit isn't on NoGrab area
-				if (hit.collider.tag != Tags.noGrab) 
+				// ## Start ledge detection ##
+				if (m_ledgeDetection.findLedge(hit) && hit.collider.tag != Tags.noGrab) 
 				{
-					// ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge(hit)) 
-					{
-						//print ("Found ledge");
-						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition();
-						m_charController.detectCollisions = false;
-					} else 
-					{
-						m_foundLedge = false;	
-					}
-				} else 
+					// Only lerps to ledge if hit wasn't on NoGrab area
+					m_foundLedge = true;
+					m_ledgeLerpTo = m_ledgeDetection.getNewPosition();
+					m_charController.detectCollisions = false;
+				} else if(m_ledgeDetection.isLedgeBlocked())
 				{
+					m_foundLedge = false;	
+					m_indi.transform.position = m_ledgeDetection.getNewPosition();
+					return;
+				} else
 					m_foundLedge = false;
-				}
                 m_indi.transform.position = hit.point + hit.normal;
 				return;
 			}
