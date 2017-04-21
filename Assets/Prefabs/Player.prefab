@@ -9,13 +9,13 @@ GameObject:
   m_Component:
   - component: {fileID: 453968}
   - component: {fileID: 2037190}
-  - component: {fileID: 8155470}
   - component: {fileID: 12441502}
   - component: {fileID: 11446192}
   - component: {fileID: 114882374167312562}
   - component: {fileID: 114300794588411738}
   - component: {fileID: 114164667205807124}
   - component: {fileID: 114707980694823172}
+  - component: {fileID: 114863518346403202}
   m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
@@ -161,7 +161,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
   m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
-  m_LocalPosition: {x: 33.75, y: 15.65, z: 26.31}
+  m_LocalPosition: {x: 61.27, y: 20.66, z: 26.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -259,13 +259,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!81 &8155470
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 120282}
-  m_Enabled: 1
 --- !u!114 &11402340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1482,9 +1475,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4726225900532976}
   - component: {fileID: 20272156223068912}
-  - component: {fileID: 124631472197992442}
-  - component: {fileID: 92927511043685312}
-  - component: {fileID: 81584584740657114}
   - component: {fileID: 114645807170923446}
   m_Layer: 2
   m_Name: Arm Camera
@@ -3978,20 +3968,6 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
---- !u!81 &81584584740657114
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1520927747172846}
-  m_Enabled: 1
---- !u!92 &92927511043685312
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1520927747172846}
-  m_Enabled: 1
 --- !u!95 &95265900485279720
 Animator:
   serializedVersion: 3
@@ -4147,6 +4123,18 @@ MonoBehaviour:
   blurAndFlaresShader: {fileID: 4800000, guid: be6e39cf196f146d5be72fbefb18ed75, type: 3}
   brightPassFilterShader: {fileID: 4800000, guid: 0aeaa4cb29f5d4e9c8455f04c8575c8c,
     type: 3}
+--- !u!114 &114863518346403202
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 120282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListenerNumber: 0
 --- !u!114 &114882374167312562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4171,13 +4159,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 2
   lerpSpeed: 8
---- !u!124 &124631472197992442
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1520927747172846}
-  m_Enabled: 1
 --- !u!135 &135489145939978978
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -4332,7 +4313,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 949087188
+  randomSeed: 946747222
   InitialModule:
     serializedVersion: 3
     enabled: 1

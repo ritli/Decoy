@@ -38,7 +38,21 @@ public class AudioPlayer : MonoBehaviour {
 
         if (oneShot)
         {
-            FMODUnity.RuntimeManager.PlayOneShot(m_events[index], GameManager.GetPlayer().transform.position);
+            FMODUnity.RuntimeManager.PlayOneShot(m_events[index], transform.position);
+        }
+        else
+        {
+            m_emitter.Play();
+        }
+    }
+
+    public void PlaySoundAtPosition(int index, bool oneShot, Vector3 pos)
+    {
+        m_emitter.Event = m_events[index].ToString();
+
+        if (oneShot)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(m_events[index], pos);
         }
         else
         {
