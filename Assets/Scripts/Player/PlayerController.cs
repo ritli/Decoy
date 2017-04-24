@@ -67,13 +67,18 @@ public class PlayerController : MonoBehaviour, IKillable
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
+    private Vector3 jumpingOrigin;
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
     public float landingBob = 0.5f;
     [Tooltip("Determines the amount that the camera is moved during a jumping bob effect.")]
     public float jumpingBob = 1.0f;
+    [Tooltip("Determines the amount that the camera is moved during a walking bob effect.")]
+    public float walkingBob = 0.1f;
+    [Tooltip("Determine how far the player must have traveled in the air for the landing bobb to play.")]
+    public float landingThreshold = 2.0f;
 
 
-[SerializeField] private float m_StepInterval;
+    [SerializeField] private float m_StepInterval;
 	[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
 	[SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
 	[SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
@@ -381,7 +386,8 @@ public class PlayerController : MonoBehaviour, IKillable
 		
         if (m_Jump && !m_ledgeDetect.canGrab())
         {
-            m_cameraBobber.startBob(jumpingBob);
+            m_cameraBobber.startBob(jumpingBob, false);
+            jumpingOrigin = transform.position;
         }
 
         if (m_ledgeInRange)
@@ -404,7 +410,9 @@ public class PlayerController : MonoBehaviour, IKillable
 		{
             // Start the transformation of camera based on landBob
             //m_cameraBobber.stopBob();
-            m_cameraBobber.startBob(landingBob);
+            if (Vector3.Distance(jumpingOrigin, transform.position) >= landingThreshold)
+                m_cameraBobber.startBob(landingBob, false);
+
 			//PlayLandingSound ();
 			m_MoveDir.y = 0f;
 			m_Jumping = false;
@@ -452,12 +460,19 @@ public class PlayerController : MonoBehaviour, IKillable
         else if (m_Input.magnitude > 0)
         {
             // IMPLEMENT MOVEMENT BOBBING
-            print("Moving");
+            if (!m_cameraBobber.isBobbing())
+            {
+                m_cameraBobber.startBob(walkingBob, true);
+            }
+
             m_speedWindup += m_WindupScale;
         }
         else
         {
             m_speedWindup -= m_WindupScale;
+
+            if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
+                m_cameraBobber.stopBob();
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);

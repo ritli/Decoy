@@ -13,11 +13,13 @@ public class VectorBobber : MonoBehaviour {
     private float m_bobAmount;
 
     private bool keepbobbing = false;
+    private bool bobbingDone = true;
 
     // Initiate a bobbing coroutine with the given amount
-    public void startBob(float bobAmount)
+    public void startBob(float bobAmount, bool loopBobbing)
     {
         m_bobAmount = bobAmount;
+        keepbobbing = loopBobbing;
         
         if (Mathf.Sign(bobAmount) == -1)
             m_bobDown = true;
@@ -37,15 +39,16 @@ public class VectorBobber : MonoBehaviour {
     IEnumerator gradualBob()
     {
         float timePassed = 0.0f;
-        bool done = false;
+        bobbingDone = false;
 
         // Iterate the coroutine until it has "finished"
-        while (!done)
+        while (!bobbingDone)
         {
             // Stop the routine if stopBob() has been called
             if (stopping)
             {
                 stopping = false;
+                bobbingDone = true;
                 yield break;
             }
             
@@ -68,5 +71,15 @@ public class VectorBobber : MonoBehaviour {
     public Vector3 getOffset()
     {
         return currentOffset;
+    }
+
+    public bool isBobbing()
+    {
+        return !bobbingDone;
+    }
+
+    public bool isLooping()
+    {
+        return keepbobbing;
     }
 }
