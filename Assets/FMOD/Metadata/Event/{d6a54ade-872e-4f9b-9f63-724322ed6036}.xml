@@ -5,7 +5,7 @@
             <value>HangarRoomtone</value>
         </property>
         <property name="outputFormat">
-            <value>2</value>
+            <value>0</value>
         </property>
         <relationship name="mixer">
             <destination>{03895f6f-3313-47a8-b01c-924d9aea69a2}</destination>
@@ -133,8 +133,9 @@
     <object class="MixerBusEffectChain" id="{d0a68c38-3dc5-4240-9d49-4569aa58d248}">
         <relationship name="effects">
             <destination>{1e8efa0b-b61c-4fe6-b273-b551920a88ef}</destination>
-            <destination>{22cb9f83-db59-475f-85a5-4f183bff2f50}</destination>
             <destination>{90e7ddb3-8055-4a11-a10d-53a7fea686bb}</destination>
+            <destination>{6e8a2a66-b0e8-4d56-9c19-280a2a2ba3a8}</destination>
+            <destination>{7e5e4282-564d-4644-a140-4d2f12a7a162}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{b9614263-8df6-49d7-a492-00d596f74f20}"/>
@@ -146,14 +147,23 @@
     </object>
     <object class="MixerBusPanner" id="{32771dbb-1302-4bc2-a81e-4c87551b576d}"/>
     <object class="MixerBusFader" id="{1e8efa0b-b61c-4fe6-b273-b551920a88ef}"/>
-    <object class="SpatialiserEffect" id="{22cb9f83-db59-475f-85a5-4f183bff2f50}"/>
     <object class="MixerSend" id="{90e7ddb3-8055-4a11-a10d-53a7fea686bb}">
         <property name="inputFormat">
-            <value>2</value>
+            <value>0</value>
         </property>
         <relationship name="mixerReturn">
             <destination>{6f000e4c-a8a0-4891-ba02-935b72763345}</destination>
         </relationship>
+    </object>
+    <object class="CompressorEffect" id="{6e8a2a66-b0e8-4d56-9c19-280a2a2ba3a8}">
+        <property name="gain">
+            <value>30</value>
+        </property>
+    </object>
+    <object class="LimiterEffect" id="{7e5e4282-564d-4644-a140-4d2f12a7a162}">
+        <property name="boost">
+            <value>7.69999933</value>
+        </property>
     </object>
     <object class="MixerBusFader" id="{d042663a-f087-48af-9656-5329efabd9c0}"/>
 </objects>

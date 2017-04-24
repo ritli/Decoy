@@ -5,7 +5,7 @@
             <value>LabRoomtone</value>
         </property>
         <property name="outputFormat">
-            <value>2</value>
+            <value>0</value>
         </property>
         <relationship name="mixer">
             <destination>{8880c9c6-d823-4c2e-ab52-bb8f8ac0506c}</destination>
@@ -103,6 +103,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{e8671c79-31ba-4a5e-bfe5-b5cceca6a5ec}">
+        <property name="volume">
+            <value>2.5</value>
+        </property>
         <property name="name">
             <value>LabRoomtone</value>
         </property>
@@ -133,7 +136,6 @@
     <object class="MixerBusEffectChain" id="{e5fdae4a-8baa-4fdf-b62b-65e1a169e6c5}">
         <relationship name="effects">
             <destination>{4cb0d980-c393-4e00-8de4-b0f62a70da0e}</destination>
-            <destination>{2d06c7eb-af78-470b-925a-af687b690119}</destination>
             <destination>{5b3a88d1-8a6d-4da1-b2b9-4811ea9e43de}</destination>
         </relationship>
     </object>
@@ -142,18 +144,59 @@
     <object class="MixerBusEffectChain" id="{2f4e8b92-1493-4c82-a54d-c9c1b9c1af72}">
         <relationship name="effects">
             <destination>{1009f6b1-79f7-4a28-aeb7-e04337aa7840}</destination>
+            <destination>{fef9046e-90c7-4593-b8d3-bfb2707722fc}</destination>
+            <destination>{9532dbe0-304d-4773-9f04-ad53dbabccd3}</destination>
+            <destination>{60a3643a-b48e-4ee5-a821-cf98b765ca78}</destination>
+            <destination>{652d5a2c-f846-4e8e-803a-a57be4d83b67}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{f918d892-451b-48a1-8220-76e372ebe69a}"/>
     <object class="MixerBusFader" id="{4cb0d980-c393-4e00-8de4-b0f62a70da0e}"/>
-    <object class="SpatialiserEffect" id="{2d06c7eb-af78-470b-925a-af687b690119}"/>
     <object class="MixerSend" id="{5b3a88d1-8a6d-4da1-b2b9-4811ea9e43de}">
         <property name="inputFormat">
-            <value>2</value>
+            <value>0</value>
         </property>
         <relationship name="mixerReturn">
             <destination>{6f000e4c-a8a0-4891-ba02-935b72763345}</destination>
         </relationship>
     </object>
     <object class="MixerBusFader" id="{1009f6b1-79f7-4a28-aeb7-e04337aa7840}"/>
+    <object class="CompressorEffect" id="{fef9046e-90c7-4593-b8d3-bfb2707722fc}">
+        <property name="gain">
+            <value>30</value>
+        </property>
+    </object>
+    <object class="LimiterEffect" id="{9532dbe0-304d-4773-9f04-ad53dbabccd3}">
+        <property name="boost">
+            <value>3.39999986</value>
+        </property>
+    </object>
+    <object class="ThreeEQEffect" id="{60a3643a-b48e-4ee5-a821-cf98b765ca78}">
+        <property name="lowGain">
+            <value>-80</value>
+        </property>
+        <property name="midGain">
+            <value>2.5</value>
+        </property>
+        <property name="highGain">
+            <value>-15</value>
+        </property>
+        <property name="lowCrossover">
+            <value>240</value>
+        </property>
+        <property name="highCrossover">
+            <value>400</value>
+        </property>
+        <property name="crossoverSlope">
+            <value>0</value>
+        </property>
+    </object>
+    <object class="SFXReverbEffect" id="{652d5a2c-f846-4e8e-803a-a57be4d83b67}">
+        <property name="wetLevel">
+            <value>0</value>
+        </property>
+        <property name="dryLevel">
+            <value>-80</value>
+        </property>
+    </object>
 </objects>
