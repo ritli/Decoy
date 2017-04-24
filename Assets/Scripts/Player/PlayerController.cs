@@ -63,12 +63,12 @@ public class PlayerController : MonoBehaviour, IKillable
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
-    [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
+    //[SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
     private VectorBobber m_walkingBobber;
-    private Vector3 m_jumpingOrigin;
+    private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
-        m_HeadBob.Setup(m_Camera, m_StepInterval);
+        //m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
@@ -394,10 +394,14 @@ public class PlayerController : MonoBehaviour, IKillable
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
         }
 		
-        if (!m_leftGround && !m_CharacterController.isGrounded)
+        // Keep track of the maximum height achieved while in air for measuring when landing
+        if (!m_CharacterController.isGrounded)
         {
-            m_jumpingOrigin = transform.position;
-            m_leftGround = true;
+            if (transform.position.y > m_maximumFreefallHeight || !m_leftGround)
+                m_maximumFreefallHeight = transform.position.y;
+
+            if (!m_leftGround)
+                m_leftGround = true;
         }
 
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
@@ -422,8 +426,11 @@ public class PlayerController : MonoBehaviour, IKillable
 		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
 		{
             // Start the transformation of camera based on landBob
-            if (Mathf.Abs(m_jumpingOrigin.y - transform.position.y) >= landingThreshold)
+            if (m_maximumFreefallHeight - transform.position.y >= landingThreshold)
+            {
                 m_cameraBobber.startBob(landingBob, false);
+            }
+
 
 			//PlayLandingSound ();
 			m_MoveDir.y = 0f;
