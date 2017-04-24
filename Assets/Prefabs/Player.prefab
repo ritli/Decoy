@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 114638914860175162}
   - component: {fileID: 114908024422846402}
   - component: {fileID: 114508373021751664}
+  - component: {fileID: 114891065613552114}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -96,7 +97,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &411726
 Transform:
   m_ObjectHideFlags: 1
@@ -129,7 +130,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120282}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.04013179, y: 0, z: 0, w: 0.99919444}
   m_LocalPosition: {x: -0.004, y: 0.453, z: 0.004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -160,15 +161,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
-  m_LocalPosition: {x: 61.27, y: 20.66, z: 26.31}
+  m_LocalRotation: {x: 0, y: -0.5569337, z: 0, w: 0.830557}
+  m_LocalPosition: {x: -50.46665, y: 6.58, z: 50.812893}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
   - {fileID: 470846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -128.08801, z: 0}
 --- !u!20 &2037190
 Camera:
   m_ObjectHideFlags: 1
@@ -271,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raySource: {fileID: 453968}
-  maxDistance: 0
+  maxDistance: 5
   layerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -306,7 +307,7 @@ MonoBehaviour:
     smooth: 0
     smoothTime: 5
     lockCursor: 1
-  m_UseHeadBob: 0
+  m_UseHeadBob: 1
   m_HeadBob:
     HorizontalBobRange: 0.33
     VerticalBobRange: 0.33
@@ -347,9 +348,8 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     VerticaltoHorizontalRatio: 1
-  m_JumpBob:
-    BobDuration: 0
-    BobAmount: 0
+  landingBob: -0.5
+  jumpingBob: -1.5
   m_StepInterval: 0
   m_FootstepSounds: []
   m_JumpSound: {fileID: 0}
@@ -3698,7 +3698,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1880181141324122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.62, z: -0.041}
+  m_LocalPosition: {x: -0, y: -0.58169997, z: -0.041}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4700063348526348}
@@ -3950,7 +3950,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: 1
@@ -4003,7 +4003,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120282}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fc6bde01469c7b4badee5362f191d96, type: 3}
   m_Name: 
@@ -4042,8 +4042,8 @@ MonoBehaviour:
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_indi: {fileID: 187996}
   m_fovKick:
-    Camera: {fileID: 0}
-    originalFov: 0
+    Camera: {fileID: 2037190}
+    originalFov: 80
     FOVIncrease: 3
     TimeToIncrease: 1
     TimeToDecrease: 1
@@ -4146,6 +4146,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cdbf0fb392365419beaa31a8ff21d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114891065613552114
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd97326cce00684c90cb23ed5250c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bobSpeed: 0.2
 --- !u!114 &114908024422846402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4313,7 +4325,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 946747222
+  randomSeed: -1364302920
   InitialModule:
     serializedVersion: 3
     enabled: 1
