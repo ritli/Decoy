@@ -136,6 +136,50 @@ Transform:
   m_Father: {fileID: 694744020}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &641890284 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 149630, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+  m_PrefabInternal: {fileID: 1525939239}
+--- !u!114 &641890298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 641890284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/SFX/Avatar/AvatarBlinkDevice
+  PlayEvent: 0
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params:
+  - Name: BlinkUsage
+    Value: 0
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
+--- !u!114 &641890299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 641890284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 641890298}
+    Params: []
+  TriggerEvent: 0
+  CollisionTag: 
 --- !u!4 &694744020 stripped
 Transform:
   m_PrefabParentObject: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
@@ -193,17 +237,22 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114508373021751664, guid: 4d041c3e539ffd1459a5d8213a778764,
+        type: 2}
+      propertyPath: m_emitter.Params.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 61.27
+      value: 27.8
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 20.66
+      value: 1.95
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 26.31
+      value: 26.3
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalRotation.x
@@ -305,6 +354,16 @@ Prefab:
         type: 2}
       propertyPath: teleportCooldown
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114508373021751664, guid: 4d041c3e539ffd1459a5d8213a778764,
+        type: 2}
+      propertyPath: m_emitter.Target
+      value: 
+      objectReference: {fileID: 641890298}
+    - target: {fileID: 114508373021751664, guid: 4d041c3e539ffd1459a5d8213a778764,
+        type: 2}
+      propertyPath: m_emitter.Params.Array.data[0].Name
+      value: BlinkUsage
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8220720, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
