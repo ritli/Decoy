@@ -16,6 +16,15 @@ public class PlayerTeleport : MonoBehaviour {
 	private GameObject m_instanceOfteleportTarget;
 	private LedgeLerp m_ledgeLerp;
 
+    public Material m_emissionMat;
+
+    public Color m_rechargeColor;
+    public Color m_activeColor;
+    public Color m_canBlinkColor;
+    Color m_currentColor;
+    Color m_lastColor;
+
+
     public GameObject m_decoy;
     PlayerController m_player;
     public GameObject m_indi;
@@ -112,6 +121,16 @@ public class PlayerTeleport : MonoBehaviour {
                     m_spriteRenderer.color = Color.white;
             }
 
+            if (m_cooldownTimer.isTimeUp())
+            {
+                m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+
+            }
+            else
+            {
+                m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
+            }
+
             // Move towards target position set when letting go of the "Teleport" button.
 			if (!m_arrived)
             {
@@ -139,6 +158,8 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
                 {
+                    m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
+
                     ShowIndicator();
                     m_blinkState = BlinkState.aiming;
                 }
@@ -182,6 +203,8 @@ public class PlayerTeleport : MonoBehaviour {
                 }
                 else
                     m_cancelTeleport = false;
+
+
             }
 
             // When right clicking, cancel teleportation.
@@ -200,6 +223,13 @@ public class PlayerTeleport : MonoBehaviour {
             }
         }
 
+        //Checks if color has changed since last frame to avoid needless material changes
+        if (m_currentColor != m_lastColor)
+        {
+            m_emissionMat.SetColor("_EmissionColor", m_currentColor);
+        }
+
+        m_lastColor = m_currentColor;
         m_lastPosition = transform.position;
     }
 
