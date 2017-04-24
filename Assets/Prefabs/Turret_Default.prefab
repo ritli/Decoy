@@ -143,8 +143,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183626}
+<<<<<<< HEAD
   m_LocalRotation: {x: -0, y: -0.9238794, z: -0, w: 0.38268375}
   m_LocalPosition: {x: 244, y: 20, z: 19.22}
+=======
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 23.540749, y: -57.7, z: -43.6}
+>>>>>>> refs/remotes/origin/master
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400060}
@@ -401,6 +406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdf1db1102ca64a43aefebf02fdb30d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_playerMask:
+    serializedVersion: 2
+    m_Bits: 512
   turretState: 0
   fieldOfView: 50
   viewDistance: 60
@@ -410,7 +418,11 @@ MonoBehaviour:
   m_timeToKill: 1
   m_activeColor: {r: 1, g: 0, b: 0, a: 1}
   m_idleColor: {r: 1, g: 1, b: 1, a: 1}
+<<<<<<< HEAD
   m_intensity: 3
+=======
+  m_intensity: 1
+>>>>>>> refs/remotes/origin/master
 --- !u!136 &13624334
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -3565,6 +3577,7 @@ MonoBehaviour:
   - event:/SFX/Turret/TurretShoot
   - event:/SFX/Turret/TurretRotate
   - event:/SFX/Turret/TurretIdle
+  - event:/SFX/Turret/TurretDetect
   m_emitter: {fileID: 0}
 --- !u!114 &114421267707596954
 MonoBehaviour:
