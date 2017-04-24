@@ -5,7 +5,7 @@ using UnityEngine;
 public class VectorBobber : MonoBehaviour {
 
     
-    public float bobSpeed;
+    private float bobSpeed = 0.2f;
 
     private Vector3 currentOffset = new Vector3(0, 0, 0);
     private bool stopping = false;
@@ -20,10 +20,11 @@ public class VectorBobber : MonoBehaviour {
     {
         m_bobAmount = bobAmount;
         keepbobbing = loopBobbing;
-        
+
         if (Mathf.Sign(bobAmount) == -1)
             m_bobDown = true;
 
+        bobbingDone = false;
         // Start bobbing offset
         StartCoroutine(gradualBob());
     }
@@ -39,8 +40,7 @@ public class VectorBobber : MonoBehaviour {
     IEnumerator gradualBob()
     {
         float timePassed = 0.0f;
-        bobbingDone = false;
-
+        
         // Iterate the coroutine until it has "finished"
         while (!bobbingDone)
         {
@@ -81,5 +81,10 @@ public class VectorBobber : MonoBehaviour {
     public bool isLooping()
     {
         return keepbobbing;
+    }
+
+    public void setBobSpeed(float speed)
+    {
+        bobSpeed = speed;
     }
 }

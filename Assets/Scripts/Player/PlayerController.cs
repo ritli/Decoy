@@ -67,15 +67,23 @@ public class PlayerController : MonoBehaviour, IKillable
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
-    private Vector3 jumpingOrigin;
+    private VectorBobber m_walkingBobber;
+    private Vector3 m_jumpingOrigin;
+
+    private bool m_leftGround = false;
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
     public float landingBob = 0.5f;
     [Tooltip("Determines the amount that the camera is moved during a jumping bob effect.")]
     public float jumpingBob = 1.0f;
     [Tooltip("Determines the amount that the camera is moved during a walking bob effect.")]
     public float walkingBob = 0.1f;
-    [Tooltip("Determine how far the player must have traveled in the air for the landing bobb to play.")]
+    [Tooltip("Determine how far the player must have traveled in the y-axis in order for the landing bobb to play.")]
     public float landingThreshold = 2.0f;
+
+    [Tooltip("Determines the speed at which the camera bobs when walking.")]
+    public float walkBobSpeed = 0.2f;
+    [Tooltip("Determines the speed at which the camera bobs when jumping and landing.")]
+    public float jumpBobSpeed = 0.2f;
 
 
     [SerializeField] private float m_StepInterval;
@@ -131,7 +139,9 @@ public class PlayerController : MonoBehaviour, IKillable
     private void Start()
     {
         m_cameraBobber = GetComponent<VectorBobber>();
-        
+        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+        m_walkingBobber.setBobSpeed(walkBobSpeed);
+        m_cameraBobber.setBobSpeed(jumpBobSpeed);
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
@@ -384,11 +394,14 @@ public class PlayerController : MonoBehaviour, IKillable
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
         }
 		
-        if (m_Jump && !m_ledgeDetect.canGrab())
+        if (!m_leftGround && !m_CharacterController.isGrounded)
         {
-            m_cameraBobber.startBob(jumpingBob, false);
-            jumpingOrigin = transform.position;
+            m_jumpingOrigin = transform.position;
+            m_leftGround = true;
         }
+
+        if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
+            m_cameraBobber.startBob(jumpingBob, false);
 
         if (m_ledgeInRange)
         {
@@ -409,13 +422,13 @@ public class PlayerController : MonoBehaviour, IKillable
 		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
 		{
             // Start the transformation of camera based on landBob
-            //m_cameraBobber.stopBob();
-            if (Vector3.Distance(jumpingOrigin, transform.position) >= landingThreshold)
+            if (Mathf.Abs(m_jumpingOrigin.y - transform.position.y) >= landingThreshold)
                 m_cameraBobber.startBob(landingBob, false);
 
 			//PlayLandingSound ();
 			m_MoveDir.y = 0f;
 			m_Jumping = false;
+            m_leftGround = false;
 		}
 		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
 		{
@@ -456,13 +469,17 @@ public class PlayerController : MonoBehaviour, IKillable
             m_speedWindup -= m_JumpAirVelDecay;
         }
 
+        if (!m_CharacterController.isGrounded)
+            m_walkingBobber.stopBob();
+
         //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
         else if (m_Input.magnitude > 0)
         {
-            // IMPLEMENT MOVEMENT BOBBING
-            if (!m_cameraBobber.isBobbing())
+
+            //m_cameraBobber.startBob(walkingBob, true);
+            if (!m_walkingBobber.isBobbing())
             {
-                m_cameraBobber.startBob(walkingBob, true);
+                m_walkingBobber.startBob(walkingBob, true);
             }
 
             m_speedWindup += m_WindupScale;
@@ -471,8 +488,13 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_speedWindup -= m_WindupScale;
 
-            if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
-                m_cameraBobber.stopBob();
+            if (m_walkingBobber.isBobbing())
+            {
+                m_walkingBobber.stopBob();
+            }
+
+            // if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
+            //  m_cameraBobber.stopBob();
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
@@ -597,7 +619,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Camera.transform.localPosition = m_cameraOrigin;
         m_cameraOrigin = m_Camera.transform.localPosition;
 
-        m_Camera.transform.localPosition += m_cameraBobber.getOffset();
+        m_Camera.transform.localPosition += m_cameraBobber.getOffset() + m_walkingBobber.getOffset();
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
