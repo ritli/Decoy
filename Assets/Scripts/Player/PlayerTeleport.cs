@@ -28,7 +28,7 @@ public class PlayerTeleport : MonoBehaviour {
     public GameObject m_decoy;
     PlayerController m_player;
     public GameObject m_indi;
-    float m_playerLength = 3f;
+    float m_playerLength = 1.7f;
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
@@ -55,6 +55,7 @@ public class PlayerTeleport : MonoBehaviour {
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
+	private bool m_enoughSpace = true;
 
     private Raycast m_raycaster;
 	private CharacterController m_charController;
@@ -115,8 +116,10 @@ public class PlayerTeleport : MonoBehaviour {
         {
             if (m_indi.activeSelf)
             {
-                if (m_foundLedge)
-                    m_spriteRenderer.color = Color.red;
+				if (m_foundLedge)
+					m_spriteRenderer.color = Color.red;
+				else if (!m_enoughSpace)
+					m_spriteRenderer.color = Color.yellow;
                 else
                     m_spriteRenderer.color = Color.white;
             }
@@ -170,17 +173,20 @@ public class PlayerTeleport : MonoBehaviour {
                 {
                     m_indi.SetActive(false);
 
-                    if (m_foundLedge)
-                    {
+					if (m_foundLedge) 
+					{
 						print ("Found ledge");
-						moveTo(m_ledgeDetection.getNewPosition());
-                        //m_foundLedge = false;
-                    }
-                    else if (m_ledgeDetection.isLedgeBlocked())
-                    {
+						moveTo (m_ledgeDetection.getWallPoint ());
+						//m_foundLedge = false;
+					} else if (m_ledgeDetection.isLedgeBlocked ()) 
+					{
 						print ("Ledge blocked");
+						moveTo (m_ledgeDetection.getNewPosition ());
+					} else if (!m_enoughSpace) 
+					{
+						print ("Not enough space");
 						moveTo(m_ledgeDetection.getNewPosition());
-                    }
+					}
                     else
                     {
 						m_ledgeDetection.isTeleporting();
@@ -282,10 +288,12 @@ public class PlayerTeleport : MonoBehaviour {
 
         Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
+
         if (m_raycaster.doRaycast(out hit))
         {
-            //print(Vector3.Angle(hit.normal, Vector3.down));
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace (hit);
 
+			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
             {
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
@@ -296,21 +304,25 @@ public class PlayerTeleport : MonoBehaviour {
 			//If true then surface is wall
 			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
 			{
-				// ## Start ledge detection ##
-				if (m_ledgeDetection.findLedge(hit) && hit.collider.tag != Tags.noGrab) 
+				if (m_enoughSpace) 
 				{
-					// Only lerps to ledge if hit wasn't on NoGrab area
-					m_foundLedge = true;
-					m_ledgeLerpTo = m_ledgeDetection.getNewPosition();
-					m_charController.detectCollisions = false;
-				} else if(m_ledgeDetection.isLedgeBlocked())
-				{
-					m_foundLedge = false;	
-					m_indi.transform.position = m_ledgeDetection.getNewPosition();
-					return;
-				} else
-					m_foundLedge = false;
-                m_indi.transform.position = hit.point + hit.normal;
+					// ## Start ledge detection ##
+					if (m_ledgeDetection.findLedge (hit) && hit.collider.tag != Tags.noGrab) 
+					{
+						// Only lerps to ledge if hit wasn't on NoGrab area
+						m_foundLedge = true;
+						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
+						m_charController.detectCollisions = false;
+					} else if (m_ledgeDetection.isLedgeBlocked ()) 
+					{
+						m_foundLedge = false;	
+						m_indi.transform.position = m_ledgeDetection.getNewPosition ();
+						return;
+					} else
+						m_foundLedge = false;
+
+					m_indi.transform.position = hit.point + hit.normal;
+				}
 				return;
 			}
 
@@ -320,6 +332,7 @@ public class PlayerTeleport : MonoBehaviour {
 			else
             {
 				m_foundLedge = false;
+
 				for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;
