@@ -68,7 +68,7 @@ public class PlayerTeleport : MonoBehaviour {
     {
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
-        m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+		m_spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
         m_charController = GetComponent<CharacterController>();
 		m_ledgeDetection = GetComponent<LedgeDetection>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
