@@ -71,7 +71,7 @@ public class Raycast : MonoBehaviour {
 
 		if (Physics.Raycast (ray, out hit, maxDistance, layerMask)) 
 		{
-			Debug.DrawLine (ray.origin, hit.point, Color.blue);
+			Debug.DrawLine (ray.origin, hit.point, Color.yellow);
 			inHit = hit;
 			return true;
 		}
