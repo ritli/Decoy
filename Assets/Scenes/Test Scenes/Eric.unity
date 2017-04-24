@@ -405,6 +405,18 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -128.08801
       objectReference: {fileID: 0}
+    - target: {fileID: 11439354, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+      propertyPath: m_UseHeadBob
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11439354, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+      propertyPath: landingBob
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11439354, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+      propertyPath: jumpingBob
+      value: -1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
   m_IsPrefabParent: 0
@@ -2340,6 +2352,22 @@ MonoBehaviour:
   speed: 0.1
   returnToStart: 1
   threshold: 0.5
+--- !u!1 &1456380401 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 149630, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+  m_PrefabInternal: {fileID: 250552175}
+--- !u!114 &1456380402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1456380401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd97326cce00684c90cb23ed5250c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bobSpeed: 0.2
 --- !u!1001 &1561171132
 Prefab:
   m_ObjectHideFlags: 0
