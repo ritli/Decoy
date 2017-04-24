@@ -22,6 +22,7 @@ public class LedgeDetection : MonoBehaviour {
     private Collider m_collider;
     private bool m_canGrab = false;
 	private bool m_isTeleporting = false;
+	private bool m_roof = false;
 
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
     public float ledgeSensitivity;
@@ -56,6 +57,10 @@ public class LedgeDetection : MonoBehaviour {
 			 * 
 			 * Normal från taket ska göras något åt
 			 */
+			if (Vector3.Angle (Vector3.up, direction) < 45)
+				m_roof = true;
+
+
 
 
             RaycastHit hit = new RaycastHit();
@@ -69,7 +74,7 @@ public class LedgeDetection : MonoBehaviour {
 
 //          print("angleOk: " + angleOk);
 
-            if (angleOk && foundLedge)
+            if (angleOk && foundLedge && !m_roof)
                 m_canGrab = true;
             else
                 m_canGrab = false;
@@ -89,6 +94,7 @@ public class LedgeDetection : MonoBehaviour {
     {
         m_canGrab = false;
 		m_inTrigger = false;
+		m_roof = false;
     }
     public bool canGrab()
     {
@@ -157,7 +163,7 @@ public class LedgeDetection : MonoBehaviour {
 		m_isLedgeBlocked = false;
 
 		// Sweeping upward
-		if (m_raycaster.doRaycast(out hit, m_raySweepUp.direction, m_raySweepUp.origin, ledgeSensitivity + m_playerLength))
+		if (m_raycaster.doRaycast(out hit, m_raySweepUp.direction, m_raySweepUp.origin, ledgeSensitivity))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
 			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
@@ -168,7 +174,7 @@ public class LedgeDetection : MonoBehaviour {
 		}
 
 		// Sweeping forward
-		if (m_raycaster.doRaycast (out hit, m_raySweepForward.direction, m_raySweepForward.origin, ledgeSensitivity * 3f)) 
+		if (m_raycaster.doRaycast (out hit, m_raySweepForward.direction, m_raySweepForward.origin, ledgeSensitivity)) 
 		{
 			if (Vector3.Angle (hit.normal, Vector3.up) > 45) 
 			{
@@ -205,7 +211,7 @@ public class LedgeDetection : MonoBehaviour {
 					// Raycast again to check if the first was inside an object
 					if (m_raycaster.doRaycast(out hit, m_rayDown2.direction, m_rayDown2.origin)) 
 					{
-						print ("Y difference: " + (rayDownNormal.y - hit.normal.y));
+//						print ("Y difference: " + Mathf.Abs(rayDownNormal.y - hit.normal.y));
 						Debug.DrawRay(hit.point, hit.normal * 3, Color.blue);
 
 						/* If the angle between the two rays is different, 
