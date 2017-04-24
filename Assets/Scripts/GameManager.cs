@@ -18,16 +18,25 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         Init();
 
+        Debug.Log("Start Called");
         FindReferences();
-            
+
     }
+    //private void OnLevelWasLoaded(int level)
+    //{
+    //    if (level != 0 && level != 1)
+    //    {
+    //        FindReferences();
+    //    }
+
+    //}
 
     void Init()
     {
         if (CheckForSingleton())
         {
             m_instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -51,6 +60,10 @@ public class GameManager : MonoBehaviour {
     void FindReferences()
     {
         m_player = FindObjectOfType<PlayerController>();
+        if(m_player == null)
+        {
+            Debug.LogError("Didn't find a player.");
+        }
     }
 
     public static PlayerController GetPlayer()
