@@ -18,12 +18,6 @@ public class SceneLoadButton : MonoBehaviour {
     }
     void RequestSceneLoad()
     {
-        if(SceneLoader.IsSceneLoaded(SceneLoader.Scenes.MainMenu))
-        {
-            Debug.Log("MainMenu loaded, Unloading...");
-            SceneLoader.UnloadSceneAsync(SceneLoader.Scenes.MainMenu);
-        }
-        GameManager.GetPlayer().enabled = true;
-        SceneLoader.LoadSceneSync(m_SelectedScene);
+        SceneLoader.InitialGameLoad(m_SelectedScene);
     }
 }

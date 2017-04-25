@@ -40,7 +40,10 @@ public class MenuManager : MonoBehaviour
     }
     public void continueGame()
     {
-        SceneManager.LoadScene(1);
+        if (Checkpoint.isPreviouslySaved())
+            SceneLoader.InitialGameLoad(Checkpoint.getSavedScene());
+        else
+            SceneLoader.InitialGameLoad(SceneLoader.Scenes.Section1a);
     }
     public void pauseGame(bool pause)
     {
@@ -49,5 +52,9 @@ public class MenuManager : MonoBehaviour
     public void resume()
     {
         PauseManager.resumeGame();
+    }
+    public void clearPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
     }
 }
