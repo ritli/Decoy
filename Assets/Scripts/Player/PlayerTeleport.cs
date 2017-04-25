@@ -24,7 +24,6 @@ public class PlayerTeleport : MonoBehaviour {
     Color m_currentColor;
     Color m_lastColor;
 
-
     public GameObject m_decoy;
     PlayerController m_player;
     public GameObject m_indi;
@@ -67,6 +66,7 @@ public class PlayerTeleport : MonoBehaviour {
 
 	void Start ()
     {
+
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
 		m_spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
@@ -112,7 +112,7 @@ public class PlayerTeleport : MonoBehaviour {
     // Handle input for teleportation controls.
 	void Update () {
 
-        if (!m_isPaused)
+        if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
             if (m_indi.activeSelf)
             {
@@ -161,6 +161,7 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
                 {
+
                     m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
 
                     ShowIndicator();
@@ -218,6 +219,8 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (m_indi.activeSelf)
                 {
+                    //m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
+                   // m_soundStarted = false;
                     m_blinkState = BlinkState.nah;
                     m_cancelTeleport = true;
                     m_indi.SetActive(false);
@@ -227,6 +230,9 @@ public class PlayerTeleport : MonoBehaviour {
                 if (resetTimeOnCancel)
                     m_cooldownTimer.resetTimer();
             }
+
+            //ReadBlinkState();
+
         }
 
         //Checks if color has changed since last frame to avoid needless material changes
