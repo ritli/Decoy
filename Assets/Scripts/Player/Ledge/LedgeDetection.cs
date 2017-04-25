@@ -257,7 +257,7 @@ public class LedgeDetection : MonoBehaviour {
 			m_wallPoint = transform.position;
 			return false;
 		}
-		// if hit was on wall, check up and down
+		// If hit was on wall, check up and down
 		else if (angle > 45 && angle < 135 &&
 		           m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength / 2f) &&
 		           m_raycaster.doRaycast (out newHit, Vector3.down, hit.point, m_playerLength / 2f)) 
@@ -275,7 +275,7 @@ public class LedgeDetection : MonoBehaviour {
 			return false;
 		
 		} 
-		// if hit was on floor, check up
+		// If hit was on floor, check up
 		else if (angle > 135 && m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength)) {
 			m_newPosition = transform.position;
 			m_wallPoint = transform.position;
@@ -300,15 +300,17 @@ public class LedgeDetection : MonoBehaviour {
 		m_isTeleporting = true;	
 	}
 
+	/*
+	 * Returns the position which is on top of the new ledge, if it is valid. 
+	 * Else it returns the point on the wall
+	 */
 	public Vector3 getNewPosition()
 	{
-//		print ("Get new pos: " + m_newPosition);
 		return m_newPosition;
 	}
 
 	public Vector3 getWallPoint() 
 	{
-//		print ("Get wall point: " + m_wallPoint);
 		return m_wallPoint;
 	}
 }
