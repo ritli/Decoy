@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour, IKillable
     public PlayerState m_playerState = PlayerState.isAlive;
     private PlayerState m_stateBeforePause;
 
+    [FMODUnity.EventRef]
+    public string m_deathEvent;
+
     AnimationState m_aniState = AnimationState.idle;
     Animator m_animator;
 
@@ -85,12 +88,6 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("Determines the speed at which the camera bobs when jumping and landing.")]
     public float jumpBobSpeed = 0.2f;
 
-
-    [SerializeField] private float m_StepInterval;
-	[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-	[SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
-	[SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
-
     private CharacterController m_CharacterController;
     private PlayerTeleport m_teleport;
     private Camera m_Camera;
@@ -116,7 +113,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_velocityScale;
     private float m_scalingStepAfterTeleport = 0.1f;
 
-
     private float m_crouchTimeElapsed;
     private float m_YRotation;
     private float m_initalHeight;
@@ -134,7 +130,7 @@ public class PlayerController : MonoBehaviour, IKillable
 	private float m_NextStep;
 	private AudioSource m_AudioSource;
 
-
+    bool m_inDeathState = false;
 
     private void Start()
     {
@@ -178,6 +174,31 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_playerState = PlayerState.isDead;
         m_controlsEnabled = false;
+        if (!m_inDeathState)
+        {
+            m_inDeathState = true;
+            FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+            StartCoroutine(KillRoutine());
+        }
+
+    }
+
+    IEnumerator KillRoutine()
+    {
+        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
+        float time = 0;
+        float deathTime = 0.6f;
+
+        Transform cam = overlay.transform;
+
+        while (time < deathTime)
+        {
+            cam.Translate(Random.insideUnitSphere * 0.1f + Vector3.down * Time.deltaTime);
+
+            overlay.intensity = Mathf.Lerp(1, 0, time);
+            yield return new WaitForEndOfFrame();
+            time += Time.deltaTime;
+        }
     }
 
 
@@ -343,6 +364,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
+        Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;
+        m_inDeathState = false;
+        m_controlsEnabled = true;
 
         GameManager.resetActivations();
     }
@@ -389,7 +413,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Jump()
     {
-		if (!m_Jump && !m_Jumping) 
+		if (!m_Jump && !m_Jumping && m_controlsEnabled) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
         }
@@ -446,7 +470,7 @@ public class PlayerController : MonoBehaviour, IKillable
     }
     private void FixedUpdate()
     {
-		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping()) 
+		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled) 
 		{
 			Move ();
 		}	
