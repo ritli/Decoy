@@ -442,9 +442,7 @@ public class PlayerController : MonoBehaviour, IKillable
             {
                 m_Jump = false;
             }
-            //StartCoroutine(m_JumpBob.DoBobCycle());
 
-            m_MoveDir.y = 0f;
             m_Jumping = false;
         }
 
