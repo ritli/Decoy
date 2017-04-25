@@ -23,8 +23,6 @@ public class PlayerTeleport : MonoBehaviour {
     public Color m_canBlinkColor;
     Color m_currentColor;
     Color m_lastColor;
-    public FMODUnity.EmitterRef m_emitter;
-    bool m_soundStarted = false;
 
     public GameObject m_decoy;
     PlayerController m_player;
@@ -160,13 +158,6 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
                 {
-                    if (!m_soundStarted)
-                    {
-                        m_emitter.Target.Play();
-                        m_soundStarted = true;
-                    }
-
-                    m_emitter.Target.SetParameter("BlinkUsage", 0);
 
                     m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
 
@@ -178,8 +169,6 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (!m_cancelTeleport && m_indi.activeSelf)
                 {
-                    m_emitter.Target.SetParameter("BlinkUsage", 0.6f);
-                    m_soundStarted = false;
                     m_indi.SetActive(false);
 
                     if (m_foundLedge)
@@ -224,8 +213,8 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 if (m_indi.activeSelf)
                 {
-                    m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
-                    m_soundStarted = false;
+                    //m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
+                   // m_soundStarted = false;
                     m_blinkState = BlinkState.nah;
                     m_cancelTeleport = true;
                     m_indi.SetActive(false);
@@ -235,6 +224,9 @@ public class PlayerTeleport : MonoBehaviour {
                 if (resetTimeOnCancel)
                     m_cooldownTimer.resetTimer();
             }
+
+            //ReadBlinkState();
+
         }
 
         //Checks if color has changed since last frame to avoid needless material changes
