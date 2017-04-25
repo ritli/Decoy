@@ -20,7 +20,7 @@ public class LedgeLerp : MonoBehaviour
     {
         if(m_beginLerp)
         {
-            m_incrementor += 0.04f;
+            m_incrementor += 0.08f;
 			Vector3 lerpPos = Vector3.Lerp(transform.position, m_targetPos, Time.deltaTime * lerpSpeed);
 			lerpPos.y += Time.deltaTime * height * Mathf.Sin(Mathf.Clamp01(m_incrementor) * Mathf.PI);
             transform.position = lerpPos;
