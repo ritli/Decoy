@@ -107,8 +107,6 @@ public class TurretBehaviour : MonoBehaviour
         switch (turretState)
         {
             case TurretState.isIdle:
-
-
                 m_FoVLight.color = Color.Lerp(m_activeColor, m_idleColor, m_wideTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_wideTime);
                 m_narrowTime = 0;
@@ -155,9 +153,9 @@ public class TurretBehaviour : MonoBehaviour
                     {
                         m_shotAudioPlayed = true;
                         m_audio.PlayEventTimed(0, 2, 0.4f, true);
+                        m_Target.Kill();
+                        m_fireParticles.Emit(20);
                     }
-                    m_Target.Kill();
-                    m_fireParticles.Emit(20);
                 }
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
