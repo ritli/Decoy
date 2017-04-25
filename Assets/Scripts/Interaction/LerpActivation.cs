@@ -27,7 +27,10 @@ public class LerpActivation : ActivationObject {
     {
         m_isActive = false;
         if (returnToStart)
+        {
             m_lerpAim = startPos.transform.position;
+            m_isLerping = true;
+        }
         else
             m_isLerping = false;
         
