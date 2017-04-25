@@ -20,17 +20,30 @@ public class LedgeLerp : MonoBehaviour
     {
         if(m_beginLerp)
         {
-            m_incrementor += 0.08f;
-			Vector3 lerpPos = Vector3.Lerp(transform.position, m_targetPos, Time.deltaTime * lerpSpeed);
+            m_incrementor += 0.04f;
+
+            // Start moving only the y-axis so that the camera does not clip into the enviroment while lerping.
+            float lerpY = Mathf.MoveTowards(transform.position.y, m_targetPos.y, Time.deltaTime * lerpSpeed);
+
+            Vector3 lerpPos;
+            // When the transform y-coordinate has reached the target y-coordinate, start moving the other axises.
+            if (m_targetPos.y - lerpY <= 0f)
+            {
+                float lerpX = Mathf.MoveTowards(transform.position.x, m_targetPos.x, Time.deltaTime * lerpSpeed);
+                float lerpZ = Mathf.MoveTowards(transform.position.z, m_targetPos.z, Time.deltaTime * lerpSpeed);
+                lerpPos = new Vector3(lerpX, lerpY, lerpZ);
+            }
+            else
+                lerpPos = new Vector3(transform.position.x, lerpY, transform.position.z);
+
+            // Modify the movement with a sine curve
 			lerpPos.y += Time.deltaTime * height * Mathf.Sin(Mathf.Clamp01(m_incrementor) * Mathf.PI);
             transform.position = lerpPos;
-//			print ("Lerping");
 
 			if (Vector3.Distance(transform.position, m_targetPos) < m_distanceThreshold)
 			{
 	            m_incrementor = 0;
 	            m_beginLerp = false;
-//				print ("Finished lerping");
 	        }
 		}
 //		Debug.DrawRay (m_startPos, Vector3.up, Color.yellow, 5f);
