@@ -33,7 +33,6 @@ public class VectorBobber : MonoBehaviour {
     public void stopBob()
     {
         stopping = true;
-        currentOffset = new Vector3(0, 0, 0);
     }
 
     // Coroutine that iterates the bobbing effect when it's been started
@@ -49,9 +48,9 @@ public class VectorBobber : MonoBehaviour {
             {
                 stopping = false;
                 bobbingDone = true;
+                currentOffset = new Vector3(0, 0, 0);
                 yield break;
             }
-            
             // Update the offset by the speed that is specified
             timePassed += bobSpeed;
             currentOffset.y = m_bobAmount * Mathf.Sin(timePassed);
