@@ -162,13 +162,13 @@ public class LedgeDetection : MonoBehaviour {
 		//Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		// Sweeptest using rays
-		Debug.DrawRay (raySweepUp.origin, raySweepUp.direction, Color.red);
+		Debug.DrawRay (raySweepUp.origin, raySweepUp.direction, Color.black);
 		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction, Color.white);
 
 		m_isLedgeBlocked = false;
 
 		// Sweeping upward
-		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity))
+		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity * 1.5f))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
 			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
@@ -240,31 +240,43 @@ public class LedgeDetection : MonoBehaviour {
 	}
 
 	/*
-	 * Raycasts up to find out if there is enough space for the player to teleport 
+	 * Raycasts to find out if there is enough space for the player to teleport to target location
 	 */
 	public bool findEnoughSpace(RaycastHit hit) 
 	{
 		float angle = Vector3.Angle (Vector3.up, hit.normal);
-		Vector3 direction = new Vector3 (0, 0, 0);
 	
 		RaycastHit newHit = new RaycastHit();
 	
+		Debug.DrawRay (hit.point, hit.normal, Color.yellow);
+
 		// If hit was on roof, check down
-		if (angle < 45 && m_raycaster.doRaycast(out newHit, Vector3.up, hit.point, m_playerLength))
+		if (angle < 45 && m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength)) 
 		{
 			m_newPosition = transform.position;
 			m_wallPoint = transform.position;
 			return false;
+		}
 		// if hit was on wall, check up and down
-		} else if ( angle > 45 && angle < 135 && 
-					m_raycaster.doRaycast(out newHit, Vector3.up, hit.point, m_playerLength / 2f) && 
-					m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength / 2f)) 
+		else if (angle > 45 && angle < 135 &&
+		           m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength / 2f) &&
+		           m_raycaster.doRaycast (out newHit, Vector3.down, hit.point, m_playerLength / 2f)) 
 		{
 			m_newPosition = transform.position;
 			m_wallPoint = transform.position;
 			return false;
+		}
+		// If hit was on wall, check if there is an opposite wall in the way
+		else if (angle > 45 && angle < 135 &&
+					m_raycaster.doRaycast(out newHit, hit.normal, hit.point, hit.normal.magnitude)) 
+		{
+			m_newPosition = transform.position;
+			m_wallPoint = transform.position;
+			return false;
+		
+		} 
 		// if hit was on floor, check up
-		} else if (angle > 135 && m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength)) {
+		else if (angle > 135 && m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength)) {
 			m_newPosition = transform.position;
 			m_wallPoint = transform.position;
 			return false;

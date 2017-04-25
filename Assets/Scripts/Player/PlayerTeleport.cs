@@ -286,7 +286,7 @@ public class PlayerTeleport : MonoBehaviour {
 
         RaycastHit hit = new RaycastHit();
 
-        Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
+//        Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
 
         if (m_raycaster.doRaycast(out hit))
