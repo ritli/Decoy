@@ -27,7 +27,7 @@ public class PlayerTeleport : MonoBehaviour {
     public GameObject m_decoy;
     PlayerController m_player;
     public GameObject m_indi;
-    float m_playerLength = 1.7f;
+    private float m_playerLength;
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
@@ -61,15 +61,16 @@ public class PlayerTeleport : MonoBehaviour {
 	private SpriteRenderer m_spriteRenderer;
     private ParticleController m_partController;
     private BlinkState m_blinkState;
+	private ParticleSystem.MainModule m_particleSystem;
 
     private Vector3 m_lastPosition;
 
 	void Start ()
     {
-
+		m_playerLength = GetComponent<CharacterController>().height;
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
-		m_spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
+		m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
         m_charController = GetComponent<CharacterController>();
 		m_ledgeDetection = GetComponent<LedgeDetection>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
@@ -117,11 +118,14 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_indi.activeSelf)
             {
 				if (m_foundLedge)
-					m_spriteRenderer.color = Color.red;
+					m_particleSystem.startColor = Color.blue;
+					//m_particleSystem.color = Color.red;
 				else if (!m_enoughSpace)
-					m_spriteRenderer.color = Color.yellow;
+					m_particleSystem.startColor = Color.red;
+					//m_particleSystem.color = Color.yellow;
                 else
-                    m_spriteRenderer.color = Color.white;
+					m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
+					//m_particleSystem.color = Color.white;
             }
 
             if (m_cooldownTimer.isTimeUp())
