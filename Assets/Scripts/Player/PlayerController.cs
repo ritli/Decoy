@@ -408,7 +408,7 @@ public class PlayerController : MonoBehaviour, IKillable
             break;
         }
 
-
+        UpdateCameraPosition(0);
     }
 
     void Jump()
@@ -435,6 +435,7 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
+                m_cameraBobber.stopBob();
                 m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
             }
             if (m_Jump)
@@ -465,8 +466,6 @@ public class PlayerController : MonoBehaviour, IKillable
 		{
 			m_MoveDir.y = 0f;
 		}
-        
-        //		print("playerController: " + m_ledgeDetect.canGrab());
     }
     private void FixedUpdate()
     {
@@ -597,8 +596,6 @@ public class PlayerController : MonoBehaviour, IKillable
         }
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
-        
-        UpdateCameraPosition(speed);
 
         m_MouseLook.UpdateCursorLock();
 
@@ -627,8 +624,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void UpdateCameraPosition(float speed)
     {
-        
-
         if (!m_UseHeadBob)
         {
             return;
