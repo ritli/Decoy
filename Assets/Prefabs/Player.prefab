@@ -75,6 +75,8 @@ GameObject:
   - component: {fileID: 114908024422846402}
   - component: {fileID: 114508373021751664}
   - component: {fileID: 114891065613552114}
+  - component: {fileID: 114021979508984464}
+  - component: {fileID: 114676029272047170}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -161,8 +163,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: 0, y: -0.5569337, z: 0, w: 0.830557}
-  m_LocalPosition: {x: -50.46665, y: 6.58, z: 50.812893}
+  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
+  m_LocalPosition: {x: 27.8, y: 1.95, z: 26.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 453968}
@@ -3698,7 +3700,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1880181141324122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.58169997, z: -0.041}
+  m_LocalPosition: {x: -0, y: -0.62, z: -0.041}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4700063348526348}
@@ -3985,6 +3987,30 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114021979508984464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/SFX/Avatar/AvatarBlinkDevice
+  PlayEvent: 0
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params:
+  - Name: BlinkUsage
+    Value: 0
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &114129811633040402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4039,6 +4065,9 @@ MonoBehaviour:
   m_rechargeColor: {r: 0.5808823, g: 0, b: 0, a: 1}
   m_activeColor: {r: 0.0256084, g: 0.74264705, b: 0.647, a: 1}
   m_canBlinkColor: {r: 0.027450982, g: 0.7411765, b: 0, a: 1}
+  m_emitter:
+    Target: {fileID: 114021979508984464}
+    Params: []
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_indi: {fileID: 187996}
   m_fovKick:
@@ -4085,6 +4114,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0602d97a864f784ebcba29d0a1eb39c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114676029272047170
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 114021979508984464}
+    Params: []
+  TriggerEvent: 0
+  CollisionTag: 
 --- !u!114 &114707980694823172
 MonoBehaviour:
   m_ObjectHideFlags: 1
