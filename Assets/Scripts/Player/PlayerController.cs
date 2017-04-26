@@ -55,6 +55,10 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("How much of WASD movement is applied when airborne. (0 = 0%, 1 = 100%)")]
     [Range(0,1)]
     [SerializeField] private float m_JumpAirControl;
+    [Tooltip("How much force should be applied when jumping with no previous velocity.")]
+    [Range(0, 50)]
+    public float m_stationaryJumpAirControl;
+    private Vector3 signedJumpVector;
 
     //Gravity vars
     [Header("Gravity Variables")]
@@ -415,6 +419,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Jump()
     {
+        
 		if (!m_Jump && !m_Jumping && m_controlsEnabled) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
@@ -505,7 +510,6 @@ public class PlayerController : MonoBehaviour, IKillable
         //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
         else if (m_Input.magnitude > 0)
         {
-
             //m_cameraBobber.startBob(walkingBob, true);
             if (!m_walkingBobber.isBobbing())
             {
@@ -523,8 +527,6 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_walkingBobber.stopBob();
             }
 
-            // if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
-            //  m_cameraBobber.stopBob();
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
@@ -536,7 +538,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_scalingVelocity)
         {
             speed += (m_velocityScale * speed);
-
+            
             m_velocityScale = Mathf.MoveTowards(m_velocityScale, 0, m_scalingStepAfterTeleport);
 
             if (m_velocityScale == 0)
@@ -559,14 +561,22 @@ public class PlayerController : MonoBehaviour, IKillable
         //Always move along the camera forward as it is the direction that it being aimed at
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
-
         if (m_Jumping)
         {
-            //print(m_jumpVector);
             desiredMove = m_jumpVector;
-            //print("Move direction:" + m_MoveDir.normalized);
-        
-            m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x* m_JumpAirControl;
+
+            Vector3 newVector = m_jumpVector + transform.forward * GetInput().y * m_JumpAirControl 
+                + transform.right * GetInput().x * m_JumpAirControl;
+
+            m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
+
+            if (signedJumpVector.x == Mathf.Sign(newVector.x)
+                && signedJumpVector.z == Mathf.Sign(newVector.z))
+            {
+                m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
+            }
+
+            print("JumpVector: " + m_jumpVector);
         }
 
         //Get a normal for the surface that is being touched to move along it
@@ -575,12 +585,17 @@ public class PlayerController : MonoBehaviour, IKillable
 
         desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-        //print("DesiredDir: " + desiredMove);
-        // SPEED BLIR NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOLL
-        print("Speed: " + speed);
-        m_MoveDir.x = desiredMove.x * speed;
-        m_MoveDir.z = desiredMove.z * speed;
-        //print("MovingDir: " + m_MoveDir);
+        // If stationary when jumping, use stationary force instead of ordinary speed. Otherwise apply speed as normal.
+        if (speed == 0 && m_Jumping)
+        {
+            m_MoveDir.x = desiredMove.x * m_stationaryJumpAirControl;
+            m_MoveDir.z = desiredMove.z * m_stationaryJumpAirControl;
+        }
+        else
+        {
+            m_MoveDir.x = desiredMove.x * speed;
+            m_MoveDir.z = desiredMove.z * speed;
+        }
 
         //If player is not on ground
         if (m_CharacterController.isGrounded)
@@ -594,6 +609,7 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_MoveDir.y = m_JumpForce;
                 m_Jump = false;
                 m_Jumping = true;
+                signedJumpVector = new Vector3(Mathf.Sign(m_MoveDir.x), 0, Mathf.Sign(m_MoveDir.z));
             }
 
         }
