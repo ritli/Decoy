@@ -40,8 +40,16 @@ public class MenuManager : MonoBehaviour
     }
     public void continueGame()
     {
+        Invoke("DoContinue", ImageFader.instance.m_FadeTime);
+        ImageFader.instance.SetVisible(true);
+    }
+    void DoContinue()
+    {
         if (Checkpoint.isPreviouslySaved())
+        {
             SceneLoader.InitialGameLoad(Checkpoint.getSavedScene());
+            GameManager.GetPlayer().ResetPlayer();
+        }
         else
             SceneLoader.InitialGameLoad(SceneLoader.Scenes.Section1a);
     }
