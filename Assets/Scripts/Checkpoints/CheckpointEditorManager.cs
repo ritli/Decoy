@@ -3,8 +3,9 @@ using System.Collections;
 using System;
 
 
-
+#if UNITY_EDITOR
 [ExecuteInEditMode]
+#endif
 public class CheckpointEditorManager : MonoBehaviour {
 
     public bool m_ClearPlayerPrefs = false;
@@ -17,8 +18,7 @@ public class CheckpointEditorManager : MonoBehaviour {
     {
         m_ClearPlayerPrefs = false;
     }
-
-	void OnEnable()
+    void OnEnable()
     {
         instance = this;
     }
