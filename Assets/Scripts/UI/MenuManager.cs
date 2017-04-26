@@ -56,13 +56,5 @@ public class MenuManager : MonoBehaviour
     public void clearPlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
-        if(Checkpoint.isPreviouslySaved())
-        {
-            Debug.Log("Keys still there.");
-        }
-        else
-        {
-            Debug.Log("Keys Deleted.");
-        }
     }
 }

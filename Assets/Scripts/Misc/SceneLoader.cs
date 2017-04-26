@@ -111,11 +111,9 @@ public class SceneLoader : MonoBehaviour
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
-            Debug.Log("Scene Name: " + currentScene.name);
             if (currentScene.name != Scenes.InitialScene.ToString())
             {
                 SceneManager.UnloadSceneAsync(currentScene);
-                Debug.Log("Will be deleted: "+currentScene.name);
             }
         }
         //Loads Menu, activates player 
@@ -127,7 +125,6 @@ public class SceneLoader : MonoBehaviour
     {
         if (IsSceneLoaded(Scenes.MainMenu))
         {
-            Debug.Log("MainMenu loaded, Unloading...");
             UnloadSceneAsync(Scenes.MainMenu);
         }
 
