@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
+
+    [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
     public float landingBob = 0.5f;
     [Tooltip("Determines the amount that the camera is moved during a jumping bob effect.")]
@@ -561,7 +563,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_Jumping)
         {
             desiredMove = m_jumpVector;
-            m_jumpVector += m_MoveDir.normalized * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+            print("Move direction:" + m_MoveDir.normalized);
         }
 
         //Get a normal for the surface that is being touched to move along it
@@ -572,7 +574,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
-
+        
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
