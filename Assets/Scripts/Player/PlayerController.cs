@@ -562,8 +562,11 @@ public class PlayerController : MonoBehaviour, IKillable
 
         if (m_Jumping)
         {
+            //print(m_jumpVector);
             desiredMove = m_jumpVector;
-            print("Move direction:" + m_MoveDir.normalized);
+            //print("Move direction:" + m_MoveDir.normalized);
+        
+            m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x* m_JumpAirControl;
         }
 
         //Get a normal for the surface that is being touched to move along it
@@ -572,9 +575,13 @@ public class PlayerController : MonoBehaviour, IKillable
 
         desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
+        //print("DesiredDir: " + desiredMove);
+        // SPEED BLIR NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOLL
+        print("Speed: " + speed);
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
-        
+        //print("MovingDir: " + m_MoveDir);
+
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
