@@ -36,7 +36,7 @@ public class Checkpoint : MonoBehaviour {
         {
             PlayerPrefs.SetInt("Section", (int)m_AssociatedSection);
             PlayerPrefs.SetInt("CheckpointIndex", m_Index);
-            print("Index set to " + m_Index);
+            //print("Index set to " + m_Index);
 
             PlayerPrefs.SetFloat("PositionX", m_SpawnPosition.position.x);
             PlayerPrefs.SetFloat("PositionY", m_SpawnPosition.position.y);
