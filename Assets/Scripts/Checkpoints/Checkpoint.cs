@@ -7,9 +7,10 @@ public class Checkpoint : MonoBehaviour {
     [Tooltip("place an empty gameobject as a child to use a forced spawnposition. \nIf not the Checkpoints center will be used.")]
     public Transform m_SpawnPosition;
     private int m_Index = 0;
+    public SceneLoader.Scenes m_AssociatedSection;
 
-	// Use this for initialization
-	void Start () 
+    // Use this for initialization
+    void Start () 
     {
         CheckpointEditorManager.UpdateCheckpoints();
         //loads forced position if one is present
@@ -33,8 +34,9 @@ public class Checkpoint : MonoBehaviour {
         
         if(collider.transform.gameObject.tag == Tags.player && getReachedCheckpoint() < m_Index)
         {
+            PlayerPrefs.SetInt("Section", (int)m_AssociatedSection);
             PlayerPrefs.SetInt("CheckpointIndex", m_Index);
-            print("Index set to " + m_Index);
+            //print("Index set to " + m_Index);
 
             PlayerPrefs.SetFloat("PositionX", m_SpawnPosition.position.x);
             PlayerPrefs.SetFloat("PositionY", m_SpawnPosition.position.y);
@@ -66,6 +68,10 @@ public class Checkpoint : MonoBehaviour {
     {
         Quaternion spawnRotation = new Quaternion(PlayerPrefs.GetFloat("RotationX"), PlayerPrefs.GetFloat("RotationY"), PlayerPrefs.GetFloat("RotationZ"), PlayerPrefs.GetFloat("RotationW"));
         return spawnRotation;   
+    }
+    public static SceneLoader.Scenes getSavedScene()
+    {
+        return (SceneLoader.Scenes)PlayerPrefs.GetInt("Section");
     }
     public int getReachedCheckpoint()
     {

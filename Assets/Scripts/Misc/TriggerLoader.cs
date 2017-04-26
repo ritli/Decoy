@@ -12,14 +12,25 @@ public class TriggerLoader : MonoBehaviour
     [Tooltip("Decides if the selected scene will be loaded or unloaded.")]
     public Mode m_Mode;
 
+    private bool m_playerInside = false;
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == Tags.player)
+
+        if(other.gameObject.tag == Tags.player && !m_playerInside)
         {
+            m_playerInside = true; 
             if (m_Mode == Mode.Load)
                 SceneLoader.LoadSceneAsync(m_scene);
             else
                 SceneLoader.UnloadSceneAsync(m_scene);
+        }
+    }
+     private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == Tags.player)
+        {
+            m_playerInside = false;
         }
     }
 }

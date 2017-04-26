@@ -6,6 +6,7 @@ using UnityEngine;
 public class SceneLoadButton : MonoBehaviour {
 
     public SceneLoader.Scenes m_SelectedScene;
+    public float m_LoadDelay;
 
 	// Use this for initialization
     private void OnEnable()
@@ -18,12 +19,13 @@ public class SceneLoadButton : MonoBehaviour {
     }
     void RequestSceneLoad()
     {
-        if(SceneLoader.IsSceneLoaded(SceneLoader.Scenes.MainMenu))
-        {
-            Debug.Log("MainMenu loaded, Unloading...");
-            SceneLoader.UnloadSceneAsync(SceneLoader.Scenes.MainMenu);
-        }
-        GameManager.GetPlayer().enabled = true;
-        SceneLoader.LoadSceneSync(m_SelectedScene);
+        ImageFader.instance.SetVisible(true);
+        Invoke("DoLoad", ImageFader.instance.m_FadeTime);
+    }
+    void DoLoad()
+    {
+        GameManager.GetPlayer().gameObject.SetActive(true);
+        GameManager.GetPlayer().ResetPlayer();
+        SceneLoader.InitialGameLoad(m_SelectedScene);
     }
 }
