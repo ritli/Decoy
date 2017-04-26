@@ -2,7 +2,7 @@
 using System.Collections;
 
 /* TODO: 
- * • findEnoughSpace alla riktningar oavsett träffyta
+ *
  */
 
 public class LedgeDetection : MonoBehaviour {
@@ -26,6 +26,7 @@ public class LedgeDetection : MonoBehaviour {
 	private bool m_isTeleporting = false;
 	private bool m_roof = false;
 
+	private Vector3 m_invalidPosition = new Vector3(0, 0, 0);
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
     public float ledgeSensitivity;
 
@@ -158,7 +159,7 @@ public class LedgeDetection : MonoBehaviour {
 
 		// Another ray used to determine if other ray is inside terrain
 		Ray rayDown2 = new Ray();
-		rayDown2.origin = newPosition + localUp * 2.5f;
+		rayDown2.origin = newPosition + localUp * 1.5f;
 		rayDown2.direction = direction;
 
         RaycastHit hit = new RaycastHit();
@@ -172,12 +173,12 @@ public class LedgeDetection : MonoBehaviour {
 //		Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		// Sweeptest using rays
-		Debug.DrawRay (raySweepUp.origin, raySweepUp.direction, Color.black);
-		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction, Color.white);
+		Debug.DrawRay (raySweepUp.origin, raySweepUp.direction * (ledgeSensitivity + m_playerLength), Color.white);
+//		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction, Color.white);
 
 		m_isLedgeBlocked = false;
 
-		// Sweeping upward
+		// Sweeping upward from beside the wall
 		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
@@ -186,6 +187,8 @@ public class LedgeDetection : MonoBehaviour {
 			m_isLedgeBlocked = true;
 			return false;
 		}
+
+		raySweepUp.origin = newPosition;
 
 		// Sweeping forward
 		if (m_raycaster.doRaycast (out hit, raySweepForward.direction, raySweepForward.origin, ledgeSensitivity)) 
@@ -213,16 +216,26 @@ public class LedgeDetection : MonoBehaviour {
 				// If the floor is above where the aim is
 				if (hit.point.y >= wallHit.point.y)
 				{
+					// Sweeping upward from ontop of the wall
+					if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity + m_playerLength))
+					{
+						Debug.DrawRay (hit.point, hit.normal, Color.cyan);
+						m_newPosition = m_wallPoint;
+//						m_newPosition = m_wallPoint + hit.normal * m_playerLength;
+//						m_newPosition.y = hit.point.y + hit.normal.y * m_playerLength;
+						m_isLedgeBlocked = true;
+						return false;
+					}
+
 					// Store the found normal to compare with the other ray
 					rayDownNormal = hit.normal;
 
 					// Set the new position
 					m_newPosition = hit.point;
 
-					// Raycast again to check if the first was inside an object
+					// Raycast again to check if the first hit was inside an object
 					if (m_raycaster.doRaycast(out hit, rayDown2.direction, rayDown2.origin)) 
 					{
-//						print ("Y difference: " + Mathf.Abs(rayDownNormal.y - hit.normal.y));
 						Debug.DrawRay(hit.point, hit.normal * 3, Color.blue);
 
 						/* If the angle between the two rays is different, 
@@ -243,6 +256,11 @@ public class LedgeDetection : MonoBehaviour {
 		return false;
 	}
 
+
+
+	/*
+	 * Raycasts to find out if there is enough space for the player to teleport to target location
+	 */
 	public bool findEnoughSpace(RaycastHit hit) 
 	{
 		// Angle used to determine on which surface there was a hit
@@ -261,12 +279,14 @@ public class LedgeDetection : MonoBehaviour {
 		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
 		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
 
+		m_invalidPosition = hit.point;
+
 		RaycastHit rayHit = new RaycastHit ();
 
 		// Surface was floor
 		if (angle < 45) 
 		{
-			print ("Floor");
+//			print ("Floor");
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
 				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth) &&
 				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth) ||
@@ -277,16 +297,16 @@ public class LedgeDetection : MonoBehaviour {
 				print("Not enough space!");
 				return false;
 			}
-		} 
+		}
 		// Surface was wall
 		else if (angle > 45 && angle < 135) 
 		{
-			print ("Wall");
+//			print ("Wall");
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerLength / 2) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerLength / 2) ||
-				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth / 2) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth / 2)) 
+				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerLength) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth )) 
 			{
 				// Not enough space
 				print("Not enough space!");
@@ -296,78 +316,64 @@ public class LedgeDetection : MonoBehaviour {
 		// Surface was roof
 		else if (angle > 135)
 		{
-			print ("Roof");
+//			print ("Roof");
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth / 2) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth / 2) ||
-				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth / 2) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth / 2)) 
+				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth)) 
 			{
 				// Not enough space
 				print("Not enough space!");
 				return false;
 			}
 		}
-
-
-//		if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-//		    m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerLength) ||
-//		    m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerLength) ||
-//		    m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerLength) ||
-//		    m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerLength)) 
-//		{
-//			// Not enough space
-//			return false;
-//		}
-
-
 		return true;
 	}
 
-	/*
-	 * Raycasts to find out if there is enough space for the player to teleport to target location
-	 */
-//	public bool findEnoughSpace(RaycastHit hit) 
-//	{
-//		float angle = Vector3.Angle (Vector3.up, hit.normal);
-//	
-//		RaycastHit newHit = new RaycastHit();
-//	
-//		Debug.DrawRay (hit.point, hit.normal, Color.yellow);
-//
-//		// If hit was on roof, check down
-//		if (angle < 45 && m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength)) 
-//		{
-//			m_newPosition = transform.position;
-//			m_wallPoint = transform.position;
-//			return false;
-//		}
-//		// If hit was on wall, check up and down
-//		else if (angle > 45 && angle < 135 &&
-//		           m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength / 2f) &&
-//		           m_raycaster.doRaycast (out newHit, Vector3.down, hit.point, m_playerLength / 2f)) 
-//		{
-//			m_newPosition = transform.position;
-//			m_wallPoint = transform.position;
-//			return false;
-//		}
-//		// If hit was on wall, check if there is an opposite wall in the way
-//		else if (angle > 45 && angle < 135 &&
-//					m_raycaster.doRaycast(out newHit, hit.normal, hit.point, hit.normal.magnitude)) 
-//		{
-//			m_newPosition = transform.position;
-//			m_wallPoint = transform.position;
-//			return false;
-//		
-//		} 
-//		// If hit was on floor, check up
-//		else if (angle > 135 && m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength)) {
-//			m_newPosition = transform.position;
-//			m_wallPoint = transform.position;
-//			return false;
-//		}
-//		return true;
-//	}
+	public bool findValidPosition(Vector3 invalidPosition) 
+	{
+		/*
+		 * Check for enough space along the player's aim ray.
+		 * Set m_newPosition to the first position with enough space
+		 */
+
+		Vector3 playerLook = Camera.main.transform.forward;
+		Vector3 currentInvalid = invalidPosition;
+		bool enoughSpace = false;
+		bool arrived = false;
+
+		RaycastHit hit = new RaycastHit();
+		while (!enoughSpace && !arrived) 
+		{
+			print ("Looking for space");
+			if (Vector3.Distance (currentInvalid, transform.position) == 0) 
+			{
+				print ("Arrived at player");
+				arrived = true;
+				return false;
+			}
+			
+			currentInvalid = Vector3.MoveTowards(currentInvalid, transform.position, 0.5f);
+
+			if (m_raycaster.doRaycast (out hit, Vector3.up, currentInvalid, m_playerLength) &&
+			    m_raycaster.doRaycast (out hit, -Vector3.up, currentInvalid, m_playerLength) ||
+			    m_raycaster.doRaycast (out hit, Vector3.left, currentInvalid, m_playerWidth) &&
+			    m_raycaster.doRaycast (out hit, -Vector3.left, currentInvalid, m_playerWidth) ||
+			    m_raycaster.doRaycast (out hit, Vector3.forward, currentInvalid, m_playerWidth) &&
+			    m_raycaster.doRaycast (out hit, -Vector3.forward, currentInvalid, m_playerWidth)) 
+			{
+				// Not enough space
+			} else 
+			{
+				print ("Found new position");
+				enoughSpace = true;
+				m_newPosition = currentInvalid;
+			}
+		}
+
+		return true;
+	}
 
 	public bool isLedgeBlocked() 
 	{
@@ -394,8 +400,16 @@ public class LedgeDetection : MonoBehaviour {
 		return m_newPosition;
 	}
 
+	/*
+	 * Always returns the point on the wall
+	 */
 	public Vector3 getWallPoint() 
 	{
 		return m_wallPoint;
+	}
+
+	public Vector3 getInvalidPosition() 
+	{
+		return m_invalidPosition;
 	}
 }

@@ -55,6 +55,7 @@ public class PlayerTeleport : MonoBehaviour {
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
 	private bool m_enoughSpace = true;
+	private bool m_foundValidSpace = true;
 
     private Raycast m_raycaster;
 	private CharacterController m_charController;
@@ -174,25 +175,27 @@ public class PlayerTeleport : MonoBehaviour {
             }
             if (Input.GetButtonUp("Teleport"))
             {
-                if (!m_cancelTeleport && m_indi.activeSelf)
-                {
-                    m_indi.SetActive(false);
+				if (!m_cancelTeleport && m_indi.activeSelf)
+				{
 
 					if (m_foundLedge) 
 					{
 //						print ("Found ledge");
 						moveTo (m_ledgeDetection.getWallPoint ());
 						//m_foundLedge = false;
-					} else if (m_ledgeDetection.isLedgeBlocked ()) 
+					} 
+					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
 //						print ("Ledge blocked");
 						moveTo (m_ledgeDetection.getNewPosition ());
-					} else if (!m_enoughSpace) 
-					{
-//						print ("Not enough space");
-						moveTo(m_ledgeDetection.getNewPosition());
 					}
-                    else
+					else if (!m_enoughSpace) 
+					{
+						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
+							moveTo(m_ledgeDetection.getNewPosition ());
+							
+					}
+					else
                     {
 						m_ledgeDetection.isTeleporting();
                         moveTo(m_indi.transform.position);
@@ -212,10 +215,9 @@ public class PlayerTeleport : MonoBehaviour {
 
                     GameManager.GetPlayer().CreateDecoy();
                 }
-                else
+				else
                     m_cancelTeleport = false;
-
-
+				m_indi.SetActive(false);
             }
 
             // When right clicking, cancel teleportation.
@@ -298,6 +300,9 @@ public class PlayerTeleport : MonoBehaviour {
 
 //        Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
 
+		// Reset the conditions
+		m_enoughSpace = true;
+		m_foundValidSpace = true;
 
         if (m_raycaster.doRaycast(out hit))
         {
@@ -323,16 +328,17 @@ public class PlayerTeleport : MonoBehaviour {
 						m_foundLedge = true;
 						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
 						m_charController.detectCollisions = false;
-					} else if (m_ledgeDetection.isLedgeBlocked ()) 
+					} 
+					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
 						m_foundLedge = false;	
 						m_indi.transform.position = m_ledgeDetection.getNewPosition ();
 						return;
-					} else
+					} 
+					else
 						m_foundLedge = false;
-
-					m_indi.transform.position = hit.point + hit.normal;
 				}
+				m_indi.transform.position = hit.point + hit.normal;
 				return;
 			}
 
