@@ -180,16 +180,16 @@ public class PlayerTeleport : MonoBehaviour {
 
 					if (m_foundLedge) 
 					{
-						print ("Found ledge");
+//						print ("Found ledge");
 						moveTo (m_ledgeDetection.getWallPoint ());
 						//m_foundLedge = false;
 					} else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
-						print ("Ledge blocked");
+//						print ("Ledge blocked");
 						moveTo (m_ledgeDetection.getNewPosition ());
 					} else if (!m_enoughSpace) 
 					{
-						print ("Not enough space");
+//						print ("Not enough space");
 						moveTo(m_ledgeDetection.getNewPosition());
 					}
                     else

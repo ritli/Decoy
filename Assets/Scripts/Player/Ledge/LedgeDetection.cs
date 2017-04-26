@@ -3,7 +3,6 @@ using System.Collections;
 
 /* TODO: 
  * • findEnoughSpace alla riktningar oavsett träffyta
- * • Glider långsamt mot vägg ifall kant hittas men inte klättras
  */
 
 public class LedgeDetection : MonoBehaviour {
@@ -18,6 +17,7 @@ public class LedgeDetection : MonoBehaviour {
 	private bool m_isLedgeBlocked = false;
 	private GameObject m_ind;
 	private float m_playerLength;
+	private float m_playerWidth;
 
     // Variables for nearby ledge detection
     private bool m_inTrigger = false;
@@ -37,6 +37,7 @@ public class LedgeDetection : MonoBehaviour {
     void Start () {
 		m_raycaster = GetComponent<Raycast>();
 		m_playerLength = GetComponent<CharacterController>().height;
+		m_playerWidth = GetComponent<CharacterController> ().radius * 2;
 	}
 
 
@@ -69,7 +70,7 @@ public class LedgeDetection : MonoBehaviour {
             bool raySuccess = m_raycaster.doRaycast(out hit, -direction, transform.position);
 			bool foundLedge = false;
 			if (raySuccess)
-				foundLedge = findLedge (hit);
+				foundLedge = findLedge(hit);
 
 //          print("angleOk: " + angleOk);
 
@@ -242,50 +243,131 @@ public class LedgeDetection : MonoBehaviour {
 		return false;
 	}
 
+	public bool findEnoughSpace(RaycastHit hit) 
+	{
+		// Angle used to determine on which surface there was a hit
+		float angle = Vector3.Angle(Vector3.up, hit.normal);
+
+		Vector3 localRight = Vector3.right;
+		Vector3 localUp = Vector3.forward;
+
+		if (angle > 0.1 && angle < 179.9) 
+		{
+			localRight = Vector3.Cross (Vector3.up, hit.normal);
+			localUp = Vector3.Cross (localRight, hit.normal);
+		}
+		hit.point = hit.point + hit.normal * 0.2f;
+		Debug.DrawRay(hit.point, localRight, Color.magenta);
+		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
+		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
+
+		RaycastHit rayHit = new RaycastHit ();
+
+		// Surface was floor
+		if (angle < 45) 
+		{
+			print ("Floor");
+			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth)) 
+			{
+				// Not enough space
+				print("Not enough space!");
+				return false;
+			}
+		} 
+		// Surface was wall
+		else if (angle > 45 && angle < 135) 
+		{
+			print ("Wall");
+			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerLength / 2) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerLength / 2) ||
+				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth / 2) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth / 2)) 
+			{
+				// Not enough space
+				print("Not enough space!");
+				return false;
+			}
+		}
+		// Surface was roof
+		else if (angle > 135)
+		{
+			print ("Roof");
+			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth / 2) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth / 2) ||
+				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth / 2) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth / 2)) 
+			{
+				// Not enough space
+				print("Not enough space!");
+				return false;
+			}
+		}
+
+
+//		if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
+//		    m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerLength) ||
+//		    m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerLength) ||
+//		    m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerLength) ||
+//		    m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerLength)) 
+//		{
+//			// Not enough space
+//			return false;
+//		}
+
+
+		return true;
+	}
+
 	/*
 	 * Raycasts to find out if there is enough space for the player to teleport to target location
 	 */
-	public bool findEnoughSpace(RaycastHit hit) 
-	{
-		float angle = Vector3.Angle (Vector3.up, hit.normal);
-	
-		RaycastHit newHit = new RaycastHit();
-	
-		Debug.DrawRay (hit.point, hit.normal, Color.yellow);
-
-		// If hit was on roof, check down
-		if (angle < 45 && m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength)) 
-		{
-			m_newPosition = transform.position;
-			m_wallPoint = transform.position;
-			return false;
-		}
-		// If hit was on wall, check up and down
-		else if (angle > 45 && angle < 135 &&
-		           m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength / 2f) &&
-		           m_raycaster.doRaycast (out newHit, Vector3.down, hit.point, m_playerLength / 2f)) 
-		{
-			m_newPosition = transform.position;
-			m_wallPoint = transform.position;
-			return false;
-		}
-		// If hit was on wall, check if there is an opposite wall in the way
-		else if (angle > 45 && angle < 135 &&
-					m_raycaster.doRaycast(out newHit, hit.normal, hit.point, hit.normal.magnitude)) 
-		{
-			m_newPosition = transform.position;
-			m_wallPoint = transform.position;
-			return false;
-		
-		} 
-		// If hit was on floor, check up
-		else if (angle > 135 && m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength)) {
-			m_newPosition = transform.position;
-			m_wallPoint = transform.position;
-			return false;
-		}
-		return true;
-	}
+//	public bool findEnoughSpace(RaycastHit hit) 
+//	{
+//		float angle = Vector3.Angle (Vector3.up, hit.normal);
+//	
+//		RaycastHit newHit = new RaycastHit();
+//	
+//		Debug.DrawRay (hit.point, hit.normal, Color.yellow);
+//
+//		// If hit was on roof, check down
+//		if (angle < 45 && m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength)) 
+//		{
+//			m_newPosition = transform.position;
+//			m_wallPoint = transform.position;
+//			return false;
+//		}
+//		// If hit was on wall, check up and down
+//		else if (angle > 45 && angle < 135 &&
+//		           m_raycaster.doRaycast (out newHit, Vector3.up, hit.point, m_playerLength / 2f) &&
+//		           m_raycaster.doRaycast (out newHit, Vector3.down, hit.point, m_playerLength / 2f)) 
+//		{
+//			m_newPosition = transform.position;
+//			m_wallPoint = transform.position;
+//			return false;
+//		}
+//		// If hit was on wall, check if there is an opposite wall in the way
+//		else if (angle > 45 && angle < 135 &&
+//					m_raycaster.doRaycast(out newHit, hit.normal, hit.point, hit.normal.magnitude)) 
+//		{
+//			m_newPosition = transform.position;
+//			m_wallPoint = transform.position;
+//			return false;
+//		
+//		} 
+//		// If hit was on floor, check up
+//		else if (angle > 135 && m_raycaster.doRaycast(out newHit, Vector3.down, hit.point, m_playerLength)) {
+//			m_newPosition = transform.position;
+//			m_wallPoint = transform.position;
+//			return false;
+//		}
+//		return true;
+//	}
 
 	public bool isLedgeBlocked() 
 	{
