@@ -5,32 +5,50 @@ using UnityEngine.UI;
 
 public class ImageFader : MonoBehaviour
 {
-    Image m_Image;
-    public float m_Speed;
+    public static ImageFader instance;
+    public Texture m_Texture;
+    [Tooltip("Time in milliseconds.")]
+    public float m_FadeTime;
+    private float m_TimeElapsed;
+    public bool m_StartVisible;
     public bool m_TextureVisible;
-    private float timeElapsed = 0;
-	// Use this for initialization
-	void Start ()
+    private Color m_Color;
+    public float m_Alpha;
+    private void Awake()
     {
-        m_Image = GetComponent<Image>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		if(m_TextureVisible)
+        if(m_StartVisible)
         {
-            m_Image.color = Color.Lerp(m_Image.color, Color.black, timeElapsed);
+            m_Color = Color.white;
         }
+        instance = this;
+        ImageFader[] imageFaders = FindObjectsOfType<ImageFader>();
+        foreach( ImageFader fader in imageFaders)
+        {
+            if (instance != fader)
+            {
+                Destroy(fader);
+                Debug.LogWarning("Found multiple instances of ImageFader. Deleted instances and left one.");
+            }
+        }
+    }
+    // Use this for initialization
+    private void OnGUI()
+    {
+        if (m_TextureVisible)
+            m_Color = Color.Lerp(Color.clear, Color.white, m_TimeElapsed / m_FadeTime);
         else
-        {
-            m_Image.color = Color.Lerp(m_Image.color, Color.clear, timeElapsed);
-        }
-        timeElapsed += Time.deltaTime * (m_Speed / 10);
-	}
+            m_Color = Color.Lerp(Color.white, Color.clear, m_TimeElapsed / m_FadeTime);
+
+
+        m_TimeElapsed += Time.deltaTime;
+        
+        GUI.color = m_Color;
+        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), m_Texture);
+        m_Alpha = GUI.color.a;
+    }
     public void SetVisible(bool state)
     {
         m_TextureVisible = state;
-        timeElapsed = 0;
+        m_TimeElapsed = 0;
     }
 }

@@ -99,6 +99,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_OriginalCameraPosition;
     private Vector3 initialCameraPos;
     private Vector3 initialPos;
+    private Quaternion initialRotation;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
@@ -149,6 +150,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_cameraOrigin = m_Camera.transform.localPosition;
         initialCameraPos = Camera.main.transform.position;
         initialPos = transform.position;
+        initialRotation = transform.rotation;
 
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
         m_initalHeight = m_CharacterController.height;
@@ -349,19 +351,22 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
         //Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
-        
+
         //Apply saved values if they exist
         if (Checkpoint.isPreviouslySaved())
         {
 
             transform.position = Checkpoint.getSavedPlayerPosition();
             transform.rotation = Checkpoint.getSavedPlayerRotation();
-        }      
+        }
         else
+        {
             transform.position = initialPos;
+            transform.rotation = initialRotation;
+        }
 
         m_MouseLook.Init(transform, m_Camera.transform);
-
+        
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
         GetComponentInChildren<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;

@@ -68,8 +68,10 @@ public class SceneLoader : MonoBehaviour
         if (AllowNewSceneState(scene, true))
         {
             GameManager.GetPlayer().gameObject.SetActive(true);
+            GameManager.GetPlayer().pausePlayer(false);
             SceneManager.LoadScene(scene.ToString(),LoadSceneMode.Additive);
-            
+            ImageFader.instance.SetVisible(false);
+
         }
         else
             Debug.LogWarning("Scene \""+scene.ToString()+"\" is already loaded");
@@ -104,18 +106,22 @@ public class SceneLoader : MonoBehaviour
     }
     public static void LoadMainMenu()
     {
+
         //removes all scenes from the game, except BaseScene
-        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount-1;)
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
-            Scene currentScene = SceneManager.GetSceneAt(SceneManager.sceneCount);
+            Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
+            Debug.Log("Scene Name: " + currentScene.name);
             if (currentScene.name != Scenes.InitialScene.ToString())
+            {
                 SceneManager.UnloadSceneAsync(currentScene);
-            else
-                sceneIndex++;
+                Debug.Log("Will be deleted: "+currentScene.name);
+            }
         }
         //Loads Menu, activates player 
         GameManager.GetPlayer().gameObject.SetActive(false);
         SceneManager.LoadScene(Scenes.MainMenu.ToString(), LoadSceneMode.Additive);
+        ImageFader.instance.SetVisible(false);
     }
     public static void InitialGameLoad(Scenes scene)
     {
