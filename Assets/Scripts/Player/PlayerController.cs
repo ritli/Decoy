@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour, IKillable
     public PlayerState m_playerState = PlayerState.isAlive;
     private PlayerState m_stateBeforePause;
 
+    [FMODUnity.EventRef]
+    public string m_deathEvent;
+
     AnimationState m_aniState = AnimationState.idle;
     Animator m_animator;
 
@@ -63,20 +66,27 @@ public class PlayerController : MonoBehaviour, IKillable
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
-    [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
+    //[SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
+    private VectorBobber m_walkingBobber;
+    private float m_maximumFreefallHeight;
+
+    private bool m_leftGround = false;
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
     public float landingBob = 0.5f;
     [Tooltip("Determines the amount that the camera is moved during a jumping bob effect.")]
     public float jumpingBob = 1.0f;
+    [Tooltip("Determines the amount that the camera is moved during a walking bob effect.")]
+    public float walkingBob = 0.1f;
+    [Tooltip("Determine how far the player must have traveled in the y-axis in order for the landing bobb to play.")]
+    public float landingThreshold = 2.0f;
 
-
-[SerializeField] private float m_StepInterval;
-	[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-	[SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
-	[SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+    [Tooltip("Determines the speed at which the camera bobs when walking.")]
+    public float walkBobSpeed = 0.2f;
+    [Tooltip("Determines the speed at which the camera bobs when jumping and landing.")]
+    public float jumpBobSpeed = 0.2f;
 
     private CharacterController m_CharacterController;
     private PlayerTeleport m_teleport;
@@ -103,7 +113,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_velocityScale;
     private float m_scalingStepAfterTeleport = 0.1f;
 
-
     private float m_crouchTimeElapsed;
     private float m_YRotation;
     private float m_initalHeight;
@@ -121,12 +130,14 @@ public class PlayerController : MonoBehaviour, IKillable
 	private float m_NextStep;
 	private AudioSource m_AudioSource;
 
-
+    bool m_inDeathState = false;
 
     private void Start()
     {
         m_cameraBobber = GetComponent<VectorBobber>();
-        
+        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+        m_walkingBobber.setBobSpeed(walkBobSpeed);
+        m_cameraBobber.setBobSpeed(jumpBobSpeed);
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
@@ -149,7 +160,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
-        m_HeadBob.Setup(m_Camera, m_StepInterval);
+        //m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
@@ -163,6 +174,31 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_playerState = PlayerState.isDead;
         m_controlsEnabled = false;
+        if (!m_inDeathState)
+        {
+            m_inDeathState = true;
+            FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+            StartCoroutine(KillRoutine());
+        }
+
+    }
+
+    IEnumerator KillRoutine()
+    {
+        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
+        float time = 0;
+        float deathTime = 0.6f;
+
+        Transform cam = overlay.transform;
+
+        while (time < deathTime)
+        {
+            cam.Translate(Random.insideUnitSphere * 0.1f + Vector3.down * Time.deltaTime);
+
+            overlay.intensity = Mathf.Lerp(1, 0, time);
+            yield return new WaitForEndOfFrame();
+            time += Time.deltaTime;
+        }
     }
 
 
@@ -328,6 +364,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
+        Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;
+        m_inDeathState = false;
+        m_controlsEnabled = true;
 
         GameManager.resetActivations();
     }
@@ -369,56 +408,66 @@ public class PlayerController : MonoBehaviour, IKillable
             break;
         }
 
-
+        UpdateCameraPosition(0);
     }
 
     void Jump()
     {
-		if (!m_Jump && !m_Jumping) 
+		if (!m_Jump && !m_Jumping && m_controlsEnabled) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
         }
 		
-        if (m_Jump && !m_ledgeDetect.canGrab())
+        // Keep track of the maximum height achieved while in air for measuring when landing
+        if (!m_CharacterController.isGrounded)
         {
-            m_cameraBobber.startBob(jumpingBob);
+            if (transform.position.y > m_maximumFreefallHeight || !m_leftGround)
+                m_maximumFreefallHeight = transform.position.y;
+
+            if (!m_leftGround)
+                m_leftGround = true;
         }
+
+        if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
+            m_cameraBobber.startBob(jumpingBob, false);
 
         if (m_ledgeInRange)
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
+                m_cameraBobber.stopBob();
                 m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
             }
             if (m_Jump)
             {
                 m_Jump = false;
             }
-            //StartCoroutine(m_JumpBob.DoBobCycle());
 
-            m_MoveDir.y = 0f;
             m_Jumping = false;
         }
 
 		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) 
 		{
             // Start the transformation of camera based on landBob
-            //m_cameraBobber.stopBob();
-            m_cameraBobber.startBob(landingBob);
+            if (m_maximumFreefallHeight - transform.position.y >= landingThreshold)
+            {
+                m_cameraBobber.startBob(landingBob, false);
+            }
+
+
 			//PlayLandingSound ();
 			m_MoveDir.y = 0f;
 			m_Jumping = false;
+            m_leftGround = false;
 		}
 		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
 		{
 			m_MoveDir.y = 0f;
 		}
-        
-        //		print("playerController: " + m_ledgeDetect.canGrab());
     }
     private void FixedUpdate()
     {
-		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping()) 
+		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled) 
 		{
 			Move ();
 		}	
@@ -448,16 +497,32 @@ public class PlayerController : MonoBehaviour, IKillable
             m_speedWindup -= m_JumpAirVelDecay;
         }
 
+        if (!m_CharacterController.isGrounded)
+            m_walkingBobber.stopBob();
+
         //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
         else if (m_Input.magnitude > 0)
         {
-            // IMPLEMENT MOVEMENT BOBBING
-            print("Moving");
+
+            //m_cameraBobber.startBob(walkingBob, true);
+            if (!m_walkingBobber.isBobbing())
+            {
+                m_walkingBobber.startBob(walkingBob, true);
+            }
+
             m_speedWindup += m_WindupScale;
         }
         else
         {
             m_speedWindup -= m_WindupScale;
+
+            if (m_walkingBobber.isBobbing())
+            {
+                m_walkingBobber.stopBob();
+            }
+
+            // if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
+            //  m_cameraBobber.stopBob();
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
@@ -529,8 +594,6 @@ public class PlayerController : MonoBehaviour, IKillable
         }
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
-        
-        UpdateCameraPosition(speed);
 
         m_MouseLook.UpdateCursorLock();
 
@@ -559,8 +622,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void UpdateCameraPosition(float speed)
     {
-        
-
         if (!m_UseHeadBob)
         {
             return;
@@ -582,7 +643,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Camera.transform.localPosition = m_cameraOrigin;
         m_cameraOrigin = m_Camera.transform.localPosition;
 
-        m_Camera.transform.localPosition += m_cameraBobber.getOffset();
+        m_Camera.transform.localPosition += m_cameraBobber.getOffset() + m_walkingBobber.getOffset();
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

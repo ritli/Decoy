@@ -5,7 +5,7 @@ using UnityEngine;
 public class VectorBobber : MonoBehaviour {
 
     
-    public float bobSpeed;
+    private float bobSpeed = 0.2f;
 
     private Vector3 currentOffset = new Vector3(0, 0, 0);
     private bool stopping = false;
@@ -13,15 +13,18 @@ public class VectorBobber : MonoBehaviour {
     private float m_bobAmount;
 
     private bool keepbobbing = false;
+    private bool bobbingDone = true;
 
     // Initiate a bobbing coroutine with the given amount
-    public void startBob(float bobAmount)
+    public void startBob(float bobAmount, bool loopBobbing)
     {
         m_bobAmount = bobAmount;
-        
+        keepbobbing = loopBobbing;
+
         if (Mathf.Sign(bobAmount) == -1)
             m_bobDown = true;
 
+        bobbingDone = false;
         // Start bobbing offset
         StartCoroutine(gradualBob());
     }
@@ -30,25 +33,24 @@ public class VectorBobber : MonoBehaviour {
     public void stopBob()
     {
         stopping = true;
-        currentOffset = new Vector3(0, 0, 0);
     }
 
     // Coroutine that iterates the bobbing effect when it's been started
     IEnumerator gradualBob()
     {
         float timePassed = 0.0f;
-        bool done = false;
-
+        
         // Iterate the coroutine until it has "finished"
-        while (!done)
+        while (!bobbingDone)
         {
             // Stop the routine if stopBob() has been called
             if (stopping)
             {
                 stopping = false;
+                bobbingDone = true;
+                currentOffset = new Vector3(0, 0, 0);
                 yield break;
             }
-            
             // Update the offset by the speed that is specified
             timePassed += bobSpeed;
             currentOffset.y = m_bobAmount * Mathf.Sin(timePassed);
@@ -68,5 +70,20 @@ public class VectorBobber : MonoBehaviour {
     public Vector3 getOffset()
     {
         return currentOffset;
+    }
+
+    public bool isBobbing()
+    {
+        return !bobbingDone;
+    }
+
+    public bool isLooping()
+    {
+        return keepbobbing;
+    }
+
+    public void setBobSpeed(float speed)
+    {
+        bobSpeed = speed;
     }
 }
