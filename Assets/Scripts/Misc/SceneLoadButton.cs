@@ -18,6 +18,8 @@ public class SceneLoadButton : MonoBehaviour {
     }
     void RequestSceneLoad()
     {
+        GameManager.GetPlayer().gameObject.SetActive(true);
+        GameManager.GetPlayer().ResetPlayer();
         SceneLoader.InitialGameLoad(m_SelectedScene);
     }
 }
