@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,10 +12,26 @@ public class LedgeLerp : MonoBehaviour
 	private float m_distance;
     private float m_incrementor = 0f;
     private float m_distanceThreshold = 0.3f;
-
+    private PlayerController m_playerController;
 
     public float height;
 	public float lerpSpeed;
+    [Tooltip("Scales the velocity after a ledgeclimb. -100 implies a 100% reduction in velocity after a ledgeclimb.")]
+    public float velocityReduction = -110.0f;
+
+    void Start()
+    {
+        // Attempt to get playercontroller
+        try
+        {
+            m_playerController = GameManager.GetPlayer();
+        }
+        catch (NullReferenceException msg)
+        {
+            Debug.LogError("Error, null player: " + msg.Message);
+            Debug.LogError(msg.StackTrace);
+        }
+    }
 
     void Update()
     {
@@ -44,7 +61,9 @@ public class LedgeLerp : MonoBehaviour
 			{
 	            m_incrementor = 0;
 	            m_beginLerp = false;
-	        }
+                m_playerController.modifyVelocity(velocityReduction/100.0f);
+                print("Finished ledgelerp");
+            }
 		}
 //		Debug.DrawRay (m_startPos, Vector3.up, Color.yellow, 5f);
 //		Debug.DrawRay (m_targetPos, Vector3.up, Color.cyan, 5f);

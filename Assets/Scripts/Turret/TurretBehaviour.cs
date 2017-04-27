@@ -24,6 +24,8 @@ public class TurretBehaviour : MonoBehaviour
     float m_timeToKillElapsed = 0;
 
     ParticleSystem m_fireParticles;
+    ParticleSystem m_muzzleflare1;
+    ParticleSystem m_muzzleflare2;
 
     IKillable m_Target;
 
@@ -54,6 +56,8 @@ public class TurretBehaviour : MonoBehaviour
         m_Raycast = GetComponent<Raycast>();
         turretState = TurretState.isIdle;
         m_fireParticles = GetComponentInChildren<ParticleSystem>();
+        m_muzzleflare1 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare").GetComponent<ParticleSystem>();
+        m_muzzleflare2 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare2").GetComponent<ParticleSystem>();
         m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
 
         m_audio.PlayEvent(2, false);
@@ -152,9 +156,11 @@ public class TurretBehaviour : MonoBehaviour
                     if (!m_shotAudioPlayed)
                     {
                         m_shotAudioPlayed = true;
-                        m_audio.PlayEventTimed(0, 2, 0.4f, true);
+                        //m_audio.PlayEventTimed(0, 2, 0.4f, true);
+                        m_audio.PlayEvent(0, true);
                         m_Target.Kill();
-                        m_fireParticles.Emit(20);
+
+                        StartCoroutine(ShootSequence());
                     }
                 }
                 //count up timer
@@ -169,6 +175,29 @@ public class TurretBehaviour : MonoBehaviour
         m_LookAt.lookAtPosition(m_TargetPosition);
     }
     
+    IEnumerator ShootSequence()
+    {
+        m_fireParticles.Emit(40);
+
+        m_muzzleflare1.Emit(15);
+        m_muzzleflare2.Emit(15);
+
+        yield return new WaitForSeconds(0.05f);
+
+        m_muzzleflare1.Emit(15);
+        m_muzzleflare2.Emit(15);
+
+        yield return new WaitForSeconds(0.05f);
+
+        m_muzzleflare1.Emit(15);
+        m_muzzleflare2.Emit(15);
+
+        yield return new WaitForSeconds(0.05f);
+
+        m_muzzleflare1.Emit(15);
+        m_muzzleflare2.Emit(15);
+    }
+
     void CheckPlaySweepSound()
     {
         Vector3 playerpos = GameManager.GetPlayer().transform.position;
