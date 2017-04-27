@@ -55,9 +55,6 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("How much of WASD movement is applied when airborne. (0 = 0%, 1 = 100%)")]
     [Range(0,1)]
     [SerializeField] private float m_JumpAirControl;
-    [Tooltip("How much force should be applied when jumping with no previous velocity.")]
-    [Range(0, 50)]
-    public float m_stationaryJumpAirControl;
     private Vector3 signedJumpVector;
     private float m_airDecreaseY;
     private float m_airDecreaseX;
@@ -422,7 +419,7 @@ public class PlayerController : MonoBehaviour, IKillable
     void Jump()
     {
         
-		if (!m_Jump && !m_Jumping && m_controlsEnabled) 
+		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
         }
@@ -563,42 +560,45 @@ public class PlayerController : MonoBehaviour, IKillable
         //Always move along the camera forward as it is the direction that it being aimed at
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
-
-        if (m_Jumping)
+        // If character is in middle of jump and controller is not currently scaling the velocity.
+        if (m_Jumping && !m_scalingVelocity)
         {
             desiredMove = m_jumpVector;
 
-            //Vector3 newVector = m_jumpVector + transform.forward * GetInput().y * m_JumpAirControl 
-            //    + transform.right * GetInput().x * m_JumpAirControl;
+            // Create the next update to the vector in order to compare with the current and judge whether the transformation should occur.
+            Vector3 comingVec = m_jumpVector + transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
 
-            // Move L/R
-            m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
+            // If the new vector has an opposite signed angle than the current, don't update the jumpVector
+            if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec)))
+                m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
+            // If the new vector has an opposite signed angle than the current, don't update the jumpVector
+            //print("Dot product: " + Vector3.Dot(desiredMove, comingVec));
+            print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
+            //print("Upcoming angle: " + Vector3.Dot(comingVec, transform.forward));
+
+            if (Vector3.Dot(desiredMove, m_jumpVectorR) < 0)
+                m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
+
+            // Update velocity inpact on each axis based on input
             m_airDecreaseY += GetInput().y * m_JumpAirControl;
             m_airDecreaseX += GetInput().x * m_JumpAirControl;
 
             // >= 0: Transform moving forward, otherwise: Backwards. Update speed change accordingly.
             if (Vector3.Dot(transform.forward, desiredMove) >= 0)
-            {
                 speed += m_airDecreaseY;
-            }
             else
-            {
                 speed -= m_airDecreaseY;
-            }
 
+            // Same as previous but regarding L/R movement
             if (Vector3.Dot(transform.right, desiredMove) >= 0)
-            {
                 speed += m_airDecreaseX;
-            }
             else
-            {
                 speed -= m_airDecreaseX;
-            }
 
             // Make sure the player cannot accelerate by moving in the air.
             speed = Mathf.Clamp(speed, 0, m_WalkSpeed);
-            print(speed);
+            //print(speed);
         }
 
         //Get a normal for the surface that is being touched to move along it
@@ -609,17 +609,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
         //print("Desired movement: " + desiredMove);
 
-        // If stationary when jumping, use stationary force instead of ordinary speed. Otherwise apply speed as normal.
-        if (speed == 0 && m_Jumping)
-        {
-            m_MoveDir.x = desiredMove.x * m_stationaryJumpAirControl;
-            m_MoveDir.z = desiredMove.z * m_stationaryJumpAirControl;
-        }
-        else
-        {
-            m_MoveDir.x = desiredMove.x * speed;
-            m_MoveDir.z = desiredMove.z * speed;
-        }
+        m_MoveDir.x = desiredMove.x * speed;
+        m_MoveDir.z = desiredMove.z * speed;
 
         //If player is not on ground
         if (m_CharacterController.isGrounded)
