@@ -577,7 +577,8 @@ public class PlayerController : MonoBehaviour, IKillable
             print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
             //print("Upcoming angle: " + Vector3.Dot(comingVec, transform.forward));
 
-            if (Vector3.Dot(desiredMove, m_jumpVectorR) < 0)
+            // GetInput().x > 0 && trans
+            if (true)
                 m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
 
             // Update velocity inpact on each axis based on input
