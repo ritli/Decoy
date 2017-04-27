@@ -28,6 +28,7 @@ public class PlayerTeleport : MonoBehaviour {
     PlayerController m_player;
     public GameObject m_indi;
     private float m_playerLength;
+	private float m_playerWidth;
     private bool m_cancelTeleport = false;
     private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
@@ -69,6 +70,7 @@ public class PlayerTeleport : MonoBehaviour {
 	void Start ()
     {
 		m_playerLength = GetComponent<CharacterController>().height;
+		m_playerWidth = GetComponent<CharacterController>().radius * 2;
         m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
 		m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
@@ -338,7 +340,10 @@ public class PlayerTeleport : MonoBehaviour {
 					else
 						m_foundLedge = false;
 				}
-				m_indi.transform.position = hit.point + hit.normal;
+				if (m_ledgeDetection.isIndPosSet())
+					m_indi.transform.position = m_ledgeDetection.getValidIndPosition ();
+				else
+					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
 			}
 

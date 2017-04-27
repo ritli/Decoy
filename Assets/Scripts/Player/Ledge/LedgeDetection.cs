@@ -28,6 +28,8 @@ public class LedgeDetection : MonoBehaviour {
 
 	// Variables for findValidPosition()
 	private float m_distanceDelta = 0.5f;
+	private Vector3 m_validIndPosition = new Vector3(0, 0, 0);
+	private bool m_indPositionSet = false;
 
 	private Vector3 m_invalidPosition = new Vector3(0, 0, 0);
 
@@ -111,7 +113,7 @@ public class LedgeDetection : MonoBehaviour {
 			{
 				m_roof = true;
 			}
-			Debug.DrawRay (m_collider.ClosestPointOnBounds(transform.position), normal * 3f, Color.red);
+//			Debug.DrawRay (m_collider.ClosestPointOnBounds(transform.position), normal * 3f, Color.red);
 		}
 	}
 
@@ -288,53 +290,68 @@ public class LedgeDetection : MonoBehaviour {
 			localUp = Vector3.Cross (localRight, hit.normal);
 		}
 		// Move the point up a bit to prevent it from raycasting from inside the object
-		hit.point = hit.point + hit.normal * 0.2f;
+		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
+
 		Debug.DrawRay(hit.point, localRight, Color.magenta);
 		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
 		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
 
 		m_invalidPosition = hit.point;
 
-		RaycastHit rayHit = new RaycastHit ();
+		RaycastHit rayHit = new RaycastHit();
+		RaycastHit wallNormalRayHit = new RaycastHit();
 		bool enoughSpace = true;
+
 		// Surface was floor
 		if (angle < 45) 
 		{
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth)) 
+				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth)) 
 			{
+				
 				// Not enough space
 				enoughSpace = false;
 			}
+			m_indPositionSet = false;
 		}
 		// Surface was wall
 		else if (angle > 45 && angle < 135) 
 		{
-			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerLength) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth )) 
+			if (m_raycaster.doRaycast (out wallNormalRayHit, hit.normal, hit.point, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerLength) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth )) 
 			{
+				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, new Color(0.751265f, 0.25678f, 0.3415136f));
 				// Not enough space
+				m_indPositionSet = true;
+				
+				// Sets a position based on the initial hit, it's normal, and the new hit's normal.
+				m_validIndPosition = hit.point + hit.normal + wallNormalRayHit.normal;
 				enoughSpace = false;
-			}
+
+				Debug.DrawRay(hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
+			} else
+				m_indPositionSet = false;
 		}
 		// Surface was roof
 		else if (angle > 135)
 		{
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, hit.point, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, hit.point, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localRight, hit.point, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, hit.point, m_playerWidth)) 
+				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth)) 
 			{
 				// Not enough space
 				enoughSpace = false;
 			}
+
+			m_indPositionSet = false;
 		}
 		if (!enoughSpace)
 			print ("Not enough space!");
@@ -425,5 +442,15 @@ public class LedgeDetection : MonoBehaviour {
 	public Vector3 getInvalidPosition() 
 	{
 		return m_invalidPosition;
+	}
+
+	public bool isIndPosSet() 
+	{
+		return m_indPositionSet;
+	}
+
+	public Vector3 getValidIndPosition() 
+	{
+		return m_validIndPosition;
 	}
 }
