@@ -5,15 +5,16 @@ using UnityEngine;
 
 public class MainMenuLoadButton : MonoBehaviour {
 
-    private void OnEnable()
+
+    public void RequestMainMenuLoad()
     {
-        GetComponent<Button>().onClick.AddListener(RequestMainMenuLoad);
+        ImageFader.instance.SetVisible(true);
+        Invoke("DoLoadMenu", ImageFader.instance.m_FadeTime);
+        PauseManager.resumeGame();
+        GameManager.GetPlayer().pausePlayer(true);
+
     }
-    private void OnDisable()
-    {
-        GetComponent<Button>().onClick.RemoveListener(RequestMainMenuLoad);
-    }
-    void RequestMainMenuLoad()
+    void DoLoadMenu()
     {
         GameManager.GetPlayer().enabled = false;
         SceneLoader.LoadMainMenu();
