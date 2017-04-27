@@ -126,17 +126,26 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
 
-
-	private float m_StepCycle;
+    private float m_airTime;
+    private float m_StepCycle;
 	private float m_NextStep;
 	private AudioSource m_AudioSource;
 
     bool m_inDeathState = false;
 
+    public delegate void landEvent();
+    public landEvent onLand;
+
+    void Awake()
+    {
+        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+        m_walkingBobber.WalkBob = true;
+    }
+
     private void Start()
     {
         m_cameraBobber = GetComponent<VectorBobber>();
-        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+
         m_walkingBobber.setBobSpeed(walkBobSpeed);
         m_cameraBobber.setBobSpeed(jumpBobSpeed);
 
@@ -144,7 +153,6 @@ public class PlayerController : MonoBehaviour, IKillable
         m_teleport = GetComponent<PlayerTeleport>();
         m_animator = Camera.main.GetComponentInChildren<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
-
 
         m_Camera = Camera.main;
         m_cameraOrigin = m_Camera.transform.localPosition;
@@ -179,7 +187,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!m_inDeathState)
         {
             m_inDeathState = true;
-            FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+
             StartCoroutine(KillRoutine());
         }
 
@@ -187,11 +195,15 @@ public class PlayerController : MonoBehaviour, IKillable
 
     IEnumerator KillRoutine()
     {
+        yield return new WaitForSeconds(0.1f);
+        FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+
         UnityStandardAssets.ImageEffects.ScreenOverlay overlay = Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
         float deathTime = 0.6f;
 
         Transform cam = overlay.transform;
+
 
         while (time < deathTime)
         {
@@ -203,6 +215,10 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
+    public VectorBobber GetWalkBob()
+    {
+        return m_walkingBobber;
+    }
 
     void UpdateAnimator()
     {
@@ -459,12 +475,16 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_cameraBobber.startBob(landingBob, false);
             }
 
+            if (onLand != null && m_airTime > 0.25f)
+            {
+                onLand();
+            }
 
-			//PlayLandingSound ();
-			m_MoveDir.y = 0f;
+            m_MoveDir.y = 0f;
 			m_Jumping = false;
             m_leftGround = false;
-		}
+            m_airTime = 0;
+        }
 		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
 		{
 			m_MoveDir.y = 0f;
@@ -472,6 +492,11 @@ public class PlayerController : MonoBehaviour, IKillable
     }
     private void FixedUpdate()
     {
+        if (!m_CharacterController.isGrounded)
+        {
+            m_airTime += Time.fixedDeltaTime;
+        }
+
 		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled) 
 		{
 			Move ();
