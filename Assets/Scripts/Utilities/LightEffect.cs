@@ -28,7 +28,7 @@ public class LightEffect : MonoBehaviour {
         m_internalMax = m_max;
         m_internalMin = m_min;
 
-        if (!m_lights[0])
+        if (m_lights.Length == 0)
         {
             m_lights = new Light[1];
 

@@ -68,7 +68,7 @@ public class PlayerTeleport : MonoBehaviour {
 	void Start ()
     {
 		m_playerLength = GetComponent<CharacterController>().height;
-        m_partController = Camera.main.GetComponent<ParticleController>();
+        m_partController = transform.FindChild("Camera").GetComponentInChildren<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
 		//m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
         m_charController = GetComponent<CharacterController>();
@@ -91,7 +91,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
 
-        m_fovKick.Setup(Camera.main);
+        m_fovKick.Setup(transform.FindChild("Camera").GetComponent<Camera>());
         m_player.setScaleDecay(velocityDecayOnTeleport);
     }
     private void OnEnable()

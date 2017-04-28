@@ -19,7 +19,10 @@ enum AnimationState
 [RequireComponent(typeof (CharacterController), typeof(VectorBobber))]
 public class PlayerController : MonoBehaviour, IKillable
 {
+    [Header("Editor Vars")]
+    public bool allowReset;
 
+    [Header("States")]
     public PlayerState m_playerState = PlayerState.isAlive;
     private PlayerState m_stateBeforePause;
 
