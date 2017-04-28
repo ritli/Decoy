@@ -5,9 +5,15 @@ public class Decoy : MonoBehaviour, IKillable {
 
     public float m_timeTillDeath = 1f;
     float m_decayTimeElapsed = 0;
+    Material fadingMat;
 
     PlayerState m_decoyState;
     PlayerState m_stateBeforePause;
+
+    private void Awake()
+    {
+         fadingMat = GetComponent<MeshRenderer>().material;
+    }
 
     private void OnEnable()
     {
@@ -17,7 +23,6 @@ public class Decoy : MonoBehaviour, IKillable {
     {
         PauseManager.OnPause -= pauseDecoy;
     }
-
 
     public void Kill()
     {
@@ -49,6 +54,9 @@ public class Decoy : MonoBehaviour, IKillable {
     void DecayUpdate()
     {
         m_decayTimeElapsed += Time.deltaTime;
+        // Change dissolve variable on the shader in order to gradually decay the decoy
+        if (fadingMat.HasProperty("_Dissolveamount"))
+            fadingMat.SetFloat("_Dissolveamount", Mathf.Clamp01(m_decayTimeElapsed/m_timeTillDeath));
 
         if (m_decayTimeElapsed > m_timeTillDeath)
         {
