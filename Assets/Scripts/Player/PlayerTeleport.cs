@@ -148,14 +148,17 @@ public class PlayerTeleport : MonoBehaviour {
                 float step = teleportSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
-                // When the players position has arrived, stop moving.
+                // When the players position has arrived, stop moving. //////// BUG: Distance is 0 even though it shouldnt be
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
 					m_arrived = true;
                     m_ledgeDetection.arrivedAtWall();
 					m_charController.detectCollisions = true;
 
+                    print("My position: " + transform.position);
+                    print("Teletarget: " + m_teleportTo);
 					if (m_foundLedge) {
+                        print("Lerping edge!");
 						m_ledgeLerp.lerp(m_ledgeLerpTo);
 						m_foundLedge = false;  
                     }
@@ -182,23 +185,25 @@ public class PlayerTeleport : MonoBehaviour {
 
 					if (m_foundLedge) 
 					{
-//						print ("Found ledge");
+						print ("Found ledge");
 						moveTo (m_ledgeDetection.getWallPoint ());
 						//m_foundLedge = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
-//						print ("Ledge blocked");
+						print ("Ledge blocked");
 						moveTo (m_ledgeDetection.getNewPosition ());
 					}
 					else if (!m_enoughSpace) 
 					{
+                        print("Not enough space");
 						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
 							moveTo(m_ledgeDetection.getNewPosition ());
 							
 					}
 					else
                     {
+                        print("Else ledge");
 						m_ledgeDetection.isTeleporting();
                         moveTo(m_indi.transform.position);
                     }
