@@ -55,6 +55,9 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("How much of WASD movement is applied when airborne. (0 = 0%, 1 = 100%)")]
     [Range(0,1)]
     [SerializeField] private float m_JumpAirControl;
+    private Vector3 signedJumpVector;
+    private float m_airDecreaseY;
+    private float m_airDecreaseX;
 
     //Gravity vars
     [Header("Gravity Variables")]
@@ -74,6 +77,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
+
+    [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
     public float landingBob = 0.5f;
     [Tooltip("Determines the amount that the camera is moved during a jumping bob effect.")]
@@ -418,7 +423,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Jump()
     {
-		if (!m_Jump && !m_Jumping && m_controlsEnabled) 
+        
+		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
         }
@@ -508,7 +514,6 @@ public class PlayerController : MonoBehaviour, IKillable
         //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
         else if (m_Input.magnitude > 0)
         {
-
             //m_cameraBobber.startBob(walkingBob, true);
             if (!m_walkingBobber.isBobbing())
             {
@@ -526,8 +531,6 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_walkingBobber.stopBob();
             }
 
-            // if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
-            //  m_cameraBobber.stopBob();
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
@@ -539,7 +542,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_scalingVelocity)
         {
             speed += (m_velocityScale * speed);
-
+            
             m_velocityScale = Mathf.MoveTowards(m_velocityScale, 0, m_scalingStepAfterTeleport);
 
             if (m_velocityScale == 0)
@@ -562,11 +565,46 @@ public class PlayerController : MonoBehaviour, IKillable
         //Always move along the camera forward as it is the direction that it being aimed at
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
-
-        if (m_Jumping)
+        // If character is in middle of jump and controller is not currently scaling the velocity.
+        if (m_Jumping && !m_scalingVelocity)
         {
             desiredMove = m_jumpVector;
-            m_jumpVector += m_MoveDir.normalized * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+
+            // Create the next update to the vector in order to compare with the current and judge whether the transformation should occur.
+            Vector3 comingVec = m_jumpVector + transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+
+            // If the new vector has an opposite signed angle than the current, don't update the jumpVector
+            if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec)))
+                m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
+
+            // If the new vector has an opposite signed angle than the current, don't update the jumpVector
+            //print("Dot product: " + Vector3.Dot(desiredMove, comingVec));
+            print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
+            //print("Upcoming angle: " + Vector3.Dot(comingVec, transform.forward));
+
+            // GetInput().x > 0 && trans
+            if (true)
+                m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
+
+            // Update velocity inpact on each axis based on input
+            m_airDecreaseY += GetInput().y * m_JumpAirControl;
+            m_airDecreaseX += GetInput().x * m_JumpAirControl;
+
+            // >= 0: Transform moving forward, otherwise: Backwards. Update speed change accordingly.
+            if (Vector3.Dot(transform.forward, desiredMove) >= 0)
+                speed += m_airDecreaseY;
+            else
+                speed -= m_airDecreaseY;
+
+            // Same as previous but regarding L/R movement
+            if (Vector3.Dot(transform.right, desiredMove) >= 0)
+                speed += m_airDecreaseX;
+            else
+                speed -= m_airDecreaseX;
+
+            // Make sure the player cannot accelerate by moving in the air.
+            speed = Mathf.Clamp(speed, 0, m_WalkSpeed);
+            //print(speed);
         }
 
         //Get a normal for the surface that is being touched to move along it
@@ -574,6 +612,8 @@ public class PlayerController : MonoBehaviour, IKillable
         Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo, m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 
         desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+
+        //print("Desired movement: " + desiredMove);
 
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
@@ -590,6 +630,9 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_MoveDir.y = m_JumpForce;
                 m_Jump = false;
                 m_Jumping = true;
+                signedJumpVector = new Vector3(Mathf.Sign(m_MoveDir.x), 0, Mathf.Sign(m_MoveDir.z));
+                m_airDecreaseY = 0.0f;
+                m_airDecreaseX = 0.0f;
             }
 
         }
