@@ -144,6 +144,14 @@ public class PlayerController : MonoBehaviour, IKillable
     public delegate void landEvent();
     public landEvent onLand;
 
+    public bool IsCrouching
+    {
+        get
+        {
+            return m_crouching;
+        }
+    }
+    
     void Awake()
     {
         m_walkingBobber = gameObject.AddComponent<VectorBobber>();
@@ -351,16 +359,24 @@ public class PlayerController : MonoBehaviour, IKillable
 
     bool CheckForObstruction()
     {
+        float length = (m_initalHeight - m_CharacterController.height) - 0.2f;
         Vector3 dir = Vector3.up;
-        Vector3 offset = transform.forward * 0.4f;
+        Vector3 offset = m_CharacterController.height * 0.5f * Vector3.up;
+
+        if (Physics.Raycast(transform.position + offset, dir, length))
+        {
+            return true;
+        }
+
+        offset += transform.forward * 0.15f;
 
         for (int i = 0; i < 4; i++)
         {
-            Ray ray = new Ray(transform.position + offset, dir * 0.1f);
+            Ray ray = new Ray(transform.position + offset, dir * length);
 
             Debug.DrawRay(ray.origin, ray.direction);
 
-            if (Physics.Raycast(ray, 0.1f, 0))
+            if (Physics.Raycast(ray, length, 0))
             {
                 return true;
             }
