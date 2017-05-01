@@ -332,10 +332,9 @@ public class PlayerController : MonoBehaviour, IKillable
             float currentHeight = m_CharacterController.height;
             float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTimeElapsed);
 
-            transform.Translate(Vector3.down * (currentHeight - newHeight) / 2.5f);
             m_CharacterController.height = newHeight;
-
         }
+
         else
         {
             m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
@@ -622,11 +621,8 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
             // If the new vector has an opposite signed angle than the current, don't update the jumpVector
-            //print("Dot product: " + Vector3.Dot(desiredMove, comingVec));
             print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
-            //print("Upcoming angle: " + Vector3.Dot(comingVec, transform.forward));
 
-            // GetInput().x > 0 && trans
             if (true)
                 m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
 
@@ -636,19 +632,26 @@ public class PlayerController : MonoBehaviour, IKillable
 
             // >= 0: Transform moving forward, otherwise: Backwards. Update speed change accordingly.
             if (Vector3.Dot(transform.forward, desiredMove) >= 0)
+            {
                 speed += m_airDecreaseY;
+            }
             else
+            {
                 speed -= m_airDecreaseY;
+            }
 
             // Same as previous but regarding L/R movement
             if (Vector3.Dot(transform.right, desiredMove) >= 0)
+            {
                 speed += m_airDecreaseX;
+            }
             else
+            {
                 speed -= m_airDecreaseX;
+            }
 
             // Make sure the player cannot accelerate by moving in the air.
             speed = Mathf.Clamp(speed, 0, m_WalkSpeed);
-            //print(speed);
         }
 
         //Get a normal for the surface that is being touched to move along it
