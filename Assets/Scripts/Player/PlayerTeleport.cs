@@ -70,10 +70,11 @@ public class PlayerTeleport : MonoBehaviour {
 	void Start ()
     {
 		m_playerLength = GetComponent<CharacterController>().height;
+
+        m_partController = transform.FindChild("Camera").GetComponentInChildren<ParticleController>();
 		m_playerWidth = GetComponent<CharacterController>().radius * 2;
-        m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
-		m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
+		//m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
         m_charController = GetComponent<CharacterController>();
 		m_ledgeDetection = GetComponent<LedgeDetection>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
@@ -94,7 +95,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
 
-        m_fovKick.Setup(Camera.main);
+        m_fovKick.Setup(transform.FindChild("Camera").GetComponent<Camera>());
         m_player.setScaleDecay(velocityDecayOnTeleport);
     }
     private void OnEnable()
@@ -121,14 +122,22 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_indi.activeSelf)
             {
 				if (m_foundLedge)
-					m_particleSystem.startColor = Color.blue;
-					//m_particleSystem.color = Color.red;
-				else if (!m_enoughSpace)
-					m_particleSystem.startColor = Color.red;
-					//m_particleSystem.color = Color.yellow;
+                {
+                    //m_particleSystem.startColor = Color.blue;
+                    //m_particleSystem.color = Color.red;
+                }
+                else if (!m_enoughSpace)
+                {
+                    //m_particleSystem.startColor = Color.red;
+                    //m_particleSystem.color = Color.yellow;
+                }
+
                 else
-					m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
-					//m_particleSystem.color = Color.white;
+                {
+                    //m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
+                    //m_particleSystem.color = Color.white;
+                }
+
             }
 
             if (m_cooldownTimer.isTimeUp())
