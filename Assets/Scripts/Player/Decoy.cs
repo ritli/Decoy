@@ -12,7 +12,7 @@ public class Decoy : MonoBehaviour, IKillable {
 
     private void Awake()
     {
-         fadingMat = GetComponent<MeshRenderer>().material;
+         fadingMat = GetComponentInChildren<SkinnedMeshRenderer>().material;
     }
 
     private void OnEnable()

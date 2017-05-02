@@ -19,7 +19,10 @@ enum AnimationState
 [RequireComponent(typeof (CharacterController), typeof(VectorBobber))]
 public class PlayerController : MonoBehaviour, IKillable
 {
+    [Header("Editor Vars")]
+    public bool allowReset;
 
+    [Header("States")]
     public PlayerState m_playerState = PlayerState.isAlive;
     private PlayerState m_stateBeforePause;
 
@@ -131,17 +134,34 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
 
-
-	private float m_StepCycle;
+    private float m_airTime;
+    private float m_StepCycle;
 	private float m_NextStep;
 	private AudioSource m_AudioSource;
 
     bool m_inDeathState = false;
 
+    public delegate void landEvent();
+    public landEvent onLand;
+
+    public bool IsCrouching
+    {
+        get
+        {
+            return m_crouching;
+        }
+    }
+    
+    void Awake()
+    {
+        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+        m_walkingBobber.WalkBob = true;
+    }
+
     private void Start()
     {
         m_cameraBobber = GetComponent<VectorBobber>();
-        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+
         m_walkingBobber.setBobSpeed(walkBobSpeed);
         m_cameraBobber.setBobSpeed(jumpBobSpeed);
 
@@ -149,7 +169,6 @@ public class PlayerController : MonoBehaviour, IKillable
         m_teleport = GetComponent<PlayerTeleport>();
         m_animator = Camera.main.GetComponentInChildren<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
-
 
         m_Camera = Camera.main;
         m_cameraOrigin = m_Camera.transform.localPosition;
@@ -184,7 +203,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!m_inDeathState)
         {
             m_inDeathState = true;
-            FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+
             StartCoroutine(KillRoutine());
         }
 
@@ -192,11 +211,15 @@ public class PlayerController : MonoBehaviour, IKillable
 
     IEnumerator KillRoutine()
     {
+        yield return new WaitForSeconds(0.1f);
+        FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+
         UnityStandardAssets.ImageEffects.ScreenOverlay overlay = Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
         float deathTime = 0.6f;
 
         Transform cam = overlay.transform;
+
 
         while (time < deathTime)
         {
@@ -208,6 +231,10 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
+    public VectorBobber GetWalkBob()
+    {
+        return m_walkingBobber;
+    }
 
     void UpdateAnimator()
     {
@@ -305,10 +332,9 @@ public class PlayerController : MonoBehaviour, IKillable
             float currentHeight = m_CharacterController.height;
             float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTimeElapsed);
 
-            transform.Translate(Vector3.down * (currentHeight - newHeight) / 2.5f);
             m_CharacterController.height = newHeight;
-
         }
+
         else
         {
             m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
@@ -332,16 +358,24 @@ public class PlayerController : MonoBehaviour, IKillable
 
     bool CheckForObstruction()
     {
+        float length = (m_initalHeight - m_CharacterController.height) - 0.2f;
         Vector3 dir = Vector3.up;
-        Vector3 offset = transform.forward * 0.4f;
+        Vector3 offset = m_CharacterController.height * 0.5f * Vector3.up;
+
+        if (Physics.Raycast(transform.position + offset, dir, length))
+        {
+            return true;
+        }
+
+        offset += transform.forward * 0.15f;
 
         for (int i = 0; i < 4; i++)
         {
-            Ray ray = new Ray(transform.position + offset, dir * 0.1f);
+            Ray ray = new Ray(transform.position + offset, dir * length);
 
             Debug.DrawRay(ray.origin, ray.direction);
 
-            if (Physics.Raycast(ray, 0.1f, 0))
+            if (Physics.Raycast(ray, length, 0))
             {
                 return true;
             }
@@ -465,12 +499,16 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_cameraBobber.startBob(landingBob, false);
             }
 
+            if (onLand != null && m_airTime > 0.25f)
+            {
+                onLand();
+            }
 
-			//PlayLandingSound ();
-			m_MoveDir.y = 0f;
+            m_MoveDir.y = 0f;
 			m_Jumping = false;
             m_leftGround = false;
-		}
+            m_airTime = 0;
+        }
 		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
 		{
 			m_MoveDir.y = 0f;
@@ -478,6 +516,11 @@ public class PlayerController : MonoBehaviour, IKillable
     }
     private void FixedUpdate()
     {
+        if (!m_CharacterController.isGrounded)
+        {
+            m_airTime += Time.fixedDeltaTime;
+        }
+
 		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled) 
 		{
 			Move ();
@@ -578,11 +621,8 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
             // If the new vector has an opposite signed angle than the current, don't update the jumpVector
-            //print("Dot product: " + Vector3.Dot(desiredMove, comingVec));
             print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
-            //print("Upcoming angle: " + Vector3.Dot(comingVec, transform.forward));
 
-            // GetInput().x > 0 && trans
             if (true)
                 m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
 
@@ -592,19 +632,26 @@ public class PlayerController : MonoBehaviour, IKillable
 
             // >= 0: Transform moving forward, otherwise: Backwards. Update speed change accordingly.
             if (Vector3.Dot(transform.forward, desiredMove) >= 0)
+            {
                 speed += m_airDecreaseY;
+            }
             else
+            {
                 speed -= m_airDecreaseY;
+            }
 
             // Same as previous but regarding L/R movement
             if (Vector3.Dot(transform.right, desiredMove) >= 0)
+            {
                 speed += m_airDecreaseX;
+            }
             else
+            {
                 speed -= m_airDecreaseX;
+            }
 
             // Make sure the player cannot accelerate by moving in the air.
             speed = Mathf.Clamp(speed, 0, m_WalkSpeed);
-            //print(speed);
         }
 
         //Get a normal for the surface that is being touched to move along it
