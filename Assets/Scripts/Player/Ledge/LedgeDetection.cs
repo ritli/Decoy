@@ -105,7 +105,7 @@ public class LedgeDetection : MonoBehaviour {
 	 */
 	void OnTriggerStay(Collider other) 
 	{
-		if (other.transform.tag != Tags.player) 
+		if (other.transform.tag != Tags.player && m_collider != null) 
 		{
 			Vector3 normal = calcNormal ();
 			float angle = Vector3.Angle (-Vector3.up, normal);

@@ -12,9 +12,9 @@ public class ArmAdjust : MonoBehaviour {
     float m_initialOffset;
 
 	void Start () {
-        m_MouseLook = Camera.main.GetComponentInParent<PlayerController>().m_MouseLook;
+        m_MouseLook = transform.parent.GetComponentInParent<PlayerController>().m_MouseLook;
 
-        m_cameraTransform = Camera.main.transform;
+        m_cameraTransform = transform.parent;
         m_initialOffset = transform.position.y - m_cameraTransform.position.y;
     }
 	
