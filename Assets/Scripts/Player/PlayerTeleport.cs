@@ -54,8 +54,9 @@ public class PlayerTeleport : MonoBehaviour {
     [Range(0, 100)]
     public float decoyVelocityInheritance = 100.0f;
 
-    private Vector3 m_teleportTo = new Vector3(0,0,0);
+	private Vector3 m_teleportTo = new Vector3(0, 0, 0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
+	private Vector3 m_grabPoint = new Vector3(0, 0, 0);
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
 	private bool m_enoughSpace = true;
@@ -194,18 +195,19 @@ public class PlayerTeleport : MonoBehaviour {
 
 					if (m_foundLedge) 
 					{
-						moveTo (m_ledgeDetection.getWallPoint());
+//						print ("Found ledge");
+						moveTo (m_grabPoint);
 						//m_foundLedge = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
-						moveTo (m_ledgeDetection.getNewPosition ());
+//						print ("Ledge blocked");
+						moveTo (m_grabPoint);
 					}
 					else if (!m_enoughSpace) 
 					{
-						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
-							moveTo(m_ledgeDetection.getNewPosition ());
-							
+						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint))
+							moveTo(m_grabPoint);
 					}
 					else
                     {
@@ -319,7 +321,7 @@ public class PlayerTeleport : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-			m_enoughSpace = m_ledgeDetection.findEnoughSpace (hit);
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
 
 			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
@@ -334,13 +336,12 @@ public class PlayerTeleport : MonoBehaviour {
 			{
 				if (m_enoughSpace) 
 				{
-                    //Debug.DrawLine(transform.position, hit.point, Color.green);
-                    // ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge (hit) && hit.collider.tag != Tags.noGrab) 
+					// ## Start ledge detection ##
+					if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
 					{
 						// Only lerps to ledge if hit wasn't on NoGrab area
 						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
+						//m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
 						m_charController.detectCollisions = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
@@ -353,7 +354,7 @@ public class PlayerTeleport : MonoBehaviour {
 						m_foundLedge = false;
 				}
 				if (m_ledgeDetection.isIndPosSet())
-					m_indi.transform.position = m_ledgeDetection.getValidIndPosition ();
+					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
 				else
 					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
