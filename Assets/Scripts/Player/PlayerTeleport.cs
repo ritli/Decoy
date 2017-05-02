@@ -50,6 +50,9 @@ public class PlayerTeleport : MonoBehaviour {
     public float velocityAfterTeleport = 0.0f;
     [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
     public float velocityDecayOnTeleport = 0.1f;
+    [Tooltip("Determine the amount of velocity that the decoy inherits from the player. 100: 100% of players velocity.")]
+    [Range(0, 100)]
+    public float decoyVelocityInheritance = 100.0f;
 
 	private Vector3 m_teleportTo = new Vector3(0, 0, 0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
@@ -71,10 +74,11 @@ public class PlayerTeleport : MonoBehaviour {
 	void Start ()
     {
 		m_playerLength = GetComponent<CharacterController>().height;
+
+        m_partController = transform.FindChild("Camera").GetComponentInChildren<ParticleController>();
 		m_playerWidth = GetComponent<CharacterController>().radius * 2;
-        m_partController = Camera.main.GetComponent<ParticleController>();
         m_cooldownTimer = GetComponent<Timer>();
-		m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
+		//m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
         m_charController = GetComponent<CharacterController>();
 		m_ledgeDetection = GetComponent<LedgeDetection>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
@@ -95,7 +99,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
 
-        m_fovKick.Setup(Camera.main);
+        m_fovKick.Setup(transform.FindChild("Camera").GetComponent<Camera>());
         m_player.setScaleDecay(velocityDecayOnTeleport);
     }
     private void OnEnable()
@@ -122,14 +126,22 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_indi.activeSelf)
             {
 				if (m_foundLedge)
-					m_particleSystem.startColor = Color.blue;
-					//m_particleSystem.color = Color.red;
-				else if (!m_enoughSpace)
-					m_particleSystem.startColor = Color.red;
-					//m_particleSystem.color = Color.yellow;
+                {
+                    //m_particleSystem.startColor = Color.blue;
+                    //m_particleSystem.color = Color.red;
+                }
+                else if (!m_enoughSpace)
+                {
+                    //m_particleSystem.startColor = Color.red;
+                    //m_particleSystem.color = Color.yellow;
+                }
+
                 else
-					m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
-					//m_particleSystem.color = Color.white;
+                {
+                    //m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
+                    //m_particleSystem.color = Color.white;
+                }
+
             }
 
             if (m_cooldownTimer.isTimeUp())
@@ -149,7 +161,7 @@ public class PlayerTeleport : MonoBehaviour {
                 float step = teleportSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
-                // When the players position has arrived, stop moving.
+                // When the players position has arrived, stop moving. //////// BUG: Distance is 0 even though it shouldnt be
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
 					m_arrived = true;
@@ -212,7 +224,8 @@ public class PlayerTeleport : MonoBehaviour {
                     GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
 
                     //Inherit player velocity
-                    decoy.GetComponent<Rigidbody>().velocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance/100;
                     GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
                     GameManager.GetPlayer().CreateDecoy();
