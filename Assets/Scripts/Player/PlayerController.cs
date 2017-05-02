@@ -425,9 +425,10 @@ public class PlayerController : MonoBehaviour, IKillable
 		case PlayerState.isAlive:
 			RotateView ();
             // the jump state needs to read here to make sure it is not missed
-			if (!m_ledgeLerp.isLerping ()) 
+			if (!m_ledgeLerp.isLerping ())
 				Jump ();
-
+			else
+				m_MoveDir.y = 0;
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
@@ -483,11 +484,7 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_cameraBobber.stopBob();
                 m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
             }
-            if (m_Jump)
-            {
-                m_Jump = false;
-            }
-
+            m_Jump = false;
             m_Jumping = false;
         }
 
@@ -667,17 +664,17 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_MoveDir.y = -m_StickToGroundForce;
                 
-            if (m_Jump)
-            {
-                m_jumpVector = m_MoveDir;
-                m_jumpVectorR = transform.right;
-                m_MoveDir.y = m_JumpForce;
-                m_Jump = false;
-                m_Jumping = true;
-                signedJumpVector = new Vector3(Mathf.Sign(m_MoveDir.x), 0, Mathf.Sign(m_MoveDir.z));
-                m_airDecreaseY = 0.0f;
-                m_airDecreaseX = 0.0f;
-            }
+			if (m_Jump) 
+			{
+				m_jumpVector = m_MoveDir;
+				m_jumpVectorR = transform.right;
+				m_MoveDir.y = m_JumpForce;
+				m_Jump = false;
+				m_Jumping = true;
+				signedJumpVector = new Vector3 (Mathf.Sign (m_MoveDir.x), 0, Mathf.Sign (m_MoveDir.z));
+				m_airDecreaseY = 0.0f;
+				m_airDecreaseX = 0.0f;
+			} 
 
         }
         else
