@@ -223,7 +223,7 @@ public class PlayerTeleport : MonoBehaviour {
 
                     //Inherit player velocity
                     Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
-                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity;
+                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance/100;
                     GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
                     GameManager.GetPlayer().CreateDecoy();
