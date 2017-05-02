@@ -206,7 +206,7 @@ public class PlayerTeleport : MonoBehaviour {
 					}
 					else if (!m_enoughSpace) 
 					{
-						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition()))
+						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint))
 							moveTo(m_grabPoint);
 					}
 					else
@@ -321,7 +321,7 @@ public class PlayerTeleport : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-			m_enoughSpace = m_ledgeDetection.findEnoughSpace (hit);
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
 
 			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
@@ -354,7 +354,7 @@ public class PlayerTeleport : MonoBehaviour {
 						m_foundLedge = false;
 				}
 				if (m_ledgeDetection.isIndPosSet())
-					m_indi.transform.position = m_ledgeDetection.getValidIndPosition ();
+					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
 				else
 					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
