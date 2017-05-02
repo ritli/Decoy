@@ -51,8 +51,9 @@ public class PlayerTeleport : MonoBehaviour {
     [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
     public float velocityDecayOnTeleport = 0.1f;
 
-	private Vector3 m_teleportTo = new Vector3(0,0,0);
+	private Vector3 m_teleportTo = new Vector3(0, 0, 0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
+	private Vector3 m_grabPoint = new Vector3(0, 0, 0);
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
 	private bool m_enoughSpace = true;
@@ -183,19 +184,18 @@ public class PlayerTeleport : MonoBehaviour {
 					if (m_foundLedge) 
 					{
 //						print ("Found ledge");
-						moveTo (m_ledgeDetection.getWallPoint ());
+						moveTo (m_grabPoint);
 						//m_foundLedge = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
 //						print ("Ledge blocked");
-						moveTo (m_ledgeDetection.getNewPosition ());
+						moveTo (m_grabPoint);
 					}
 					else if (!m_enoughSpace) 
 					{
-						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
-							moveTo(m_ledgeDetection.getNewPosition ());
-							
+						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition()))
+							moveTo(m_grabPoint);
 					}
 					else
                     {
@@ -324,11 +324,11 @@ public class PlayerTeleport : MonoBehaviour {
 				if (m_enoughSpace) 
 				{
 					// ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge (hit) && hit.collider.tag != Tags.noGrab) 
+					if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
 					{
 						// Only lerps to ledge if hit wasn't on NoGrab area
 						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
+						//m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
 						m_charController.detectCollisions = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 

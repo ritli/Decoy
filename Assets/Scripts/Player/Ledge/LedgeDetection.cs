@@ -81,8 +81,10 @@ public class LedgeDetection : MonoBehaviour {
 							(Vector3.Angle (cameraVert,  hitNormal) < vertical) ? true : false;
             bool raySuccess = m_raycaster.doRaycast(out hit, hitNormal, transform.position);
 			bool foundLedge = false;
+			Vector3 notUsed = new Vector3 (0, 0, 0);
+			Vector3 notUsed2 = new Vector3 (0, 0, 0);
 			if (raySuccess)
-				foundLedge = findLedge(hit);
+				foundLedge = findLedge(hit, out notUsed, out notUsed2);
 
             if (angleOk && foundLedge)
                 m_canGrab = true;
@@ -137,10 +139,11 @@ public class LedgeDetection : MonoBehaviour {
      * Finds a ledge given a raycastHit from the wall
      * Used by both teleport and regular grab
      */
-    public bool findLedge(RaycastHit wallHit)
+	public bool findLedge(RaycastHit wallHit, out Vector3 wallTarget, out Vector3 floorTarget)
     {
 		m_wallPoint = wallHit.point + wallHit.normal;
-
+		wallTarget = m_wallPoint;
+		floorTarget = new Vector3(0, 0, 0);
         // Creates new direction and position based on wall hit
         Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.§);
@@ -263,6 +266,7 @@ public class LedgeDetection : MonoBehaviour {
 							m_newPosition = hit.point;
 						}
 					}
+					floorTarget = m_newPosition;
 					return true;
 				}
 			}
