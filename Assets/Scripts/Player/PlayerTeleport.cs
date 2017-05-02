@@ -50,8 +50,11 @@ public class PlayerTeleport : MonoBehaviour {
     public float velocityAfterTeleport = 0.0f;
     [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
     public float velocityDecayOnTeleport = 0.1f;
+    [Tooltip("Determine the amount of velocity that the decoy inherits from the player. 100: 100% of players velocity.")]
+    [Range(0, 100)]
+    public float decoyVelocityInheritance = 100.0f;
 
-	private Vector3 m_teleportTo = new Vector3(0,0,0);
+    private Vector3 m_teleportTo = new Vector3(0,0,0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
@@ -155,10 +158,7 @@ public class PlayerTeleport : MonoBehaviour {
                     m_ledgeDetection.arrivedAtWall();
 					m_charController.detectCollisions = true;
 
-                    print("My position: " + transform.position);
-                    print("Teletarget: " + m_teleportTo);
 					if (m_foundLedge) {
-                        print("Lerping edge!");
 						m_ledgeLerp.lerp(m_ledgeLerpTo);
 						m_foundLedge = false;  
                     }
@@ -185,25 +185,21 @@ public class PlayerTeleport : MonoBehaviour {
 
 					if (m_foundLedge) 
 					{
-						print ("Found ledge");
-						moveTo (m_ledgeDetection.getWallPoint ());
+						moveTo (m_ledgeDetection.getWallPoint());
 						//m_foundLedge = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
-						print ("Ledge blocked");
 						moveTo (m_ledgeDetection.getNewPosition ());
 					}
 					else if (!m_enoughSpace) 
 					{
-                        print("Not enough space");
 						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
 							moveTo(m_ledgeDetection.getNewPosition ());
 							
 					}
 					else
                     {
-                        print("Else ledge");
 						m_ledgeDetection.isTeleporting();
                         moveTo(m_indi.transform.position);
                     }
@@ -217,7 +213,8 @@ public class PlayerTeleport : MonoBehaviour {
                     GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
 
                     //Inherit player velocity
-                    decoy.GetComponent<Rigidbody>().velocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity;
                     GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
                     GameManager.GetPlayer().CreateDecoy();
@@ -328,7 +325,8 @@ public class PlayerTeleport : MonoBehaviour {
 			{
 				if (m_enoughSpace) 
 				{
-					// ## Start ledge detection ##
+                    //Debug.DrawLine(transform.position, hit.point, Color.green);
+                    // ## Start ledge detection ##
 					if (m_ledgeDetection.findLedge (hit) && hit.collider.tag != Tags.noGrab) 
 					{
 						// Only lerps to ledge if hit wasn't on NoGrab area

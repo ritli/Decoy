@@ -579,7 +579,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
             // If the new vector has an opposite signed angle than the current, don't update the jumpVector
             //print("Dot product: " + Vector3.Dot(desiredMove, comingVec));
-            print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
+            //print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
             //print("Upcoming angle: " + Vector3.Dot(comingVec, transform.forward));
 
             // GetInput().x > 0 && trans
