@@ -620,9 +620,6 @@ public class PlayerController : MonoBehaviour, IKillable
             if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec)))
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
-            // If the new vector has an opposite signed angle than the current, don't update the jumpVector
-            print("Og comparison: " + Vector3.Dot(desiredMove, m_jumpVectorR));
-
             if (true)
                 m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
 
