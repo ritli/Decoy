@@ -50,9 +50,13 @@ public class PlayerTeleport : MonoBehaviour {
     public float velocityAfterTeleport = 0.0f;
     [Tooltip("Variable decides how fast the velocity after a teleport decays. Higher: velocity increase decays faster.")]
     public float velocityDecayOnTeleport = 0.1f;
+    [Tooltip("Determine the amount of velocity that the decoy inherits from the player. 100: 100% of players velocity.")]
+    [Range(0, 100)]
+    public float decoyVelocityInheritance = 100.0f;
 
-	private Vector3 m_teleportTo = new Vector3(0,0,0);
+	private Vector3 m_teleportTo = new Vector3(0, 0, 0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
+	private Vector3 m_grabPoint = new Vector3(0, 0, 0);
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
 	private bool m_enoughSpace = true;
@@ -157,7 +161,7 @@ public class PlayerTeleport : MonoBehaviour {
                 float step = teleportSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
-                // When the players position has arrived, stop moving.
+                // When the players position has arrived, stop moving. //////// BUG: Distance is 0 even though it shouldnt be
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
 					m_arrived = true;
@@ -192,19 +196,18 @@ public class PlayerTeleport : MonoBehaviour {
 					if (m_foundLedge) 
 					{
 //						print ("Found ledge");
-						moveTo (m_ledgeDetection.getWallPoint ());
+						moveTo (m_grabPoint);
 						//m_foundLedge = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
 //						print ("Ledge blocked");
-						moveTo (m_ledgeDetection.getNewPosition ());
+						moveTo (m_grabPoint);
 					}
 					else if (!m_enoughSpace) 
 					{
-						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
-							moveTo(m_ledgeDetection.getNewPosition ());
-							
+						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint))
+							moveTo(m_grabPoint);
 					}
 					else
                     {
@@ -221,7 +224,8 @@ public class PlayerTeleport : MonoBehaviour {
                     GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
 
                     //Inherit player velocity
-                    decoy.GetComponent<Rigidbody>().velocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance/100;
                     GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
                     GameManager.GetPlayer().CreateDecoy();
@@ -317,7 +321,7 @@ public class PlayerTeleport : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-			m_enoughSpace = m_ledgeDetection.findEnoughSpace (hit);
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
 
 			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
@@ -333,11 +337,11 @@ public class PlayerTeleport : MonoBehaviour {
 				if (m_enoughSpace) 
 				{
 					// ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge (hit) && hit.collider.tag != Tags.noGrab) 
+					if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
 					{
 						// Only lerps to ledge if hit wasn't on NoGrab area
 						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
+						//m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
 						m_charController.detectCollisions = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
@@ -350,7 +354,7 @@ public class PlayerTeleport : MonoBehaviour {
 						m_foundLedge = false;
 				}
 				if (m_ledgeDetection.isIndPosSet())
-					m_indi.transform.position = m_ledgeDetection.getValidIndPosition ();
+					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
 				else
 					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
