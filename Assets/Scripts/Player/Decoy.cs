@@ -4,15 +4,17 @@ using System.Collections;
 public class Decoy : MonoBehaviour, IKillable {
 
     public float m_timeTillDeath = 1f;
+    public SkinnedMeshRenderer m_renderer;
     float m_decayTimeElapsed = 0;
     Material fadingMat;
+
 
     PlayerState m_decoyState;
     PlayerState m_stateBeforePause;
 
     private void Awake()
     {
-         fadingMat = GetComponentInChildren<SkinnedMeshRenderer>().material;
+         fadingMat = m_renderer.material;
     }
 
     private void OnEnable()
