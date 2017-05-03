@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [Range(0,1)]
     [SerializeField] private float m_JumpAirControl;
     private Vector3 signedJumpVector;
+    private Vector2 m_jumpInput;
     private float m_airDecreaseY;
     private float m_airDecreaseX;
 
@@ -617,11 +618,9 @@ public class PlayerController : MonoBehaviour, IKillable
                 || Vector3.Dot(transform.forward, desiredMove) == 0)
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
-            print("Coming dot: " + Vector3.Dot(transform.right, comingVec) + ", Desired dot: " + Vector3.Dot(transform.right, desiredMove));
-            //print(Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) + " || " + Mathf.Sign(Vector3.Dot(transform.right, comingVec)));
-            if (Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right, comingVec)))
-                m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
-            else if (Mathf.Sign(Vector3.Dot(transform.right*-1, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right*-1, comingVec)))
+            if (Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right, comingVec))
+                || Mathf.Sign(Vector3.Dot(transform.right * -1, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right * -1, comingVec))
+                || m_jumpInput.x == 0)
                 m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
                 
             // Update velocity inpact on each axis based on input
@@ -676,6 +675,8 @@ public class PlayerController : MonoBehaviour, IKillable
 				m_Jump = false;
 				m_Jumping = true;
 				signedJumpVector = new Vector3 (Mathf.Sign (m_MoveDir.x), 0, Mathf.Sign (m_MoveDir.z));
+                m_jumpInput = new Vector2(GetInput().x, GetInput().y);
+
 				m_airDecreaseY = 0.0f;
 				m_airDecreaseX = 0.0f;
 			} 
