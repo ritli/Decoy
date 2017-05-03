@@ -81,14 +81,4 @@ public class Checkpoint : MonoBehaviour {
         }
         return -1;
     }
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-        BoxCollider col = GetComponent<BoxCollider>();
-
-        Mesh m = GetComponent<MeshFilter>().sharedMesh;
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireMesh(m, col.center + transform.position, transform.rotation, new Vector3(col.size.x * transform.localScale.x, col.size.y * transform.localScale.y, col.size.z * transform.localScale.z));
-    }
-#endif
 }

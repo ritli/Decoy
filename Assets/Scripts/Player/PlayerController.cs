@@ -29,8 +29,10 @@ public class PlayerController : MonoBehaviour, IKillable
     [FMODUnity.EventRef]
     public string m_deathEvent;
 
+    public bool m_hasDevice = true;
     AnimationState m_aniState = AnimationState.idle;
     Animator m_animator;
+    Animator m_noDeviceAnimator;
 
     //Decoy event
     public delegate void DecoyAction();
@@ -160,6 +162,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
+        m_Camera = transform.FindChild("Camera").GetComponent<Camera>();
+
         m_cameraBobber = GetComponent<VectorBobber>();
 
         m_walkingBobber.setBobSpeed(walkBobSpeed);
@@ -167,12 +171,12 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
-        m_animator = Camera.main.GetComponentInChildren<Animator>();
+        m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
+        m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
 
-        m_Camera = Camera.main;
         m_cameraOrigin = m_Camera.transform.localPosition;
-        initialCameraPos = Camera.main.transform.position;
+        initialCameraPos = m_Camera.transform.position;
         initialPos = transform.position;
         initialRotation = transform.rotation;
 
@@ -184,9 +188,7 @@ public class PlayerController : MonoBehaviour, IKillable
         ResetPlayer();
 
         m_CharacterController = GetComponent<CharacterController>();
-        m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
-        //m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
@@ -214,12 +216,11 @@ public class PlayerController : MonoBehaviour, IKillable
         yield return new WaitForSeconds(0.1f);
         FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
 
-        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
+        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
         float deathTime = 0.6f;
 
         Transform cam = overlay.transform;
-
 
         while (time < deathTime)
         {
@@ -238,19 +239,18 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void UpdateAnimator()
     {
-        switch (m_aniState)
+		if (m_animator != null && m_hasDevice)
         {
-            case AnimationState.idle:
-                break;
-            case AnimationState.moving:
-                break;
-            case AnimationState.jumping:
-                break;
-            default:
-                break;
+            m_animator.SetBool("HasDevice", m_hasDevice);
+            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
+            m_animator.SetInteger("State", (int)m_aniState);
         }
-		if (m_animator != null)
-        	m_animator.SetInteger("State", (int)m_aniState);
+        else if (m_noDeviceAnimator != null)
+        {
+            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
+            m_animator.SetBool("HasDevice", m_hasDevice);
+            m_noDeviceAnimator.SetInteger("State", (int)m_aniState);
+        }
     }
 
     bool GetBlinkState(out int val)
@@ -388,9 +388,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     public void ResetPlayer()
     {
-        //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
-        //Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
-
         //Apply saved values if they exist
         if (Checkpoint.isPreviouslySaved())
         {
@@ -434,8 +431,7 @@ public class PlayerController : MonoBehaviour, IKillable
             ReadAnimationState();
             break;
         case PlayerState.isDead:
-            //Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-            //Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+
             if (!m_resetCalled)
             {
                 m_resetCalled = true;
