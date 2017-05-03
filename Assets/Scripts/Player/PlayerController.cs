@@ -112,8 +112,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_jumpVectorR;
 
     private bool m_resetCalled = false;
+	private bool m_resetVelocity = false;
 	private LedgeDetection m_ledgeDetect;
-	private bool m_ledgeInRange = false;
     private bool m_arrived = true;
     private Vector3 m_moveTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
@@ -408,6 +408,7 @@ public class PlayerController : MonoBehaviour, IKillable
         
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
+		m_resetVelocity = true;
         GetComponentInChildren<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;
         m_inDeathState = false;
         m_controlsEnabled = true;
@@ -418,8 +419,6 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
-        m_ledgeInRange = m_ledgeDetect.canGrab();
-
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
@@ -433,14 +432,14 @@ public class PlayerController : MonoBehaviour, IKillable
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
             break;
-        case PlayerState.isDead:
+		case PlayerState.isDead:
             //Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
             //Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
-            if (!m_resetCalled)
-            {
-                m_resetCalled = true;
-                Invoke("ResetPlayer", 1.5f);
-            }
+			if (!m_resetCalled) 
+			{
+				m_resetCalled = true;
+				Invoke("ResetPlayer", 1.5f);
+			}
             break;
         case PlayerState.isPause:
             if (IsInvoking("ResetPlayer"))
@@ -477,7 +476,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
             m_cameraBobber.startBob(jumpingBob, false);
 
-        if (m_ledgeInRange)
+		if (m_ledgeDetect.canGrab())
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
@@ -681,6 +680,17 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
         }
+			
+		if (m_resetVelocity) 
+		{
+			m_resetVelocity = false;
+			m_Jump = false;
+			m_Jumping = false;
+			desiredMove = Vector3.zero;
+			m_MoveDir = Vector3.zero;
+			m_speedWindup = 0;
+			speed = 0;
+		}
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
