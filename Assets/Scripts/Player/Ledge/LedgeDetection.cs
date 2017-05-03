@@ -81,8 +81,10 @@ public class LedgeDetection : MonoBehaviour {
 							(Vector3.Angle (cameraVert,  hitNormal) < vertical) ? true : false;
             bool raySuccess = m_raycaster.doRaycast(out hit, hitNormal, transform.position);
 			bool foundLedge = false;
+			Vector3 notUsed = new Vector3 (0, 0, 0);
+			Vector3 notUsed2 = new Vector3 (0, 0, 0);
 			if (raySuccess)
-				foundLedge = findLedge(hit);
+				foundLedge = findLedge(hit, out notUsed, out notUsed2);
 
             if (angleOk && foundLedge)
                 m_canGrab = true;
@@ -137,10 +139,11 @@ public class LedgeDetection : MonoBehaviour {
      * Finds a ledge given a raycastHit from the wall
      * Used by both teleport and regular grab
      */
-    public bool findLedge(RaycastHit wallHit)
+	public bool findLedge(RaycastHit wallHit, out Vector3 wallTarget, out Vector3 floorTarget)
     {
 		m_wallPoint = wallHit.point + wallHit.normal;
-
+		wallTarget = m_wallPoint;
+		floorTarget = new Vector3(0, 0, 0);
         // Creates new direction and position based on wall hit
         Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;
 //		Debug.DrawRay(wallHit.point, direction * 4, Color.§);
@@ -263,6 +266,7 @@ public class LedgeDetection : MonoBehaviour {
 							m_newPosition = hit.point;
 						}
 					}
+					floorTarget = m_newPosition;
 					return true;
 				}
 			}
@@ -303,7 +307,7 @@ public class LedgeDetection : MonoBehaviour {
 		bool enoughSpace = true;
 
 		// Surface was floor
-		if (angle < 45) 
+		if (angle <= 45) 
 		{
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
 				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
@@ -328,18 +332,18 @@ public class LedgeDetection : MonoBehaviour {
 			{
 				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, new Color(0.751265f, 0.25678f, 0.3415136f));
 				// Not enough space
-				m_indPositionSet = true;
+				enoughSpace = false;
 				
 				// Sets a position based on the initial hit, it's normal, and the new hit's normal.
 				m_validIndPosition = hit.point + hit.normal + wallNormalRayHit.normal;
-				enoughSpace = false;
+				m_indPositionSet = true;
 
 				Debug.DrawRay(hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
 			} else
 				m_indPositionSet = false;
 		}
 		// Surface was roof
-		else if (angle > 135)
+		else if (angle >= 135)
 		{
 			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
 				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
@@ -359,7 +363,7 @@ public class LedgeDetection : MonoBehaviour {
 		return enoughSpace;
 	}
 
-	public bool findValidPosition(Vector3 invalidPosition) 
+	public bool findValidPosition(Vector3 invalidPosition, out Vector3 validPosition) 
 	{
 		/*
 		 * Check for enough space along the player's aim ray.
@@ -367,15 +371,16 @@ public class LedgeDetection : MonoBehaviour {
 		 */
 
 		Vector3 playerLook = Camera.main.transform.forward;
-		Vector3 currentInvalid = invalidPosition;
+		Vector3 workPosition = invalidPosition;
 		bool enoughSpace = false;
 		bool arrived = false;
+		validPosition = new Vector3(0, 0, 0);
 
 		RaycastHit hit = new RaycastHit();
 		while (!enoughSpace && !arrived) 
 		{
 			print ("Looking for space");
-			if (Vector3.Distance (currentInvalid, transform.position) == 0) 
+			if (Vector3.Distance (workPosition, transform.position) == 0) 
 			{
 				print ("Arrived at player");
 				arrived = true;
@@ -383,15 +388,15 @@ public class LedgeDetection : MonoBehaviour {
 			}
 
 			// Get a new position m_distanceDelta units closer to the player
-			currentInvalid = Vector3.MoveTowards(currentInvalid, transform.position, m_distanceDelta);
+			workPosition = Vector3.MoveTowards(workPosition, transform.position, m_distanceDelta);
 
 			// Raycast in all directions to look for obstruction
-			if (m_raycaster.doRaycast (out hit, Vector3.up, currentInvalid, m_playerLength) &&
-			    m_raycaster.doRaycast (out hit, -Vector3.up, currentInvalid, m_playerLength) ||
-			    m_raycaster.doRaycast (out hit, Vector3.left, currentInvalid, m_playerWidth) &&
-			    m_raycaster.doRaycast (out hit, -Vector3.left, currentInvalid, m_playerWidth) ||
-			    m_raycaster.doRaycast (out hit, Vector3.forward, currentInvalid, m_playerWidth) &&
-			    m_raycaster.doRaycast (out hit, -Vector3.forward, currentInvalid, m_playerWidth)) 
+			if (m_raycaster.doRaycast (out hit, Vector3.up, workPosition, m_playerLength) &&
+			    m_raycaster.doRaycast (out hit, -Vector3.up, workPosition, m_playerLength) ||
+			    m_raycaster.doRaycast (out hit, Vector3.left, workPosition, m_playerWidth) &&
+			    m_raycaster.doRaycast (out hit, -Vector3.left, workPosition, m_playerWidth) ||
+			    m_raycaster.doRaycast (out hit, Vector3.forward, workPosition, m_playerWidth) &&
+			    m_raycaster.doRaycast (out hit, -Vector3.forward, workPosition, m_playerWidth)) 
 			{
 				// Not enough space
 			} 
@@ -399,7 +404,7 @@ public class LedgeDetection : MonoBehaviour {
 			{
 				print ("Found new position");
 				enoughSpace = true;
-				m_newPosition = currentInvalid;
+				validPosition = workPosition;
 			}
 		}
 
