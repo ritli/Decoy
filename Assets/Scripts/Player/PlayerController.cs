@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [Range(0,1)]
     [SerializeField] private float m_JumpAirControl;
     private Vector3 signedJumpVector;
+    private Vector2 m_jumpInput;
     private float m_airDecreaseY;
     private float m_airDecreaseX;
 
@@ -612,13 +613,16 @@ public class PlayerController : MonoBehaviour, IKillable
             // Create the next update to the vector in order to compare with the current and judge whether the transformation should occur.
             Vector3 comingVec = m_jumpVector + transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
 
-            // If the new vector has an opposite signed angle than the current, don't update the jumpVector
-            if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec)))
+            // If the new vector has an opposite signed angle than the current, don't update the jumpVector. If the desired vector however
+            if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec))
+                || Vector3.Dot(transform.forward, desiredMove) == 0)
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
-            if (true)
+            if (Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right, comingVec))
+                || Mathf.Sign(Vector3.Dot(transform.right * -1, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right * -1, comingVec))
+                || m_jumpInput.x == 0)
                 m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
-
+                
             // Update velocity inpact on each axis based on input
             m_airDecreaseY += GetInput().y * m_JumpAirControl;
             m_airDecreaseX += GetInput().x * m_JumpAirControl;
@@ -647,7 +651,7 @@ public class PlayerController : MonoBehaviour, IKillable
             speed = Mathf.Clamp(speed, 0, m_WalkSpeed);
         }
 
-        //Get a normal for the surface that is being touched to move along it
+        // Get a normal for the surface that is being touched to move along it
         RaycastHit hitInfo;
         Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo, m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 
@@ -671,6 +675,8 @@ public class PlayerController : MonoBehaviour, IKillable
 				m_Jump = false;
 				m_Jumping = true;
 				signedJumpVector = new Vector3 (Mathf.Sign (m_MoveDir.x), 0, Mathf.Sign (m_MoveDir.z));
+                m_jumpInput = new Vector2(GetInput().x, GetInput().y);
+
 				m_airDecreaseY = 0.0f;
 				m_airDecreaseX = 0.0f;
 			} 

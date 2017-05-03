@@ -119,7 +119,6 @@ public class PlayerTeleport : MonoBehaviour {
 
     // Handle input for teleportation controls.
 	void Update () {
-		print (m_player.m_playerState);
 		if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive) 
 		{
 			if (m_indi.activeSelf) 
