@@ -21,6 +21,7 @@ public class SceneLoader : MonoBehaviour
     //Add new Scenes here as they are created.
     public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2, Section3 };
     public static SceneLoader instance;
+    public bool startfromMenu;
     private static List<LoadingScene> m_ScenesLoading;
 
 	// Use this for initialization
@@ -29,7 +30,7 @@ public class SceneLoader : MonoBehaviour
         m_ScenesLoading = new List<LoadingScene>();
         //Load the MainMenu
         LoadMainMenu();
-	}
+    }
     public static void UnloadSceneAsync(Scenes scene)
     {
         //unload scene in background if it already is't unloaded.

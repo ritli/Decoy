@@ -37,8 +37,23 @@ namespace UnityStandardAssets.Utility
 
         private void Update()
         {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.position += transform.forward * Time.deltaTime * 1;
+            }
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                transform.position += transform.forward * Time.deltaTime * 3;
+            }
+
             // we make initial calculations from the original local rotation
             transform.localRotation = m_OriginalRotation;
+
+
 
             // read input from mouse or mobile controls
             float inputH;
