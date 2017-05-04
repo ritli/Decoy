@@ -30,7 +30,6 @@ public class PlayerTeleport : MonoBehaviour {
     private float m_playerLength;
 	private float m_playerWidth;
     private bool m_cancelTeleport = false;
-    private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
     private bool m_isPaused = false;
     public FOVKick m_fovKick;
@@ -120,77 +119,79 @@ public class PlayerTeleport : MonoBehaviour {
 
     // Handle input for teleportation controls.
 	void Update () {
+		if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive) 
+		{
+			if (m_indi.activeSelf) 
+			{
+				if (m_foundLedge) 
+				{
+					//m_particleSystem.startColor = Color.blue;
+					//m_particleSystem.color = Color.red;
+				} 
+				else if (!m_enoughSpace) 
+				{
+					//m_particleSystem.startColor = Color.red;
+					//m_particleSystem.color = Color.yellow;
+				} 
+				else 
+				{
+					//m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
+					//m_particleSystem.color = Color.white;
+				}
 
-        if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
-        {
-            if (m_indi.activeSelf)
-            {
-				if (m_foundLedge)
-                {
-                    //m_particleSystem.startColor = Color.blue;
-                    //m_particleSystem.color = Color.red;
-                }
-                else if (!m_enoughSpace)
-                {
-                    //m_particleSystem.startColor = Color.red;
-                    //m_particleSystem.color = Color.yellow;
-                }
+			}
 
-                else
-                {
-                    //m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
-                    //m_particleSystem.color = Color.white;
-                }
+			if (m_cooldownTimer.isTimeUp ()) 
+			{
+				m_currentColor = Color.Lerp (m_currentColor, m_canBlinkColor, 0.5f);
 
-            }
+			} 
+			else 
+			{
+				m_currentColor = Color.Lerp (m_currentColor, m_rechargeColor, 0.5f);
+			}
 
-            if (m_cooldownTimer.isTimeUp())
-            {
-                m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+			// Move towards target position set when letting go of the "Teleport" button.
+			if (!m_arrived) 
+			{
+				m_blinkState = BlinkState.nah;
+				float step = teleportSpeed * Time.deltaTime;
+				transform.position = Vector3.MoveTowards (transform.position, m_teleportTo, step);
 
-            }
-            else
-            {
-                m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
-            }
-
-            // Move towards target position set when letting go of the "Teleport" button.
-			if (!m_arrived)
-            {
-                m_blinkState = BlinkState.nah;
-                float step = teleportSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
-
-                // When the players position has arrived, stop moving. //////// BUG: Distance is 0 even though it shouldnt be
-                if (Vector3.Distance(transform.position, m_teleportTo) == 0)
-                {
+				// When the players position has arrived, stop moving.
+				if (Vector3.Distance (transform.position, m_teleportTo) == 0) 
+				{
 					m_arrived = true;
-                    m_ledgeDetection.arrivedAtWall();
+					m_ledgeDetection.arrivedAtWall ();
 					m_charController.detectCollisions = true;
 
-					if (m_foundLedge) {
-						m_ledgeLerp.lerp(m_ledgeLerpTo);
+					if (m_foundLedge) 
+					{
+						m_ledgeLerp.lerp (m_ledgeLerpTo);
 						m_foundLedge = false;  
-                    }
-					m_player.enableGravity();
-					m_player.modifyVelocity(velocityAfterTeleport / 100);
-                }
-            }
+					}
+					m_player.enableGravity ();
+					m_player.modifyVelocity (velocityAfterTeleport / 100);
+				}
+			}
 
-            if (Input.GetButton("Teleport"))
-            {
-                if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
-                {
+			if (Input.GetButtonDown("Teleport"))
+				m_cancelTeleport = false;
 
-                    m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
+			if (Input.GetButton ("Teleport")) 
+			{
+				if (!m_cancelTeleport && m_cooldownTimer.isTimeUp()) 
+				{
 
-                    ShowIndicator();
-                    m_blinkState = BlinkState.aiming;
-                }
-            }
-            if (Input.GetButtonUp("Teleport"))
-            {
-				if (!m_cancelTeleport && m_indi.activeSelf)
+					m_currentColor = Color.Lerp (m_currentColor, m_activeColor, 0.5f);
+
+					ShowIndicator();
+					m_blinkState = BlinkState.aiming;
+				}
+			}
+			if (Input.GetButtonUp ("Teleport")) 
+			{
+				if (!m_cancelTeleport && m_indi.activeSelf) 
 				{
 
 					if (m_foundLedge) 
@@ -203,58 +204,48 @@ public class PlayerTeleport : MonoBehaviour {
 					{
 //						print ("Ledge blocked");
 						moveTo (m_grabPoint);
-					}
+					} 
 					else if (!m_enoughSpace) 
 					{
-						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint))
-							moveTo(m_grabPoint);
+						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
+							moveTo (m_grabPoint);
+					} 
+					else 
+					{
+						m_ledgeDetection.isTeleporting ();
+						moveTo (m_indi.transform.position);
 					}
-					else
-                    {
-						m_ledgeDetection.isTeleporting();
-                        moveTo(m_indi.transform.position);
-                    }
 
-                    m_blinkState = BlinkState.blinking;
-                    Vector3 lastPos = transform.position;
-                    PlayVisualEffects();
+					m_blinkState = BlinkState.blinking;
+					Vector3 lastPos = transform.position;
+					PlayVisualEffects ();
 
-                    m_cooldownTimer.resetTimer();
+					m_cooldownTimer.resetTimer ();
 
-                    GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
+					GameObject decoy = (GameObject)Instantiate (m_decoy, lastPos, Quaternion.identity);
 
-                    //Inherit player velocity
-                    Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
-                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance/100;
-                    GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+					//Inherit player velocity
+					Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
+					decoy.GetComponent<Rigidbody> ().velocity = inheritVelocity * decoyVelocityInheritance / 100;
+					GameManager.SetDecoy (decoy.GetComponent<Decoy> ());
 
-                    GameManager.GetPlayer().CreateDecoy();
-                }
+					GameManager.GetPlayer ().CreateDecoy ();
+				} 
 				else
-                    m_cancelTeleport = false;
-				m_indi.SetActive(false);
-            }
+					m_cancelTeleport = false;
+				m_indi.SetActive (false);
+			}
 
-            // When right clicking, cancel teleportation.
-            if (Input.GetButtonDown("CancelTeleport"))
-            {
-                if (m_indi.activeSelf)
-                {
-                    //m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
-                   // m_soundStarted = false;
-                    m_blinkState = BlinkState.nah;
-                    m_cancelTeleport = true;
-                    m_indi.SetActive(false);
-                    m_foundLedge = false;
-                }
+			// When right clicking, cancel teleportation.
+			if (Input.GetButtonDown ("CancelTeleport")) 
+			{
+				cancelTeleport();
+			}
 
-                if (resetTimeOnCancel)
-                    m_cooldownTimer.resetTimer();
-            }
+			//ReadBlinkState();
 
-            //ReadBlinkState();
-
-        }
+		} else
+			cancelTeleport();
 
         //Checks if color has changed since last frame to avoid needless material changes
         if (m_currentColor != m_lastColor)
@@ -285,6 +276,22 @@ public class PlayerTeleport : MonoBehaviour {
         //StartCoroutine(m_fovKick.FOVKickDown());
         m_partController.LerpAlpha(0.5f, 0, 0.05f);
     }
+
+	void cancelTeleport() 
+	{
+		if (m_indi.activeSelf)
+		{
+			//m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
+			// m_soundStarted = false;
+			m_blinkState = BlinkState.nah;
+			m_cancelTeleport = true;
+			m_indi.SetActive(false);
+			m_foundLedge = false;
+		}
+
+		if (resetTimeOnCancel)
+			m_cooldownTimer.resetTimer();
+	}
 
     void ShowIndicator()
     {
