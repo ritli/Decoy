@@ -10,6 +10,8 @@ public class LightPulser : MonoBehaviour {
     public float startIntensity = 1.0f;
     [Tooltip("Determine the end intensity.")]
     public float endIntensity = 1.0f;
+    [Tooltip("Randomise the change between the given interval.")]
+    public bool randomFlicker = false;
 
     private bool m_movingForward = true;
     private float m_targetIntensity;
@@ -31,10 +33,17 @@ public class LightPulser : MonoBehaviour {
         // Switch back and forth from the chosen intensitys.
         if (m_light.intensity == m_targetIntensity)
         {
-            if (m_movingForward)
-                m_targetIntensity = startIntensity;
+            if (!randomFlicker)
+            {
+                if (m_movingForward)
+                    m_targetIntensity = startIntensity;
+                else
+                    m_targetIntensity = endIntensity;
+            }
             else
-                m_targetIntensity = endIntensity;
+            {
+                m_targetIntensity = Random.Range(startIntensity, endIntensity);
+            }
 
             m_movingForward = !m_movingForward;
         }
