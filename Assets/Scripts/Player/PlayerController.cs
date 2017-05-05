@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool m_resetCalled = false;
 	private bool m_resetVelocity = false;
-	private LedgeDetection m_ledgeDetect;
+	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
     private Vector3 m_moveTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
-		m_ledgeDetect = GetComponent<LedgeDetection>();
+		m_ledgeDetect = GetComponent<LedgeGrab>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
     }
 
