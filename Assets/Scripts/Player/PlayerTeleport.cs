@@ -253,6 +253,7 @@ public class PlayerTeleport : MonoBehaviour {
             m_arrived = true;
             m_charController.detectCollisions = true;
             m_player.enableGravity();
+            m_ledgeDetection.arrivedAtWall();
         }
         else if (m_player.m_playerState == PlayerState.isPause)
             cancelTeleport();
