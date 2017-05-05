@@ -10,7 +10,7 @@ public enum BlinkState
 public class PlayerTeleport : MonoBehaviour {
 
 
-	private LedgeDetection m_ledgeDetection;
+	private LedgeTele m_ledgeDetection;
     private LerpObject m_lerpObject;
     private TeleportationAdjuster m_teleportAdjuster;
 	private GameObject m_instanceOfteleportTarget;
@@ -79,7 +79,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
 		//m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
         m_charController = GetComponent<CharacterController>();
-		m_ledgeDetection = GetComponent<LedgeDetection>();
+		m_ledgeDetection = GetComponent<LedgeTele>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
@@ -194,27 +194,29 @@ public class PlayerTeleport : MonoBehaviour {
                 if (!m_cancelTeleport && m_indi.activeSelf)
                 {
 
-                    if (m_foundLedge)
-                    {
-                        //						print ("Found ledge");
-                        moveTo(m_grabPoint);
-                        //m_foundLedge = false;
-                    }
-                    else if (m_ledgeDetection.isLedgeBlocked())
-                    {
-                        //						print ("Ledge blocked");
-                        moveTo(m_grabPoint);
-                    }
-                    else if (!m_enoughSpace)
-                    {
-                        if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint))
-                            moveTo(m_grabPoint);
-                    }
-                    else
-                    {
-                        m_ledgeDetection.isTeleporting();
-                        moveTo(m_indi.transform.position);
-                    }
+					if (m_foundLedge) 
+					{
+						print ("Found ledge");
+						moveTo (m_grabPoint);
+						//m_foundLedge = false;
+					} 
+					else if (m_ledgeDetection.isLedgeBlocked()) 
+					{
+						print ("Ledge blocked");
+						moveTo (m_grabPoint);
+					} 
+					else if (!m_enoughSpace) 
+					{
+						print ("Not enough space");
+						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
+							moveTo (m_grabPoint);
+					} 
+					else 
+					{
+						print ("No ledge");
+						m_ledgeDetection.startTeleporting();
+						moveTo(m_indi.transform.position);
+					}
 
                     m_blinkState = BlinkState.blinking;
                     Vector3 lastPos = transform.position;
@@ -255,8 +257,8 @@ public class PlayerTeleport : MonoBehaviour {
         else if (m_player.m_playerState == PlayerState.isPause)
             cancelTeleport();
 
-            //Checks if color has changed since last frame to avoid needless material changes
-            if (m_currentColor != m_lastColor)
+        //Checks if color has changed since last frame to avoid needless material changes
+        if (m_currentColor != m_lastColor)
         {
             m_emissionMat.SetColor("_EmissionColor", m_currentColor);
         }
@@ -337,7 +339,7 @@ public class PlayerTeleport : MonoBehaviour {
         if (m_raycaster.doRaycast(out hit))
         {
 			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
-
+			print ("Enough space: " + m_enoughSpace);
 			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
             {
