@@ -9,10 +9,10 @@ public class LedgeTele : FindLedge {
 
 	// Variables for findValidPosition()
 	private float m_distanceDelta = 0.5f;
-	private Vector3 m_validIndPosition = new Vector3(0, 0, 0);
 	private bool m_indPositionSet = false;
-	private Vector3 m_invalidPosition = new Vector3 (0, 0, 0);
 	private bool m_isTeleporting = false;
+	private Vector3 m_validIndPosition = new Vector3(0, 0, 0);
+	private Vector3 m_invalidPosition = new Vector3 (0, 0, 0);
 
 	/*
 	 * Raycasts to find out if there is enough space for the player to teleport to target location
