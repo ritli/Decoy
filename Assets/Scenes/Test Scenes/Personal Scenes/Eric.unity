@@ -359,6 +359,11 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114432632614438868, guid: 369ae9b06ae92074885005508bf740ff,
+        type: 2}
+      propertyPath: m_alwaysClearPrefs
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 369ae9b06ae92074885005508bf740ff, type: 2}
   m_IsPrefabParent: 0
@@ -457,6 +462,10 @@ Prefab:
         type: 2}
       propertyPath: decoyVelocityInheritance
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 11439354, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+      propertyPath: m_StickToGroundForce
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
@@ -1677,6 +1686,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkIndex: 0
+  timed: 0
+  m_time: 0
   startPos: {fileID: 1966169820}
   destPos: {fileID: 1158314415}
   speed: 1
@@ -2307,6 +2318,8 @@ MonoBehaviour:
   - activationObject: {fileID: 1413501252}
     setState: 1
     delay: 2
+  m_triggerType: 0
+  m_triggererTag: 
 --- !u!114 &1413501250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2442,6 +2455,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkIndex: 1
+  timed: 0
+  m_time: 0
   startPos: {fileID: 906793790}
   destPos: {fileID: 1004124719}
   speed: 0.1
