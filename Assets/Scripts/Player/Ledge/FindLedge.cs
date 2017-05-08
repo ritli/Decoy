@@ -92,8 +92,8 @@ public class FindLedge : MonoBehaviour {
 		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
-			wallTarget = m_wallPoint + hit.normal * m_playerLength;
-			wallTarget.y = hit.point.y + hit.normal.y * m_playerLength;
+			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
+			m_newPosition.y = hit.point.y + hit.normal.y * m_playerLength;
 			m_isLedgeBlocked = true;
 //			print ("sweep up");
 			return false;
@@ -108,7 +108,7 @@ public class FindLedge : MonoBehaviour {
 			{
 				Debug.DrawRay (hit.point, hit.normal, Color.yellow);
 				// There is a wall where floor might be...
-				wallTarget = m_wallPoint;
+				m_newPosition = m_wallPoint;
 				m_isLedgeBlocked = true;
 //				print ("sweep forward");
 				return false;

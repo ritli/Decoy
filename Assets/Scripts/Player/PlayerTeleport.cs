@@ -365,7 +365,7 @@ public class PlayerTeleport : MonoBehaviour {
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
 						m_foundLedge = false;	
-						m_indi.transform.position = m_grabPoint;
+						m_indi.transform.position = m_ledgeDetection.getNewPosition();
 						return;
 					} 
 					else
