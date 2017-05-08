@@ -8,7 +8,7 @@ public class AudioPlayer : MonoBehaviour {
     public string[] m_events;
     public FMODUnity.StudioEventEmitter m_emitter;
 
-	void Start () {
+	void Awake () {
 		if (m_emitter == null)
         {
             if (GetComponent<FMODUnity.StudioEventEmitter>())
