@@ -92,9 +92,10 @@ public class FindLedge : MonoBehaviour {
 		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
-			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
-			m_newPosition.y = hit.point.y + hit.normal.y * m_playerLength;
+			wallTarget = m_wallPoint + hit.normal * m_playerLength;
+			wallTarget.y = hit.point.y + hit.normal.y * m_playerLength;
 			m_isLedgeBlocked = true;
+//			print ("sweep up");
 			return false;
 		}
 
@@ -105,10 +106,11 @@ public class FindLedge : MonoBehaviour {
 		{
 			if (Vector3.Angle (hit.normal, Vector3.up) > 45) 
 			{
-				Debug.DrawRay (hit.point, hit.normal, Color.black);
+				Debug.DrawRay (hit.point, hit.normal, Color.yellow);
 				// There is a wall where floor might be...
-				m_newPosition = m_wallPoint;
+				wallTarget = m_wallPoint;
 				m_isLedgeBlocked = true;
+//				print ("sweep forward");
 				return false;
 			}
 		}
@@ -132,6 +134,7 @@ public class FindLedge : MonoBehaviour {
 						Debug.DrawRay (hit.point, hit.normal, Color.cyan);
 						m_newPosition = m_wallPoint;
 						m_isLedgeBlocked = true;
+//						print ("in if sweep up");
 						return false;
 					}
 
@@ -185,5 +188,10 @@ public class FindLedge : MonoBehaviour {
 	public bool isLedgeBlocked() 
 	{
 		return m_isLedgeBlocked;	
+	}
+
+	public void hitNothing() 
+	{
+		m_isLedgeBlocked = false;	
 	}
 }

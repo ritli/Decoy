@@ -340,7 +340,7 @@ public class PlayerTeleport : MonoBehaviour {
         if (m_raycaster.doRaycast(out hit))
         {
 			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
-			print ("Enough space: " + m_enoughSpace);
+//			print ("Enough space: " + m_enoughSpace);
 			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
             {
@@ -365,7 +365,7 @@ public class PlayerTeleport : MonoBehaviour {
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
 						m_foundLedge = false;	
-						m_indi.transform.position = m_ledgeDetection.getNewPosition ();
+						m_indi.transform.position = m_grabPoint;
 						return;
 					} 
 					else
@@ -409,13 +409,11 @@ public class PlayerTeleport : MonoBehaviour {
         // Check for collision of floor when ray does not hit a surface.
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
-            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
-            //print("Hitting the ground");
+            m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+//            print("Hitting the ground");
 			m_foundLedge = false;
-            //print("Hitting the ground");
             return;
         }
-
 
 
         for (int i = 0; i < 5; i++)
@@ -434,7 +432,7 @@ public class PlayerTeleport : MonoBehaviour {
             }
         }
 		m_foundLedge = false;
-
+		m_ledgeDetection.hitNothing();
         m_indi.transform.position = transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)
