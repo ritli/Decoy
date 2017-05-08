@@ -604,7 +604,7 @@ public class PlayerController : MonoBehaviour, IKillable
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         // If character is in middle of jump and controller is not currently scaling the velocity.
-        if (m_Jumping && !m_scalingVelocity)
+        if (!m_CharacterController.isGrounded && !m_scalingVelocity)
         {
             desiredMove = m_jumpVector;
 
@@ -613,7 +613,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
             // If the new vector has an opposite signed angle than the current, don't update the jumpVector. If the desired vector however
             if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec))
-                || Vector3.Dot(transform.forward, desiredMove) == 0)
+                || m_jumpInput.y == 0) //Vector3.Dot(transform.forward, desiredMove) == 0
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
             if (Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right, comingVec))
@@ -729,18 +729,6 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             return;
         }
-        /*if (m_CharacterController.velocity.magnitude > 0 && m_CharacterController.isGrounded)
-        {
-            m_Camera.transform.localPosition =
-                m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude + speed);
-            newCameraPosition = m_Camera.transform.localPosition;
-            newCameraPosition.y = m_Camera.transform.localPosition.y - m_JumpBob.Offset();
-        }
-        else
-        {
-            newCameraPosition = m_Camera.transform.localPosition;
-            newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
-        }*/
         
         // Reset camera before each offset so that it does not get continuously moved
         m_Camera.transform.localPosition = m_cameraOrigin;
