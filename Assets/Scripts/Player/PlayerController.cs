@@ -116,9 +116,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool m_resetCalled = false;
 	private bool m_resetVelocity = false;
-	private LedgeDetection m_ledgeDetect;
+	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
-    private Vector3 m_moveTo = new Vector3(0, 0, 0);
+    private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
 
     private bool m_scalingVelocity = false;
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour, IKillable
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
-		m_ledgeDetect = GetComponent<LedgeDetection>();
+		m_ledgeDetect = GetComponent<LedgeGrab>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
     }
 
@@ -475,12 +475,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
             m_cameraBobber.startBob(jumpingBob, false);
 
-		if (m_ledgeDetect.canGrab())
+		if (m_ledgeDetect.lookForLedge(out m_ledgeLerpTo))
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
                 m_cameraBobber.stopBob();
-                m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
+				//print (m_ledgeDetect.getNewPosition ());
+				m_ledgeLerp.lerp(m_ledgeLerpTo);
             }
             m_Jump = false;
             m_Jumping = false;
@@ -604,7 +605,7 @@ public class PlayerController : MonoBehaviour, IKillable
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         // If character is in middle of jump and controller is not currently scaling the velocity.
-        if (m_Jumping && !m_scalingVelocity)
+        if (!m_CharacterController.isGrounded && !m_scalingVelocity)
         {
             desiredMove = m_jumpVector;
 
@@ -613,7 +614,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
             // If the new vector has an opposite signed angle than the current, don't update the jumpVector. If the desired vector however
             if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec))
-                || Vector3.Dot(transform.forward, desiredMove) == 0)
+                || m_jumpInput.y == 0) //Vector3.Dot(transform.forward, desiredMove) == 0
                 m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
 
             if (Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right, comingVec))
@@ -729,18 +730,6 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             return;
         }
-        /*if (m_CharacterController.velocity.magnitude > 0 && m_CharacterController.isGrounded)
-        {
-            m_Camera.transform.localPosition =
-                m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude + speed);
-            newCameraPosition = m_Camera.transform.localPosition;
-            newCameraPosition.y = m_Camera.transform.localPosition.y - m_JumpBob.Offset();
-        }
-        else
-        {
-            newCameraPosition = m_Camera.transform.localPosition;
-            newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
-        }*/
         
         // Reset camera before each offset so that it does not get continuously moved
         m_Camera.transform.localPosition = m_cameraOrigin;
