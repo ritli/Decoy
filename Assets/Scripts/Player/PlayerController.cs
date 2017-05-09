@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour, IKillable
 	private bool m_resetVelocity = false;
 	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
+	private bool m_ledgeGrabbing = false;
     private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
 
@@ -420,12 +421,16 @@ public class PlayerController : MonoBehaviour, IKillable
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
+//			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
             // the jump state needs to read here to make sure it is not missed
-			if (!m_ledgeLerp.isLerping ())
+			if (!m_ledgeLerp.isLerping())
 				Jump ();
-			else
+			else {
+				// ############# Not ledge grabbing anymore ################
+				m_ledgeGrabbing = false;
 				m_MoveDir.y = 0;
+			}
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
@@ -480,8 +485,9 @@ public class PlayerController : MonoBehaviour, IKillable
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
                 m_cameraBobber.stopBob();
-				//print (m_ledgeDetect.getNewPosition ());
 				m_ledgeLerp.lerp(m_ledgeLerpTo);
+				// ############# ledge grabbing here ###############
+				m_ledgeGrabbing = true;
             }
             m_Jump = false;
             m_Jumping = false;
