@@ -60,7 +60,7 @@ public class LedgeGrab : FindLedge {
 			if (raySuccess)
 				foundLedge = findLedge(hit, out notUsed, out floorPosition);
 
-			print ("foundLedge: " + foundLedge);
+//			print ("foundLedge: " + foundLedge);
 
 			if (angleOk && foundLedge) 
 			{
