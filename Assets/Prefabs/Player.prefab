@@ -72,8 +72,9 @@ GameObject:
   - component: {fileID: 11439354}
   - component: {fileID: 11492416}
   - component: {fileID: 11402340}
-  - component: {fileID: 114638914860175162}
   - component: {fileID: 114908024422846402}
+  - component: {fileID: 114939885223513076}
+  - component: {fileID: 114081350608886980}
   - component: {fileID: 114508373021751664}
   - component: {fileID: 114891065613552114}
   - component: {fileID: 114775751990688318}
@@ -167,8 +168,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9, y: 1.91, z: -8.18}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.9, y: 1.95, z: -1.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4949601670907862}
@@ -176,7 +177,7 @@ Transform:
   - {fileID: 470846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -128.08801, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90.64001, z: 0}
 --- !u!20 &2037190
 Camera:
   m_ObjectHideFlags: 1
@@ -304,9 +305,9 @@ MonoBehaviour:
   m_crouchSpeedMultiplier: 0.8
   m_speedToReachCrouch: 2
   m_JumpForce: 10
-  m_JumpAirVelDecay: 0
+  m_JumpAirVelDecay: 0.0033
   m_JumpAirControl: 0.25
-  m_StickToGroundForce: 0.3
+  m_StickToGroundForce: 4
   m_GravityMultiplier: 2
   m_MouseLook:
     XSensitivity: 2
@@ -330,7 +331,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120282}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a036ac295913984aa7fbcfaa61e4638, type: 3}
   m_Name: 
@@ -407,7 +408,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -7681,6 +7682,20 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
+--- !u!114 &114081350608886980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60c59c97217114aca830874a33b98b38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ledgeSensitivity: 1
+  horizontal: 45
+  vertical: 75
 --- !u!114 &114129811633040402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7824,20 +7839,6 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
---- !u!114 &114638914860175162
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029c19cb0b0d54b99b36d25bad306c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ledgeSensitivity: 1
-  horizontal: 45
-  vertical: 75
 --- !u!114 &114645807170923446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7984,7 +7985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 2
-  lerpSpeed: 8
+  lerpSpeed: 4
   velocityReduction: -110
 --- !u!114 &114916954519775552
 MonoBehaviour:
@@ -7997,6 +7998,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc20dea4146a6e24b9a701d0cebc8976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114939885223513076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ceba3e8e69a84913884f27f5e428fc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ledgeSensitivity: 1
 --- !u!135 &135489145939978978
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -8007,7 +8020,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.75
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!137 &137135509854049180
 SkinnedMeshRenderer:
