@@ -665,21 +665,14 @@ public class PlayerController : MonoBehaviour, IKillable
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
-        if (m_CharacterController.isGrounded)
-        {
-            print("Character is grounded: " + m_MoveDir.y);
-        }
-
-
         RaycastHit groundHit;
         Debug.DrawRay(transform.position, new Vector3(0, -1, 0), Color.green);
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
-            print("Gogo powerangers!");
             //m_MoveDir.y = -m_StickToGroundForce;
 
-            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 2.0f))
+            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
             {
                 m_MoveDir.y = -m_StickToGroundForce;
                 m_onEdge = false;
@@ -689,8 +682,8 @@ public class PlayerController : MonoBehaviour, IKillable
             {
                 m_MoveDir.y = -0.3f;
                 m_onEdge = true;
-                m_MoveDir.x += m_ledgeHitDir.x;
-                m_MoveDir.z += m_ledgeHitDir.z;
+                //m_MoveDir.x += m_ledgeHitDir.x;
+                //m_MoveDir.z += m_ledgeHitDir.z;
                 //m_MoveDir.x = 5.0f;
             }
 
@@ -709,7 +702,7 @@ public class PlayerController : MonoBehaviour, IKillable
 			} 
 
         }
-        else 
+        else
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
         }
@@ -726,6 +719,9 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
+
+        //if (m_ledgeHitDir != Vector3.zero)
+        //    m_CollisionFlags = m_CharacterController.Move(m_ledgeHitDir * Time.fixedDeltaTime);
 
         m_MouseLook.UpdateCursorLock();
 
