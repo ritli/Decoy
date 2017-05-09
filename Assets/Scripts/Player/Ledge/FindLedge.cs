@@ -43,8 +43,8 @@ public class FindLedge : MonoBehaviour {
 		// Rotates around the right vector to face toward the floor
 		direction = Quaternion.AngleAxis(-90f, hitRight) * direction.normalized;
 
-		//		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
-		//		Debug.DrawRay(wallHit.point, direction * 4, Color.grey);
+//		Debug.DrawRay(wallHit.point, hitRight * 4, Color.magenta);
+//		Debug.DrawRay(wallHit.point, direction * 4, Color.grey);
 
 		// Sweeptest rays up and forward
 		Ray raySweepUp = new Ray();
@@ -60,8 +60,11 @@ public class FindLedge : MonoBehaviour {
 
 		// Creates a point above and a little bit inside the wall to look for floor
 		Vector3 localUp = Vector3.Cross (wallHit.normal, hitRight);
+//		print ("wallHit.point: " + wallHit.point);
+//		print ("localUp: " + localUp);
+//		print ("wallHit.normal: " + wallHit.normal);
 		Vector3 newPosition = wallHit.point + localUp * ledgeSensitivity - wallHit.normal * positionOffset;
-
+//		print ("newPos: " + newPosition);
 		// A ray above target position and facing towards the wall's floor
 		Ray rayDown = new Ray();
 		rayDown.origin = newPosition;
@@ -75,12 +78,12 @@ public class FindLedge : MonoBehaviour {
 		RaycastHit hit = new RaycastHit();
 
 		// Ray based on given wallNormal
-		//		Debug.DrawRay(wallHit.point, wallHit.normal * 4, Color.green);
-		//		Debug.DrawRay(wallHit.point, wallHit.normal * -4, Color.red);
+//		Debug.DrawRay(wallHit.point, wallHit.normal * 4, Color.green);
+//		Debug.DrawRay(wallHit.point, wallHit.normal * -4, Color.red);
 
 		// Ray moved up and looking down based on wallNormal
-		//		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
-		//		Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
+//		Debug.DrawRay(m_rayDown.origin, m_rayDown.direction * 4, Color.yellow);
+//		Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		// Sweeptest using rays
 		Debug.DrawRay (raySweepUp.origin, raySweepUp.direction * (ledgeSensitivity + m_playerLength), Color.white);
@@ -89,7 +92,7 @@ public class FindLedge : MonoBehaviour {
 		m_isLedgeBlocked = false;
 
 		// Sweeping upward from beside the wall
-		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity))
+		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, m_playerLength))
 		{
 			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
 			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
@@ -101,12 +104,15 @@ public class FindLedge : MonoBehaviour {
 
 		raySweepUp.origin = newPosition;
 
+		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction * m_playerWidth * 2, Color.white);
+
 		// Sweeping forward
-		if (m_raycaster.doRaycast (out hit, raySweepForward.direction, raySweepForward.origin, ledgeSensitivity)) 
+		if (m_raycaster.doRaycast(out hit, raySweepForward.direction, raySweepForward.origin, m_playerWidth * 2)) 
 		{
+//			print ("Found something forward");
 			if (Vector3.Angle (hit.normal, Vector3.up) > 45) 
 			{
-				Debug.DrawRay (hit.point, hit.normal, Color.yellow);
+				//Debug.DrawRay (hit.point, hit.normal, Color.yellow, 3);
 				// There is a wall where floor might be...
 				m_newPosition = m_wallPoint;
 				m_isLedgeBlocked = true;
@@ -128,6 +134,12 @@ public class FindLedge : MonoBehaviour {
 				// If the floor is above where the aim is
 				if (hit.point.y >= wallHit.point.y)
 				{
+					// Store the found normal to compare with rayDown2
+					rayDownNormal = hit.normal;
+
+					// Set the new position
+					m_newPosition = hit.point;
+
 					// Sweeping upward from ontop of the wall
 					if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity + m_playerLength))
 					{
@@ -138,11 +150,7 @@ public class FindLedge : MonoBehaviour {
 						return false;
 					}
 
-					// Store the found normal to compare with rayDown2
-					rayDownNormal = hit.normal;
 
-					// Set the new position
-					m_newPosition = hit.point;
 
 					// Raycast again to check if the first hit was inside an object
 					if (m_raycaster.doRaycast(out hit, rayDown2.direction, rayDown2.origin)) 

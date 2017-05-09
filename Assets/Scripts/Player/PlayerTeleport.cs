@@ -364,6 +364,7 @@ public class PlayerTeleport : MonoBehaviour {
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
+						// Sets the indicator to a new calculated position depending on how the ledge is blocked
 						m_foundLedge = false;	
 						m_indi.transform.position = m_ledgeDetection.getNewPosition();
 						return;
