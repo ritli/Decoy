@@ -679,17 +679,18 @@ public class PlayerController : MonoBehaviour, IKillable
             print("Gogo powerangers!");
             //m_MoveDir.y = -m_StickToGroundForce;
 
-            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
+            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 2.0f))
             {
                 m_MoveDir.y = -m_StickToGroundForce;
                 m_onEdge = false;
+                m_ledgeHitDir = Vector3.zero;
             }
             else
             {
                 m_MoveDir.y = -0.3f;
                 m_onEdge = true;
-                m_MoveDir.x = m_ledgeHitDir.x;
-                m_MoveDir.z = m_ledgeHitDir.z;
+                m_MoveDir.x += m_ledgeHitDir.x;
+                m_MoveDir.z += m_ledgeHitDir.z;
                 //m_MoveDir.x = 5.0f;
             }
 
@@ -773,7 +774,6 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_onEdge)
         {
             m_ledgeHitDir = (hit.transform.position - transform.position) * -1;
-            //m_CharacterController.Move(hitDir*-1 * Time.deltaTime);
             Debug.DrawRay(transform.position, hitDir * 5.0f, Color.red);
             
         }
