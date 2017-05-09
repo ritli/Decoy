@@ -377,6 +377,7 @@ public class PlayerController : MonoBehaviour, IKillable
         GetComponentInChildren<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;
         m_inDeathState = false;
         m_controlsEnabled = true;
+        m_teleport.m_indi.SetActive(false);
 
         GameManager.resetActivations();
     }
