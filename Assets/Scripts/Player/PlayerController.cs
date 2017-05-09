@@ -71,6 +71,9 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_GravityMultiplier;
     private float m_originGravity;
     private bool m_usingGravity = true;
+    private Raycast m_raycaster;
+    private bool m_onEdge = false;
+    private Vector3 m_ledgeHitDir = new Vector3(0, 0, 0);
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
@@ -159,6 +162,7 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_walkingBobber = gameObject.AddComponent<VectorBobber>();
         m_walkingBobber.WalkBob = true;
+        m_raycaster = GetComponent<Raycast>();
     }
 
     private void Start()
@@ -606,7 +610,7 @@ public class PlayerController : MonoBehaviour, IKillable
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         // If character is in middle of jump and controller is not currently scaling the velocity.
-        if (!m_CharacterController.isGrounded && !m_scalingVelocity)
+        if (m_Jumping && !m_scalingVelocity) // m_Jumping
         {
             desiredMove = m_jumpVector;
 
@@ -662,12 +666,29 @@ public class PlayerController : MonoBehaviour, IKillable
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
+        RaycastHit groundHit;
+        Debug.DrawRay(transform.position, new Vector3(0, -1, 0), Color.green);
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
-            m_MoveDir.y = -m_StickToGroundForce;
-                
-			if (m_Jump) 
+            //m_MoveDir.y = -m_StickToGroundForce;
+
+            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
+            {
+                m_MoveDir.y = -m_StickToGroundForce;
+                m_onEdge = false;
+                m_ledgeHitDir = Vector3.zero;
+            }
+            else
+            {
+                m_MoveDir.y = -0.3f;
+                m_onEdge = true;
+                //m_MoveDir.x += m_ledgeHitDir.x;
+                //m_MoveDir.z += m_ledgeHitDir.z;
+                //m_MoveDir.x = 5.0f;
+            }
+
+            if (m_Jump) 
 			{
 				m_jumpVector = m_MoveDir;
 				m_jumpVectorR = transform.right;
@@ -699,6 +720,9 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
+
+        //if (m_ledgeHitDir != Vector3.zero)
+        //    m_CollisionFlags = m_CharacterController.Move(m_ledgeHitDir * Time.fixedDeltaTime);
 
         m_MouseLook.UpdateCursorLock();
 
@@ -742,6 +766,15 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
+        Vector3 hitDir = new Vector3(0, 0, 0);
+
+        if (m_onEdge)
+        {
+            m_ledgeHitDir = (hit.transform.position - transform.position) * -1;
+            Debug.DrawRay(transform.position, hitDir * 5.0f, Color.red);
+            
+        }
+
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)
         {
