@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_usingGravity = true;
     private Raycast m_raycaster;
     private bool m_onEdge = false;
+    private Vector3 m_ledgeHitDir = new Vector3(0, 0, 0);
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
@@ -686,6 +687,8 @@ public class PlayerController : MonoBehaviour, IKillable
             {
                 m_MoveDir.y = -0.3f;
                 m_onEdge = true;
+                m_MoveDir.x = m_ledgeHitDir.x;
+                m_MoveDir.z = m_ledgeHitDir.z;
                 //m_MoveDir.x = 5.0f;
             }
 
@@ -768,8 +771,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
         if (m_onEdge)
         {
-            hitDir = hit.transform.position - transform.position;
+            m_ledgeHitDir = (hit.transform.position - transform.position) * -1;
+            //m_CharacterController.Move(hitDir*-1 * Time.deltaTime);
             Debug.DrawRay(transform.position, hitDir * 5.0f, Color.red);
+            
         }
 
         //dont move the rigidbody if the character is on top of it
