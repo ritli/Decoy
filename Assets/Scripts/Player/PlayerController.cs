@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour, IKillable
 	private bool m_resetVelocity = false;
 	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
-    private Vector3 m_moveTo = new Vector3(0, 0, 0);
+    private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
 
     private bool m_scalingVelocity = false;
@@ -479,12 +479,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
             m_cameraBobber.startBob(jumpingBob, false);
 
-		if (m_ledgeDetect.canGrab())
+		if (m_ledgeDetect.lookForLedge(out m_ledgeLerpTo))
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
                 m_cameraBobber.stopBob();
-                m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
+				//print (m_ledgeDetect.getNewPosition ());
+				m_ledgeLerp.lerp(m_ledgeLerpTo);
             }
             m_Jump = false;
             m_Jumping = false;
