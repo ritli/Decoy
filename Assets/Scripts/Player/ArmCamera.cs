@@ -8,7 +8,7 @@ public class ArmCamera : MonoBehaviour {
     Camera m_Camera;
 
 	void Start () {
-        m_MainCamera = Camera.main.GetComponent<Camera>();
+        m_MainCamera = transform.parent.GetComponent<Camera>();
         m_Camera = GetComponent<Camera>();
     }
 	

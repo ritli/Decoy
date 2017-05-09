@@ -105,7 +105,7 @@ public class LedgeDetection : MonoBehaviour {
 	 */
 	void OnTriggerStay(Collider other) 
 	{
-		if (other.transform.tag != Tags.player) 
+		if (other.transform.tag != Tags.player && m_collider != null) 
 		{
 			Vector3 normal = calcNormal ();
 			float angle = Vector3.Angle (-Vector3.up, normal);
@@ -139,7 +139,8 @@ public class LedgeDetection : MonoBehaviour {
      */
     public bool findLedge(RaycastHit wallHit)
     {
-		m_wallPoint = wallHit.point + wallHit.normal;
+        m_wallPoint = wallHit.point + wallHit.normal;
+        print("Afte ledge: " + m_wallPoint);
 
         // Creates new direction and position based on wall hit
         Vector3 direction = new Vector3(wallHit.normal.x, wallHit.normal.y, wallHit.normal.z) * -1;

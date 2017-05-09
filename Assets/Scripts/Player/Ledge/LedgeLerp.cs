@@ -7,7 +7,6 @@ public class LedgeLerp : MonoBehaviour
 {
 
     private bool m_beginLerp = false;
-    private Vector3 m_startPos = new Vector3(0, 0, 0);
     private Vector3 m_targetPos = new Vector3(0, 0, 0);
 	private float m_distance;
     private float m_incrementor = 0f;
@@ -71,7 +70,6 @@ public class LedgeLerp : MonoBehaviour
 
     public void lerp(Vector3 destination)
     {
-        m_startPos = transform.position;
 		m_targetPos = destination + Vector3.up;
         m_beginLerp = true;
     }
