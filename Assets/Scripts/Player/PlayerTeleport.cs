@@ -10,7 +10,7 @@ public enum BlinkState
 public class PlayerTeleport : MonoBehaviour {
 
 
-	private LedgeDetection m_ledgeDetection;
+	private LedgeTele m_ledgeDetection;
     private LerpObject m_lerpObject;
     private TeleportationAdjuster m_teleportAdjuster;
 	private GameObject m_instanceOfteleportTarget;
@@ -30,7 +30,6 @@ public class PlayerTeleport : MonoBehaviour {
     private float m_playerLength;
 	private float m_playerWidth;
     private bool m_cancelTeleport = false;
-    private bool ableToTeleport = true;
     private Timer m_cooldownTimer;
     private bool m_isPaused = false;
     public FOVKick m_fovKick;
@@ -54,8 +53,9 @@ public class PlayerTeleport : MonoBehaviour {
     [Range(0, 100)]
     public float decoyVelocityInheritance = 100.0f;
 
-    private Vector3 m_teleportTo = new Vector3(0,0,0);
+	private Vector3 m_teleportTo = new Vector3(0, 0, 0);
 	private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
+	private Vector3 m_grabPoint = new Vector3(0, 0, 0);
 	private bool m_arrived = true;
 	private bool m_foundLedge = false;
 	private bool m_enoughSpace = true;
@@ -79,7 +79,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer = GetComponent<Timer>();
 		//m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
         m_charController = GetComponent<CharacterController>();
-		m_ledgeDetection = GetComponent<LedgeDetection>();
+		m_ledgeDetection = GetComponent<LedgeTele>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
 		m_cooldownTimer = GetComponent<Timer>();
         m_raycaster = GetComponent<Raycast>();
@@ -119,12 +119,11 @@ public class PlayerTeleport : MonoBehaviour {
 
     // Handle input for teleportation controls.
 	void Update () {
-
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
             if (m_indi.activeSelf)
             {
-				if (m_foundLedge)
+                if (m_foundLedge)
                 {
                     //m_particleSystem.startColor = Color.blue;
                     //m_particleSystem.color = Color.red;
@@ -134,7 +133,6 @@ public class PlayerTeleport : MonoBehaviour {
                     //m_particleSystem.startColor = Color.red;
                     //m_particleSystem.color = Color.yellow;
                 }
-
                 else
                 {
                     //m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
@@ -154,27 +152,31 @@ public class PlayerTeleport : MonoBehaviour {
             }
 
             // Move towards target position set when letting go of the "Teleport" button.
-			if (!m_arrived)
+            if (!m_arrived)
             {
                 m_blinkState = BlinkState.nah;
                 float step = teleportSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
-                // When the players position has arrived, stop moving. //////// BUG: Distance is 0 even though it shouldnt be
+                // When the players position has arrived, stop moving.
                 if (Vector3.Distance(transform.position, m_teleportTo) == 0)
                 {
-					m_arrived = true;
+                    m_arrived = true;
                     m_ledgeDetection.arrivedAtWall();
-					m_charController.detectCollisions = true;
+                    m_charController.detectCollisions = true;
 
-					if (m_foundLedge) {
-						m_ledgeLerp.lerp(m_ledgeLerpTo);
-						m_foundLedge = false;  
+                    if (m_foundLedge)
+                    {
+                        m_ledgeLerp.lerp(m_ledgeLerpTo);
+                        m_foundLedge = false;
                     }
-					m_player.enableGravity();
-					m_player.modifyVelocity(velocityAfterTeleport / 100);
+                    m_player.enableGravity();
+                    m_player.modifyVelocity(velocityAfterTeleport / 100);
                 }
             }
+
+            if (Input.GetButtonDown("Teleport"))
+                m_cancelTeleport = false;
 
             if (Input.GetButton("Teleport"))
             {
@@ -189,29 +191,32 @@ public class PlayerTeleport : MonoBehaviour {
             }
             if (Input.GetButtonUp("Teleport"))
             {
-				if (!m_cancelTeleport && m_indi.activeSelf)
-				{
+                if (!m_cancelTeleport && m_indi.activeSelf)
+                {
 
 					if (m_foundLedge) 
 					{
-						moveTo (m_ledgeDetection.getWallPoint());
+						print ("Found ledge");
+						moveTo (m_grabPoint);
 						//m_foundLedge = false;
 					} 
-					else if (m_ledgeDetection.isLedgeBlocked ()) 
+					else if (m_ledgeDetection.isLedgeBlocked()) 
 					{
-						moveTo (m_ledgeDetection.getNewPosition ());
-					}
+						print ("Ledge blocked");
+						moveTo (m_grabPoint);
+					} 
 					else if (!m_enoughSpace) 
 					{
-						if (m_ledgeDetection.findValidPosition (m_ledgeDetection.getInvalidPosition ()))
-							moveTo(m_ledgeDetection.getNewPosition ());
-							
+						print ("Not enough space");
+						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
+							moveTo (m_grabPoint);
+					} 
+					else 
+					{
+						print ("No ledge");
+						m_ledgeDetection.startTeleporting();
+						moveTo(m_indi.transform.position);
 					}
-					else
-                    {
-						m_ledgeDetection.isTeleporting();
-                        moveTo(m_indi.transform.position);
-                    }
 
                     m_blinkState = BlinkState.blinking;
                     Vector3 lastPos = transform.position;
@@ -223,36 +228,35 @@ public class PlayerTeleport : MonoBehaviour {
 
                     //Inherit player velocity
                     Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
-                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance/100;
+                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance / 100;
                     GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
                     GameManager.GetPlayer().CreateDecoy();
                 }
-				else
+                else
                     m_cancelTeleport = false;
-				m_indi.SetActive(false);
+                m_indi.SetActive(false);
             }
 
             // When right clicking, cancel teleportation.
             if (Input.GetButtonDown("CancelTeleport"))
             {
-                if (m_indi.activeSelf)
-                {
-                    //m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
-                   // m_soundStarted = false;
-                    m_blinkState = BlinkState.nah;
-                    m_cancelTeleport = true;
-                    m_indi.SetActive(false);
-                    m_foundLedge = false;
-                }
-
-                if (resetTimeOnCancel)
-                    m_cooldownTimer.resetTimer();
+                cancelTeleport();
             }
 
             //ReadBlinkState();
 
         }
+        else if (m_player.m_playerState == PlayerState.isDead)
+        {
+            cancelTeleport();
+            m_arrived = true;
+            m_charController.detectCollisions = true;
+            m_player.enableGravity();
+            m_ledgeDetection.arrivedAtWall();
+        }
+        else if (m_player.m_playerState == PlayerState.isPause)
+            cancelTeleport();
 
         //Checks if color has changed since last frame to avoid needless material changes
         if (m_currentColor != m_lastColor)
@@ -283,6 +287,22 @@ public class PlayerTeleport : MonoBehaviour {
         //StartCoroutine(m_fovKick.FOVKickDown());
         m_partController.LerpAlpha(0.5f, 0, 0.05f);
     }
+
+	void cancelTeleport() 
+	{
+		if (m_indi.activeSelf)
+		{
+			//m_emitter.Target.SetParameter("BlinkUsage", 1.6f);
+			// m_soundStarted = false;
+			m_blinkState = BlinkState.nah;
+			m_cancelTeleport = true;
+			m_indi.SetActive(false);
+			m_foundLedge = false;
+		}
+
+		if (resetTimeOnCancel)
+			m_cooldownTimer.resetTimer();
+	}
 
     void ShowIndicator()
     {
@@ -319,8 +339,8 @@ public class PlayerTeleport : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-			m_enoughSpace = m_ledgeDetection.findEnoughSpace (hit);
-
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
+//			print ("Enough space: " + m_enoughSpace);
 			// Roof
             if (Vector3.Angle(hit.normal, Vector3.down) < 45)
             {
@@ -334,26 +354,26 @@ public class PlayerTeleport : MonoBehaviour {
 			{
 				if (m_enoughSpace) 
 				{
-                    //Debug.DrawLine(transform.position, hit.point, Color.green);
-                    // ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge (hit) && hit.collider.tag != Tags.noGrab) 
+					// ## Start ledge detection ##
+					if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
 					{
 						// Only lerps to ledge if hit wasn't on NoGrab area
 						m_foundLedge = true;
-						m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
+						//m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
 						m_charController.detectCollisions = false;
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
+						// Sets the indicator to a new calculated position depending on how the ledge is blocked
 						m_foundLedge = false;	
-						m_indi.transform.position = m_ledgeDetection.getNewPosition ();
+						m_indi.transform.position = m_ledgeDetection.getNewPosition();
 						return;
 					} 
 					else
 						m_foundLedge = false;
 				}
 				if (m_ledgeDetection.isIndPosSet())
-					m_indi.transform.position = m_ledgeDetection.getValidIndPosition ();
+					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
 				else
 					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
@@ -390,13 +410,11 @@ public class PlayerTeleport : MonoBehaviour {
         // Check for collision of floor when ray does not hit a surface.
         else if (Physics.Raycast(rayDown, out hit, 1.5f))
         {
-            m_indi.transform.position = hit.point + new Vector3(0,0.1f,0);
-            //print("Hitting the ground");
+            m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+//            print("Hitting the ground");
 			m_foundLedge = false;
-            //print("Hitting the ground");
             return;
         }
-
 
 
         for (int i = 0; i < 5; i++)
@@ -415,7 +433,7 @@ public class PlayerTeleport : MonoBehaviour {
             }
         }
 		m_foundLedge = false;
-
+		m_ledgeDetection.hitNothing();
         m_indi.transform.position = transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)
