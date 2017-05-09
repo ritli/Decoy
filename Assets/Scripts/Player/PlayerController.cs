@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_originGravity;
     private bool m_usingGravity = true;
     private Raycast m_raycaster;
+    private bool m_onEdge = false;
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
@@ -677,9 +678,16 @@ public class PlayerController : MonoBehaviour, IKillable
             //m_MoveDir.y = -m_StickToGroundForce;
 
             if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
+            {
                 m_MoveDir.y = -m_StickToGroundForce;
+                m_onEdge = false;
+            }
             else
+            {
                 m_MoveDir.y = -0.3f;
+                m_onEdge = true;
+                //m_MoveDir.x = 5.0f;
+            }
 
             if (m_Jump) 
 			{
@@ -756,6 +764,14 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
+        Vector3 hitDir = new Vector3(0, 0, 0);
+
+        if (m_onEdge)
+        {
+            hitDir = hit.transform.position - transform.position;
+            Debug.DrawRay(transform.position, hitDir * 5.0f, Color.red);
+        }
+
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)
         {
