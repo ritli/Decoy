@@ -721,12 +721,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
-        if (m_onEdge)
-        {
-            print("Moving from ledge!");
-            //m_CollisionFlags = m_CharacterController.Move(m_ledgeHitDir * Time.fixedDeltaTime * ledgeAdjust);
-        }
-
         m_MouseLook.UpdateCursorLock();
 
         m_lastInput = Input; //Stores last input to determine if player has released the key.
@@ -769,13 +763,11 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
-        Vector3 hitDir = new Vector3(0, 0, 0);
 
         if (m_onEdge)
         {
-            m_ledgeHitDir = (hit.transform.position - transform.position) * -1;
-            print("RAY YOU FKN BTCH");
-            Debug.DrawRay(transform.position, hitDir * 5.0f, Color.red);
+            m_ledgeHitDir = (hit.collider.ClosestPointOnBounds(transform.position) - transform.position) * -1;
+            Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
         }
 
         //dont move the rigidbody if the character is on top of it
