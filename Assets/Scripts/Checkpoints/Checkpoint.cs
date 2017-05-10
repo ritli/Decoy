@@ -6,7 +6,7 @@ public class Checkpoint : MonoBehaviour {
 
     [Tooltip("place an empty gameobject as a child to use a forced spawnposition. \nIf not the Checkpoints center will be used.")]
     public Transform m_SpawnPosition;
-    private int m_Index = 0;
+    public int m_Index = 0;
     public SceneLoader.Scenes m_AssociatedSection;
 
     // Use this for initialization
