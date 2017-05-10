@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_GravityMultiplier;
     private float m_originGravity;
     private bool m_usingGravity = true;
+    private Raycast m_raycaster;
+    private bool m_onEdge = false;
+    private Vector3 m_ledgeHitDir = new Vector3(0, 0, 0);
+    [Tooltip("Decide the amount the player is pushed when touching an edge.")]
+    public float ledgeAdjust = 2.0f;
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
@@ -160,6 +165,7 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_walkingBobber = gameObject.AddComponent<VectorBobber>();
         m_walkingBobber.WalkBob = true;
+        m_raycaster = GetComponent<Raycast>();
     }
 
     private void Start()
@@ -416,6 +422,7 @@ public class PlayerController : MonoBehaviour, IKillable
         GetComponentInChildren<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;
         m_inDeathState = false;
         m_controlsEnabled = true;
+        m_teleport.m_indi.SetActive(false);
 
         GameManager.resetActivations();
     }
@@ -615,7 +622,7 @@ public class PlayerController : MonoBehaviour, IKillable
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         // If character is in middle of jump and controller is not currently scaling the velocity.
-        if (!m_CharacterController.isGrounded && !m_scalingVelocity)
+        if (m_Jumping && !m_scalingVelocity) // m_Jumping
         {
             desiredMove = m_jumpVector;
 
@@ -666,17 +673,31 @@ public class PlayerController : MonoBehaviour, IKillable
 
         desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-        //print("Desired movement: " + desiredMove);
-
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
+        RaycastHit groundHit;
+        Debug.DrawRay(transform.position, new Vector3(0, -1, 0), Color.green);
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
-            m_MoveDir.y = -m_StickToGroundForce;
-                
-			if (m_Jump) 
+            //m_MoveDir.y = -m_StickToGroundForce;
+
+            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
+            {
+                m_MoveDir.y = -m_StickToGroundForce;
+                m_onEdge = false;
+            }
+            else
+            {
+                m_MoveDir.y = -0.3f;
+                m_MoveDir = m_MoveDir + new Vector3(m_ledgeHitDir.x, m_ledgeHitDir.y * -1, m_ledgeHitDir.z) * ledgeAdjust;
+                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+
+                m_onEdge = true;
+            }
+
+            if (m_Jump) 
 			{
 				m_jumpVector = m_MoveDir;
 				m_jumpVectorR = transform.right;
@@ -694,6 +715,7 @@ public class PlayerController : MonoBehaviour, IKillable
         else
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+            m_onEdge = false;
         }
 			
 		if (m_resetVelocity) 
@@ -759,6 +781,13 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (m_onEdge)
+        {
+            m_ledgeHitDir = (hit.collider.ClosestPointOnBounds(transform.position) - transform.position) * -1;
+            Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
+        }
+
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)
         {
