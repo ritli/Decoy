@@ -21,86 +21,54 @@ public class LedgeTele : FindLedge {
 	{
 		// Angle used to determine on which surface there was a hit
 		float angle = Vector3.Angle(Vector3.up, hit.normal);
-
-		Vector3 localRight = Vector3.right;
-		Vector3 localUp = Vector3.forward;
+		bool newUpRight = false;
 
 		// If the hit wasn't on roof or floor, create new right and up vectors
-		if (angle > 0.1 && angle < 179.9) 
-		{
-			localRight = Vector3.Cross (Vector3.up, hit.normal);
-			localUp = Vector3.Cross (localRight, hit.normal);
-		}
-		// Move the point up a bit to prevent it from raycasting from inside the object
-		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
-
-		Debug.DrawRay(hit.point, localRight, Color.magenta);
-		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
-		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
+		if (angle > 0.1 && angle < 179.9)
+			newUpRight = true;
 
 		m_invalidPosition = hit.point;
 
 		RaycastHit rayHit = new RaycastHit();
 		RaycastHit wallNormalRayHit = new RaycastHit();
 		bool enoughSpace = true;
+		m_indPositionSet = false;
 
 		// Surface was floor
 		if (angle <= 45) 
 		{
-//			print ("Floor");
-			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth)) 
-			{
-				
-				// Not enough space
+			// If true, not enough space
+			if (isSpaceObstructedFloor(hit, newUpRight)) 
 				enoughSpace = false;
-			}
-			m_indPositionSet = false;
+
 		}
 		// Surface was wall
 		else if (angle > 45 && angle < 135) 
 		{
-//			print ("Wall");
-			if (m_raycaster.doRaycast (out wallNormalRayHit, hit.normal, hit.point, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerLength) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth )) 
+			if (isSpaceObstructedWall (out wallNormalRayHit, hit, newUpRight)) 
 			{
-				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, new Color(0.751265f, 0.25678f, 0.3415136f));
-				// Not enough space
+				// If true, not enough space
 				enoughSpace = false;
+
+				Debug.DrawRay (wallNormalRayHit.point, wallNormalRayHit.normal, new Color (0.751265f, 0.25678f, 0.3415136f));
 				
-				// Sets a position based on the initial hit, it's normal, and the new hit's normal.
+				/* Sets a position based on the initial hit, it's normal, and the new hit's normal.
+				 * This puts the indicator between two walls instead of inside one of them.
+				 */
 				m_validIndPosition = hit.point + hit.normal + wallNormalRayHit.normal;
 				m_indPositionSet = true;
 
-				Debug.DrawRay(hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
-			} else
-				m_indPositionSet = false;
+				Debug.DrawRay (hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
+			}
 		}
 		// Surface was roof
 		else if (angle >= 135)
 		{
-//			print ("Roof");
-			if (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth)) 
-			{
-				// Not enough space
+			// If true, not enough space
+			if (isSpaceObstructedRoof(hit, newUpRight)) 
 				enoughSpace = false;
-			}
-
-			m_indPositionSet = false;
 		}
-		if (!enoughSpace)
-			print ("Not enough space!");
-
+//		print ("Enough space: " + enoughSpace);
 		return enoughSpace;
 	}
 
