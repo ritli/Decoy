@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
     //[SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
+
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
@@ -88,6 +89,10 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
+
+	[Header("Camera while climbing variable")]
+	[Tooltip("Determines how fast the camera turns toward a ledge when a climb is initiated")]
+	public float climbAdjSpeed = 1.0f;
 
     [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
@@ -754,23 +759,21 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-		// TODO: Rotation på m_camera och transformation sätts inte korrekt, trots att getDestDir är rätt
+		// TODO:
 		if (m_ledgeGrabbing) 
 		{
-			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 5, Color.yellow, 5);
-			print ("Slerping rotation");
+			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
 			m_resetRotation = true;
-			m_Camera.transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection(), Vector3.up);
-			transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection(), Vector3.up);
+			m_MouseLook.LookRotationLimited(transform, m_Camera.transform);
 		}
-		else if (m_resetRotation) {
-			print ("Reset rotation");
+		else if (m_resetRotation) 
+		{
 			m_resetRotation = false;
-			//m_MouseLook.Init(transform, m_Camera.transform);
+			m_MouseLook.Init(transform, m_Camera.transform);
 		}
 		else 
 		{
-			m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
 		}
     }
 
