@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool m_resetCalled = false;
 	private bool m_resetVelocity = false;
+	private bool m_resetRotation = false;
 	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
 	private bool m_ledgeGrabbing = false;
@@ -753,10 +754,19 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
+		// TODO: Rotation på m_camera och transformation sätts inte korrekt, trots att getDestDir är rätt
 		if (m_ledgeGrabbing) 
 		{
-			m_Camera.transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
-			transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
+			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 5, Color.yellow, 5);
+			print ("Slerping rotation");
+			m_resetRotation = true;
+			m_Camera.transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection(), Vector3.up);
+			transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection(), Vector3.up);
+		}
+		else if (m_resetRotation) {
+			print ("Reset rotation");
+			m_resetRotation = false;
+			//m_MouseLook.Init(transform, m_Camera.transform);
 		}
 		else 
 		{
