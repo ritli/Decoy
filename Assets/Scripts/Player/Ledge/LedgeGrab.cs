@@ -97,7 +97,7 @@ public class LedgeGrab : FindLedge {
 				m_roof = true;
 			}
 			Debug.DrawRay (m_collider.ClosestPointOnBounds(transform.position), normal * 3f, Color.red);
-			Debug.DrawRay (m_collider.transform.position, Vector3.right * 5f, Color.green);
+			//Debug.DrawRay (m_collider.transform.position, Vector3.right * 5f, Color.green);
 		}
 
 	}

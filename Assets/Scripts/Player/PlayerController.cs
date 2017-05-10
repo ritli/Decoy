@@ -13,7 +13,7 @@ public enum PlayerState
 
 enum AnimationState
 {
-    idle, moving, jumping, falling, crouching, aiming, blinking
+    idle, moving, jumping, falling, crouching, aiming, blinking, climbing
 }
 
 [RequireComponent(typeof (CharacterController), typeof(VectorBobber))]
@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour, IKillable
 	private bool m_resetVelocity = false;
 	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
+	private bool m_ledgeGrabbing = false;
     private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
 
@@ -297,6 +298,11 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.jumping;
         }
+		// Climb animation pls
+//		else if (m_ledgeGrabbing)
+//		{
+//			m_aniState = AnimationState.climbing;
+//		}	
         else
         {
             m_aniState = AnimationState.idle;
@@ -427,9 +433,14 @@ public class PlayerController : MonoBehaviour, IKillable
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
+//			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
+
+			// ### Ledge grabbing state ###
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
+
             // the jump state needs to read here to make sure it is not missed
-			if (!m_ledgeLerp.isLerping ())
+			if (!m_ledgeGrabbing)
 				Jump ();
 			else
 				m_MoveDir.y = 0;
@@ -487,7 +498,6 @@ public class PlayerController : MonoBehaviour, IKillable
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
                 m_cameraBobber.stopBob();
-				//print (m_ledgeDetect.getNewPosition ());
 				m_ledgeLerp.lerp(m_ledgeLerpTo);
             }
             m_Jump = false;
@@ -743,7 +753,15 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-        m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+		if (m_ledgeGrabbing) 
+		{
+			m_Camera.transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
+			transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
+		}
+		else 
+		{
+			m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+		}
     }
 
     private void UpdateCameraPosition(float speed)
