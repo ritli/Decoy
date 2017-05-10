@@ -15,7 +15,6 @@ public class ObjectEnableActivation : ActivationObject {
     // Function to be called when deactivating the objcet, toggling off.
     public override void deactivate()
     {
-        objectToEnable.SetActive(!m_value);
     }
 
     // Check if the object is activated or not.
