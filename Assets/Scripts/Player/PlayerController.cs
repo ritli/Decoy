@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private Raycast m_raycaster;
     private bool m_onEdge = false;
     private Vector3 m_ledgeHitDir = new Vector3(0, 0, 0);
+    [Tooltip("Decide the amount the player is pushed when touching an edge.")]
+    public float ledgeAdjust = 2.0f;
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
@@ -661,8 +663,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
         desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-        //print("Desired movement: " + desiredMove);
-
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
@@ -677,15 +677,14 @@ public class PlayerController : MonoBehaviour, IKillable
             {
                 m_MoveDir.y = -m_StickToGroundForce;
                 m_onEdge = false;
-                m_ledgeHitDir = Vector3.zero;
             }
             else
             {
                 m_MoveDir.y = -0.3f;
+                m_MoveDir = m_MoveDir + new Vector3(m_ledgeHitDir.x, m_ledgeHitDir.y * -1, m_ledgeHitDir.z) * ledgeAdjust;
+                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+
                 m_onEdge = true;
-                //m_MoveDir.x += m_ledgeHitDir.x;
-                //m_MoveDir.z += m_ledgeHitDir.z;
-                //m_MoveDir.x = 5.0f;
             }
 
             if (m_Jump) 
@@ -706,6 +705,7 @@ public class PlayerController : MonoBehaviour, IKillable
         else
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+            m_onEdge = false;
         }
 			
 		if (m_resetVelocity) 
@@ -720,9 +720,6 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
-
-        //if (m_ledgeHitDir != Vector3.zero)
-        //    m_CollisionFlags = m_CharacterController.Move(m_ledgeHitDir * Time.fixedDeltaTime);
 
         m_MouseLook.UpdateCursorLock();
 
@@ -766,13 +763,11 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
-        Vector3 hitDir = new Vector3(0, 0, 0);
 
         if (m_onEdge)
         {
-            m_ledgeHitDir = (hit.transform.position - transform.position) * -1;
-            Debug.DrawRay(transform.position, hitDir * 5.0f, Color.red);
-            
+            m_ledgeHitDir = (hit.collider.ClosestPointOnBounds(transform.position) - transform.position) * -1;
+            Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
         }
 
         //dont move the rigidbody if the character is on top of it
