@@ -60,7 +60,6 @@ public class PlayerTeleport : MonoBehaviour {
 	private bool m_foundLedge = false;
 	private bool m_enoughSpace = true;
 	private bool m_foundValidSpace = true;
-	private bool m_ledgeGrabbing = false;
 
     private Raycast m_raycaster;
 	private CharacterController m_charController;
@@ -122,7 +121,6 @@ public class PlayerTeleport : MonoBehaviour {
 	void Update () {
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
-//			print ("LedgeGrabbing tele: " + m_ledgeGrabbing);
             if (m_cooldownTimer.isTimeUp())
             {
                 m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
@@ -150,8 +148,6 @@ public class PlayerTeleport : MonoBehaviour {
                     if (m_foundLedge)
                     {
                         m_ledgeLerp.lerp(m_ledgeLerpTo);
-						// ############### ledge grabbing ################
-						m_ledgeGrabbing = true;
                         m_foundLedge = false;
                     }
                     m_player.enableGravity();
@@ -228,10 +224,6 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 cancelTeleport();
             }
-
-			// ############# Not ledge grabbing anymore ##########
-			if (!m_ledgeLerp.isLerping ())
-				m_ledgeGrabbing = false;
 			
             //ReadBlinkState();
 

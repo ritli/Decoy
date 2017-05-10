@@ -13,7 +13,7 @@ public enum PlayerState
 
 enum AnimationState
 {
-    idle, moving, jumping, falling, crouching, aiming, blinking
+    idle, moving, jumping, falling, crouching, aiming, blinking, climbing
 }
 
 [RequireComponent(typeof (CharacterController), typeof(VectorBobber))]
@@ -292,6 +292,11 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.jumping;
         }
+		// Climb animation pls
+//		else if (m_ledgeGrabbing)
+//		{
+//			m_aniState = AnimationState.climbing;
+//		}	
         else
         {
             m_aniState = AnimationState.idle;
@@ -423,14 +428,15 @@ public class PlayerController : MonoBehaviour, IKillable
 		case PlayerState.isAlive:
 //			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
+
+			// ### Ledge grabbing state ###
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
+
             // the jump state needs to read here to make sure it is not missed
-			if (!m_ledgeLerp.isLerping())
+			if (!m_ledgeGrabbing)
 				Jump ();
-			else {
-				// ############# Not ledge grabbing anymore ################
-				m_ledgeGrabbing = false;
+			else
 				m_MoveDir.y = 0;
-			}
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
@@ -486,8 +492,6 @@ public class PlayerController : MonoBehaviour, IKillable
             {
                 m_cameraBobber.stopBob();
 				m_ledgeLerp.lerp(m_ledgeLerpTo);
-				// ############# ledge grabbing here ###############
-				m_ledgeGrabbing = true;
             }
             m_Jump = false;
             m_Jumping = false;
@@ -727,7 +731,15 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-        m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+		if (m_ledgeGrabbing) 
+		{
+			m_Camera.transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
+			transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
+		}
+		else 
+		{
+			m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+		}
     }
 
     private void UpdateCameraPosition(float speed)
