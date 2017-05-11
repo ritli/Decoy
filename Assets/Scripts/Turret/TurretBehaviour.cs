@@ -253,7 +253,8 @@ public class TurretBehaviour : MonoBehaviour
        //is player visible to the turret? if not the return to idle.
         if(isObjectVisible(GameManager.GetPlayer().gameObject.transform, Tags.player))
         {
-            m_TargetPosition = GameManager.GetPlayer().transform.position;
+            //m_TargetPosition = GameManager.GetPlayer().transform.position;
+            m_TargetPosition = GameManager.GetPlayer().GetComponentInChildren<Camera>().transform.position;
             m_Target = GameManager.GetPlayer();
 
             //check if player can be fired at. if yes, initiate fire. Else, target player
