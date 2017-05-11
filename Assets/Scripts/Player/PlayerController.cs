@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
     //[SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
+
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
@@ -88,6 +89,10 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
+
+	[Header("Camera while climbing variable")]
+	[Tooltip("Determines how fast the camera turns toward a ledge when a climb is initiated")]
+	public float climbAdjSpeed = 1.0f;
 
     [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
@@ -121,6 +126,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool m_resetCalled = false;
 	private bool m_resetVelocity = false;
+	private bool m_resetRotation = false;
 	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
 	private bool m_ledgeGrabbing = false;
@@ -753,14 +759,21 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
+		// TODO:
 		if (m_ledgeGrabbing) 
 		{
-			m_Camera.transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
-			transform.localRotation = Quaternion.LookRotation(m_ledgeLerp.getDestinationDirection());
+			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
+			m_resetRotation = true;
+			m_MouseLook.LookRotationLimited(transform, m_Camera.transform);
+		}
+		else if (m_resetRotation) 
+		{
+			m_resetRotation = false;
+			m_MouseLook.Init(transform, m_Camera.transform);
 		}
 		else 
 		{
-			m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
 		}
     }
 
