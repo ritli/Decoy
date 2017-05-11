@@ -183,7 +183,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
                 break;
 
             case ScientistState.Idle:
-                //m_animator.Play("Scientist Idle");
+                m_animator.Play("Scientist Idle");
                 break;
             case ScientistState.RemoveAndLeave:
                 m_animator.Play("Scientist Remove And Leave");
