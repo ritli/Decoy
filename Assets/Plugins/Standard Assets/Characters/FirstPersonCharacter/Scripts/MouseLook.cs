@@ -19,8 +19,6 @@ public class MouseLook
     private Quaternion m_CharacterTargetRot;
     private Quaternion m_CameraTargetRot;
     private bool m_cursorIsLocked = true;
-	private float rotationX = 0f;
-	private float rotationY = 0f;
 
     public void Init(Transform character, Transform camera)
     {
@@ -29,63 +27,30 @@ public class MouseLook
     }
 
     
-
-	public void LookRotationLimited(Transform character, Transform camera) 
+	// TODO: Slerp to min/max if aim already is outside bounds
+	public void LookRotationLimited(Transform character, Transform camera, Vector3 towardWall, float horizontal, float verticalMin, float verticalMax) 
 	{
+		// Rotation towards the target position. Used to determine the angle
+		Quaternion center = Quaternion.LookRotation(towardWall);
+
 		float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
 		float xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
 
+		Quaternion yRotation = Quaternion.Euler (0f, yRot, 0f);
 		m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
-		m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
 
-		// TODO: ### Clampa horisontellt ###
-//		float newRotX = 0;
-//		float newRotY = 0;
-//		if (m_CameraTargetRot.eulerAngles.x < ClampAngle(-20))
-//			newRotX = 360 - 45;
-//		else if (m_CameraTargetRot.eulerAngles.x > ClampAngle(45))
-//			newRotX = 0 + 45;
-//		else
-//			newRotX = m_CameraTargetRot.eulerAngles.x;
-//
-//		if (m_CameraTargetRot.eulerAngles.y < ClampAngle(-45))
-//			newRotY = 360 - 45;
-//		else if (m_CameraTargetRot.eulerAngles.y > ClampAngle(45))
-//			newRotY = 0 + 45;
-//		else 
-//			newRotY = m_CameraTargetRot.eulerAngles.y;
-//
-//		Debug.Log(m_CameraTargetRot.eulerAngles.x);
-//		m_CameraTargetRot.eulerAngles = new Vector3 (	newRotX, 
-//														newRotY, 
-//														m_CameraTargetRot.eulerAngles.z);
+		// Horizontal clamp
+		Quaternion coming = m_CharacterTargetRot * yRotation;
+		float angle = Quaternion.Angle (center, coming);
+		if (angle < horizontal)
+			m_CharacterTargetRot = coming;
 
-		m_CameraTargetRot = clampRotationX(m_CameraTargetRot, -20, 45);
-		//m_CameraTargetRot = clampRotationY(m_CameraTargetRot, -20, 45);
+		// Vertical clamp
+		Quaternion xRotation = clampRotationX (m_CameraTargetRot, -verticalMax, -verticalMin);
+		m_CameraTargetRot = xRotation;
 
-		character.localRotation = m_CharacterTargetRot;
 		camera.localRotation = m_CameraTargetRot;
-
-//
-//		rotationY += Input.GetAxis("Mouse X") * XSensitivity;
-//		rotationY = Mathf.Clamp(rotationY, -45, 45);
-//
-//		rotationX += Input.GetAxis("Mouse Y") * YSensitivity;
-//		rotationX = Mathf.Clamp(rotationX, -20, 45);
-//
-//		camera.localEulerAngles = new Vector3(-rotationX, 0, camera.localEulerAngles.z);
-//		character.localEulerAngles = new Vector3(0f, rotationY, character.localEulerAngles.z);
-//
-//		UpdateCursorLock();
-	}
-
-	public float ClampAngle(float angle) {
-		if(angle < 0f)
-			return angle + (360f * (int) ((angle / 360f) + 1));
-		else if(angle > 360f)
-			return angle - (360f * (int) (angle / 360f));
-		else
-			return angle;
+		character.localRotation = m_CharacterTargetRot;
 	}
 
     public Quaternion GetCameraRotation()
@@ -144,9 +109,6 @@ public class MouseLook
 	{
 		float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
 		float xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
-
-		rotationY = yRot;
-		rotationX = xRot;
 
 		m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
 		m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
