@@ -57,14 +57,10 @@ public class FindLedge : MonoBehaviour {
 		raySweepForward.origin = sweepForward;
 		raySweepForward.direction = -wallHit.normal;
 
-
 		// Creates a point above and a little bit inside the wall to look for floor
 		Vector3 localUp = Vector3.Cross (wallHit.normal, hitRight);
-//		print ("wallHit.point: " + wallHit.point);
-//		print ("localUp: " + localUp);
-//		print ("wallHit.normal: " + wallHit.normal);
 		Vector3 newPosition = wallHit.point + localUp * ledgeSensitivity - wallHit.normal * positionOffset;
-//		print ("newPos: " + newPosition);
+
 		// A ray above target position and facing towards the wall's floor
 		Ray rayDown = new Ray();
 		rayDown.origin = newPosition;
@@ -129,7 +125,7 @@ public class FindLedge : MonoBehaviour {
 			if (Vector3.Angle(hit.normal, Vector3.up) <= 45)
 			{
 				// Ray from the floor above ledge
-				//				Debug.DrawRay(hit.point, hit.normal * 5, Color.white);
+//				Debug.DrawRay(hit.point, hit.normal * 5, Color.white);
 
 				// If the floor is above where the aim is
 				if (hit.point.y >= wallHit.point.y)
@@ -146,11 +142,8 @@ public class FindLedge : MonoBehaviour {
 						Debug.DrawRay (hit.point, hit.normal, Color.cyan);
 						m_newPosition = m_wallPoint;
 						m_isLedgeBlocked = true;
-//						print ("in if sweep up");
 						return false;
 					}
-
-
 
 					// Raycast again to check if the first hit was inside an object
 					if (m_raycaster.doRaycast(out hit, rayDown2.direction, rayDown2.origin)) 
@@ -166,6 +159,15 @@ public class FindLedge : MonoBehaviour {
 							m_newPosition = hit.point;
 						}
 					}
+
+					// Check if there is enough space up on the ledge
+					Vector3 offsetHit = hit.point + hit.normal * 0.01f;
+					bool newUpRight = 	Vector3.Angle (Vector3.up, hit.normal) > 0.1 && 
+										Vector3.Angle (Vector3.up, hit.normal) < 179.9 ? true : false;
+
+					if (isSpaceObstructedFloor(hit, newUpRight))
+						return false;
+
 					floorTarget = m_newPosition;
 					return true;
 				}
@@ -174,6 +176,75 @@ public class FindLedge : MonoBehaviour {
 		// If ray doesn't find floor, set position to point on wall
 		m_newPosition = m_wallPoint;
 		return false;
+	}
+
+	private void createNewLocalVectors(out Vector3 localUp, out Vector3 localRight, RaycastHit hit) 
+	{
+		// New local vectors based on the hit's normal
+		localRight = Vector3.Cross (Vector3.up, hit.normal);
+		localUp = Vector3.Cross (localRight, hit.normal);
+
+
+		Debug.DrawRay(hit.point, localRight, Color.magenta);
+		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
+		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
+	}
+
+	protected bool isSpaceObstructedFloor(RaycastHit hit, bool createNewLocal) 
+	{
+		Vector3 localRight = Vector3.right;
+		Vector3 localUp = Vector3.forward;
+
+		// Move the point up a bit to prevent it raycasting from inside the object
+		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
+
+		if (createNewLocal)
+			createNewLocalVectors(out localUp, out localRight, hit);
+
+		RaycastHit rayHit = new RaycastHit ();
+		return (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth));
+	}
+
+	protected bool isSpaceObstructedWall(out RaycastHit wallNormalHit, RaycastHit hit, bool createNewLocal) 
+	{
+		Vector3 localRight = Vector3.right;
+		Vector3 localUp = Vector3.forward;
+
+		// Move the point up a bit to prevent it raycasting from inside the object
+		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
+
+		if (createNewLocal)
+			createNewLocalVectors(out localUp, out localRight, hit);
+
+		RaycastHit rayHit = new RaycastHit ();
+		return (m_raycaster.doRaycast (out wallNormalHit, hit.normal, hit.point, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerLength) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth));
+	}
+
+	protected bool isSpaceObstructedRoof(RaycastHit hit, bool createNewLocal) 
+	{
+		Vector3 localRight = Vector3.right;
+		Vector3 localUp = Vector3.forward;
+
+		// Move the point up a bit to prevent it raycasting from inside the object
+		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
+
+		if (createNewLocal)
+			createNewLocalVectors(out localUp, out localRight, hit);
+		
+		RaycastHit rayHit = new RaycastHit ();
+		return (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
+				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
+				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
+				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth));
 	}
 
 	/*

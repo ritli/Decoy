@@ -93,11 +93,9 @@ public class LedgeGrab : FindLedge {
 			// Don't look for ledge if player is touching roof
 			float angle = Vector3.Angle (-Vector3.up, normal);
 			if (angle < 45) 
-			{
 				m_roof = true;
-			}
 			Debug.DrawRay (m_collider.ClosestPointOnBounds(transform.position), normal * 3f, Color.red);
-			Debug.DrawRay (m_collider.transform.position, Vector3.right * 5f, Color.green);
+			//Debug.DrawRay (m_collider.transform.position, Vector3.right * 5f, Color.green);
 		}
 
 	}

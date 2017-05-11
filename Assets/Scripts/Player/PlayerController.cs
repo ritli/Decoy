@@ -13,7 +13,7 @@ public enum PlayerState
 
 enum AnimationState
 {
-    idle, moving, jumping, falling, crouching, aiming, blinking
+    idle, moving, jumping, falling, crouching, aiming, blinking, climbing
 }
 
 [RequireComponent(typeof (CharacterController), typeof(VectorBobber))]
@@ -71,11 +71,17 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_GravityMultiplier;
     private float m_originGravity;
     private bool m_usingGravity = true;
+    private Raycast m_raycaster;
+    private bool m_onEdge = false;
+    private Vector3 m_ledgeHitDir = new Vector3(0, 0, 0);
+    [Tooltip("Decide the amount the player is pushed when touching an edge.")]
+    public float ledgeAdjust = 2.0f;
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
     //[SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
+
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
@@ -83,6 +89,10 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
+
+	[Header("Camera while climbing variable")]
+	[Tooltip("Determines how fast the camera turns toward a ledge when a climb is initiated")]
+	public float climbAdjSpeed = 1.0f;
 
     [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
@@ -116,8 +126,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool m_resetCalled = false;
 	private bool m_resetVelocity = false;
+	private bool m_resetRotation = false;
 	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
+	private bool m_ledgeGrabbing = false;
     private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
 
@@ -159,6 +171,7 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         m_walkingBobber = gameObject.AddComponent<VectorBobber>();
         m_walkingBobber.WalkBob = true;
+        m_raycaster = GetComponent<Raycast>();
     }
 
     private void Start()
@@ -291,6 +304,11 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.jumping;
         }
+		// Climb animation pls
+//		else if (m_ledgeGrabbing)
+//		{
+//			m_aniState = AnimationState.climbing;
+//		}	
         else
         {
             m_aniState = AnimationState.idle;
@@ -421,9 +439,14 @@ public class PlayerController : MonoBehaviour, IKillable
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
+//			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
+
+			// ### Ledge grabbing state ###
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
+
             // the jump state needs to read here to make sure it is not missed
-			if (!m_ledgeLerp.isLerping ())
+			if (!m_ledgeGrabbing)
 				Jump ();
 			else
 				m_MoveDir.y = 0;
@@ -481,7 +504,6 @@ public class PlayerController : MonoBehaviour, IKillable
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
                 m_cameraBobber.stopBob();
-				//print (m_ledgeDetect.getNewPosition ());
 				m_ledgeLerp.lerp(m_ledgeLerpTo);
             }
             m_Jump = false;
@@ -606,7 +628,7 @@ public class PlayerController : MonoBehaviour, IKillable
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
         // If character is in middle of jump and controller is not currently scaling the velocity.
-        if (!m_CharacterController.isGrounded && !m_scalingVelocity)
+        if (m_Jumping && !m_scalingVelocity) // m_Jumping
         {
             desiredMove = m_jumpVector;
 
@@ -657,17 +679,31 @@ public class PlayerController : MonoBehaviour, IKillable
 
         desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-        //print("Desired movement: " + desiredMove);
-
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
+        RaycastHit groundHit;
+        Debug.DrawRay(transform.position, new Vector3(0, -1, 0), Color.green);
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
-            m_MoveDir.y = -m_StickToGroundForce;
-                
-			if (m_Jump) 
+            //m_MoveDir.y = -m_StickToGroundForce;
+
+            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
+            {
+                m_MoveDir.y = -m_StickToGroundForce;
+                m_onEdge = false;
+            }
+            else
+            {
+                m_MoveDir.y = -0.3f;
+                m_MoveDir = m_MoveDir + new Vector3(m_ledgeHitDir.x, m_ledgeHitDir.y * -1, m_ledgeHitDir.z) * ledgeAdjust;
+                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+
+                m_onEdge = true;
+            }
+
+            if (m_Jump) 
 			{
 				m_jumpVector = m_MoveDir;
 				m_jumpVectorR = transform.right;
@@ -685,6 +721,7 @@ public class PlayerController : MonoBehaviour, IKillable
         else
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+            m_onEdge = false;
         }
 			
 		if (m_resetVelocity) 
@@ -722,7 +759,22 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-        m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+		// TODO:
+		if (m_ledgeGrabbing) 
+		{
+			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
+			m_resetRotation = true;
+			m_MouseLook.LookRotationLimited(transform, m_Camera.transform);
+		}
+		else if (m_resetRotation) 
+		{
+			m_resetRotation = false;
+			m_MouseLook.Init(transform, m_Camera.transform);
+		}
+		else 
+		{
+			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
+		}
     }
 
     private void UpdateCameraPosition(float speed)
@@ -742,6 +794,13 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (m_onEdge)
+        {
+            m_ledgeHitDir = (hit.collider.ClosestPointOnBounds(transform.position) - transform.position) * -1;
+            Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
+        }
+
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)
         {
