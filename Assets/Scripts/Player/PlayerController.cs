@@ -88,12 +88,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private VectorBobber m_walkingBobber;
     private float m_maximumFreefallHeight;
 
-	// Mouse restriction while climbing vars
-	[Header("Climbing camera restriction variables")]
-	public float horizontalRestr = 45f;
-	public float verticalRestrMin = -20f;
-	public float verticalRestrMax = 75f;
-
     private bool m_leftGround = false;
 
 	// TODO:
@@ -771,12 +765,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		{
 //			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
 			m_resetRotation = true;
-			m_MouseLook.LookRotationLimited(transform, 
-											m_Camera.transform, 
-											m_ledgeLerp.getDestinationDirection(), 
-											horizontalRestr, 
-											verticalRestrMin, 
-											verticalRestrMax);
+			m_MouseLook.LookRotationLimited(transform, m_Camera.transform, m_ledgeLerp.getDestinationDirection());
 		}
 		else if (m_resetRotation) 
 		{
