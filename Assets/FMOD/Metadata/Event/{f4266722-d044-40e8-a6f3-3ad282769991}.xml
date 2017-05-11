@@ -122,6 +122,9 @@
         <property name="timelockedOffset">
             <value>0.095000000000000029</value>
         </property>
+        <property name="voiceStealing">
+            <value>3</value>
+        </property>
         <relationship name="fadeOutCurve">
             <destination>{5b3e2388-4105-4e6f-94de-f6de9b53a8d4}</destination>
         </relationship>
@@ -281,7 +284,6 @@
         <relationship name="effects">
             <destination>{810d24d7-6631-4c15-9838-cb6141285b2a}</destination>
             <destination>{61df3c0f-7bf2-4dae-8ddc-bf3b593e1853}</destination>
-            <destination>{0d9dbd9a-da76-4daf-9ace-d5791b3d67db}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{43b7bc95-8b39-4985-a496-a70db6ec5224}"/>
@@ -329,9 +331,4 @@
     </object>
     <object class="MixerBusFader" id="{810d24d7-6631-4c15-9838-cb6141285b2a}"/>
     <object class="ThreeEQEffect" id="{61df3c0f-7bf2-4dae-8ddc-bf3b593e1853}"/>
-    <object class="SFXReverbEffect" id="{0d9dbd9a-da76-4daf-9ace-d5791b3d67db}">
-        <property name="wetLevel">
-            <value>-10</value>
-        </property>
-    </object>
 </objects>
