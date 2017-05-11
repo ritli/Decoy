@@ -88,8 +88,15 @@ public class PlayerController : MonoBehaviour, IKillable
     private VectorBobber m_walkingBobber;
     private float m_maximumFreefallHeight;
 
+	// Mouse restriction while climbing vars
+	[Header("Climbing camera restriction variables")]
+	public float horizontalRestr = 45f;
+	public float verticalRestrMin = -20f;
+	public float verticalRestrMax = 75f;
+
     private bool m_leftGround = false;
 
+	// TODO:
 	[Header("Camera while climbing variable")]
 	[Tooltip("Determines how fast the camera turns toward a ledge when a climb is initiated")]
 	public float climbAdjSpeed = 1.0f;
@@ -762,9 +769,14 @@ public class PlayerController : MonoBehaviour, IKillable
 		// TODO:
 		if (m_ledgeGrabbing) 
 		{
-			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
+//			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
 			m_resetRotation = true;
-			m_MouseLook.LookRotationLimited(transform, m_Camera.transform);
+			m_MouseLook.LookRotationLimited(transform, 
+											m_Camera.transform, 
+											m_ledgeLerp.getDestinationDirection(), 
+											horizontalRestr, 
+											verticalRestrMin, 
+											verticalRestrMax);
 		}
 		else if (m_resetRotation) 
 		{
