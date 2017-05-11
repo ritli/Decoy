@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 114707980694823172}
   - component: {fileID: 114863518346403202}
   - component: {fileID: 114366758051768794}
+  - component: {fileID: 114899587330457334}
   m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
@@ -168,8 +169,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.9, y: 1.95, z: -1.7}
+  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
+  m_LocalPosition: {x: 61.05, y: 20.41, z: 26.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4949601670907862}
@@ -298,7 +299,7 @@ MonoBehaviour:
   allowReset: 0
   m_playerState: 0
   m_deathEvent: event:/Sound/Player/PlayerDeath
-  m_hasDevice: 0
+  m_hasDevice: 1
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_WindupScale: 0.1
   m_WalkSpeed: 8
@@ -309,6 +310,7 @@ MonoBehaviour:
   m_JumpAirControl: 0.25
   m_StickToGroundForce: 4
   m_GravityMultiplier: 2
+  ledgeAdjust: 2
   m_MouseLook:
     XSensitivity: 2
     YSensitivity: 2
@@ -331,7 +333,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120282}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a036ac295913984aa7fbcfaa61e4638, type: 3}
   m_Name: 
@@ -7973,6 +7975,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd97326cce00684c90cb23ed5250c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114899587330457334
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 120282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 38a9ab537d1518f4180567a2fb9a6bc6, type: 2}
 --- !u!114 &114908024422846402
 MonoBehaviour:
   m_ObjectHideFlags: 1
