@@ -6,7 +6,7 @@ public class Checkpoint : MonoBehaviour {
 
     [Tooltip("place an empty gameobject as a child to use a forced spawnposition. \nIf not the Checkpoints center will be used.")]
     public Transform m_SpawnPosition;
-    private int m_Index = 0;
+    public int m_Index = 0;
     public SceneLoader.Scenes m_AssociatedSection;
 
     // Use this for initialization
@@ -31,8 +31,8 @@ public class Checkpoint : MonoBehaviour {
     }
     void OnTriggerEnter(Collider collider)
     {
-        
-        if(collider.transform.gameObject.tag == Tags.player && getReachedCheckpoint() < m_Index)
+        // && getReachedCheckpoint() < m_Index
+        if (collider.transform.gameObject.tag == Tags.player)
         {
             PlayerPrefs.SetInt("Section", (int)m_AssociatedSection);
             PlayerPrefs.SetInt("CheckpointIndex", m_Index);

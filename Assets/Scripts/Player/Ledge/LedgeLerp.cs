@@ -61,7 +61,7 @@ public class LedgeLerp : MonoBehaviour
 	            m_incrementor = 0;
 	            m_beginLerp = false;
                 m_playerController.modifyVelocity(velocityReduction/100.0f);
-                print("Finished ledgelerp");
+//                print("Finished ledgelerp");
             }
 		}
 //		Debug.DrawRay (m_startPos, Vector3.up, Color.yellow, 5f);
@@ -74,9 +74,22 @@ public class LedgeLerp : MonoBehaviour
         m_beginLerp = true;
     }
 
+	// Returns the horizontal direction toward the destination
+	public Vector3 getDestinationDirection() 
+	{
+		Vector3 dir = m_targetPos - transform.position;
+		dir.y = 0;
+		return dir;
+	}
+
 	public bool isLerping() 
 	{
 		return m_beginLerp;	
+	}
+
+	public void stop() 
+	{
+		m_beginLerp = false;	
 	}
 
 }
