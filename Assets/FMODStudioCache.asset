@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114151727047463752}
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   EditorEvents:
   - {fileID: 114787266053499880}
   - {fileID: 114279629260487776}
@@ -46,9 +46,9 @@ MonoBehaviour:
   - {fileID: 114091738565312152}
   - {fileID: 114735913626609820}
   - {fileID: 114357743138946936}
-  MasterBankRef: {fileID: 114991796643380892}
+  MasterBankRef: {fileID: 114924526422968176}
   StringsBankRef: {fileID: 114151727047463752}
-  stringsBankWriteTime: 636294958112465910
+  stringsBankWriteTime: 636299284354346015
   cacheVersion: 2
 --- !u!114 &114006914735286170
 MonoBehaviour:
@@ -64,7 +64,7 @@ MonoBehaviour:
   Path: event:/Sound/Turret/TurretRotate
   guid: 130115a7294aff45b8c51260b2eb3de8
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -86,6 +86,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114062808930453506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Heavy
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114067513691192522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,12 +115,12 @@ MonoBehaviour:
   Path: event:/Sound/Outdoor/OutdoorWind
   guid: d64b77429b02b240ba0f9095dabbae9e
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114537059014981098}
+  - {fileID: 114511472461330142}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114073852203739692
@@ -122,7 +137,7 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerDecoySpawn
   guid: bb1f74e7ef79864299fbb60442c147dd
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -173,12 +188,12 @@ MonoBehaviour:
   Path: "event:/Music/Section3/Sam is a bessdur part tv\xE5"
   guid: edaba0784111fa45bb30300594267675
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114752092350550634}
+  - {fileID: 114489028604521706}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114100620808151036
@@ -195,14 +210,29 @@ MonoBehaviour:
   Path: event:/Music/Section3/Action_Section3
   guid: a26df342a795024eaec82221183f9f97
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114934508088708626}
+  - {fileID: 114128624146899514}
   MinDistance: 0
   MaxDistance: 0
+--- !u!114 &114128624146899514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Progression Section 3
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114144604848170598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +247,7 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerJump
   guid: 56922f74ea9f66459d090081872f6e6f
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -239,6 +269,36 @@ MonoBehaviour:
   Min: 0
   Max: 2
   Default: 0
+--- !u!114 &114148927123556140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Progression
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114148952392369924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Material
+  Min: 0
+  Max: 4
+  Default: 0
 --- !u!114 &114151727047463752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets/FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636294958112465910
+  lastModified: 636299284354346015
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -271,14 +331,29 @@ MonoBehaviour:
   Path: event:/Music/Sektion2(test)/Sektion2MainEvent
   guid: 2d73fd88ba33bc42b37d7540bf8eec51
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114079321345459902}
+  - {fileID: 114594743326165148}
   MinDistance: 0
   MaxDistance: 0
+--- !u!114 &114170952113788688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Level Progression
+  Min: 0
+  Max: 2
+  Default: 0
 --- !u!114 &114179109328545286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +368,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Hangar/ObjHangarLightswitch
   guid: 35509c799c492f40aa8e60e13063aaed
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -374,7 +449,7 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerDeathLaser
   guid: 430e6449860c054eae641d3d6d62146e
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 1
   IsOneShot: 1
@@ -410,13 +485,13 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerLand
   guid: 109246adc242e9468fe2e023bf90a859
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114312433464779948}
-  - {fileID: 114499926219838006}
+  - {fileID: 114874855259782756}
+  - {fileID: 114062808930453506}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114290756719978124
@@ -433,7 +508,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Outdoor/ObjOutdoorLaser
   guid: 5a9b62c88181774faae853aa4bcf48ba
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -469,7 +544,7 @@ MonoBehaviour:
   Path: event:/Sound/Turret/TurretIdle
   guid: b48eec2064b7ac44a0c6e02a711e91f2
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -505,7 +580,7 @@ MonoBehaviour:
   Path: event:/Sound/Turret/TurretDetect
   guid: f8fa07e3ade8e649894efc66d5d418ff
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -526,12 +601,12 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerBlinkDevice
   guid: 2452fc2fbe49fc40be3330a9dcce8dff
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114632413935823234}
+  - {fileID: 114471901297120526}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114435583903584692
@@ -548,7 +623,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Hangar/ObjHangarPipes
   guid: 36b650794b3e314d8b1a6b77abd47403
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -569,7 +644,7 @@ MonoBehaviour:
   Path: event:/Sound/Turret/TurretShoot
   guid: c183fb6c2b7cc04c8f80d702b6dc0176
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 1
   IsOneShot: 1
@@ -590,7 +665,7 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerDecoyDeath
   guid: b596a2c171dc9247a1e90facadd879e2
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -611,7 +686,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Labratory/ObjLabraDecoycontainter
   guid: 31fdf4ebd101a042be99a48aafa03fe9
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -632,13 +707,28 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerDeath
   guid: 9abce2645e479341a1ff32c90c7f1f0e
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
+--- !u!114 &114471901297120526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: BlinkUsage
+  Min: 0
+  Max: 2
+  Default: 0
 --- !u!114 &114477229786190398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,12 +743,12 @@ MonoBehaviour:
   Path: event:/Music/Section3/Sam is a besturd
   guid: 3443fa345cb0524e9dfb4013de88fb34
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114197741424039852}
+  - {fileID: 114695772979180302}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114483675266970624
@@ -675,6 +765,21 @@ MonoBehaviour:
   Name: Material
   Min: 0
   Max: 4
+  Default: 0
+--- !u!114 &114489028604521706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Progression S3
+  Min: 0
+  Max: 1
   Default: 0
 --- !u!114 &114499926219838006
 MonoBehaviour:
@@ -705,16 +810,31 @@ MonoBehaviour:
   Path: event:/Music/Section1/Section1MainEvent
   guid: 546261a538411a45a85f280b142dba8e
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114202340153819066}
-  - {fileID: 114519534069533860}
-  - {fileID: 114340474386740550}
+  - {fileID: 114972883173740580}
+  - {fileID: 114170952113788688}
+  - {fileID: 114148927123556140}
   MinDistance: 0
   MaxDistance: 0
+--- !u!114 &114511472461330142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Intensity
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114512436175193094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -729,7 +849,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Hangar/ObjHangarVentilation
   guid: c5a2908aa410b14bab68e95a42c27074
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -780,7 +900,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Labratory/ObjLabraDoorClose
   guid: 69f361e0c6cba442a7fe00687243221c
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -801,7 +921,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Hangar/ObjHangarFans
   guid: de1b9f1c12f0c24fb751985b2f047bf3
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -837,13 +957,28 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Hangar/ObjHangarAlarm
   guid: 6a7b06df1c4f61448118ff572b59d5da
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114594743326165148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Action Start
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114632413935823234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -873,12 +1008,12 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerRun
   guid: ec5a79689c0b0c4e82790e04881d8fb6
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114718241026044418}
+  - {fileID: 114148952392369924}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114695289798761968
@@ -893,6 +1028,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Progression Section 3
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114695772979180302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Progression S3
   Min: 0
   Max: 1
   Default: 0
@@ -925,7 +1075,7 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerLedgegrab
   guid: f2545f1052e97241b2244682726055c4
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -946,7 +1096,7 @@ MonoBehaviour:
   Path: event:/Sound/Player/PlayerCrouch
   guid: 1b35b537e03a48409a4b525fac779b48
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -982,7 +1132,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Outdoor/ObjOutdoorBrokenwindow
   guid: 056576fdb5723d4eb0ca5ea650e3b4f5
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -1003,7 +1153,7 @@ MonoBehaviour:
   Path: event:/Sound/Objects/Labratory/ObjLabraDoorOpen
   guid: a2e8410f7b4a674d97e520dfa86b0997
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -1072,13 +1222,28 @@ MonoBehaviour:
   Path: event:/Sound/Hangar/HangarRoomtone
   guid: d8f12d14a18b754abfa2298224b989e2
   Banks:
-  - {fileID: 114991796643380892}
+  - {fileID: 114924526422968176}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
+--- !u!114 &114874855259782756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Material
+  Min: 0
+  Max: 4
+  Default: 0
 --- !u!114 &114883668312083276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1094,6 +1259,25 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114924526422968176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: "D:\\green\\Dropbox\\H\xF6gskola\\Spel projekt 2\\Decoy\\Assets\\FMOD\\Build\\Desktop\\Master
+    Bank.bank"
+  lastModified: 636299284353975020
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 61190624
+  Exists: 1
 --- !u!114 &114934508088708626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1106,6 +1290,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Progression Section 3
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114972883173740580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Hi-passRemove
   Min: 0
   Max: 1
   Default: 0
