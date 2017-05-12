@@ -45,12 +45,12 @@ public class LedgeTele : FindLedge {
 		// Surface was wall
 		else if (angle > 45 && angle < 135) 
 		{
-			if (isSpaceObstructedWall (out wallNormalRayHit, hit, newUpRight)) 
+			if (isSpaceObstructedWall(out wallNormalRayHit, hit, newUpRight)) 
 			{
 				// If true, not enough space
 				enoughSpace = false;
 
-				Debug.DrawRay (wallNormalRayHit.point, wallNormalRayHit.normal, new Color (0.751265f, 0.25678f, 0.3415136f));
+				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, new Color (0.751265f, 0.25678f, 0.3415136f));
 				
 				/* Sets a position based on the initial hit, it's normal, and the new hit's normal.
 				 * This puts the indicator between two walls instead of inside one of them.
@@ -100,8 +100,8 @@ public class LedgeTele : FindLedge {
 			workPosition = Vector3.MoveTowards(workPosition, transform.position, m_distanceDelta);
 
 			// Raycast in all directions to look for obstruction
-			if (m_raycaster.doRaycast (out hit, Vector3.up, workPosition, m_playerLength) &&
-			    m_raycaster.doRaycast (out hit, -Vector3.up, workPosition, m_playerLength) ||
+			if (m_raycaster.doRaycast (out hit, Vector3.up, workPosition, m_playerLength * 1.2f) &&
+				m_raycaster.doRaycast (out hit, -Vector3.up, workPosition, m_playerLength * 1.2f) ||
 			    m_raycaster.doRaycast (out hit, Vector3.left, workPosition, m_playerWidth) &&
 			    m_raycaster.doRaycast (out hit, -Vector3.left, workPosition, m_playerWidth) ||
 			    m_raycaster.doRaycast (out hit, Vector3.forward, workPosition, m_playerWidth) &&

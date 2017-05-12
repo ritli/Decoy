@@ -23,8 +23,7 @@ public class LedgeGrab : FindLedge {
 	{
 		m_ledgeTele = GetComponent<LedgeTele>();
 	}
-
-
+		
 	Vector3 calcNormal() 
 	{
 		Vector3 direction = m_collider.ClosestPoint(transform.position);
@@ -33,9 +32,6 @@ public class LedgeGrab : FindLedge {
 		return direction;
 	}
 
-	/*
-     * Update is used for finding ledge on a wall near the player
-     */
 	public bool lookForLedge(out Vector3 floorPosition)
 	{
 		m_isLedgeBlocked = false;
