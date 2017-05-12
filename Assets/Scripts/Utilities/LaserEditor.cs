@@ -18,17 +18,18 @@ public class LaserEditor : MonoBehaviour {
         //iterate over children and add them anew to list which displays transforms in editor
         for (int index = 1; index < m_InternalLaserPoints.Length; index++)
         {
-                m_LaserPoints.Add(m_InternalLaserPoints[index]);
+            m_LaserPoints.Add(m_InternalLaserPoints[index]);
         }
+        m_LineRenderer.positionCount = m_LaserPoints.Count;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        for (int index = 0; index < m_InternalLaserPoints.Length-1; index++)
+        for (int index = 0; index < m_LaserPoints.Count; index++)
         {
             //Set posiitions in Linerenderer
-                m_LineRenderer.SetPosition(index, m_LaserPoints[index].position);
+            m_LineRenderer.SetPosition(index, m_LaserPoints[index].position);
         }
     }
 }

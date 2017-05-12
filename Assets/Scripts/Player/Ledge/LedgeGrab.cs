@@ -27,7 +27,8 @@ public class LedgeGrab : FindLedge {
 
 	Vector3 calcNormal() 
 	{
-		Vector3 direction = m_collider.ClosestPointOnBounds(transform.position);
+		Vector3 direction = m_collider.ClosestPoint(transform.position);
+		Debug.DrawRay (direction, Vector3.up, Color.red);
 		direction = transform.position - direction;
 		return direction;
 	}
@@ -47,8 +48,8 @@ public class LedgeGrab : FindLedge {
 			cameraHoriz.y = 0;
 			Vector3 cameraVert = cameraDirection;
 
-//          Debug.DrawRay(transform.position, hitNormal * 3, Color.yellow);
-//			Debug.DrawRay(transform.position, cameraVert * 3, Color.blue);
+         	Debug.DrawRay(transform.position, hitNormal * 3, Color.yellow);
+			Debug.DrawRay(transform.position, cameraDirection * 3, Color.blue);
 
 			RaycastHit hit = new RaycastHit();
 
@@ -89,14 +90,12 @@ public class LedgeGrab : FindLedge {
 	{
 		if (other.transform.tag != Tags.player && m_collider != null) 
 		{
-			Vector3 normal = calcNormal ();
+			Vector3 normal = calcNormal();
 			// Don't look for ledge if player is touching roof
 			float angle = Vector3.Angle (-Vector3.up, normal);
 			if (angle < 45) 
-			{
 				m_roof = true;
-			}
-			Debug.DrawRay (m_collider.ClosestPointOnBounds(transform.position), normal * 3f, Color.red);
+			//Debug.DrawRay (m_collider.ClosestPoint(transform.position), normal * 3f, Color.red);
 			//Debug.DrawRay (m_collider.transform.position, Vector3.right * 5f, Color.green);
 		}
 
@@ -104,8 +103,8 @@ public class LedgeGrab : FindLedge {
 
 	void OnTriggerExit(Collider other)
 	{
-		/* If the last collider that the player entered is the same as the last exited, 
-		 * then the player isn't in a trigger anymore
+		/* If the last collider that the player entered is the same as the exited, 
+		 * then the player isn't in a trigger anymore.
 		 */
 		if (m_collider == other)
 			m_inTrigger = false;
