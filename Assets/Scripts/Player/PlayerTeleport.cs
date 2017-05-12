@@ -121,26 +121,6 @@ public class PlayerTeleport : MonoBehaviour {
 	void Update () {
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
-            if (m_indi.activeSelf)
-            {
-                if (m_foundLedge)
-                {
-                    //m_particleSystem.startColor = Color.blue;
-                    //m_particleSystem.color = Color.red;
-                }
-                else if (!m_enoughSpace)
-                {
-                    //m_particleSystem.startColor = Color.red;
-                    //m_particleSystem.color = Color.yellow;
-                }
-                else
-                {
-                    //m_particleSystem.startColor = new ParticleSystem.MinMaxGradient(new Color32(0, 255, 55, 255));
-                    //m_particleSystem.color = Color.white;
-                }
-
-            }
-
             if (m_cooldownTimer.isTimeUp())
             {
                 m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
@@ -191,6 +171,7 @@ public class PlayerTeleport : MonoBehaviour {
             }
             if (Input.GetButtonUp("Teleport"))
             {
+				m_ledgeLerp.stop();
                 if (!m_cancelTeleport && m_indi.activeSelf)
                 {
 
@@ -226,9 +207,10 @@ public class PlayerTeleport : MonoBehaviour {
 
                     GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
 
-                    //Inherit player velocity
+                    // Inherit player velocity and rotation when instancing
                     Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
                     decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance / 100;
+                    decoy.transform.rotation = transform.rotation;
                     GameManager.SetDecoy(decoy.GetComponent<Decoy>());
 
                     GameManager.GetPlayer().CreateDecoy();
@@ -243,7 +225,7 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 cancelTeleport();
             }
-
+			
             //ReadBlinkState();
 
         }
@@ -254,6 +236,7 @@ public class PlayerTeleport : MonoBehaviour {
             m_charController.detectCollisions = true;
             m_player.enableGravity();
             m_ledgeDetection.arrivedAtWall();
+			m_ledgeLerp.stop();
         }
         else if (m_player.m_playerState == PlayerState.isPause)
             cancelTeleport();
