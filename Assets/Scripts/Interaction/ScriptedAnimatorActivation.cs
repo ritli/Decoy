@@ -27,6 +27,10 @@ public struct Event
     public bool awaitPrevMovement;
     [Tooltip("Determine if this event should wait for this animation state before running. Leave empty if not used.")]
     public string awaitState;
+    [Tooltip("Spawn decoy when running event.")]
+    public bool spawnDecoy;
+    [Tooltip("Play particles or not")]
+    public bool playParticles;
 }
 
 [RequireComponent(typeof(Timer))]
@@ -49,7 +53,11 @@ public class ScriptedAnimatorActivation : ActivationObject {
     private Quaternion m_targetRotation;
     private float currentRotationSpeed;
 
+    // Particles
+    private ParticleController m_particleController;
+
     // Publics
+    public GameObject scientistDecoy;
     public ScientistState defaultState;
     public Event[] events;
 
@@ -84,6 +92,10 @@ public class ScriptedAnimatorActivation : ActivationObject {
         if (m_timer == null)
             Debug.LogError("Timer is null");
 
+        m_particleController = GetComponent<ParticleController>();
+        if (m_particleController == null)
+            Debug.LogError("ParticleController is null");
+
         // Initiate and play the default state.
         currentState = defaultState;
         playState(currentState);
@@ -103,14 +115,28 @@ public class ScriptedAnimatorActivation : ActivationObject {
         {
             Event cEvent = events[currentIndex];
             
+            // Await movement to stop if this condition is chosen
             if (cEvent.awaitPrevMovement && !m_isMoving
                 || !cEvent.awaitPrevMovement)
             {
+                // Await a chosen animation state if this condition is chosen
                 if (m_animator.GetCurrentAnimatorStateInfo(0).IsName(cEvent.awaitState)
                 || cEvent.awaitState == "")
                 {
+                    // Play chosen animation
                     playState(cEvent.stateToPlay);
 
+                    // Spawn decoy and play particle effects if chosen
+                    if (cEvent.spawnDecoy && scientistDecoy != null)
+                    {
+                        GameObject decoyInstance = (GameObject)Instantiate(scientistDecoy, transform.position, transform.rotation);
+                    }
+                    if (cEvent.playParticles && m_particleController != null)
+                    {
+                        PlayVisualEffects();
+                    }
+
+                    // Start movement
                     if (cEvent.movePosition != null)
                     {
                         m_targetPosition = cEvent.movePosition.position;
@@ -118,6 +144,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
                         m_isMoving = true;
                     }
 
+                    // Start rotation
                     if (cEvent.rotation != 0)
                     {
                         m_targetRotation = Quaternion.AngleAxis(cEvent.rotation, new Vector3(0, 1, 0)) * transform.rotation;
@@ -125,6 +152,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
                         m_isRotating = true;
                     }
 
+                    // Update the current event
                     if (currentIndex < events.Length - 1)
                         currentIndex++;
                     else
@@ -146,11 +174,13 @@ public class ScriptedAnimatorActivation : ActivationObject {
             {
                 m_isMoving = false;
 
+                // Return to idle if walking animation is playing when reaching the target
                 if (currentState == ScientistState.Walk)
                     playState(ScientistState.Idle);
             }
         }
 
+        // Start rotating the chosen amount of degrees
         if (m_isRotating)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, m_targetRotation, currentRotationSpeed * Time.deltaTime);
@@ -159,6 +189,18 @@ public class ScriptedAnimatorActivation : ActivationObject {
                 m_isRotating = false;
         }
 	}
+
+    // Play teleportation particles
+    void PlayVisualEffects()
+    {
+        m_particleController.LerpAlpha(0, 0.7f, 0.05f);
+        m_particleController.PlayBurst(50);
+        Invoke("CancelVisualEffects", 0.5f);
+    }
+    void CancelVisualEffects()
+    {
+        m_particleController.LerpAlpha(0.5f, 0, 0.05f);
+    }
 
     // Play the given state
     void playState(ScientistState playState)
@@ -169,6 +211,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
         if (playState != ScientistState.Walk && playState != ScientistState.None)
             m_animator.SetBool("IsWalking", false);
 
+        // Play the corresponding animation
         switch (playState)
         {
             case ScientistState.Aiming:
@@ -177,11 +220,9 @@ public class ScriptedAnimatorActivation : ActivationObject {
             case ScientistState.AppearTurn:
                 m_animator.Play("Scientist Appear Turn");
                 break;
-
             case ScientistState.Fibble:
                 m_animator.Play("Scientist Fibble");
                 break;
-
             case ScientistState.Idle:
                 m_animator.Play("Scientist Idle");
                 break;
