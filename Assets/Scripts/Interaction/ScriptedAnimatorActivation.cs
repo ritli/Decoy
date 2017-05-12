@@ -6,7 +6,7 @@ using UnityEngine;
 public enum ScientistState { Aiming, AppearTurn, Fibble, Idle, RemoveAndLeave, Walk, None };
 
 [Serializable]
-public struct Event
+public struct ScientistEvent
 {
     [Tooltip("Name of event")]
     public string eventName;
@@ -59,7 +59,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
     // Publics
     public GameObject scientistDecoy;
     public ScientistState defaultState;
-    public Event[] events;
+    public ScientistEvent[] events;
 
     public override void activate()
     {
@@ -113,7 +113,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
         // Play the next event when time is up
         if (m_timer.isTimeUp() && startedScriptedEvent)
         {
-            Event cEvent = events[currentIndex];
+            ScientistEvent cEvent = events[currentIndex];
             
             // Await movement to stop if this condition is chosen
             if (cEvent.awaitPrevMovement && !m_isMoving
