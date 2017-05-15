@@ -22,6 +22,7 @@ public class EndStarter : MonoBehaviour
     {
 		if(!m_EndStarted)
         {
+            //if player is teleporting into the collider, then start the end.
             if(m_PlayerTeleport.isTeleporting() &&  m_Collider.bounds.Contains(m_PlayerTeleport.TeleportingTo()))
             {
                 m_EndStarted = true;
