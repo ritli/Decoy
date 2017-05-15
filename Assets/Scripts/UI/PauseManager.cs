@@ -52,7 +52,7 @@ public class PauseManager : MonoBehaviour
         //pause all Physics
         if (pause)
         {
-            Time.timeScale = 0f;
+            Time.timeScale = 0.00000000001f;
         }
         else
         {

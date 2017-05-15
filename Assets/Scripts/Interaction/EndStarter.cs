@@ -13,8 +13,13 @@ public class EndStarter : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        m_AS = GetComponentInChildren<ActivationSequence>();
         m_Collider = GetComponent<BoxCollider>();
         m_PlayerTeleport = GameManager.GetPlayer().GetComponent<PlayerTeleport>();
+        if(m_PlayerTeleport == null)
+        {
+            print("playerTeleport null");
+        }
 	}
 	
 	// Update is called once per frame
@@ -22,15 +27,18 @@ public class EndStarter : MonoBehaviour
     {
 		if(!m_EndStarted)
         {
+            //if player is teleporting into the collider, then start the end.
             if(m_PlayerTeleport.isTeleporting() &&  m_Collider.bounds.Contains(m_PlayerTeleport.TeleportingTo()))
             {
+                
                 m_EndStarted = true;
                 m_PlayerTeleport.FinishTeleport();
                 GameManager.GetPlayer().pausePlayer(true);
                 GameManager.GetPlayer().disableGravity();
+                Destroy(GameManager.GetDecoy().gameObject);
+                GameManager.GetPlayer().StopBob();
                 Cursor.visible = false;
                 PauseManager.GetInstance().DisablePause(true);
-                
                 m_AS.Init();
                 enabled = false;
 

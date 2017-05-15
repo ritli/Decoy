@@ -14,7 +14,7 @@ public struct ActivationEvent
 
 public enum TriggerType
 {
-    OnAwake, OnTriggerEnter, OnTriggerExit
+    OnAwake, OnTriggerEnter, OnTriggerExit, None
 }
 
 [RequireComponent(typeof(Timer))][Serializable]
