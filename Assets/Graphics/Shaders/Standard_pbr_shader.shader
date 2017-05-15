@@ -3,19 +3,20 @@
 // Shader created with Shader Forge v1.35 
 // Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
 // Note: Manually altering this data may prevent you from opening it in Shader Forge
-/*SF_DATA;ver:1.35;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,lico:1,lgpr:1,limd:3,spmd:1,trmd:0,grmd:1,uamb:True,mssp:True,bkdf:True,hqlp:False,rprd:True,enco:False,rmgx:True,imps:True,rpth:1,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:0,bsrc:0,bdst:1,dpts:2,wrdp:True,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False;n:type:ShaderForge.SFN_Final,id:2865,x:32719,y:32712,varname:node_2865,prsc:2|diff-6343-OUT,spec-8909-OUT,gloss-5179-OUT,normal-5964-RGB,emission-128-OUT;n:type:ShaderForge.SFN_Multiply,id:6343,x:32114,y:32712,varname:node_6343,prsc:2|A-7736-RGB,B-6665-RGB;n:type:ShaderForge.SFN_Color,id:6665,x:31921,y:32805,ptovrint:False,ptlb:Color,ptin:_Color,varname:_Color,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:0.5019608,c2:0.5019608,c3:0.5019608,c4:1;n:type:ShaderForge.SFN_Tex2d,id:7736,x:31921,y:32620,ptovrint:True,ptlb:Base Color,ptin:_MainTex,varname:_MainTex,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Tex2d,id:5964,x:32315,y:32984,ptovrint:True,ptlb:Normal Map,ptin:_BumpMap,varname:_BumpMap,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:3,isnm:True;n:type:ShaderForge.SFN_Slider,id:358,x:31716,y:33225,ptovrint:False,ptlb:Metallic,ptin:_Metallic,varname:node_358,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,min:0,cur:0,max:1;n:type:ShaderForge.SFN_Slider,id:1813,x:32027,y:32436,ptovrint:False,ptlb:Roughness,ptin:_Roughness,varname:_Metallic_copy,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,min:0,cur:0.8,max:1;n:type:ShaderForge.SFN_Tex2d,id:6110,x:32315,y:33178,ptovrint:False,ptlb:Emissive,ptin:_Emissive,varname:node_6110,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:2,isnm:False;n:type:ShaderForge.SFN_Color,id:4355,x:32315,y:33371,ptovrint:False,ptlb:Emissive Color,ptin:_EmissiveColor,varname:node_4355,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:0.5,c2:0.5,c3:0.5,c4:1;n:type:ShaderForge.SFN_Multiply,id:128,x:32499,y:33262,varname:node_128,prsc:2|A-6110-RGB,B-4355-RGB;n:type:ShaderForge.SFN_Tex2d,id:2208,x:31921,y:32986,ptovrint:False,ptlb:Metalic texture,ptin:_Metalictexture,varname:node_2208,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Multiply,id:8909,x:32114,y:33113,varname:node_8909,prsc:2|A-2208-A,B-358-OUT;n:type:ShaderForge.SFN_Tex2d,id:4966,x:32043,y:32236,ptovrint:False,ptlb:Roughness Texture,ptin:_RoughnessTexture,varname:node_4966,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Multiply,id:5179,x:32423,y:32349,varname:node_5179,prsc:2|A-4966-A,B-1813-OUT;proporder:5964-6665-7736-358-1813-6110-4355-2208-4966;pass:END;sub:END;*/
+/*SF_DATA;ver:1.35;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,lico:1,lgpr:1,limd:3,spmd:1,trmd:0,grmd:1,uamb:True,mssp:True,bkdf:True,hqlp:False,rprd:True,enco:False,rmgx:True,imps:True,rpth:1,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:0,bsrc:0,bdst:1,dpts:2,wrdp:True,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False;n:type:ShaderForge.SFN_Final,id:2865,x:32719,y:32712,varname:node_2865,prsc:2|diff-6343-OUT,spec-8909-OUT,gloss-5179-OUT,normal-5964-RGB,emission-5180-OUT;n:type:ShaderForge.SFN_Multiply,id:6343,x:32114,y:32712,varname:node_6343,prsc:2|A-7736-RGB,B-6665-RGB;n:type:ShaderForge.SFN_Color,id:6665,x:31921,y:32805,ptovrint:False,ptlb:Color,ptin:_Color,varname:_Color,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:0.5019608,c2:0.5019608,c3:0.5019608,c4:1;n:type:ShaderForge.SFN_Tex2d,id:7736,x:31921,y:32620,ptovrint:True,ptlb:Base Color,ptin:_MainTex,varname:_MainTex,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Tex2d,id:5964,x:32192,y:32909,ptovrint:True,ptlb:Normal Map,ptin:_BumpMap,varname:_BumpMap,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:3,isnm:True;n:type:ShaderForge.SFN_Slider,id:358,x:31716,y:33225,ptovrint:False,ptlb:Metallic,ptin:_Metallic,varname:node_358,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,min:0,cur:0,max:1;n:type:ShaderForge.SFN_Slider,id:1813,x:32027,y:32436,ptovrint:False,ptlb:Roughness,ptin:_Roughness,varname:_Metallic_copy,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,min:0,cur:1,max:1;n:type:ShaderForge.SFN_Tex2d,id:6110,x:32315,y:33178,ptovrint:False,ptlb:Emissive Texture,ptin:_EmissiveTexture,varname:node_6110,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:2,isnm:False;n:type:ShaderForge.SFN_Color,id:4355,x:32054,y:33412,ptovrint:False,ptlb:Emissive Color,ptin:_EmissiveColor,varname:node_4355,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:0.5,c2:0.5,c3:0.5,c4:1;n:type:ShaderForge.SFN_Multiply,id:128,x:32315,y:33361,varname:node_128,prsc:2|A-4355-RGB,B-9378-OUT;n:type:ShaderForge.SFN_Tex2d,id:2208,x:31921,y:32986,ptovrint:False,ptlb:Metalic texture,ptin:_Metalictexture,varname:node_2208,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Multiply,id:8909,x:32114,y:33113,varname:node_8909,prsc:2|A-2208-A,B-358-OUT;n:type:ShaderForge.SFN_Tex2d,id:4966,x:32043,y:32236,ptovrint:False,ptlb:Roughness Texture,ptin:_RoughnessTexture,varname:node_4966,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Multiply,id:5179,x:32416,y:32388,varname:node_5179,prsc:2|A-4966-A,B-1813-OUT;n:type:ShaderForge.SFN_ValueProperty,id:9378,x:32054,y:33598,ptovrint:False,ptlb:Emissive Value,ptin:_EmissiveValue,varname:node_9378,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,v1:0;n:type:ShaderForge.SFN_Multiply,id:5180,x:32530,y:33195,varname:node_5180,prsc:2|A-6110-RGB,B-128-OUT;proporder:7736-6665-5964-2208-358-4966-1813-6110-4355-9378;pass:END;sub:END;*/
 
 Shader "Shader Forge/Standard_pbr_shader" {
     Properties {
-        _BumpMap ("Normal Map", 2D) = "bump" {}
-        _Color ("Color", Color) = (0.5019608,0.5019608,0.5019608,1)
         _MainTex ("Base Color", 2D) = "white" {}
-        _Metallic ("Metallic", Range(0, 1)) = 0
-        _Roughness ("Roughness", Range(0, 1)) = 0.8
-        _Emissive ("Emissive", 2D) = "black" {}
-        _EmissiveColor ("Emissive Color", Color) = (0.5,0.5,0.5,1)
+        _Color ("Color", Color) = (0.5019608,0.5019608,0.5019608,1)
+        _BumpMap ("Normal Map", 2D) = "bump" {}
         _Metalictexture ("Metalic texture", 2D) = "white" {}
+        _Metallic ("Metallic", Range(0, 1)) = 0
         _RoughnessTexture ("Roughness Texture", 2D) = "white" {}
+        _Roughness ("Roughness", Range(0, 1)) = 1
+        _EmissiveTexture ("Emissive Texture", 2D) = "black" {}
+        _EmissiveColor ("Emissive Color", Color) = (0.5,0.5,0.5,1)
+        _EmissiveValue ("Emissive Value", Float ) = 0
     }
     SubShader {
         Tags {
@@ -52,10 +53,11 @@ Shader "Shader Forge/Standard_pbr_shader" {
             uniform sampler2D _BumpMap; uniform float4 _BumpMap_ST;
             uniform float _Metallic;
             uniform float _Roughness;
-            uniform sampler2D _Emissive; uniform float4 _Emissive_ST;
+            uniform sampler2D _EmissiveTexture; uniform float4 _EmissiveTexture_ST;
             uniform float4 _EmissiveColor;
             uniform sampler2D _Metalictexture; uniform float4 _Metalictexture_ST;
             uniform sampler2D _RoughnessTexture; uniform float4 _RoughnessTexture_ST;
+            uniform float _EmissiveValue;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -167,13 +169,13 @@ Shader "Shader Forge/Standard_pbr_shader" {
                 float3 indirectDiffuse = float3(0,0,0);
                 indirectDiffuse += gi.indirect.diffuse;
 ////// Emissive:
-                float4 _Emissive_var = tex2D(_Emissive,TRANSFORM_TEX(i.uv0, _Emissive));
-                float3 emissive = (_Emissive_var.rgb*_EmissiveColor.rgb);
+                float4 _EmissiveTexture_var = tex2D(_EmissiveTexture,TRANSFORM_TEX(i.uv0, _EmissiveTexture));
+                float3 emissive = (_EmissiveTexture_var.rgb*(_EmissiveColor.rgb*_EmissiveValue));
 /// Final Color:
                 outDiffuse = half4( diffuseColor, 1 );
                 outSpecSmoothness = half4( specularColor, gloss );
                 outNormal = half4( normalDirection * 0.5 + 0.5, 1 );
-                outEmission = half4( (_Emissive_var.rgb*_EmissiveColor.rgb), 1 );
+                outEmission = half4( (_EmissiveTexture_var.rgb*(_EmissiveColor.rgb*_EmissiveValue)), 1 );
                 outEmission.rgb += indirectSpecular * 1;
                 outEmission.rgb += indirectDiffuse * diffuseColor;
                 #ifndef UNITY_HDR_ON
@@ -212,10 +214,11 @@ Shader "Shader Forge/Standard_pbr_shader" {
             uniform sampler2D _BumpMap; uniform float4 _BumpMap_ST;
             uniform float _Metallic;
             uniform float _Roughness;
-            uniform sampler2D _Emissive; uniform float4 _Emissive_ST;
+            uniform sampler2D _EmissiveTexture; uniform float4 _EmissiveTexture_ST;
             uniform float4 _EmissiveColor;
             uniform sampler2D _Metalictexture; uniform float4 _Metalictexture_ST;
             uniform sampler2D _RoughnessTexture; uniform float4 _RoughnessTexture_ST;
+            uniform float _EmissiveValue;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -370,8 +373,8 @@ Shader "Shader Forge/Standard_pbr_shader" {
                 indirectDiffuse += gi.indirect.diffuse;
                 float3 diffuse = (directDiffuse + indirectDiffuse) * diffuseColor;
 ////// Emissive:
-                float4 _Emissive_var = tex2D(_Emissive,TRANSFORM_TEX(i.uv0, _Emissive));
-                float3 emissive = (_Emissive_var.rgb*_EmissiveColor.rgb);
+                float4 _EmissiveTexture_var = tex2D(_EmissiveTexture,TRANSFORM_TEX(i.uv0, _EmissiveTexture));
+                float3 emissive = (_EmissiveTexture_var.rgb*(_EmissiveColor.rgb*_EmissiveValue));
 /// Final Color:
                 float3 finalColor = diffuse + specular + emissive;
                 fixed4 finalRGBA = fixed4(finalColor,1);
@@ -411,10 +414,11 @@ Shader "Shader Forge/Standard_pbr_shader" {
             uniform sampler2D _BumpMap; uniform float4 _BumpMap_ST;
             uniform float _Metallic;
             uniform float _Roughness;
-            uniform sampler2D _Emissive; uniform float4 _Emissive_ST;
+            uniform sampler2D _EmissiveTexture; uniform float4 _EmissiveTexture_ST;
             uniform float4 _EmissiveColor;
             uniform sampler2D _Metalictexture; uniform float4 _Metalictexture_ST;
             uniform sampler2D _RoughnessTexture; uniform float4 _RoughnessTexture_ST;
+            uniform float _EmissiveValue;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -542,10 +546,11 @@ Shader "Shader Forge/Standard_pbr_shader" {
             uniform sampler2D _MainTex; uniform float4 _MainTex_ST;
             uniform float _Metallic;
             uniform float _Roughness;
-            uniform sampler2D _Emissive; uniform float4 _Emissive_ST;
+            uniform sampler2D _EmissiveTexture; uniform float4 _EmissiveTexture_ST;
             uniform float4 _EmissiveColor;
             uniform sampler2D _Metalictexture; uniform float4 _Metalictexture_ST;
             uniform sampler2D _RoughnessTexture; uniform float4 _RoughnessTexture_ST;
+            uniform float _EmissiveValue;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float2 texcoord0 : TEXCOORD0;
@@ -573,8 +578,8 @@ Shader "Shader Forge/Standard_pbr_shader" {
                 UnityMetaInput o;
                 UNITY_INITIALIZE_OUTPUT( UnityMetaInput, o );
                 
-                float4 _Emissive_var = tex2D(_Emissive,TRANSFORM_TEX(i.uv0, _Emissive));
-                o.Emission = (_Emissive_var.rgb*_EmissiveColor.rgb);
+                float4 _EmissiveTexture_var = tex2D(_EmissiveTexture,TRANSFORM_TEX(i.uv0, _EmissiveTexture));
+                o.Emission = (_EmissiveTexture_var.rgb*(_EmissiveColor.rgb*_EmissiveValue));
                 
                 float4 _MainTex_var = tex2D(_MainTex,TRANSFORM_TEX(i.uv0, _MainTex));
                 float3 diffColor = (_MainTex_var.rgb*_Color.rgb);
