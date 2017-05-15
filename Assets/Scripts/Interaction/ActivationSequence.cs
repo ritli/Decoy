@@ -40,7 +40,7 @@ public class ActivationSequence : MonoBehaviour {
         CheckActivation(TriggerType.OnAwake);
     }
 
-    void Init()
+    public void Init()
     {
         if (!m_activated)
         {
