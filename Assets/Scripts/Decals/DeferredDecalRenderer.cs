@@ -129,19 +129,30 @@ public class DeferredDecalRenderer : MonoBehaviour
 
         if (posOnScreen.z > 0)
         {
-            foreach(Vector3 vertex in m_CubeMesh.vertices)
+            //Calculate and decide if decal is visible
+            Vector3 camerapos = Camera.main.transform.position;
+            Vector3 decpos = decal.transform.position;
+
+            Vector3 direction = camerapos - decpos;
+
+            Vector3 upwards = Vector3.ProjectOnPlane(Vector3.up, direction);
+            
+            Vector3 rotated = Quaternion.AngleAxis(90, upwards) * direction.normalized;
+
+            float mult = decal.transform.localScale.x / 2 + 0.25f;
+
+            posOnScreen = Camera.main.WorldToScreenPoint(rotated * mult + decal.transform.position);
+
+            if ((posOnScreen.x > 0 && posOnScreen.x < Screen.width) && (posOnScreen.y > 0 && posOnScreen.y < Screen.height))
             {
-                Vector3 vertexOnScreen = Camera.main.WorldToScreenPoint(vertex+transform.position);
-
-                if ((vertexOnScreen.x > 0 && vertexOnScreen.x < Screen.width) && (vertexOnScreen.y > 0 && vertexOnScreen.y < Screen.height))
-                {
-                    return true;
-                }
+                return true;
             }
-            return false;
 
-            if((posOnScreen.x > 0 && posOnScreen.x < Screen.width) && (posOnScreen.y > 0 && posOnScreen.y < Screen.height))
-            {   
+            rotated = Quaternion.AngleAxis(-90, upwards) * direction.normalized;
+            posOnScreen = Camera.main.WorldToScreenPoint(rotated * mult + decal.transform.position);
+
+            if ((posOnScreen.x > 0 && posOnScreen.x < Screen.width) && (posOnScreen.y > 0 && posOnScreen.y < Screen.height))
+            {
                 return true;
             }
         }
