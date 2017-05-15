@@ -11,6 +11,26 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1693487204520326}
   m_IsPrefabParent: 1
+--- !u!1 &1179022480726634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4580301295870600}
+  - component: {fileID: 114284481456349362}
+  - component: {fileID: 114993079240857618}
+  - component: {fileID: 114272532723407582}
+  - component: {fileID: 114997591726583026}
+  - component: {fileID: 114986372395311896}
+  m_Layer: 2
+  m_Name: ActivationSequence
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1693487204520326
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,10 +56,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1693487204520326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.29, y: 6.04, z: -10.58}
+  m_LocalPosition: {x: 4.3900285, y: 6.25, z: -10.52}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4580301295870600}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4580301295870600
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1179022480726634}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 4320456715609656}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &65571004692120536
@@ -77,5 +111,83 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9417bb9b05ca4bf449616ed1e22de64d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ReadyToStart: 0
   m_EndStarted: 0
+--- !u!114 &114272532723407582
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1179022480726634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cf724669c3e464882187c2bd0852d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  m_value: 0
+--- !u!114 &114284481456349362
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1179022480726634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20c225db90cb72d41990f1bb80b527e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_timeout: 1
+  printTime: 1
+--- !u!114 &114986372395311896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1179022480726634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ddaf0723060b5848b191e21af754e33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  m_toLoad: 10
+--- !u!114 &114993079240857618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1179022480726634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b551b1b11ca86a547b8f1bd2d28013a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loopList: 0
+  activations:
+  - eventName: InitialAnimation
+    activationObject: {fileID: 114272532723407582}
+    setState: 1
+    delay: 2
+  - eventName: Imagefader fading
+    activationObject: {fileID: 114997591726583026}
+    setState: 1
+    delay: 4
+  - eventName: Credits loading
+    activationObject: {fileID: 114986372395311896}
+    setState: 1
+    delay: 2
+  m_triggerType: 3
+  m_triggererTag: 
+--- !u!114 &114997591726583026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1179022480726634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e1d0814f2f58c4ca612d3f2ddd9192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  m_newState: 1
