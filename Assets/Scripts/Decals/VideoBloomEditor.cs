@@ -1,6 +1,8 @@
+#if UNITY_EDITOR
 using System;
 using UnityEditor;
 using UnityEngine;
+
 
 [CustomEditor (typeof(VideoBloom))]
 class VideoBloomEditor : Editor
@@ -76,3 +78,4 @@ class VideoBloomEditor : Editor
 		serObj.ApplyModifiedProperties();
 	}
 }
+#endif
