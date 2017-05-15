@@ -48,7 +48,7 @@ public class FindLedge : MonoBehaviour {
 
 		// Sweeptest rays up and forward
 		Ray raySweepUp = new Ray();
-		raySweepUp.origin = m_wallPoint;
+		raySweepUp.origin = wallHit.point + wallHit.normal * 0.1f;
 		raySweepUp.direction = Vector3.up;
 
 		Vector3 sweepForward = raySweepUp.origin;
@@ -90,9 +90,10 @@ public class FindLedge : MonoBehaviour {
 		// Sweeping upward from beside the wall
 		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, m_playerLength))
 		{
-			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
+			//Debug.DrawRay (hit.point, hit.normal, Color.cyan, 5);
 			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
 			m_newPosition.y = hit.point.y + hit.normal.y * m_playerLength;
+			wallTarget = hit.point + hit.normal * m_playerLength;
 			m_isLedgeBlocked = true;
 //			print ("sweep up");
 			return false;
@@ -186,7 +187,7 @@ public class FindLedge : MonoBehaviour {
 
 
 		Debug.DrawRay(hit.point, localRight, Color.magenta);
-		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
+		Debug.DrawRay(hit.point, localUp, new Color(19.89f/225f, 204f/255f, 176f/255f)); // Cyan
 		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
 	}
 
@@ -214,11 +215,13 @@ public class FindLedge : MonoBehaviour {
 		Vector3 localRight = Vector3.right;
 		Vector3 localUp = Vector3.forward;
 
-		// Move the point up a bit to prevent it raycasting from inside the object
+		// Move the point a bit to prevent it raycasting from inside the object
 		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
 
 		if (createNewLocal)
 			createNewLocalVectors(out localUp, out localRight, hit);
+
+		Debug.DrawRay (hit.point, hit.normal, Color.red);
 
 		RaycastHit rayHit = new RaycastHit ();
 		return (m_raycaster.doRaycast (out wallNormalHit, hit.normal, hit.point, m_playerWidth) ||

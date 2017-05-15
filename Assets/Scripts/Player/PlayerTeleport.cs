@@ -189,6 +189,7 @@ public class PlayerTeleport : MonoBehaviour {
 					else if (!m_enoughSpace) 
 					{
 						print ("Not enough space");
+						print (m_ledgeDetection.getInvalidPosition ());
 						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
 							moveTo (m_grabPoint);
 					} 
@@ -310,10 +311,12 @@ public class PlayerTeleport : MonoBehaviour {
 
         // Create ray for casting when no terrain was hit
         Vector3 playerLook = forward * actualLength;
-		Ray rayDown = new Ray(Camera.main.transform.position + playerLook, Vector3.down);
-		Ray rayUp = new Ray(Camera.main.transform.position + playerLook, Vector3.up);
+		Ray rayAir = new Ray(Camera.main.transform.position + playerLook, Vector3.down);
 
         RaycastHit hit = new RaycastHit();
+		RaycastHit wallNormalHit = new RaycastHit();
+
+		Vector3 validPos = new Vector3 (0, 0, 0);
 
 //		Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
 //		Debug.DrawRay(rayUp.origin, rayUp.direction, Color.white);
@@ -323,22 +326,31 @@ public class PlayerTeleport : MonoBehaviour {
 		m_enoughSpace = true;
 		m_foundValidSpace = true;
 
+
         if (m_raycaster.doRaycast(out hit))
         {
+			float angle = Vector3.Angle(hit.normal, Vector3.up);
+			bool newUpRight = false;
+			// If the hit wasn't on roof or floor, create new right and up vectors
+			if (angle > 0.1 && angle < 179.9)
+				newUpRight = true;
+
 			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
 //			print ("Enough space: " + m_enoughSpace);
 
 			// Roof
-            if (Vector3.Angle(hit.normal, Vector3.down) < 45)
+			if (angle > 135)
             {
+				print ("Roof");
                 m_indi.transform.position = hit.point + hit.normal * m_playerLength;
 				m_foundLedge = false;
                 return;
             }
 
 			//If true then surface is wall
-			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
+			else if (angle > 45 && angle < 135)
 			{
+				print ("Wall");
 				if (m_enoughSpace) 
 				{
 					// ## Start ledge detection ##
@@ -351,18 +363,21 @@ public class PlayerTeleport : MonoBehaviour {
 					} 
 					else if (m_ledgeDetection.isLedgeBlocked ()) 
 					{
+						m_foundLedge = false;
 						// Sets the indicator to a new calculated position depending on how the ledge is blocked
-						m_foundLedge = false;	
-						m_indi.transform.position = m_ledgeDetection.getNewPosition();
-						return;
+						//m_indi.transform.position = m_ledgeDetection.getNewPosition();
+						m_indi.transform.position = m_grabPoint;
+						Debug.DrawRay(m_indi.transform.position, Vector3.up, new Color(0.34f, 0.75f, 0.34f));
 					} 
 					else
 						m_foundLedge = false;
 				}
-				if (m_ledgeDetection.isIndPosSet())
-					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
-				else
-					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
+				m_ledgeDetection.findValidPosition (hit.point, out validPos);
+				m_indi.transform.position = validPos;
+//				if (m_ledgeDetection.isIndPosSet())
+//					m_indi.transform.position = m_ledgeDetection.getNewPosition();
+//				else
+//					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
 			}
 
@@ -371,24 +386,23 @@ public class PlayerTeleport : MonoBehaviour {
 			//Else then surface is floor
 			else
             {
+				print ("Floor");
 				m_foundLedge = false;
 
-//				for (int i = 0; i < 5; i++)
-//                {
-//                    Vector3 centerpos = hit.point + Vector3.up * 0.5f;
-//                    Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
-//
-//                    if (Physics.Raycast(centerpos, dir, out hit, 1f))
-//                    {
-//
-//                        if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-//                        {
-//                            m_indi.transform.position = hit.point + hit.normal * 0.1f;
-//                            return;
-//                        }
-//                    }
-//                }
-				print("Hitting floor!!");
+				for (int i = 0; i < 5; i++)
+                {
+                    Vector3 centerpos = hit.point + Vector3.up * 0.5f;
+                    Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
+
+                    if (Physics.Raycast(centerpos, dir, out hit, 1f))
+                    {
+                        if (Vector3.Angle(hit.normal, Vector3.up) > 45)
+                        {
+                            m_indi.transform.position = hit.point + hit.normal * 0.1f;
+                            return;
+                        }
+                    }
+                }
 				m_indi.transform.position = hit.point;
 
             }
@@ -396,19 +410,22 @@ public class PlayerTeleport : MonoBehaviour {
 
         }
         // Check for collision of floor when ray does not hit a surface.
-		else if (m_raycaster.doRaycast(out hit, rayDown.direction, rayDown.origin, 0.2f))
+		else if (m_raycaster.doRaycast(out hit, rayAir.direction, rayAir.origin, 0.2f))
         {
+			m_ledgeDetection.findValidPosition (hit.point + hit.normal * m_playerLength, out validPos);
 			// Put the indicator on the ground
-            m_indi.transform.position = hit.point;
+			m_indi.transform.position = validPos;
             print("Hitting the ground");
 			m_foundLedge = false;
             return;
         }
+
 		// Check for collision of roof when ray does not hit a surface.
-		else if (m_raycaster.doRaycast(out hit, rayUp.direction, rayUp.origin, m_playerLength))
+		else if (m_raycaster.doRaycast(out hit, -rayAir.direction, rayAir.origin, m_playerLength))
 		{
-			// Put the indicator playerLength away from the roof
-			m_indi.transform.position = hit.point - new Vector3(0, m_playerLength, 0);
+			m_ledgeDetection.findValidPosition (hit.point + hit.normal * m_playerLength, out validPos);
+			// Put the indicator playerLength distance away from the roof
+			m_indi.transform.position = validPos /*- new Vector3(0, m_playerLength, 0)*/;
             print("Hitting the ceiling");
 			m_foundLedge = false;
 			return;
@@ -430,9 +447,13 @@ public class PlayerTeleport : MonoBehaviour {
                 }
             }
         }
+		// If nothing is hit, check for enough space
+		print("Hit nothing");
 		m_foundLedge = false;
 		m_ledgeDetection.hitNothing();
-		m_indi.transform.position = Camera.main.transform.position + playerLook;
+		Vector3 airPosition = new Vector3 (0, 0, 0);
+		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out airPosition);
+		m_indi.transform.position = airPosition;
     }
     void pauseIndicator(bool isPaused)
     {
