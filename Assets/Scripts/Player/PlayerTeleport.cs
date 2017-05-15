@@ -189,7 +189,7 @@ public class PlayerTeleport : MonoBehaviour {
 					else if (!m_enoughSpace) 
 					{
 						print ("Not enough space");
-						print (m_ledgeDetection.getInvalidPosition ());
+						//print (m_ledgeDetection.getInvalidPosition ());
 						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
 							moveTo (m_grabPoint);
 					} 
@@ -372,12 +372,13 @@ public class PlayerTeleport : MonoBehaviour {
 					else
 						m_foundLedge = false;
 				}
-				m_ledgeDetection.findValidPosition (hit.point, out validPos);
-				m_indi.transform.position = validPos;
-//				if (m_ledgeDetection.isIndPosSet())
-//					m_indi.transform.position = m_ledgeDetection.getNewPosition();
-//				else
-//					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
+
+				if (m_ledgeDetection.isIndPosSet())
+					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
+				else if (m_ledgeDetection.findValidPosition (hit.point, out validPos))
+					m_indi.transform.position = validPos;
+				else
+					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
 				return;
 			}
 
@@ -414,7 +415,7 @@ public class PlayerTeleport : MonoBehaviour {
         {
 			m_ledgeDetection.findValidPosition (hit.point + hit.normal * m_playerLength, out validPos);
 			// Put the indicator on the ground
-			m_indi.transform.position = validPos;
+			m_indi.transform.position = hit.point + hit.normal * 0.2f;
             print("Hitting the ground");
 			m_foundLedge = false;
             return;
@@ -432,28 +433,29 @@ public class PlayerTeleport : MonoBehaviour {
 		}
 
 
-        for (int i = 0; i < 5; i++)
-        {
-            Vector3 centerpos = transform.position + playerLook;
-            Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
+//        for (int i = 0; i < 5; i++)
+//        {
+//            Vector3 centerpos = transform.position + playerLook;
+//            Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
+//
+//            if (Physics.Raycast(centerpos, dir, out hit, 0.5f))
+//            {
+//                if (Vector3.Angle(hit.normal, Vector3.up) > 45)
+//                {
+//                    m_indi.transform.position = hit.point + hit.normal;
+//                    m_foundLedge = false;
+//                    return;
+//                }
+//            }
+//        }
 
-            if (Physics.Raycast(centerpos, dir, out hit, 0.5f))
-            {
-                if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-                {
-                    m_indi.transform.position = hit.point + hit.normal;
-                    m_foundLedge = false;
-                    return;
-                }
-            }
-        }
 		// If nothing is hit, check for enough space
 		print("Hit nothing");
 		m_foundLedge = false;
 		m_ledgeDetection.hitNothing();
-		Vector3 airPosition = new Vector3 (0, 0, 0);
-		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out airPosition);
-		m_indi.transform.position = airPosition;
+		validPos = new Vector3 (0, 0, 0);
+		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out validPos);
+		m_indi.transform.position = Camera.main.transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)
     {

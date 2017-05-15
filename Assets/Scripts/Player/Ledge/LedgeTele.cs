@@ -49,16 +49,19 @@ public class LedgeTele : FindLedge {
 			if (isSpaceObstructedWall(out wallNormalRayHit, hit, newUpRight)) 
 			{
 				enoughSpace = false;
-
-				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, new Color (0.751265f, 0.25678f, 0.3415136f));
+				//new Color (0.751265f, 0.25678f, 0.3415136f)
+				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, Color.yellow);
 				
 				/* Sets a position based on the initial hit, it's normal, and the new hit's normal.
 				 * This puts the indicator between two walls instead of inside one of them.
 				 */
-				m_validIndPosition = hit.point + hit.normal + wallNormalRayHit.normal;
+				Vector3 maybeValid = hit.point + hit.normal + wallNormalRayHit.normal;
+				// Adjust position using rays
+				adjustPosition(maybeValid, out m_validIndPosition);
 				m_indPositionSet = true;
 
-				Debug.DrawRay (hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
+
+				//Debug.DrawRay (hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
 			}
 		}
 		// Surface was roof
@@ -92,6 +95,10 @@ public class LedgeTele : FindLedge {
 		RaycastHit forward = new RaycastHit();
 		RaycastHit backward = new RaycastHit();
 
+		bool enoughWidth = true;
+		bool enoughHeight = true;
+		bool enoughDepth = true;
+
 		while (!enoughSpace && !arrived) 
 		{
 			print ("Looking for space");
@@ -106,12 +113,19 @@ public class LedgeTele : FindLedge {
 			workPosition = Vector3.MoveTowards(workPosition, transform.position, m_distanceDelta);
 
 			// Raycast in all directions to look for obstruction
-			if (m_raycaster.doRaycast (out up, Vector3.up, workPosition, m_playerLength) &&
-				m_raycaster.doRaycast (out down, -Vector3.up, workPosition, m_playerLength) ||
-			    m_raycaster.doRaycast (out left, Vector3.left, workPosition, m_playerWidth) &&
-				m_raycaster.doRaycast (out right, -Vector3.left, workPosition, m_playerWidth) ||
-				m_raycaster.doRaycast (out forward, Vector3.forward, workPosition, m_playerWidth) &&
-				m_raycaster.doRaycast (out backward, -Vector3.forward, workPosition, m_playerWidth)) 
+			if (m_raycaster.doRaycast (out up, Vector3.up, workPosition, m_playerLength + m_margin) &&
+			    m_raycaster.doRaycast (out down, -Vector3.up, workPosition, m_playerLength + m_margin))
+				enoughHeight = false;
+			
+			if (m_raycaster.doRaycast (out left, Vector3.left, workPosition, m_playerWidth + m_margin) &&
+			    m_raycaster.doRaycast (out right, -Vector3.left, workPosition, m_playerWidth + m_margin))
+				enoughWidth = false;
+			
+			if (m_raycaster.doRaycast (out forward, Vector3.forward, workPosition, m_playerWidth + m_margin) &&
+			    m_raycaster.doRaycast (out backward, -Vector3.forward, workPosition, m_playerWidth + m_margin))
+				enoughDepth = false;
+			
+			if (!enoughHeight || !enoughWidth || !enoughDepth)
 			{
 				// Not enough space
 			} 
@@ -119,7 +133,15 @@ public class LedgeTele : FindLedge {
 			{
 				print ("Found new position");
 				enoughSpace = true;
-				validPosition = workPosition + up.normal + down.normal + left.normal + right.normal + forward.normal + backward.normal;
+
+				if (!enoughHeight)
+					workPosition += up.normal + down.normal;
+				if (!enoughWidth)
+					workPosition += left.normal + right.normal;
+				if (!enoughDepth)
+					workPosition += forward.normal + backward.normal;
+
+				validPosition = workPosition;
 //				print (validPosition);
 			}
 		}
