@@ -37,7 +37,7 @@ public class AnimationActivation : ActivationObject {
 
     public override bool isActivated()
     {
-        throw new NotImplementedException();
+        return m_active;
     }
 
     protected override void checkActivationEvent(int index)
