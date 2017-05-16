@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousColorSigma: 1
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
-  m_LightingDataAsset: {fileID: 112002326, guid: dd706725e402e7446b3230704cd648e4,
+  m_LightingDataAsset: {fileID: 112004310, guid: dd706725e402e7446b3230704cd648e4,
     type: 2}
   m_ShadowMaskMode: 2
 --- !u!196 &4
@@ -435,22 +435,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a5dbd5e51810c044eaa8ab173cacdda9, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1070597139 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 120282, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
-  m_PrefabInternal: {fileID: 1953910153}
---- !u!114 &1070597150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1070597139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: 1e3324ae7d4eb0e48b56ce0b3db8ac0a, type: 2}
 --- !u!1001 &1164291200
 Prefab:
   m_ObjectHideFlags: 0
@@ -521,7 +505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1624772718
 Light:
   m_ObjectHideFlags: 0
@@ -580,15 +564,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 32.096924
+      value: 347.87
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 16.42
+      value: 22.18
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 29.788403
+      value: -44.88
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalRotation.x
@@ -626,7 +610,23 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -165.27802
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114899587330457334, guid: 4d041c3e539ffd1459a5d8213a778764,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037190, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+      propertyPath: m_Depth
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114899587330457334, guid: 4d041c3e539ffd1459a5d8213a778764,
+        type: 2}
+      propertyPath: profile
+      value: 
+      objectReference: {fileID: 11400000, guid: 0bb47c606e54ab744b7cf4e1a4fcefba,
+        type: 2}
+    m_RemovedComponents:
+    - {fileID: 114707980694823172, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &2136971527
@@ -658,7 +658,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ClearPlayerPrefs: 0
   m_alwaysClearPrefs: 1
+  m_dynamicallyUpdateCheckpoints: 1
+  m_updateCheckpoints: 0
+  m_updateList: 0
   m_NamePrefix: Checkpoint
+  m_checkpoints:
+  - {fileID: 0}
 --- !u!4 &2136971529
 Transform:
   m_ObjectHideFlags: 0
@@ -687,7 +692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &2138616998
 Light:
   m_ObjectHideFlags: 0
