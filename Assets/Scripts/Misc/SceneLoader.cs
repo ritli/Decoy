@@ -19,7 +19,7 @@ public class LoadingScene : MonoBehaviour
 public class SceneLoader : MonoBehaviour
 {
     //Add new Scenes here as they are created.
-    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section5, CreditScene };
+    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, CreditScene };
     public static SceneLoader instance;
     public bool startfromMenu;
     private static List<LoadingScene> m_ScenesLoading;
