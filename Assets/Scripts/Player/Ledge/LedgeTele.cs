@@ -58,7 +58,7 @@ public class LedgeTele : FindLedge {
 				Vector3 maybeValid = hit.point + hit.normal + wallNormalRayHit.normal;
 				m_validIndPosition = maybeValid;
 				// Adjust position using rays
-				//adjustPosition(maybeValid, out m_validIndPosition);
+				adjustPosition(maybeValid, out m_validIndPosition);
 				m_indPositionSet = true;
 
 
@@ -125,8 +125,12 @@ public class LedgeTele : FindLedge {
 			if (m_raycaster.doRaycast (out forward, Vector3.forward, workPosition, m_playerWidth + m_margin) &&
 			    m_raycaster.doRaycast (out backward, -Vector3.forward, workPosition, m_playerWidth + m_margin))
 				enoughDepth = false;
-			Debug.DrawRay(workPosition, Vector3.forward);
-			Debug.DrawRay(workPosition, -Vector3.forward, Color.black);
+//			Debug.DrawRay(workPosition, Vector3.forward, Color.white, 2);
+//			Debug.DrawRay(workPosition, -Vector3.forward, Color.black, 2);
+//			Debug.DrawRay(workPosition, Vector3.up, Color.green, 2);
+//			Debug.DrawRay(workPosition, -Vector3.up, Color.gray, 2);
+//			Debug.DrawRay(workPosition, Vector3.left, Color.yellow, 2);
+//			Debug.DrawRay(workPosition, -Vector3.left, Color.red, 2);
 			print(enoughHeight + " " + enoughWidth + " " + enoughDepth);
 
 			if (!enoughHeight || !enoughWidth || !enoughDepth)
@@ -137,14 +141,6 @@ public class LedgeTele : FindLedge {
 			{
 				print ("Found new position");
 				enoughSpace = true;
-
-				if (!enoughHeight)
-					workPosition += up.normal + down.normal;
-				if (!enoughWidth)
-					workPosition += left.normal + right.normal;
-				if (!enoughDepth)
-					workPosition += forward.normal + backward.normal;
-
 				validPosition = workPosition;
 //				print (validPosition);
 			}

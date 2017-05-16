@@ -263,7 +263,7 @@ public class FindLedge : MonoBehaviour {
 			m_raycaster.doRaycast(out hit1, Vector3.forward, current, m_playerWidth) ||
 			m_raycaster.doRaycast(out hit2, -Vector3.forward, current, m_playerWidth))
 		{
-			current = Vector3.MoveTowards(current, transform.position, 0.5f);
+			current = Vector3.MoveTowards(current, transform.position, m_playerWidth);
 		}
 		target = current;
 
