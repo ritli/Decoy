@@ -15,6 +15,10 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         instance = FindObjectOfType<PauseManager>();
+
+        //To force the game to begin running at full speed.
+        //There was an error on some machines that originated from the timescale being 0.
+        Time.timeScale = 1.0f;
 	}
 
     private void OnEnable()
