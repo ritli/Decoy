@@ -13,7 +13,7 @@ public class FindLedge : MonoBehaviour {
 	protected Raycast m_raycaster;
 	protected bool m_isLedgeBlocked = false;
 	private float positionOffset = 0.5f;
-	protected float m_margin = 0.15f;
+	protected float m_margin = 0.125f;
 
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
 	public float ledgeSensitivity;
@@ -102,7 +102,7 @@ public class FindLedge : MonoBehaviour {
 
 		raySweepUp.origin = newPosition;
 
-		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction * m_playerWidth * 2, Color.white);
+		//Debug.DrawRay (raySweepForward.origin, raySweepForward.direction * m_playerWidth * 2, Color.white);
 
 		// Sweeping forward
 		if (m_raycaster.doRaycast(out hit, raySweepForward.direction, raySweepForward.origin, m_playerWidth * 2)) 
@@ -185,9 +185,9 @@ public class FindLedge : MonoBehaviour {
 		// New local vectors based on the hit's normal
 		localRight = Vector3.Cross (Vector3.up, hit.normal);
 		localUp = Vector3.Cross (localRight, hit.normal);
-		Debug.DrawRay(hit.point, localRight, Color.magenta);
-		Debug.DrawRay(hit.point, localUp, new Color(19.89f/225f, 204f/255f, 176f/255f)); // Cyan
-		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
+		//Debug.DrawRay(hit.point, localRight, Color.magenta);
+		//Debug.DrawRay(hit.point, localUp, new Color(19.89f/225f, 204f/255f, 176f/255f)); // Cyan
+		//Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
 	}
 
 	protected bool isSpaceObstructedFloor(RaycastHit hit, bool createNewLocal) 
@@ -251,19 +251,34 @@ public class FindLedge : MonoBehaviour {
 
 	protected void adjustPosition(Vector3 current, out Vector3 target) 
 	{
+		print("Adjusting position");
 		RaycastHit hit1 = new RaycastHit ();
 		RaycastHit hit2 = new RaycastHit ();
-		target = new Vector3 (0, 0, 0);
+		target = current;
 
-		if (m_raycaster.doRaycast (out hit1, Vector3.forward, current, m_playerWidth) ||
-		    m_raycaster.doRaycast (out hit2, -Vector3.forward, current, m_playerWidth))
-			target += hit1.normal + hit2.normal;
-		if (m_raycaster.doRaycast (out hit1, Vector3.up, current, m_playerLength) ||
-			m_raycaster.doRaycast (out hit2, -Vector3.up, current, m_playerLength))
-			target += hit1.normal + hit2.normal;
-		if (m_raycaster.doRaycast (out hit1, Vector3.left, current, m_playerWidth) ||
-			m_raycaster.doRaycast (out hit2, -Vector3.left, current, m_playerWidth))
-			target += hit1.normal + hit2.normal;
+		if (m_raycaster.doRaycast(out hit1, Vector3.up, current, m_playerLength) ||
+			m_raycaster.doRaycast(out hit2, -Vector3.up, current, m_playerLength) ||
+			m_raycaster.doRaycast(out hit1, Vector3.left, current, m_playerWidth) ||
+			m_raycaster.doRaycast(out hit2, -Vector3.left, current, m_playerWidth) ||
+			m_raycaster.doRaycast(out hit1, Vector3.forward, current, m_playerWidth) ||
+			m_raycaster.doRaycast(out hit2, -Vector3.forward, current, m_playerWidth))
+		{
+			current = Vector3.MoveTowards(current, transform.position, 0.5f);
+		}
+		target = current;
+
+		//if (m_raycaster.doRaycast(out hit1, Vector3.forward, current, m_playerWidth) ||
+		//	m_raycaster.doRaycast(out hit2, -Vector3.forward, current, m_playerWidth))
+		//	target = Vector3.MoveTowards(current, transform.position, 0.5f);
+		//	//target += hit1.normal + hit2.normal;
+		//if (m_raycaster.doRaycast(out hit1, Vector3.up, current, m_playerLength) ||
+		//	m_raycaster.doRaycast(out hit2, -Vector3.up, current, m_playerLength))
+		//	target = Vector3.MoveTowards(current, transform.position, 0.5f);
+		//	//target += hit1.normal + hit2.normal;
+		//if (m_raycaster.doRaycast(out hit1, Vector3.left, current, m_playerWidth) ||
+		//	m_raycaster.doRaycast(out hit2, -Vector3.left, current, m_playerWidth))
+		//	target = Vector3.MoveTowards(current, transform.position, 0.5f);
+		//	//target += hit1.normal + hit2.normal;
 	}
 
 	/*

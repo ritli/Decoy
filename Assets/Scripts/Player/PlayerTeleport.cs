@@ -189,7 +189,7 @@ public class PlayerTeleport : MonoBehaviour {
 					else if (!m_enoughSpace) 
 					{
 						print ("Not enough space");
-						//print (m_ledgeDetection.getInvalidPosition ());
+						print (m_ledgeDetection.getInvalidPosition ());
 						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
 							moveTo (m_grabPoint);
 					} 
@@ -366,6 +366,7 @@ public class PlayerTeleport : MonoBehaviour {
 						m_foundLedge = false;
 						// Sets the indicator to a new calculated position depending on how the ledge is blocked
 						//m_indi.transform.position = m_ledgeDetection.getNewPosition();
+						print("Ledge blocked");
 						m_indi.transform.position = m_grabPoint;
 						Debug.DrawRay(m_indi.transform.position, Vector3.up, new Color(0.34f, 0.75f, 0.34f));
 					} 
@@ -424,10 +425,12 @@ public class PlayerTeleport : MonoBehaviour {
 		// Check for collision of roof when ray does not hit a surface.
 		else if (m_raycaster.doRaycast(out hit, -rayAir.direction, rayAir.origin, m_playerLength))
 		{
-			m_ledgeDetection.findValidPosition (hit.point + hit.normal * m_playerLength, out validPos);
+			if (m_ledgeDetection.findValidPosition(hit.point + hit.normal * m_playerLength, out validPos))
+				m_indi.transform.position = validPos;
+			else
+				m_indi.transform.position = hit.point - new Vector3(0, m_playerLength, 0);
 			// Put the indicator playerLength distance away from the roof
-			m_indi.transform.position = validPos /*- new Vector3(0, m_playerLength, 0)*/;
-            print("Hitting the ceiling");
+			print("Hitting the ceiling");
 			m_foundLedge = false;
 			return;
 		}
@@ -453,7 +456,6 @@ public class PlayerTeleport : MonoBehaviour {
 		print("Hit nothing");
 		m_foundLedge = false;
 		m_ledgeDetection.hitNothing();
-		validPos = new Vector3 (0, 0, 0);
 		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out validPos);
 		m_indi.transform.position = Camera.main.transform.position + playerLook;
     }

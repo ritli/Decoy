@@ -56,8 +56,9 @@ public class LedgeTele : FindLedge {
 				 * This puts the indicator between two walls instead of inside one of them.
 				 */
 				Vector3 maybeValid = hit.point + hit.normal + wallNormalRayHit.normal;
+				m_validIndPosition = maybeValid;
 				// Adjust position using rays
-				adjustPosition(maybeValid, out m_validIndPosition);
+				//adjustPosition(maybeValid, out m_validIndPosition);
 				m_indPositionSet = true;
 
 
@@ -95,15 +96,15 @@ public class LedgeTele : FindLedge {
 		RaycastHit forward = new RaycastHit();
 		RaycastHit backward = new RaycastHit();
 
-		bool enoughWidth = true;
-		bool enoughHeight = true;
-		bool enoughDepth = true;
 
 		while (!enoughSpace && !arrived) 
 		{
+			bool enoughWidth = true;
+			bool enoughHeight = true;
+			bool enoughDepth = true;
 			print ("Looking for space");
 			if (Vector3.Distance (workPosition, transform.position) == 0) 
-			{
+			{ // Found no new position
 				print ("Arrived at player");
 				arrived = true;
 				return false;
@@ -124,7 +125,10 @@ public class LedgeTele : FindLedge {
 			if (m_raycaster.doRaycast (out forward, Vector3.forward, workPosition, m_playerWidth + m_margin) &&
 			    m_raycaster.doRaycast (out backward, -Vector3.forward, workPosition, m_playerWidth + m_margin))
 				enoughDepth = false;
-			
+			Debug.DrawRay(workPosition, Vector3.forward);
+			Debug.DrawRay(workPosition, -Vector3.forward, Color.black);
+			print(enoughHeight + " " + enoughWidth + " " + enoughDepth);
+
 			if (!enoughHeight || !enoughWidth || !enoughDepth)
 			{
 				// Not enough space
