@@ -257,6 +257,11 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         return m_walkingBobber;
     }
+    public void StopBob()
+    {
+        m_cameraBobber.stopBob();
+        m_walkingBobber.stopBob();
+    }
 
     void UpdateAnimator()
     {
