@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public struct ActivationEvent
 {
+    public string eventName;
     public ActivationObject activationObject;
     public bool setState;
     public float delay;
@@ -13,10 +14,10 @@ public struct ActivationEvent
 
 public enum TriggerType
 {
-    OnAwake, OnTriggerEnter, OnTriggerExit
+    OnAwake, OnTriggerEnter, OnTriggerExit, None
 }
 
-[RequireComponent(typeof(Timer))]
+[RequireComponent(typeof(Timer))][Serializable]
 public class ActivationSequence : MonoBehaviour {
 
     [Tooltip("Determine whether the list should loop or if the script should end when the list is done.")]
@@ -40,7 +41,7 @@ public class ActivationSequence : MonoBehaviour {
         CheckActivation(TriggerType.OnAwake);
     }
 
-    void Init()
+    public void Init()
     {
         if (!m_activated)
         {
