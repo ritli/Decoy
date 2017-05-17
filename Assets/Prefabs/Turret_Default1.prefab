@@ -84,6 +84,7 @@ Transform:
   - {fileID: 450788}
   - {fileID: 4347637623991746}
   - {fileID: 4881444004240540}
+  - {fileID: 4938310558337442}
   m_Father: {fileID: 419168}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -94,13 +95,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183626}
   m_LocalRotation: {x: -0.000001065433, y: -0.0000008940697, z: 0.7071057, w: 0.7071079}
-  m_LocalPosition: {x: -11.118607, y: -1.3074169, z: 78.796616}
+  m_LocalPosition: {x: 12.02, y: -54.53, z: -48.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400060}
   - {fileID: 4370748059929692}
   - {fileID: 4165034550829562}
-  - {fileID: 4580677561590220}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
@@ -251,7 +251,7 @@ MonoBehaviour:
   lightAngleOffset: 0
   m_narrowAngle: 5
   m_zoomSpeed: 9
-  m_timeToKill: 1
+  m_timeToKill: 2
   m_activeColor: {r: 1, g: 0, b: 0, a: 1}
   m_idleColor: {r: 1, g: 1, b: 1, a: 1}
   m_intensity: 1
@@ -3326,6 +3326,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1411070328287820
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4938310558337442}
+  - component: {fileID: 114947596172659174}
+  m_Layer: 2
+  m_Name: Detect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1624918333710104
 GameObject:
   m_ObjectHideFlags: 1
@@ -3355,22 +3371,6 @@ GameObject:
   - component: {fileID: 23822650457285378}
   m_Layer: 0
   m_Name: TurretBody
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1665390483942840
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4580677561590220}
-  - component: {fileID: 114021147902288542}
-  m_Layer: 0
-  m_Name: Detect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3425,22 +3425,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1968446125110470
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4875453498623114}
-  - component: {fileID: 114533891885640294}
-  m_Layer: 0
-  m_Name: Waypoint (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &4060684453541354
 Transform:
   m_ObjectHideFlags: 1
@@ -3448,7 +3432,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1913928317459474}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.57, y: 0.95, z: 20.27}
+  m_LocalPosition: {x: -9.85, y: 0.95, z: 33.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4370748059929692}
@@ -3507,22 +3491,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4060684453541354}
-  - {fileID: 4875453498623114}
   m_Father: {fileID: 419168}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4580677561590220
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1665390483942840}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 419168}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4721978436962660
 Transform:
@@ -3537,19 +3507,6 @@ Transform:
   m_Father: {fileID: 4347637623991746}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -178.989, y: -360.013, z: -9.395996}
---- !u!4 &4875453498623114
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1968446125110470}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.68, y: 25.84, z: -20.81}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4370748059929692}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4881444004240540
 Transform:
   m_ObjectHideFlags: 1
@@ -3562,6 +3519,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400060}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4938310558337442
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1411070328287820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400060}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23215910975259610
 MeshRenderer:
@@ -3692,28 +3662,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1654118775483194}
   m_Mesh: {fileID: 4300002, guid: 9f748139afd509f4cab0433d135738e3, type: 3}
---- !u!114 &114021147902288542
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1665390483942840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: event:/Sound/Turret/TurretDetect
-  PlayEvent: 0
-  StopEvent: 0
-  CollisionTag: 
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 80
 --- !u!114 &114174931425733160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3742,17 +3690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af1450474031dd4ea9bbc8f3728a971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114533891885640294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1968446125110470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5af1450474031dd4ea9bbc8f3728a971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114830622362779078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3775,6 +3712,28 @@ MonoBehaviour:
   OverrideAttenuation: 1
   OverrideMinDistance: 20
   OverrideMaxDistance: 70
+--- !u!114 &114947596172659174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1411070328287820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Sound/Turret/TurretDetect
+  PlayEvent: 0
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 80
 --- !u!198 &198098190627914634
 ParticleSystem:
   m_ObjectHideFlags: 1
