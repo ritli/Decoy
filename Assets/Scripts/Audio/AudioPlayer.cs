@@ -22,6 +22,11 @@ public class AudioPlayer : MonoBehaviour {
         }
 	}
 
+    public void StopEvent(int index)
+    {
+        m_emitter.Stop();
+    }
+
     public void PlayEvent(int index, bool oneshot)
     {
         PlaySound(index, oneshot);
