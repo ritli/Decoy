@@ -8,12 +8,24 @@ using System;
 public class CheckpointEditorManager : MonoBehaviour {
 
     public bool m_ClearPlayerPrefs = false;
+    public bool m_alwaysClearPrefs = false;
     public static CheckpointEditorManager instance;
     public string m_NamePrefix = "Checkpoint_";
-	// Use this for initialization
+    // Use this for initialization
+
+    private void Start()
+    {
+        m_ClearPlayerPrefs = false;
+    }
+
 	void OnEnable()
     {
         instance = this;
+    }
+
+    void Awake()
+    {
+        m_ClearPlayerPrefs = m_alwaysClearPrefs;
     }
 	
 	public static void UpdateCheckpoints () {
@@ -23,7 +35,6 @@ public class CheckpointEditorManager : MonoBehaviour {
         //set name and index on the checkpoint
         foreach(Checkpoint chkpt in checkpoints)
         {
-
             chkpt.gameObject.name = instance.m_NamePrefix;
             chkpt.gameObject.name += index;
             chkpt.setIndex(index--);
@@ -73,6 +84,7 @@ public class CheckpointEditorManager : MonoBehaviour {
             m_ClearPlayerPrefs = false;
 
             PlayerPrefs.DeleteAll();
+            print("DELETING PREFS");
         }
     }
 }
