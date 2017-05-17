@@ -860,6 +860,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4915815207954502}
   - component: {fileID: 95314359574879294}
+  - component: {fileID: 114937871244944028}
   - component: {fileID: 114173608945723854}
   m_Layer: 0
   m_Name: Flashback1
@@ -14129,6 +14130,26 @@ MonoBehaviour:
   playOnAwake: 0
   activatedState: Take 001
   deactivatedState: Empty
+--- !u!114 &114937871244944028
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1128198498726656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb460e205207bef49b3e350cfd53c1c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  fadeValueName: node_233
+  fadingSpeed: 1
+  invisibleOnAwake: 1
+  fadeOnce: 1
+  fadingMeshes:
+  - {fileID: 137373395075308598}
+  - {fileID: 137647425818259696}
+  - {fileID: 137522617400018128}
 --- !u!137 &137373395075308598
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -14136,7 +14157,7 @@ SkinnedMeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1925788823218104}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -14247,7 +14268,7 @@ SkinnedMeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1823122242614174}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -14358,7 +14379,7 @@ SkinnedMeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1883528940873500}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -14517,7 +14538,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1283326077
+  randomSeed: 939324324
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -17521,7 +17542,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 826118604
+  randomSeed: 1266065081
   InitialModule:
     serializedVersion: 3
     enabled: 1
