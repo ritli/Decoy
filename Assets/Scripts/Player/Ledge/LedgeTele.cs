@@ -15,7 +15,7 @@ public class LedgeTele : FindLedge {
 
     void Start() 
     {
-        validSpaceCol = transform.FindChild("validSpaceCol").gameObject;
+		validSpaceCol = GameObject.FindGameObjectWithTag(Tags.validSpaceCol).gameObject;
         testCol = validSpaceCol.GetComponent<CapsuleCollider>();
         testCol.enabled = false;
     }
