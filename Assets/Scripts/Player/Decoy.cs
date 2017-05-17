@@ -13,6 +13,8 @@ public class Decoy : MonoBehaviour, IKillable {
     float m_decayTimeElapsed = 0;
     List<Material> fadingMats = new List<Material>();
 
+    FMOD_StudioEventEmitter m_emitter;
+
     private bool m_dissolving = false;
 
     PlayerState m_decoyState;
@@ -24,6 +26,8 @@ public class Decoy : MonoBehaviour, IKillable {
         {
             fadingMats.Add(mat);
         }
+
+        m_emitter = GetComponent<FMOD_StudioEventEmitter>();
     }
 
     private void OnEnable()
