@@ -22,7 +22,7 @@ public class FindLedge : MonoBehaviour {
 	{
 		m_raycaster = GetComponent<Raycast>();
 		m_playerLength = GetComponent<CharacterController>().height;
-		m_playerWidth = GetComponent<CharacterController> ().radius * 2;	
+        m_playerWidth = GetComponent<CharacterController> ().radius * 2; 
 	}
 
 	/* 
@@ -251,7 +251,7 @@ public class FindLedge : MonoBehaviour {
 
 	protected void adjustPosition(Vector3 current, out Vector3 target) 
 	{
-		print("Adjusting position");
+//		print("Adjusting position");
 		RaycastHit hit1 = new RaycastHit ();
 		RaycastHit hit2 = new RaycastHit ();
 		target = current;

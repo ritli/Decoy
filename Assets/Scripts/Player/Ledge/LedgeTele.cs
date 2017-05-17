@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/* TODO: 
- *
- */
-
 public class LedgeTele : FindLedge {
 
 	// Variables for findValidPosition()
@@ -13,13 +9,74 @@ public class LedgeTele : FindLedge {
 	private bool m_isTeleporting = false;
 	private Vector3 m_validIndPosition = new Vector3(0, 0, 0);
 	private Vector3 m_invalidPosition = new Vector3 (0, 0, 0);
+    private Collider[] overlap;
+    private GameObject validSpaceCol;
+    private Collider testCol;
+
+    void Start() 
+    {
+        validSpaceCol = transform.FindChild("validSpaceCol").gameObject;
+        testCol = validSpaceCol.GetComponent<CapsuleCollider>();
+        testCol.enabled = false;
+    }
 
 	/*
 	 * Raycasts to find out if there is enough space for the player to teleport to target location
 	 */
-	public bool findEnoughSpace(RaycastHit hit) 
+    public bool findEnoughSpace(RaycastHit hit, out Vector3 target) 
 	{
-		// Angle used to determine on which surface there was a hit
+        Vector3 relocatedPosition = hit.point + hit.normal * 0.1f;
+        Vector3 direction = new Vector3(0, 0, 0);
+        float distanceToMove = 0;
+
+        // Set position and rotation of the test collider object to calc new position
+        testCol.enabled = true;
+        testCol.transform.position = relocatedPosition;
+        testCol.transform.rotation = transform.rotation;
+
+        // Looks for overlapping colliders using player measurements
+        overlap = Physics.OverlapCapsule(
+            testCol.bounds.min, 
+            testCol.bounds.max, 
+            m_playerWidth);
+
+        print("Colliders: " + overlap.Length);
+        print("Original pos: " + relocatedPosition);
+
+        Vector3 totalDirection = new Vector3(0, 0, 0);
+        // Iterates through all overlapping colliders and moves the testCol just enough to not overlap anymore
+        foreach (Collider col in overlap)
+        {
+            if (col != testCol && col.tag != Tags.player)
+            {
+                if (testCol.bounds.Intersects(col.bounds))
+                {
+                    Vector3 closestPoint = col.bounds.ClosestPoint(testCol.transform.position);
+                    totalDirection += testCol.transform.position - closestPoint;
+                    testCol.transform.position = Vector3.MoveTowards(testCol.transform.position, transform.position, m_playerWidth);
+                }
+
+//                if (Physics.ComputePenetration(
+//                        testCol, testCol.transform.position, testCol.transform.rotation,
+//                        col, col.transform.position, col.transform.rotation,
+//                        out direction, out distanceToMove))
+//                {
+//                    totalDirection += direction * distanceToMove;
+//                    //relocatedPosition += direction * distanceToMove;
+//                    print("Penetrated ur mum");
+//                }
+            }
+        }
+        target = testCol.transform.position;
+        Debug.DrawRay(hit.point, totalDirection, Color.red);
+        testCol.enabled = false;
+        print("RelocatedPos: " + relocatedPosition);
+
+
+
+        // ############# OLD CODE. TO BE CHANGED #############
+
+        // Angle used to determine on which surface there was a hit
 		float angle = Vector3.Angle(Vector3.up, hit.normal);
 		bool newUpRight = false;
 
@@ -37,7 +94,7 @@ public class LedgeTele : FindLedge {
 		// Surface was floor
 		if (angle <= 45) 
 		{
-			print ("Surface was floor");
+//			print ("Surface was floor");
 			if (isSpaceObstructedFloor(hit, newUpRight)) 
 				enoughSpace = false;
 
@@ -45,20 +102,30 @@ public class LedgeTele : FindLedge {
 		// Surface was wall
 		else if (angle > 45 && angle < 135) 
 		{
-			print ("Surface was wall");
+//			print ("Surface was wall");
 			if (isSpaceObstructedWall(out wallNormalRayHit, hit, newUpRight)) 
 			{
 				enoughSpace = false;
 				//new Color (0.751265f, 0.25678f, 0.3415136f)
-				Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, Color.yellow);
+//              Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, Color.red);
 				
-				/* Sets a position based on the initial hit, it's normal, and the new hit's normal.
-				 * This puts the indicator between two walls instead of inside one of them.
-				 */
+			    // Sets a position based on the initial hit, it's normal, and the new hit's normal.
 				Vector3 maybeValid = hit.point + hit.normal + wallNormalRayHit.normal;
-				m_validIndPosition = maybeValid;
-				// Adjust position using rays
+                float distance = Vector3.Distance(maybeValid, hit.point);
+                //m_validIndPosition = Vector3.MoveTowards(maybeValid, transform.position, distance * 0.5f);
+
+//                if (Vector3.Angle(Vector3.up, Camera.main.transform.forward) < 30) 
+//                {
+//                    Vector3 playerDir = transform.position - maybeValid;
+//                    playerDir.y = 0;
+//                    m_validIndPosition = maybeValid + playerDir * 0.25f;
+//                }
+                   
+
+                // Adjust position using rays
 				adjustPosition(maybeValid, out m_validIndPosition);
+
+
 				m_indPositionSet = true;
 
 
@@ -72,7 +139,7 @@ public class LedgeTele : FindLedge {
 			if (isSpaceObstructedRoof(hit, newUpRight)) 
 				enoughSpace = false;
 		}
-		print ("Enough space: " + enoughSpace);
+//		print ("Enough space: " + enoughSpace);
 		return enoughSpace;
 	}
 
@@ -87,7 +154,7 @@ public class LedgeTele : FindLedge {
 		Vector3 workPosition = invalidPosition;
 		bool enoughSpace = false;
 		bool arrived = false;
-		validPosition = new Vector3(0, 0, 0);
+        validPosition = transform.position;
 
 		RaycastHit up = new RaycastHit();
 		RaycastHit down = new RaycastHit();
@@ -102,7 +169,7 @@ public class LedgeTele : FindLedge {
 			bool enoughWidth = true;
 			bool enoughHeight = true;
 			bool enoughDepth = true;
-			print ("Looking for space");
+//			print ("Looking for space");
 			if (Vector3.Distance (workPosition, transform.position) == 0) 
 			{ // Found no new position
 				print ("Arrived at player");
@@ -131,7 +198,7 @@ public class LedgeTele : FindLedge {
 //			Debug.DrawRay(workPosition, -Vector3.up, Color.gray, 2);
 //			Debug.DrawRay(workPosition, Vector3.left, Color.yellow, 2);
 //			Debug.DrawRay(workPosition, -Vector3.left, Color.red, 2);
-			print(enoughHeight + " " + enoughWidth + " " + enoughDepth);
+//			print(enoughHeight + " " + enoughWidth + " " + enoughDepth);
 
 			if (!enoughHeight || !enoughWidth || !enoughDepth)
 			{
@@ -139,7 +206,7 @@ public class LedgeTele : FindLedge {
 			} 
 			else 
 			{
-				print ("Found new position");
+//				print ("Found new position");
 				enoughSpace = true;
 				validPosition = workPosition;
 //				print (validPosition);
