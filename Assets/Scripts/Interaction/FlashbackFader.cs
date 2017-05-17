@@ -9,12 +9,16 @@ public class FlashbackFader : ActivationObject {
     public string fadeValueName;
     public float fadingSpeed = 1.0f;
     public bool invisibleOnAwake = true;
+    [Tooltip("Determine if the fading happens only once.")]
+    public bool fadeOnce = true;
     [Tooltip("List of all meshes to be faded.")]
     public SkinnedMeshRenderer[] fadingMeshes;
 
     private List<Material> m_fadingMats = new List<Material>();
     private bool isFading = false;
+    private bool finishedFading = false;
     private float fadingTarget;
+    private AnimationActivation m_animation;
 
     // Fade in
     public override void activate()
@@ -51,13 +55,17 @@ public class FlashbackFader : ActivationObject {
     private void Awake()
     {
         fadeValueName = "_" + fadeValueName;
+        m_animation = GetComponent<AnimationActivation>();
+
+        if (m_animation == null)
+            Debug.LogError("No AnimationActivation attached to object.");
 
         foreach (SkinnedMeshRenderer r in fadingMeshes)
             foreach (Material m in r.materials)
             {
                 m_fadingMats.Add(m);
                 if (!m.HasProperty(fadeValueName))
-                    print("Material has no property " + fadeValueName);
+                    Debug.LogError("Material has no property " + fadeValueName);
             }
         
 
@@ -65,7 +73,6 @@ public class FlashbackFader : ActivationObject {
             foreach (Material m in m_fadingMats)
                 if (m.HasProperty(fadeValueName))
                 {
-                    print("Seting fade amount");
                     m.SetFloat(fadeValueName, 0.0f);
                 }
     }
@@ -83,9 +90,20 @@ public class FlashbackFader : ActivationObject {
                     m.SetFloat(fadeValueName, Mathf.MoveTowards(m.GetFloat(fadeValueName), fadingTarget, fadingSpeed * Time.deltaTime));
 
                     if (m.GetFloat(fadeValueName) == fadingTarget)
+                    {
                         isFading = false;
+                        finishedFading = true;
+                        
+                        if (fadingTarget == 1.0f)
+                            m_animation.activate();
+                    }
                 }
             }
+        }
+        else if (!m_animation.isActivated() && finishedFading)
+        {
+            finishedFading = false;
+            deactivate();
         }
 	}
 }
