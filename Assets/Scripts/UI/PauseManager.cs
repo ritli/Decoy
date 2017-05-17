@@ -11,11 +11,6 @@ public class PauseManager : MonoBehaviour
 
     private bool m_PauseDisabled = false; 
     private bool isPaused = false;
-    // Use this for initialization
-    void Start()
-    {
-        instance = FindObjectOfType<PauseManager>();
-	}
 
     private void OnEnable()
     {
@@ -25,6 +20,16 @@ public class PauseManager : MonoBehaviour
     {
         OnPause -= pauseGame;
     }
+    // Use this for initialization
+    void Start()
+    {
+        instance = FindObjectOfType<PauseManager>();
+
+        //To force the game to begin running at full speed.
+        //There was an error on some machines that originated from the timescale being 0.
+        Time.timeScale = 1.0f;
+    }
+
     public static PauseManager GetInstance()
     {
         return instance;
@@ -52,10 +57,12 @@ public class PauseManager : MonoBehaviour
         //pause all Physics
         if (pause)
         {
+            //"physics" at its finest.
             Time.timeScale = 0.00000000001f;
         }
         else
         {
+            //Full game speed
             Time.timeScale = 1;
         }
     }
