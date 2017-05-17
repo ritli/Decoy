@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PauseManager : MonoBehaviour
 {
-    public static PauseManager instance;
+    static PauseManager instance;
 
     public delegate void PauseAction(bool isPaused);
     public static event PauseAction OnPause;
 
-     
-    static bool isPaused = false;
+    private bool m_PauseDisabled = false; 
+    private bool isPaused = false;
     // Use this for initialization
     void Start()
     {
@@ -25,11 +25,15 @@ public class PauseManager : MonoBehaviour
     {
         OnPause -= pauseGame;
     }
+    public static PauseManager GetInstance()
+    {
+        return instance;
+    }
     // Update is called once per frame
     void Update ()
     {
         //Pauses the game if input is pressed
-		if(Input.GetKeyDown(KeyCode.Escape))
+		if(Input.GetKeyDown(KeyCode.Escape) && !m_PauseDisabled)
         {
             if(OnPause != null && !isPaused)
             {
@@ -48,7 +52,7 @@ public class PauseManager : MonoBehaviour
         //pause all Physics
         if (pause)
         {
-            Time.timeScale = 0f;
+            Time.timeScale = 0.00000000001f;
         }
         else
         {
@@ -57,7 +61,11 @@ public class PauseManager : MonoBehaviour
     }
     public static void resumeGame()
     {
-        isPaused = false;
+        PauseManager.GetInstance().isPaused = false;
         OnPause(false);
+    }
+    public void DisablePause( bool state)
+    {
+        m_PauseDisabled = state;
     }
 }

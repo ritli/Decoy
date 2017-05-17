@@ -231,12 +231,7 @@ public class PlayerTeleport : MonoBehaviour {
         }
         else if (m_player.m_playerState == PlayerState.isDead)
         {
-            cancelTeleport();
-            m_arrived = true;
-            m_charController.detectCollisions = true;
-            m_player.enableGravity();
-            m_ledgeDetection.arrivedAtWall();
-			m_ledgeLerp.stop();
+            FinishTeleport();
         }
         else if (m_player.m_playerState == PlayerState.isPause)
             cancelTeleport();
@@ -427,5 +422,22 @@ public class PlayerTeleport : MonoBehaviour {
             m_indi.SetActive(false);
         }
         m_isPaused = isPaused;
+    }
+    public void FinishTeleport()
+    {
+        cancelTeleport();
+        m_arrived = true;
+        m_charController.detectCollisions = true;
+        m_player.enableGravity();
+        m_ledgeDetection.arrivedAtWall();
+        m_ledgeLerp.stop();
+    }
+    public Vector3 TeleportingTo()
+    {
+        return m_teleportTo;
+    }
+    public bool isTeleporting()
+    {
+        return !m_arrived;
     }
 }
