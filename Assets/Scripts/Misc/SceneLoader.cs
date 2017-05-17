@@ -29,7 +29,8 @@ public class SceneLoader : MonoBehaviour
     {
         m_ScenesLoading = new List<LoadingScene>();
         //Load the MainMenu
-        LoadMainMenu();
+        if(startfromMenu)
+            LoadMainMenu();
     }
     public static void UnloadSceneAsync(Scenes scene)
     {
@@ -135,7 +136,7 @@ public class SceneLoader : MonoBehaviour
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
-            if (currentScene.name != Scenes.InitialScene.ToString())
+            if (currentScene.name != Scenes.InitialScene.ToString() || currentScene.name != "InitialScene Debug")
             {
                 SceneManager.UnloadSceneAsync(currentScene);
             }
