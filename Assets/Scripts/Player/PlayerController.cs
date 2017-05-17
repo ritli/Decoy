@@ -159,7 +159,9 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_airTime;
     private float m_StepCycle;
 	private float m_NextStep;
+
 	private AudioSource m_AudioSource;
+    private AudioPlayer m_Audio;
 
     bool m_inDeathState = false;
 
@@ -217,6 +219,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		m_MouseLook.Init(transform , m_Camera.transform);
 		m_ledgeDetect = GetComponent<LedgeGrab>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
+        m_Audio = GetComponentInChildren<AudioPlayer>();
     }
 
     public void Kill()
@@ -236,6 +239,7 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         yield return new WaitForSeconds(0.1f);
         FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+        m_Audio.PlaySoundAtPosition(0, true, transform.position);
 
         UnityStandardAssets.ImageEffects.ScreenOverlay overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
@@ -339,8 +343,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Crouch()   
     {
-        if (CrossPlatformInputManager.GetButtonDown("Crouch"))
+        if (CrossPlatformInputManager.GetButtonDown("Crouch") && !m_Jumping)
         {
+            m_Audio.PlayEvent(3, true);
             m_crouching = true;
             m_crouchTimeElapsed = 0;
         }
@@ -353,6 +358,7 @@ public class PlayerController : MonoBehaviour, IKillable
             }
             else
             {
+                m_Audio.PlayEvent(3, true);
                 m_crouching = false;
                 m_crouchTimeElapsed = 0;
             }
@@ -459,9 +465,15 @@ public class PlayerController : MonoBehaviour, IKillable
 
             // the jump state needs to read here to make sure it is not missed
 			if (!m_ledgeGrabbing)
-				Jump ();
-			else
-				m_MoveDir.y = 0;
+                {
+                    Jump();
+                }
+            else
+                {
+                    m_MoveDir.y = 0;
+
+                }
+
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
@@ -496,6 +508,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
+            
         }
 		
         // Keep track of the maximum height achieved while in air for measuring when landing
@@ -505,7 +518,11 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_maximumFreefallHeight = transform.position.y;
 
             if (!m_leftGround)
+            {
+                m_Audio.PlayEvent(2, true);
                 m_leftGround = true;
+            }
+
         }
 
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
