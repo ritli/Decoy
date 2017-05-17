@@ -13,18 +13,26 @@ public enum PlayerState
 
 enum AnimationState
 {
-    idle, moving, jumping, falling, crouching, aiming, blinking
+    idle, moving, jumping, falling, crouching, aiming, blinking, climbing
 }
 
 [RequireComponent(typeof (CharacterController), typeof(VectorBobber))]
 public class PlayerController : MonoBehaviour, IKillable
 {
+    [Header("Editor Vars")]
+    public bool allowReset;
 
+    [Header("States")]
     public PlayerState m_playerState = PlayerState.isAlive;
     private PlayerState m_stateBeforePause;
 
+    [FMODUnity.EventRef]
+    public string m_deathEvent;
+
+    public bool m_hasDevice = true;
     AnimationState m_aniState = AnimationState.idle;
     Animator m_animator;
+    Animator m_noDeviceAnimator;
 
     //Decoy event
     public delegate void DecoyAction();
@@ -52,6 +60,10 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("How much of WASD movement is applied when airborne. (0 = 0%, 1 = 100%)")]
     [Range(0,1)]
     [SerializeField] private float m_JumpAirControl;
+    private Vector3 signedJumpVector;
+    private Vector2 m_jumpInput;
+    private float m_airDecreaseY;
+    private float m_airDecreaseX;
 
     //Gravity vars
     [Header("Gravity Variables")]
@@ -59,18 +71,37 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_GravityMultiplier;
     private float m_originGravity;
     private bool m_usingGravity = true;
+    private Raycast m_raycaster;
+    private bool m_onEdge = false;
+    private Vector3 m_ledgeHitDir = new Vector3(0, 0, 0);
+    [Tooltip("Decide the amount the player is pushed when touching an edge.")]
+    public float ledgeAdjust = 2.0f;
 
     //Camera vars
     [SerializeField] public MouseLook m_MouseLook;
     [SerializeField] private bool m_UseHeadBob;
     //[SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
+
     // Bobbing vars
     private Vector3 m_cameraOrigin;
     private VectorBobber m_cameraBobber;
     private VectorBobber m_walkingBobber;
     private float m_maximumFreefallHeight;
 
+	// Mouse restriction while climbing vars
+	[Header("Climbing camera restriction variables")]
+	public float horizontalRestr = 45f;
+	public float verticalRestrMin = -20f;
+	public float verticalRestrMax = 75f;
+
     private bool m_leftGround = false;
+
+	// TODO:
+	[Header("Camera while climbing variable")]
+	[Tooltip("Determines how fast the camera turns toward a ledge when a climb is initiated")]
+	public float climbAdjSpeed = 1.0f;
+
+    [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
     public float landingBob = 0.5f;
     [Tooltip("Determines the amount that the camera is moved during a jumping bob effect.")]
@@ -85,12 +116,6 @@ public class PlayerController : MonoBehaviour, IKillable
     [Tooltip("Determines the speed at which the camera bobs when jumping and landing.")]
     public float jumpBobSpeed = 0.2f;
 
-
-    [SerializeField] private float m_StepInterval;
-	[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-	[SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
-	[SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
-
     private CharacterController m_CharacterController;
     private PlayerTeleport m_teleport;
     private Camera m_Camera;
@@ -102,20 +127,22 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector3 m_OriginalCameraPosition;
     private Vector3 initialCameraPos;
     private Vector3 initialPos;
+    private Quaternion initialRotation;
     private Vector3 m_jumpVector;
     private Vector3 m_jumpVectorR;
 
     private bool m_resetCalled = false;
-	private LedgeDetection m_ledgeDetect;
-	private bool m_ledgeInRange = false;
+	private bool m_resetVelocity = false;
+	private bool m_resetRotation = false;
+	private LedgeGrab m_ledgeDetect;
     private bool m_arrived = true;
-    private Vector3 m_moveTo = new Vector3(0, 0, 0);
+	private bool m_ledgeGrabbing = false;
+    private Vector3 m_ledgeLerpTo = new Vector3(0, 0, 0);
 	private LedgeLerp m_ledgeLerp;
 
     private bool m_scalingVelocity = false;
     private float m_velocityScale;
     private float m_scalingStepAfterTeleport = 0.1f;
-
 
     private float m_crouchTimeElapsed;
     private float m_YRotation;
@@ -129,30 +156,52 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
 
-
-	private float m_StepCycle;
+    private float m_airTime;
+    private float m_StepCycle;
 	private float m_NextStep;
+
 	private AudioSource m_AudioSource;
+    private AudioPlayer m_Audio;
 
+    bool m_inDeathState = false;
 
+    public delegate void landEvent();
+    public landEvent onLand;
+
+    public bool IsCrouching
+    {
+        get
+        {
+            return m_crouching;
+        }
+    }
+    
+    void Awake()
+    {
+        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+        m_walkingBobber.WalkBob = true;
+        m_raycaster = GetComponent<Raycast>();
+    }
 
     private void Start()
     {
+        m_Camera = transform.FindChild("Camera").GetComponent<Camera>();
+
         m_cameraBobber = GetComponent<VectorBobber>();
-        m_walkingBobber = gameObject.AddComponent<VectorBobber>();
+
         m_walkingBobber.setBobSpeed(walkBobSpeed);
         m_cameraBobber.setBobSpeed(jumpBobSpeed);
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
-        m_animator = Camera.main.GetComponentInChildren<Animator>();
+        m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
+        m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
 
-
-        m_Camera = Camera.main;
         m_cameraOrigin = m_Camera.transform.localPosition;
-        initialCameraPos = Camera.main.transform.position;
+        initialCameraPos = m_Camera.transform.position;
         initialPos = transform.position;
+        initialRotation = transform.rotation;
 
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
         m_initalHeight = m_CharacterController.height;
@@ -162,40 +211,76 @@ public class PlayerController : MonoBehaviour, IKillable
         ResetPlayer();
 
         m_CharacterController = GetComponent<CharacterController>();
-        m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
-        //m_HeadBob.Setup(m_Camera, m_StepInterval);
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
         m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
 		m_MouseLook.Init(transform , m_Camera.transform);
-		m_ledgeDetect = GetComponent<LedgeDetection>();
+		m_ledgeDetect = GetComponent<LedgeGrab>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
+        m_Audio = GetComponentInChildren<AudioPlayer>();
     }
 
     public void Kill()
     {
         m_playerState = PlayerState.isDead;
         m_controlsEnabled = false;
+        if (!m_inDeathState)
+        {
+            m_inDeathState = true;
+
+            StartCoroutine(KillRoutine());
+        }
+
     }
 
+    IEnumerator KillRoutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+        FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+        m_Audio.PlaySoundAtPosition(0, true, transform.position);
+
+        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
+        float time = 0;
+        float deathTime = 0.6f;
+
+        Transform cam = overlay.transform;
+
+        while (time < deathTime)
+        {
+            cam.Translate(Random.insideUnitSphere * 0.1f + Vector3.down * Time.deltaTime);
+
+            overlay.intensity = Mathf.Lerp(1, 0, time);
+            yield return new WaitForEndOfFrame();
+            time += Time.deltaTime;
+        }
+    }
+
+    public VectorBobber GetWalkBob()
+    {
+        return m_walkingBobber;
+    }
+    public void StopBob()
+    {
+        m_cameraBobber.stopBob();
+        m_walkingBobber.stopBob();
+    }
 
     void UpdateAnimator()
     {
-        switch (m_aniState)
+		if (m_animator != null && m_hasDevice)
         {
-            case AnimationState.idle:
-                break;
-            case AnimationState.moving:
-                break;
-            case AnimationState.jumping:
-                break;
-            default:
-                break;
+            m_animator.SetBool("HasDevice", m_hasDevice);
+            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
+            m_animator.SetInteger("State", (int)m_aniState);
         }
-		if (m_animator != null)
-        	m_animator.SetInteger("State", (int)m_aniState);
+        else if (m_noDeviceAnimator != null)
+        {
+            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
+            m_animator.SetBool("HasDevice", m_hasDevice);
+            m_noDeviceAnimator.SetInteger("State", (int)m_aniState);
+        }
     }
 
     bool GetBlinkState(out int val)
@@ -235,6 +320,11 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.jumping;
         }
+		// Climb animation pls
+//		else if (m_ledgeGrabbing)
+//		{
+//			m_aniState = AnimationState.climbing;
+//		}	
         else
         {
             m_aniState = AnimationState.idle;
@@ -253,8 +343,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Crouch()   
     {
-        if (CrossPlatformInputManager.GetButtonDown("Crouch"))
+        if (CrossPlatformInputManager.GetButtonDown("Crouch") && !m_Jumping)
         {
+            m_Audio.PlayEvent(3, true);
             m_crouching = true;
             m_crouchTimeElapsed = 0;
         }
@@ -267,6 +358,7 @@ public class PlayerController : MonoBehaviour, IKillable
             }
             else
             {
+                m_Audio.PlayEvent(3, true);
                 m_crouching = false;
                 m_crouchTimeElapsed = 0;
             }
@@ -277,10 +369,9 @@ public class PlayerController : MonoBehaviour, IKillable
             float currentHeight = m_CharacterController.height;
             float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTimeElapsed);
 
-            transform.Translate(Vector3.down * (currentHeight - newHeight) / 2.5f);
             m_CharacterController.height = newHeight;
-
         }
+
         else
         {
             m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
@@ -304,16 +395,24 @@ public class PlayerController : MonoBehaviour, IKillable
 
     bool CheckForObstruction()
     {
+        float length = (m_initalHeight - m_CharacterController.height) - 0.2f;
         Vector3 dir = Vector3.up;
-        Vector3 offset = transform.forward * 0.4f;
+        Vector3 offset = m_CharacterController.height * 0.5f * Vector3.up;
+
+        if (Physics.Raycast(transform.position + offset, dir, length))
+        {
+            return true;
+        }
+
+        offset += transform.forward * 0.15f;
 
         for (int i = 0; i < 4; i++)
         {
-            Ray ray = new Ray(transform.position + offset, dir * 0.1f);
+            Ray ray = new Ray(transform.position + offset, dir * length);
 
             Debug.DrawRay(ray.origin, ray.direction);
 
-            if (Physics.Raycast(ray, 0.1f, 0))
+            if (Physics.Raycast(ray, length, 0))
             {
                 return true;
             }
@@ -324,25 +423,30 @@ public class PlayerController : MonoBehaviour, IKillable
         return false;
     }
 
-    void ResetPlayer()
+    public void ResetPlayer()
     {
-        //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, initialCameraPos.y, Camera.main.transform.position.z);
-        //Camera.main.transform.rotation = new Quaternion(0, 0, 0, Camera.main.transform.rotation.w);
-        
         //Apply saved values if they exist
         if (Checkpoint.isPreviouslySaved())
         {
 
             transform.position = Checkpoint.getSavedPlayerPosition();
             transform.rotation = Checkpoint.getSavedPlayerRotation();
-        }      
+        }
         else
+        {
             transform.position = initialPos;
+            transform.rotation = initialRotation;
+        }
 
         m_MouseLook.Init(transform, m_Camera.transform);
-
+        
         m_playerState = PlayerState.isAlive;
         m_resetCalled = false;
+		m_resetVelocity = true;
+        GetComponentInChildren<UnityStandardAssets.ImageEffects.ScreenOverlay>().intensity = 0;
+        m_inDeathState = false;
+        m_controlsEnabled = true;
+        m_teleport.m_indi.SetActive(false);
 
         GameManager.resetActivations();
     }
@@ -350,28 +454,39 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
-        m_ledgeInRange = m_ledgeDetect.canGrab();
-
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
+//			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
+
+			// ### Ledge grabbing state ###
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
+
             // the jump state needs to read here to make sure it is not missed
-			if (!m_ledgeLerp.isLerping ()) 
-				Jump ();
+			if (!m_ledgeGrabbing)
+                {
+                    Jump();
+                }
+            else
+                {
+                    m_MoveDir.y = 0;
+
+                }
 
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
             break;
+
         case PlayerState.isDead:
-            //Camera.main.transform.Rotate(Random.insideUnitSphere * 3);
-            //Camera.main.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+
             if (!m_resetCalled)
             {
                 m_resetCalled = true;
                 Invoke("ResetPlayer", 1.5f);
             }
+
             break;
         case PlayerState.isPause:
             if (IsInvoking("ResetPlayer"))
@@ -384,14 +499,16 @@ public class PlayerController : MonoBehaviour, IKillable
             break;
         }
 
-
+        UpdateCameraPosition(0);
     }
 
     void Jump()
     {
-		if (!m_Jump && !m_Jumping) 
+        
+		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
+            
         }
 		
         // Keep track of the maximum height achieved while in air for measuring when landing
@@ -401,25 +518,24 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_maximumFreefallHeight = transform.position.y;
 
             if (!m_leftGround)
+            {
+                m_Audio.PlayEvent(2, true);
                 m_leftGround = true;
+            }
+
         }
 
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
             m_cameraBobber.startBob(jumpingBob, false);
 
-        if (m_ledgeInRange)
+		if (m_ledgeDetect.lookForLedge(out m_ledgeLerpTo))
         {
             if (CrossPlatformInputManager.GetButton("Jump"))
             {
-                m_ledgeLerp.lerp(m_ledgeDetect.getNewPosition());
+                m_cameraBobber.stopBob();
+				m_ledgeLerp.lerp(m_ledgeLerpTo);
             }
-            if (m_Jump)
-            {
-                m_Jump = false;
-            }
-            //StartCoroutine(m_JumpBob.DoBobCycle());
-
-            m_MoveDir.y = 0f;
+            m_Jump = false;
             m_Jumping = false;
         }
 
@@ -431,22 +547,29 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_cameraBobber.startBob(landingBob, false);
             }
 
+            if (onLand != null && m_airTime > 0.25f)
+            {
+                onLand();
+            }
 
-			//PlayLandingSound ();
-			m_MoveDir.y = 0f;
+            m_MoveDir.y = 0f;
 			m_Jumping = false;
             m_leftGround = false;
-		}
+            m_airTime = 0;
+        }
 		if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) 
 		{
 			m_MoveDir.y = 0f;
 		}
-        
-        //		print("playerController: " + m_ledgeDetect.canGrab());
     }
     private void FixedUpdate()
     {
-		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping()) 
+        if (!m_CharacterController.isGrounded)
+        {
+            m_airTime += Time.fixedDeltaTime;
+        }
+
+		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled) 
 		{
 			Move ();
 		}	
@@ -482,7 +605,6 @@ public class PlayerController : MonoBehaviour, IKillable
         //Checks if player is actually attempting to move. If moving the windup starts to increase until it reaches 1
         else if (m_Input.magnitude > 0)
         {
-
             //m_cameraBobber.startBob(walkingBob, true);
             if (!m_walkingBobber.isBobbing())
             {
@@ -500,8 +622,6 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_walkingBobber.stopBob();
             }
 
-            // if (m_cameraBobber.isLooping() && m_CharacterController.isGrounded)
-            //  m_cameraBobber.stopBob();
         }
         //Clamps the multiplier between 0-1
         m_speedWindup = Mathf.Clamp01(m_speedWindup);
@@ -513,7 +633,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_scalingVelocity)
         {
             speed += (m_velocityScale * speed);
-
+            
             m_velocityScale = Mathf.MoveTowards(m_velocityScale, 0, m_scalingStepAfterTeleport);
 
             if (m_velocityScale == 0)
@@ -536,14 +656,53 @@ public class PlayerController : MonoBehaviour, IKillable
         //Always move along the camera forward as it is the direction that it being aimed at
         Vector3 desiredMove = transform.forward * Input.y + transform.right * Input.x;
 
-
-        if (m_Jumping)
+        // If character is in middle of jump and controller is not currently scaling the velocity.
+        if (m_Jumping && !m_scalingVelocity) // m_Jumping
         {
             desiredMove = m_jumpVector;
-            m_jumpVector += m_MoveDir.normalized * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+
+            // Create the next update to the vector in order to compare with the current and judge whether the transformation should occur.
+            Vector3 comingVec = m_jumpVector + transform.forward * GetInput().y * m_JumpAirControl + transform.right * GetInput().x * m_JumpAirControl;
+
+            // If the new vector has an opposite signed angle than the current, don't update the jumpVector. If the desired vector however
+            if (Mathf.Sign(Vector3.Dot(transform.forward, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.forward, comingVec))
+                || m_jumpInput.y == 0) //Vector3.Dot(transform.forward, desiredMove) == 0
+                m_jumpVector += transform.forward * GetInput().y * m_JumpAirControl;
+
+            if (Mathf.Sign(Vector3.Dot(transform.right, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right, comingVec))
+                || Mathf.Sign(Vector3.Dot(transform.right * -1, desiredMove)) != Mathf.Sign(Vector3.Dot(transform.right * -1, comingVec))
+                || m_jumpInput.x == 0)
+                m_jumpVector += transform.right * GetInput().x * m_JumpAirControl;
+                
+            // Update velocity inpact on each axis based on input
+            m_airDecreaseY += GetInput().y * m_JumpAirControl;
+            m_airDecreaseX += GetInput().x * m_JumpAirControl;
+
+            // >= 0: Transform moving forward, otherwise: Backwards. Update speed change accordingly.
+            if (Vector3.Dot(transform.forward, desiredMove) >= 0)
+            {
+                speed += m_airDecreaseY;
+            }
+            else
+            {
+                speed -= m_airDecreaseY;
+            }
+
+            // Same as previous but regarding L/R movement
+            if (Vector3.Dot(transform.right, desiredMove) >= 0)
+            {
+                speed += m_airDecreaseX;
+            }
+            else
+            {
+                speed -= m_airDecreaseX;
+            }
+
+            // Make sure the player cannot accelerate by moving in the air.
+            speed = Mathf.Clamp(speed, 0, m_WalkSpeed);
         }
 
-        //Get a normal for the surface that is being touched to move along it
+        // Get a normal for the surface that is being touched to move along it
         RaycastHit hitInfo;
         Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo, m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 
@@ -552,29 +711,60 @@ public class PlayerController : MonoBehaviour, IKillable
         m_MoveDir.x = desiredMove.x * speed;
         m_MoveDir.z = desiredMove.z * speed;
 
+        RaycastHit groundHit;
+        Debug.DrawRay(transform.position, new Vector3(0, -1, 0), Color.green);
         //If player is not on ground
         if (m_CharacterController.isGrounded)
         {
-            m_MoveDir.y = -m_StickToGroundForce;
-                
-            if (m_Jump)
+            //m_MoveDir.y = -m_StickToGroundForce;
+
+            if (m_raycaster.doRaycast(out groundHit, new Vector3(0, -1, 0), transform.position, 1.0f))
             {
-                m_jumpVector = m_MoveDir;
-                m_jumpVectorR = transform.right;
-                m_MoveDir.y = m_JumpForce;
-                m_Jump = false;
-                m_Jumping = true;
+                m_MoveDir.y = -m_StickToGroundForce;
+                m_onEdge = false;
             }
+            else
+            {
+                m_MoveDir.y = -0.3f;
+                m_MoveDir = m_MoveDir + new Vector3(m_ledgeHitDir.x, m_ledgeHitDir.y * -1, m_ledgeHitDir.z) * ledgeAdjust;
+                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+
+                m_onEdge = true;
+            }
+
+            if (m_Jump) 
+			{
+				m_jumpVector = m_MoveDir;
+				m_jumpVectorR = transform.right;
+				m_MoveDir.y = m_JumpForce;
+				m_Jump = false;
+				m_Jumping = true;
+				signedJumpVector = new Vector3 (Mathf.Sign (m_MoveDir.x), 0, Mathf.Sign (m_MoveDir.z));
+                m_jumpInput = new Vector2(GetInput().x, GetInput().y);
+
+				m_airDecreaseY = 0.0f;
+				m_airDecreaseX = 0.0f;
+			} 
 
         }
         else
         {
             m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+            m_onEdge = false;
         }
+			
+		if (m_resetVelocity) 
+		{
+			m_resetVelocity = false;
+			m_Jump = false;
+			m_Jumping = false;
+			desiredMove = Vector3.zero;
+			m_MoveDir = Vector3.zero;
+			m_speedWindup = 0;
+			speed = 0;
+		}
 
         m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
-        
-        UpdateCameraPosition(speed);
 
         m_MouseLook.UpdateCursorLock();
 
@@ -598,29 +788,35 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-        m_MouseLook.LookRotation (transform, m_Camera.transform, !m_Jumping);
+		// TODO:
+		if (m_ledgeGrabbing) 
+		{
+//			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
+			m_resetRotation = true;
+			m_MouseLook.LookRotationLimited(transform, 
+											m_Camera.transform, 
+											m_ledgeLerp.getDestinationDirection(), 
+											horizontalRestr, 
+											verticalRestrMin, 
+											verticalRestrMax);
+		}
+		else if (m_resetRotation) 
+		{
+			m_resetRotation = false;
+			m_MouseLook.Init(transform, m_Camera.transform);
+		}
+		else 
+		{
+			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
+		}
     }
 
     private void UpdateCameraPosition(float speed)
     {
-        
-
         if (!m_UseHeadBob)
         {
             return;
         }
-        /*if (m_CharacterController.velocity.magnitude > 0 && m_CharacterController.isGrounded)
-        {
-            m_Camera.transform.localPosition =
-                m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude + speed);
-            newCameraPosition = m_Camera.transform.localPosition;
-            newCameraPosition.y = m_Camera.transform.localPosition.y - m_JumpBob.Offset();
-        }
-        else
-        {
-            newCameraPosition = m_Camera.transform.localPosition;
-            newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
-        }*/
         
         // Reset camera before each offset so that it does not get continuously moved
         m_Camera.transform.localPosition = m_cameraOrigin;
@@ -632,6 +828,13 @@ public class PlayerController : MonoBehaviour, IKillable
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (m_onEdge)
+        {
+            m_ledgeHitDir = (hit.collider.ClosestPointOnBounds(transform.position) - transform.position) * -1;
+            Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
+        }
+
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)
         {

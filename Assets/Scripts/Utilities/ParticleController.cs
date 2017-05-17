@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class ParticleController : MonoBehaviour {
 
-    ParticleSystem m_particleSystem;
+    public ParticleSystem m_particleSystem;
 
     bool m_busy;
 
 	void Start ()
     {
-        if (m_particleSystem = GetComponent<ParticleSystem>()) ;
-        else if (m_particleSystem = GetComponentInChildren<ParticleSystem>()) ;
+        //if (m_particleSystem = GetComponent<ParticleSystem>()) ;
+       // else if (m_particleSystem = GetComponentInChildren<ParticleSystem>()) ;
 	}
 	
     public void LerpAlpha(float a, float b, float time)

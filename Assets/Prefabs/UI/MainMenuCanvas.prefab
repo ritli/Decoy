@@ -274,6 +274,7 @@ GameObject:
   - component: {fileID: 222200474105546774}
   - component: {fileID: 114317864589528754}
   - component: {fileID: 114131249304879328}
+  - component: {fileID: 114879187178285356}
   m_Layer: 5
   m_Name: New Game
   m_TagString: Untagged
@@ -893,6 +894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d948716746f026648b9eaa304607cbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_StartActive: 1
 --- !u!114 &114024589759575932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1125,22 +1127,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114020422188199336}
-        m_MethodName: setGameObjectActive
-        m_Mode: 2
+        m_MethodName: clearPlayerPrefs
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1979346287359334}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 114020422188199336}
-        m_MethodName: setGameObjectInactive
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1488462487341618}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1237,22 +1228,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114020422188199336}
-        m_MethodName: setGameObjectActive
-        m_Mode: 2
+        m_MethodName: LoadFromCheckpoint
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1979346287359334}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 114020422188199336}
-        m_MethodName: setGameObjectInactive
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1488462487341618}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2347,8 +2327,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114020422188199336}
-        m_MethodName: changeScene
-        m_Mode: 3
+        m_MethodName: quitGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2391,7 +2371,20 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Do you really want to quit to Main Menu?
+  m_Text: Do you really want to quit to Desktop?
+--- !u!114 &114879187178285356
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395885208373976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d74bf892504e59469a1f5e75486559a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SelectedScene: 3
+  m_LoadDelay: 0
 --- !u!114 &114888291830200050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2520,7 +2513,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Quit to Main Menu
+  m_Text: Quit to Desktop
 --- !u!114 &114945811686228632
 MonoBehaviour:
   m_ObjectHideFlags: 1

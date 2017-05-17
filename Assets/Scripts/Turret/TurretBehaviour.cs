@@ -11,19 +11,22 @@ public class TurretBehaviour : MonoBehaviour
     private TurretState m_StateBeforePause;
     //[HideInInspector]
     public float fieldOfView = 10;
+    public float narrowFieldOfView = 5;
+    public float fovAdjustSpeed = 1f;
+    float currentFieldOfView;
     //[HideInInspector]
     public float viewDistance = 10;
     public float lightAngleOffset;
     float m_currentAngle;
     public float m_narrowAngle = 5f;
     public float m_zoomSpeed = 1f;
-    float m_narrowTime = 0f;
-    float m_wideTime = 0f;
 
     public float m_timeToKill = 3;
     float m_timeToKillElapsed = 0;
 
     ParticleSystem m_fireParticles;
+    ParticleSystem m_muzzleflare1;
+    ParticleSystem m_muzzleflare2;
 
     IKillable m_Target;
 
@@ -31,6 +34,7 @@ public class TurretBehaviour : MonoBehaviour
     LookAt m_LookAt;
     Light m_FoVLight;
     Decoy m_Decoy;
+    FMODUnity.StudioEventEmitter m_emitter;
 
     RaycastHit m_Hit;
     Vector3 m_TargetPosition;
@@ -42,7 +46,7 @@ public class TurretBehaviour : MonoBehaviour
     bool m_shotAudioPlayed = false;
     bool m_switchTargetPlayed = false;
     bool m_alertSoundPlayed = false;
-
+    float m_timeSinceAlertSound;
 
     // Use this for initialization
     void Start()
@@ -54,9 +58,15 @@ public class TurretBehaviour : MonoBehaviour
         m_Raycast = GetComponent<Raycast>();
         turretState = TurretState.isIdle;
         m_fireParticles = GetComponentInChildren<ParticleSystem>();
+        m_muzzleflare1 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare").GetComponent<ParticleSystem>();
+        m_muzzleflare2 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare2").GetComponent<ParticleSystem>();
         m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
 
+        m_emitter = transform.FindChild("Detect").GetComponent<FMODUnity.StudioEventEmitter>();
+
         m_audio.PlayEvent(2, false);
+
+        currentFieldOfView = fieldOfView;
     }
 
     void OnEnable()
@@ -107,13 +117,10 @@ public class TurretBehaviour : MonoBehaviour
         switch (turretState)
         {
             case TurretState.isIdle:
+                m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_idleColor, m_zoomSpeed * Time.deltaTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_zoomSpeed * Time.deltaTime);
 
-
-                m_FoVLight.color = Color.Lerp(m_activeColor, m_idleColor, m_wideTime);
-                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_wideTime);
-                m_narrowTime = 0;
-
-                m_wideTime += Time.deltaTime * m_zoomSpeed;
+                currentFieldOfView = Mathf.Lerp(currentFieldOfView, fieldOfView, fovAdjustSpeed * Time.deltaTime);
 
                 CheckPlaySweepSound();
 
@@ -122,19 +129,34 @@ public class TurretBehaviour : MonoBehaviour
                     m_LookAt.lookAtWaypoint();
                 }
 
-                m_alertSoundPlayed = false;
+                if (m_timeSinceAlertSound < 0.5f)
+                {
+                    m_emitter.SetParameter("BuildCancel", 1);
+                }
+                else
+                {
+                    m_emitter.Stop();
+                    m_alertSoundPlayed = false;
+                    m_emitter.SetParameter("BuildCancel", 0);
+                }
+
+                m_timeSinceAlertSound += Time.deltaTime;
+
                 break;
             case TurretState.isTargeting:
                 if (!m_alertSoundPlayed)
                 {
+                    m_timeSinceAlertSound = 0;
+
                     m_alertSoundPlayed = true;
-                    m_audio.PlayEvent(3, true);
+                    m_emitter.Play();
                 }
 
-                m_FoVLight.color = Color.Lerp(m_idleColor, m_activeColor, m_narrowTime);
-                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_narrowTime);
-                m_wideTime = 0f;
-                m_narrowTime += Time.deltaTime * m_zoomSpeed;
+                m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
+
+                currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
+
 
                 //Reset timer
                 m_timeToKillElapsed = 0;
@@ -148,16 +170,24 @@ public class TurretBehaviour : MonoBehaviour
 
                 aimAtTarget();
 
+                m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
+                m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
+
+                currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
+
                 //Run timer until player is killed.
                 if (m_timeToKillElapsed > m_timeToKill) 
                 {
                     if (!m_shotAudioPlayed)
                     {
                         m_shotAudioPlayed = true;
-                        m_audio.PlayEventTimed(0, 2, 0.4f, true);
+                        m_audio.PlayEvent(0, true);
+                        m_Target.Kill();
+
+                        m_alertSoundPlayed = false;
+
+                        StartCoroutine(ShootSequence());
                     }
-                    m_Target.Kill();
-                    m_fireParticles.Emit(20);
                 }
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
@@ -171,6 +201,22 @@ public class TurretBehaviour : MonoBehaviour
         m_LookAt.lookAtPosition(m_TargetPosition);
     }
     
+    IEnumerator ShootSequence()
+    {
+        m_fireParticles.Emit(40);
+
+        m_muzzleflare1.Emit(15);
+        m_muzzleflare2.Emit(15);
+
+        for (int i = 0; i < 3; i++)
+        {
+            yield return new WaitForSeconds(0.05f);
+
+            m_muzzleflare1.Emit(15);
+            m_muzzleflare2.Emit(15);
+        }
+    }
+
     void CheckPlaySweepSound()
     {
         Vector3 playerpos = GameManager.GetPlayer().transform.position;
@@ -178,31 +224,29 @@ public class TurretBehaviour : MonoBehaviour
         Vector3 forward = transform.forward * viewDistance;
         Vector3 check = Vector3.Project(distance, forward);
 
-        Debug.DrawRay(transform.position, check);
-
         check += transform.position - check.normalized * 0.7f;
-
-        Debug.DrawRay(check, Vector3.down * 10);
 
         if (Physics.Raycast(new Ray(check, Vector3.down * 10), 10f, m_playerMask))
         {
             PlayRotateSound();
-            print("soundplayed");
         }
 
     }
 
     bool isObjectVisible(Transform objectTransform, string tag)
     {
+        if (objectTransform.CompareTag(Tags.player))
+        {
+            objectTransform = objectTransform.GetComponentInChildren<Camera>().transform;
+        }
 
         //Calculate direction to the player
-        Vector3 direction = objectTransform.transform.position - transform.position;
+        Vector3 direction = (objectTransform.transform.position) - transform.position;
         direction.Normalize();
 
         //decide if player is inside FoV
-        if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < fieldOfView / 2)
+        if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < currentFieldOfView / 2)
         {
-
             //decide if view is obstructed with raycast
             if (m_Raycast.doRaycast(out m_Hit, direction) && m_Hit.transform.gameObject.tag == tag)
                 return true;
@@ -239,7 +283,8 @@ public class TurretBehaviour : MonoBehaviour
        //is player visible to the turret? if not the return to idle.
         if(isObjectVisible(GameManager.GetPlayer().gameObject.transform, Tags.player))
         {
-            m_TargetPosition = GameManager.GetPlayer().transform.position;
+            //m_TargetPosition = GameManager.GetPlayer().transform.position;
+            m_TargetPosition = GameManager.GetPlayer().GetComponentInChildren<Camera>().transform.position;
             m_Target = GameManager.GetPlayer();
 
             //check if player can be fired at. if yes, initiate fire. Else, target player

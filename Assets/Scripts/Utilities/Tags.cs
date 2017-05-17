@@ -9,4 +9,8 @@ public class Tags : MonoBehaviour {
 	public static string noGrab = "NoGrab";
     public static string trigger = "Trigger";
     public static string button = "Button";
+    public static string asphalt = "Asphalt";
+    public static string concrete = "Concrete";
+    public static string metal = "Metal";
+    public static string sand = "Sand";
 }
