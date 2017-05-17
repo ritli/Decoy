@@ -8,6 +8,7 @@ public class AreaInteractionTrigger : MonoBehaviour {
     public ActivationObject[] m_activationObjects;
 
     public bool m_triggerOnce = false;
+    public bool deactivateOnExit = true;
 
     private Animator m_Animatior;
 
@@ -26,7 +27,7 @@ public class AreaInteractionTrigger : MonoBehaviour {
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == Tags.player)
+        if(other.gameObject.tag == Tags.player && deactivateOnExit)
         {
             ActivateObjects(false);
         }

@@ -31,8 +31,8 @@ public class Checkpoint : MonoBehaviour {
     }
     void OnTriggerEnter(Collider collider)
     {
-        
-        if(collider.transform.gameObject.tag == Tags.player && getReachedCheckpoint() < m_Index)
+        // && getReachedCheckpoint() < m_Index
+        if (collider.transform.gameObject.tag == Tags.player)
         {
             PlayerPrefs.SetInt("Section", (int)m_AssociatedSection);
             PlayerPrefs.SetInt("CheckpointIndex", m_Index);

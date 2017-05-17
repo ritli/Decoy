@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class PauseManager : MonoBehaviour
 {
-    public static PauseManager instance;
+    static PauseManager instance;
 
     public delegate void PauseAction(bool isPaused);
     public static event PauseAction OnPause;
 
-     
-    static bool isPaused = false;
-    // Use this for initialization
-    void Start()
-    {
-        instance = FindObjectOfType<PauseManager>();
-	}
+    private bool m_PauseDisabled = false; 
+    private bool isPaused = false;
 
     private void OnEnable()
     {
@@ -25,11 +20,25 @@ public class PauseManager : MonoBehaviour
     {
         OnPause -= pauseGame;
     }
+    // Use this for initialization
+    void Start()
+    {
+        instance = FindObjectOfType<PauseManager>();
+
+        //To force the game to begin running at full speed.
+        //There was an error on some machines that originated from the timescale being 0.
+        Time.timeScale = 1.0f;
+    }
+
+    public static PauseManager GetInstance()
+    {
+        return instance;
+    }
     // Update is called once per frame
     void Update ()
     {
         //Pauses the game if input is pressed
-		if(Input.GetKeyDown(KeyCode.Escape))
+		if(Input.GetKeyDown(KeyCode.Escape) && !m_PauseDisabled)
         {
             if(OnPause != null && !isPaused)
             {
@@ -48,16 +57,22 @@ public class PauseManager : MonoBehaviour
         //pause all Physics
         if (pause)
         {
-            Time.timeScale = 0f;
+            //"physics" at its finest.
+            Time.timeScale = 0.00000000001f;
         }
         else
         {
+            //Full game speed
             Time.timeScale = 1;
         }
     }
     public static void resumeGame()
     {
-        isPaused = false;
+        PauseManager.GetInstance().isPaused = false;
         OnPause(false);
+    }
+    public void DisablePause( bool state)
+    {
+        m_PauseDisabled = state;
     }
 }
