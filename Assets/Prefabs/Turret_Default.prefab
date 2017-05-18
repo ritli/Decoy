@@ -84,6 +84,7 @@ Transform:
   - {fileID: 450788}
   - {fileID: 4347637623991746}
   - {fileID: 4881444004240540}
+  - {fileID: 4580677561590220}
   m_Father: {fileID: 419168}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -94,7 +95,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183626}
   m_LocalRotation: {x: -0.000001065433, y: -0.0000008940697, z: 0.7071057, w: 0.7071079}
-  m_LocalPosition: {x: 119.3, y: 30.096397, z: -9.787674}
+  m_LocalPosition: {x: 97.245, y: 21.30474, z: 102.59821}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400060}
@@ -244,6 +245,8 @@ MonoBehaviour:
     m_Bits: 512
   turretState: 0
   fieldOfView: 30
+  narrowFieldOfView: 5
+  fovAdjustSpeed: 1
   viewDistance: 70
   lightAngleOffset: 0
   m_narrowAngle: 5
@@ -3357,6 +3360,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1665390483942840
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4580677561590220}
+  - component: {fileID: 114021147902288542}
+  m_Layer: 0
+  m_Name: Detect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1672722350094322
 GameObject:
   m_ObjectHideFlags: 0
@@ -3491,6 +3510,19 @@ Transform:
   - {fileID: 4875453498623114}
   m_Father: {fileID: 419168}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4580677561590220
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1665390483942840}
+  m_LocalRotation: {x: -0, y: -0, z: -9.525712e-13, w: 1}
+  m_LocalPosition: {x: 0, y: -1.0859163, z: -0.1894452}
+  m_LocalScale: {x: 0.8130695, y: 4.051926, z: 0.8130695}
+  m_Children: []
+  m_Father: {fileID: 400060}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4721978436962660
 Transform:
@@ -3660,6 +3692,28 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1654118775483194}
   m_Mesh: {fileID: 4300002, guid: 9f748139afd509f4cab0433d135738e3, type: 3}
+--- !u!114 &114021147902288542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1665390483942840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Sound/Turret/TurretDetect
+  PlayEvent: 0
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 80
 --- !u!114 &114174931425733160
 MonoBehaviour:
   m_ObjectHideFlags: 1

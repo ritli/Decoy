@@ -1956,6 +1956,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4949601670907862}
   - component: {fileID: 114528895425823014}
+  - component: {fileID: 114104369431534246}
+  - component: {fileID: 114939968700196760}
   m_Layer: 9
   m_Name: FootstepManager
   m_TagString: Untagged
@@ -7825,6 +7827,28 @@ MonoBehaviour:
   ledgeSensitivity: 1
   horizontal: 45
   vertical: 75
+--- !u!114 &114104369431534246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343442841702268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!114 &114129811633040402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8141,6 +8165,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ledgeSensitivity: 1
+--- !u!114 &114939968700196760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343442841702268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97b9428402d3b7409d4df4aeb4235bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_events:
+  - event:/Sound/Player/PlayerDeath
+  - event:/Sound/Player/PlayerDeathLaser
+  - event:/Sound/Player/PlayerJump
+  - event:/Sound/Player/PlayerCrouch
+  m_emitter: {fileID: 0}
 --- !u!135 &135489145939978978
 SphereCollider:
   m_ObjectHideFlags: 1
