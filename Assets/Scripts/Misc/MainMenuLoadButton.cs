@@ -17,6 +17,6 @@ public class MainMenuLoadButton : MonoBehaviour {
     void DoLoadMenu()
     {
         GameManager.GetPlayer().enabled = false;
-        SceneLoader.LoadMainMenu();
+        SceneLoader.getInstance().LoadMainMenu();
     }
 }
