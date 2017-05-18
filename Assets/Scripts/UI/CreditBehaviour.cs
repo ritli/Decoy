@@ -28,7 +28,7 @@ public class CreditBehaviour : MonoBehaviour
             //ImageFader.instance.SetVisible(true);
             finished = true;
             Debug.Log("Loading Menu");
-            SceneLoader.LoadMainMenu();
+            SceneLoader.getInstance().LoadMainMenu();
         }
         else if(m_MainCanvas.transform.position.y + m_MainCanvas.pixelRect.height / 2 < rectPosition.y && !finished)
         {
