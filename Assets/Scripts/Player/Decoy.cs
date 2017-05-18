@@ -31,8 +31,6 @@ public class Decoy : MonoBehaviour, IKillable {
         m_audio = GetComponent<AudioPlayer>();
         m_smoke = transform.Find("Smoke").gameObject;
         m_smoke.SetActive(false);
-
-
     }
 
     void Start()
