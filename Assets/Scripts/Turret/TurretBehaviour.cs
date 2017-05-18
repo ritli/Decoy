@@ -11,6 +11,9 @@ public class TurretBehaviour : MonoBehaviour
     private TurretState m_StateBeforePause;
     //[HideInInspector]
     public float fieldOfView = 10;
+    public float narrowFieldOfView = 5;
+    public float fovAdjustSpeed = 1f;
+    float currentFieldOfView;
     //[HideInInspector]
     public float viewDistance = 10;
     public float lightAngleOffset;
@@ -31,6 +34,7 @@ public class TurretBehaviour : MonoBehaviour
     LookAt m_LookAt;
     Light m_FoVLight;
     Decoy m_Decoy;
+    FMODUnity.StudioEventEmitter m_emitter;
 
     RaycastHit m_Hit;
     Vector3 m_TargetPosition;
@@ -42,7 +46,7 @@ public class TurretBehaviour : MonoBehaviour
     bool m_shotAudioPlayed = false;
     bool m_switchTargetPlayed = false;
     bool m_alertSoundPlayed = false;
-
+    float m_timeSinceAlertSound;
 
     // Use this for initialization
     void Start()
@@ -58,7 +62,11 @@ public class TurretBehaviour : MonoBehaviour
         m_muzzleflare2 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare2").GetComponent<ParticleSystem>();
         m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
 
+        m_emitter = transform.FindChild("Detect").GetComponent<FMODUnity.StudioEventEmitter>();
+
         m_audio.PlayEvent(2, false);
+
+        currentFieldOfView = fieldOfView;
     }
 
     void OnEnable()
@@ -112,6 +120,8 @@ public class TurretBehaviour : MonoBehaviour
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_idleColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_zoomSpeed * Time.deltaTime);
 
+                currentFieldOfView = Mathf.Lerp(currentFieldOfView, fieldOfView, fovAdjustSpeed * Time.deltaTime);
+
                 CheckPlaySweepSound();
 
                 if (m_LookAt.isMovingAim())
@@ -119,17 +129,34 @@ public class TurretBehaviour : MonoBehaviour
                     m_LookAt.lookAtWaypoint();
                 }
 
-                m_alertSoundPlayed = false;
+                if (m_timeSinceAlertSound < 0.5f)
+                {
+                    m_emitter.SetParameter("BuildCancel", 1);
+                }
+                else
+                {
+                    m_emitter.Stop();
+                    m_alertSoundPlayed = false;
+                    m_emitter.SetParameter("BuildCancel", 0);
+                }
+
+                m_timeSinceAlertSound += Time.deltaTime;
+
                 break;
             case TurretState.isTargeting:
                 if (!m_alertSoundPlayed)
                 {
+                    m_timeSinceAlertSound = 0;
+
                     m_alertSoundPlayed = true;
-                    m_audio.PlayEvent(3, true);
+                    m_emitter.Play();
                 }
 
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
+
+                currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
+
 
                 //Reset timer
                 m_timeToKillElapsed = 0;
@@ -146,6 +173,7 @@ public class TurretBehaviour : MonoBehaviour
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
 
+                currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
 
                 //Run timer until player is killed.
                 if (m_timeToKillElapsed > m_timeToKill) 
@@ -155,6 +183,8 @@ public class TurretBehaviour : MonoBehaviour
                         m_shotAudioPlayed = true;
                         m_audio.PlayEvent(0, true);
                         m_Target.Kill();
+
+                        m_alertSoundPlayed = false;
 
                         StartCoroutine(ShootSequence());
                     }
@@ -215,7 +245,7 @@ public class TurretBehaviour : MonoBehaviour
         direction.Normalize();
 
         //decide if player is inside FoV
-        if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < fieldOfView / 2)
+        if (Mathf.Abs(Vector3.Angle(transform.forward, direction)) < currentFieldOfView / 2)
         {
             //decide if view is obstructed with raycast
             if (m_Raycast.doRaycast(out m_Hit, direction) && m_Hit.transform.gameObject.tag == tag)

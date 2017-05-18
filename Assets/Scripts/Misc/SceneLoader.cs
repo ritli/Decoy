@@ -19,17 +19,17 @@ public class LoadingScene : MonoBehaviour
 public class SceneLoader : MonoBehaviour
 {
     //Add new Scenes here as they are created.
-    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section5 };
+    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, CreditScene, MusicScene, AudioScene };
     public static SceneLoader instance;
-    public bool startfromMenu;
     private static List<LoadingScene> m_ScenesLoading;
-
+    public bool startfromMenu;
 	// Use this for initialization
 	void Start ()
     {
         m_ScenesLoading = new List<LoadingScene>();
         //Load the MainMenu
-        LoadMainMenu();
+        if(startfromMenu)
+            LoadMainMenu();
     }
     public static void UnloadSceneAsync(Scenes scene)
     {
@@ -107,16 +107,8 @@ public class SceneLoader : MonoBehaviour
     }
     public static void LoadMainMenu()
     {
+        UnloadAll();
 
-        //removes all scenes from the game, except BaseScene
-        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
-        {
-            Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
-            if (currentScene.name != Scenes.InitialScene.ToString())
-            {
-                SceneManager.UnloadSceneAsync(currentScene);
-            }
-        }
         //Loads Menu, activates player 
         GameManager.GetPlayer().gameObject.SetActive(false);
         SceneManager.LoadScene(Scenes.MainMenu.ToString(), LoadSceneMode.Additive);
@@ -132,10 +124,24 @@ public class SceneLoader : MonoBehaviour
         
         //load checkpoint/ whatever main ingame scene.
         LoadSceneSync(Scenes.InGameBase);
+        LoadSceneSync(Scenes.MusicScene);
+        LoadSceneSync(Scenes.AudioScene);
         //load target Scene
         LoadSceneSync(scene);
         GameManager.GetPlayer().enabled = true;
 
+    }
+    public static void UnloadAll()
+    {
+        //removes all scenes from the game, except InitialScene
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+        {
+            Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
+            if (currentScene.name != Scenes.InitialScene.ToString() || currentScene.name != "InitialScene Debug")
+            {
+                SceneManager.UnloadSceneAsync(currentScene);
+            }
+        }
     }
 
 }
