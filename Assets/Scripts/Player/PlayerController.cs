@@ -254,6 +254,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void UpdateAnimator()
     {
+		print(m_aniState);
 		if (m_animator != null && m_hasDevice)
         {
             m_animator.SetBool("HasDevice", m_hasDevice);
@@ -262,8 +263,8 @@ public class PlayerController : MonoBehaviour, IKillable
         }
         else if (m_noDeviceAnimator != null)
         {
-            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
             m_animator.SetBool("HasDevice", m_hasDevice);
+			m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
             m_noDeviceAnimator.SetInteger("State", (int)m_aniState);
         }
     }
@@ -293,6 +294,10 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = (AnimationState)tempStateVal;
         }
+		else if (m_ledgeGrabbing)
+		{
+			m_aniState = AnimationState.climbing;
+		}	
         else if (Mathf.Abs(m_Input.y) > 0 && !m_Jumping && !m_crouching) 
         {
             m_aniState = AnimationState.moving;
@@ -305,11 +310,6 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.jumping;
         }
-		// Climb animation pls
-//		else if (m_ledgeGrabbing)
-//		{
-//			m_aniState = AnimationState.climbing;
-//		}	
         else
         {
             m_aniState = AnimationState.idle;
