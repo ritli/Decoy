@@ -13,6 +13,9 @@ public class Decoy : MonoBehaviour, IKillable {
     float m_decayTimeElapsed = 0;
     List<Material> fadingMats = new List<Material>();
 
+    AudioPlayer m_audio;
+    GameObject m_smoke;
+    private bool m_dissolvesoundplayed;
     private bool m_dissolving = false;
 
     PlayerState m_decoyState;
@@ -24,6 +27,17 @@ public class Decoy : MonoBehaviour, IKillable {
         {
             fadingMats.Add(mat);
         }
+
+        m_audio = GetComponent<AudioPlayer>();
+        m_smoke = transform.Find("Smoke").gameObject;
+        m_smoke.SetActive(false);
+
+
+    }
+
+    void Start()
+    {
+        m_audio.PlaySoundAtPosition(0, true, transform.position);
     }
 
     private void OnEnable()
@@ -42,6 +56,8 @@ public class Decoy : MonoBehaviour, IKillable {
 
     void DestroyObject()
     {
+
+
         Destroy(gameObject);
     }
 	
@@ -75,6 +91,13 @@ public class Decoy : MonoBehaviour, IKillable {
 
         if (m_dissolving)
         {
+            if (!m_dissolvesoundplayed)
+            {
+                m_smoke.SetActive(true);
+                m_dissolvesoundplayed = true;
+                m_audio.PlaySoundAtPosition(1, true, transform.position);
+            }
+
             // Change dissolve variable on the shader in order to gradually decay the decoy
             foreach (Material m in fadingMats)
             {
