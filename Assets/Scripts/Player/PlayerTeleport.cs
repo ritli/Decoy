@@ -175,40 +175,40 @@ public class PlayerTeleport : MonoBehaviour {
 				m_ledgeLerp.stop();
                 if (!m_cancelTeleport && m_indi.activeSelf)
                 {
-
-					if (m_foundLedge) 
-					{
-						print ("Found ledge");
-						moveTo (m_grabPoint);
-						//m_foundLedge = false;
-					} 
-					else if (m_ledgeDetection.isLedgeBlocked()) 
-					{
-//						print ("Ledge blocked");
-						
-						if (m_ledgeDetection.isIndPosSet ()) 
-						{
-							print("Used indPos");
-							moveTo(m_ledgeDetection.getValidIndPosition ());
-						} 
-						else 
-						{
-							print("Used m_Grab");
-							moveTo(m_grabPoint);
-						}
-					} 
-					else if (!m_enoughSpace) 
-					{
-						print ("Not enough space");
-                        m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint);
-                        moveTo(m_grabPoint);
-					} 
-					else 
-					{
-//						print ("No ledge");
-						m_ledgeDetection.startTeleporting();
-						moveTo(m_indi.transform.position);
-					}
+                    moveTo(m_grabPoint);
+//					if (m_foundLedge) 
+//					{
+//						print ("Found ledge");
+//						moveTo (m_grabPoint);
+//						//m_foundLedge = false;
+//					} 
+//					else if (m_ledgeDetection.isLedgeBlocked()) 
+//					{
+////						print ("Ledge blocked");
+//						
+//						if (m_ledgeDetection.isIndPosSet ()) 
+//						{
+//							print("Used indPos");
+//							moveTo(m_ledgeDetection.getValidIndPosition ());
+//						} 
+//						else 
+//						{
+//							print("Used m_Grab");
+//							moveTo(m_grabPoint);
+//						}
+//					} 
+//					else if (!m_enoughSpace) 
+//					{
+//						print ("Not enough space");
+//                        m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition(), out m_grabPoint);
+//                        moveTo(m_grabPoint);
+//					} 
+//					else 
+//					{
+////						print ("No ledge");
+//                        moveTo(m_indi.transform.position);
+//                    }
+                    m_ledgeDetection.startTeleporting();
 
                     m_blinkState = BlinkState.blinking;
                     Vector3 lastPos = transform.position;
@@ -335,25 +335,44 @@ public class PlayerTeleport : MonoBehaviour {
 		m_enoughSpace = true;
 		m_foundValidSpace = true;
 
-
         if (m_raycaster.doRaycast(out hit))
         {
 			float angle = Vector3.Angle(hit.normal, Vector3.up);
 
             m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit, out validPos);
-            // ## Start ledge detection ##
+            // Start ledge detection and sets the variables to their appropriate positions
             if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
             {
+//                print("Found ledge");
                 m_indi.transform.position = m_grabPoint;
                 m_foundLedge = true;
                 m_charController.detectCollisions = false;
                 return;
             }
             m_grabPoint = validPos;
-            m_indi.transform.position = validPos;
-            return;
+			m_indi.transform.position = validPos;
+			m_foundLedge = false;
+			return;
 
+//			if (angle > 135)
+//			{ // If hit was on roof, move indicator down.
+//				m_indi.transform.position = hit.point + hit.normal * m_playerLength;
+//				m_foundLedge = false;
+//			}
+//			else if (angle < 45) // If hit was on floor, move indicator up
+//			{
+//				m_indi.transform.position = validPos;
+//			}
+//            else // if hit was on wall, check for roof
+//            {
+//				if (m_raycaster.doRaycast(out hit, Vector3.up, validPos, m_playerLength / 2))
+//					m_indi.transform.position = validPos - new Vector3(0, m_playerLength / 2, 0); 
+//				else 
+//					m_indi.transform.position = validPos;
+//            }
 
+            //#### Code to be changed ####
+            /*
 			// Roof
 			if (angle > 135)
             {
@@ -418,15 +437,15 @@ public class PlayerTeleport : MonoBehaviour {
 				return;
 			}
 
-			//If true then normal is a ceiling
+            //If true then normal is a ceiling
 
-			//Else then surface is floor
-			else
+            //Else then surface is floor
+            else
             {
-//				print ("Floor");
-				m_foundLedge = false;
+//              print ("Floor");
+                m_foundLedge = false;
 
-				for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     Vector3 centerpos = hit.point + Vector3.up * 0.5f;
                     Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
@@ -440,19 +459,26 @@ public class PlayerTeleport : MonoBehaviour {
                         }
                     }
                 }
-				m_indi.transform.position = hit.point;
+                m_indi.transform.position = hit.point;
 
             }
             return;
+            */
 
         }
         // Check for collision of floor when ray does not hit a surface.
 		else if (m_raycaster.doRaycast(out hit, rayAir.direction, rayAir.origin, 0.2f))
         {
-			m_ledgeDetection.findValidPosition (hit.point + hit.normal * m_playerLength, out validPos);
-			// Put the indicator on the ground
-			m_indi.transform.position = hit.point + hit.normal * 0.2f;
-            print("Hitting the ground");
+			//m_ledgeDetection.findValidPosition (hit.point + hit.normal * m_playerLength, out validPos);
+
+            // Put the indicator on the ground
+            m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit, out validPos);
+            m_indi.transform.position = validPos;
+            m_grabPoint = validPos;
+
+//          m_indi.transform.position = hit.point + hit.normal * 0.2f;
+//          m_grabPoint = m_indi.transform.position + new Vector3(0, m_playerLength / 2, 0);
+//            print("Hitting the ground");
 			m_foundLedge = false;
             return;
         }
@@ -460,12 +486,18 @@ public class PlayerTeleport : MonoBehaviour {
 		// Check for collision of roof when ray does not hit a surface.
 		else if (m_raycaster.doRaycast(out hit, -rayAir.direction, rayAir.origin, m_playerLength))
 		{
-			if (m_ledgeDetection.findValidPosition(hit.point + hit.normal * m_playerLength, out validPos))
-				m_indi.transform.position = validPos;
-			else
-				m_indi.transform.position = hit.point - new Vector3(0, m_playerLength, 0);
-			// Put the indicator playerLength distance away from the roof
-			print("Hitting the ceiling");
+//			if (m_ledgeDetection.findValidPosition(hit.point + hit.normal * m_playerLength, out validPos))
+//				m_indi.transform.position = validPos;
+//			else
+
+            m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit, out validPos);
+            // Put the indicator playerLength distance away from the roof
+//            m_indi.transform.position = validPos;
+//            m_grabPoint = validPos;
+
+            m_indi.transform.position = hit.point - new Vector3(0, m_playerLength, 0);
+            m_grabPoint = m_indi.transform.position;
+//			print("Hitting the ceiling");
 			m_foundLedge = false;
 			return;
 		}
@@ -488,11 +520,12 @@ public class PlayerTeleport : MonoBehaviour {
 //        }
 
 		// If nothing is hit, check for enough space
-		print("Hit nothing");
+//		print("Hit nothing");
 		m_foundLedge = false;
 		m_ledgeDetection.hitNothing();
 		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out validPos);
         m_indi.transform.position = validPos;
+		m_grabPoint = validPos;
         //m_indi.transform.position = Camera.main.transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)

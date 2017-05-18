@@ -136,13 +136,13 @@ public class FindLedge : MonoBehaviour {
 					rayDownNormal = hit.normal;
 
 					// Set the new position
-					m_newPosition = hit.point;
+                    floorTarget = hit.point;
 
 					// Sweeping upward from ontop of the wall
 					if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity + m_playerLength))
 					{
 						//Debug.DrawRay (hit.point, hit.normal, Color.cyan);
-						m_newPosition = m_wallPoint;
+                        wallTarget = m_wallPoint;
 						m_isLedgeBlocked = true;
 						return false;
 					}
@@ -158,25 +158,22 @@ public class FindLedge : MonoBehaviour {
 						if (Vector3.Angle (rayDownNormal, hit.normal) > 0 || !(Mathf.Abs(hit.normal.y - rayDownNormal.y) > 0))
 						{
 							// Update the position to the higher point
-							m_newPosition = hit.point;
+                            floorTarget = hit.point;
 						}
 					}
 
 					// Check if there is enough space up on the ledge
-					Vector3 offsetHit = hit.point + hit.normal * 0.01f;
 					bool newUpRight = 	Vector3.Angle (Vector3.up, hit.normal) > 0.1 && 
 										Vector3.Angle (Vector3.up, hit.normal) < 179.9 ? true : false;
 
 					if (isSpaceObstructedFloor(hit, newUpRight))
 						return false;
-
-					floorTarget = m_newPosition;
 					return true;
 				}
 			}
 		}
 		// If ray doesn't find floor, set position to point on wall
-		m_newPosition = m_wallPoint;
+        floorTarget = m_wallPoint;
 		return false;
 	}
 

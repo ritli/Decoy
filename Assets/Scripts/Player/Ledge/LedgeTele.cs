@@ -21,7 +21,10 @@ public class LedgeTele : FindLedge {
     }
 
 	/*
-	 * Raycasts to find out if there is enough space for the player to teleport to target location
+	 * Does a reverse sweep test to find a position with enough space for the player. 
+     * It uses a CapsuleCollider attached as a child to the player and puts it where the player is aiming. 
+     * It then checks for all overlapping colliders and moves the CapsuleCollider towards the player as long 
+     * as it intersects one of the found colliders.
 	 */
     public bool findEnoughSpace(RaycastHit hit, out Vector3 target) 
 	{
@@ -29,53 +32,32 @@ public class LedgeTele : FindLedge {
         Vector3 direction = new Vector3(0, 0, 0);
         float distanceToMove = 0;
 
-        // Set position and rotation of the test collider object to calc new position
+        // Set position and rotation of the test collider object to the players values
         testCol.enabled = true;
         testCol.transform.position = relocatedPosition;
         testCol.transform.rotation = transform.rotation;
 
         // Looks for overlapping colliders using player measurements
-        overlap = Physics.OverlapCapsule(
-            testCol.bounds.min, 
-            testCol.bounds.max, 
-            m_playerWidth);
-
-        print("Colliders: " + overlap.Length);
-        print("Original pos: " + relocatedPosition);
-
-        Vector3 totalDirection = new Vector3(0, 0, 0);
-        // Iterates through all overlapping colliders and moves the testCol just enough to not overlap anymore
+        overlap = Physics.OverlapCapsule(testCol.bounds.min, testCol.bounds.max, m_playerWidth);
+        
+        // Iterates through all overlapping colliders and moves the testCol closer to the player
         foreach (Collider col in overlap)
         {
             if (col != testCol && col.tag != Tags.player)
             {
                 if (testCol.bounds.Intersects(col.bounds))
                 {
-                    Vector3 closestPoint = col.bounds.ClosestPoint(testCol.transform.position);
-                    totalDirection += testCol.transform.position - closestPoint;
                     testCol.transform.position = Vector3.MoveTowards(testCol.transform.position, transform.position, m_playerWidth);
                 }
-
-//                if (Physics.ComputePenetration(
-//                        testCol, testCol.transform.position, testCol.transform.rotation,
-//                        col, col.transform.position, col.transform.rotation,
-//                        out direction, out distanceToMove))
-//                {
-//                    totalDirection += direction * distanceToMove;
-//                    //relocatedPosition += direction * distanceToMove;
-//                    print("Penetrated ur mum");
-//                }
             }
         }
         target = testCol.transform.position;
-        Debug.DrawRay(hit.point, totalDirection, Color.red);
         testCol.enabled = false;
-        print("RelocatedPos: " + relocatedPosition);
-
+		return true;
 
 
         // ############# OLD CODE. TO BE CHANGED #############
-
+		/*
         // Angle used to determine on which surface there was a hit
 		float angle = Vector3.Angle(Vector3.up, hit.normal);
 		bool newUpRight = false;
@@ -135,12 +117,13 @@ public class LedgeTele : FindLedge {
 		// Surface was roof
 		else if (angle >= 135)
 		{
-			print ("Surface was roof");
+//			print ("Surface was roof");
 			if (isSpaceObstructedRoof(hit, newUpRight)) 
 				enoughSpace = false;
 		}
 //		print ("Enough space: " + enoughSpace);
 		return enoughSpace;
+		*/
 	}
 
 	public bool findValidPosition(Vector3 invalidPosition, out Vector3 validPosition) 
