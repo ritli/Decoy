@@ -10,8 +10,8 @@ public class ChangeSceneActivation : ActivationObject
 
     public override void activate()
     {
-        SceneLoader.UnloadAll();    
-        SceneLoader.LoadSceneSync(m_toLoad);
+        SceneLoader.getInstance().UnloadAll();    
+        SceneLoader.getInstance().LoadSceneSync(m_toLoad);
     }
 
     public override void deactivate()
