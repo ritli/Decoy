@@ -9,12 +9,14 @@ public class EndStarter : MonoBehaviour
     public bool m_EndStarted = false;
     private PlayerTeleport m_PlayerTeleport;
     private ActivationSequence m_AS;
+    public GameObject endDecoy;
 
     // Use this for initialization
     void Start ()
     {
         m_AS = GetComponentInChildren<ActivationSequence>();
         m_Collider = GetComponent<BoxCollider>();
+
         m_PlayerTeleport = GameManager.GetPlayer().GetComponent<PlayerTeleport>();
         if(m_PlayerTeleport == null)
         {
@@ -39,7 +41,10 @@ public class EndStarter : MonoBehaviour
                 GameManager.GetPlayer().StopBob();
                 Cursor.visible = false;
                 PauseManager.GetInstance().DisablePause(true);
+                endDecoy.transform.position = m_PlayerTeleport.TeleportingTo();
+                endDecoy.transform.rotation = new Quaternion(0, GameManager.GetPlayer().transform.rotation.y, 0, endDecoy.transform.rotation.w);
                 m_AS.Init();
+
                 enabled = false;
 
                 //Add rest of end here, maybe An activationSequence
