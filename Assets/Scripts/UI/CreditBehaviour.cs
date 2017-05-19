@@ -12,11 +12,12 @@ public class CreditBehaviour : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        GameManager.GetPlayer().gameObject.SetActive(false);
+        
         finished = false;
         m_MainCanvas = FindObjectOfType<Canvas>();
         m_RectTransform = GetComponent<RectTransform>();
-	}
+        GameManager.GetPlayer().gameObject.SetActive(false);
+    }
 	
 	// Update is called once per frame
 	void OnGUI ()
