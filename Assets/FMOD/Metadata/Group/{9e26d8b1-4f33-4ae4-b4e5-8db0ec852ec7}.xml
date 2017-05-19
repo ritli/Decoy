@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.09.00">
+    <object class="MixerGroup" id="{9e26d8b1-4f33-4ae4-b4e5-8db0ec852ec7}">
+        <property name="name">
+            <value>Blink</value>
+        </property>
+        <relationship name="effectChain">
+            <destination>{9470a903-40bf-4d35-baa5-c472319da949}</destination>
+        </relationship>
+        <relationship name="panner">
+            <destination>{302a5799-ceb6-4d7b-b2ba-cf54bb6bb69b}</destination>
+        </relationship>
+        <relationship name="output">
+            <destination>{b09caec5-1856-4bf5-b2f8-8a7defa69e34}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusEffectChain" id="{9470a903-40bf-4d35-baa5-c472319da949}">
+        <relationship name="effects">
+            <destination>{1e497efa-efcb-4fb8-8edb-0b6fc176123b}</destination>
+            <destination>{e0b07d78-3ea4-466b-9589-4d069d85f3ed}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusPanner" id="{302a5799-ceb6-4d7b-b2ba-cf54bb6bb69b}"/>
+    <object class="MixerBusFader" id="{1e497efa-efcb-4fb8-8edb-0b6fc176123b}"/>
+    <object class="Sidechain" id="{e0b07d78-3ea4-466b-9589-4d069d85f3ed}">
+        <relationship name="targets">
+            <destination>{c2885e92-2b84-4cd9-a107-8e39953ba14a}</destination>
+        </relationship>
+    </object>
+</objects>

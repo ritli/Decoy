@@ -8,7 +8,7 @@
             <value>true</value>
         </property>
         <property name="name">
-            <value>Reverb</value>
+            <value>HangarReverb</value>
         </property>
         <relationship name="effectChain">
             <destination>{89c4c1d1-cc08-4697-965f-3378a7fac764}</destination>
@@ -22,18 +22,27 @@
     </object>
     <object class="MixerBusEffectChain" id="{89c4c1d1-cc08-4697-965f-3378a7fac764}">
         <relationship name="effects">
-            <destination>{9a595780-184e-4475-a214-2e39b9a54eca}</destination>
             <destination>{7b541bea-9d2d-4aa1-af7c-2b6b7e1854a5}</destination>
+            <destination>{9a595780-184e-4475-a214-2e39b9a54eca}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{86774dcc-8810-42d4-9080-66edca6fe3d0}"/>
+    <object class="MixerBusFader" id="{7b541bea-9d2d-4aa1-af7c-2b6b7e1854a5}"/>
     <object class="SFXReverbEffect" id="{9a595780-184e-4475-a214-2e39b9a54eca}">
+        <property name="decayTime">
+            <value>3200</value>
+        </property>
+        <property name="earlyDelay">
+            <value>10</value>
+        </property>
+        <property name="HFReference">
+            <value>6500</value>
+        </property>
+        <property name="lowShelfFrequency">
+            <value>600</value>
+        </property>
         <property name="wetLevel">
             <value>0</value>
         </property>
-        <property name="dryLevel">
-            <value>-80</value>
-        </property>
     </object>
-    <object class="MixerBusFader" id="{7b541bea-9d2d-4aa1-af7c-2b6b7e1854a5}"/>
 </objects>
