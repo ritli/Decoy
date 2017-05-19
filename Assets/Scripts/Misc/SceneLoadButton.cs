@@ -6,8 +6,7 @@ using UnityEngine;
 public class SceneLoadButton : MonoBehaviour {
 
     public SceneLoader.Scenes m_SelectedScene;
-    public float m_LoadDelay;
-
+    public bool loadRequested = false;
 	// Use this for initialization
     private void OnEnable()
     {
@@ -20,12 +19,20 @@ public class SceneLoadButton : MonoBehaviour {
     void RequestSceneLoad()
     {
         ImageFader.instance.SetVisible(true);
-        Invoke("DoLoad", ImageFader.instance.m_FadeTime);
+        if (!loadRequested)
+        {
+
+            Invoke("DoLoad", ImageFader.instance.m_FadeTime);
+            loadRequested = true;
+        }
     }
     void DoLoad()
     {
+        Debug.Log("Request called to load.");
         GameManager.GetPlayer().gameObject.SetActive(true);
         GameManager.GetPlayer().ResetPlayer();
-        SceneLoader.InitialGameLoad(m_SelectedScene);
+        loadRequested = false;
+        SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
+        
     }
 }
