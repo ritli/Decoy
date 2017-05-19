@@ -299,26 +299,26 @@ public class PlayerController : MonoBehaviour, IKillable
     void ReadAnimationState()
     {
         int tempStateVal = 0;
-        if (GetBlinkState(out tempStateVal))
-        {
-            m_aniState = (AnimationState)tempStateVal;
-        }
-		else if (m_ledgeGrabbing)
+		if (m_ledgeGrabbing)
 		{
 			m_aniState = AnimationState.climbing;
 		}	
+        else if (GetBlinkState(out tempStateVal))
+        {
+            m_aniState = (AnimationState)tempStateVal;
+        }
         else if (Mathf.Abs(m_Input.y) > 0 && !m_Jumping && !m_crouching) 
         {
             m_aniState = AnimationState.moving;
-        }
-        else if (m_crouching)
-        {
-            m_aniState = AnimationState.crouching;
         }
         else if (m_Jumping)
         {
             m_aniState = AnimationState.jumping;
         }
+		else if (m_crouching)
+		{
+			m_aniState = AnimationState.crouching;
+		}
         else
         {
             m_aniState = AnimationState.idle;
@@ -454,19 +454,12 @@ public class PlayerController : MonoBehaviour, IKillable
 //			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
 
-			// ### Ledge grabbing state ###
-			m_ledgeGrabbing = m_ledgeLerp.isLerping();
-
             // the jump state needs to read here to make sure it is not missed
 			if (!m_ledgeGrabbing)
-                {
-                    Jump();
-                }
+                Jump();
             else
-                {
-                    m_MoveDir.y = 0;
-
-                }
+                m_MoveDir.y = 0;
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
 
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;

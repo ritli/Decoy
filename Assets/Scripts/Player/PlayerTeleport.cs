@@ -11,9 +11,6 @@ public class PlayerTeleport : MonoBehaviour {
 
 
 	private LedgeTele m_ledgeDetection;
-    private LerpObject m_lerpObject;
-    private TeleportationAdjuster m_teleportAdjuster;
-	private GameObject m_instanceOfteleportTarget;
 	private LedgeLerp m_ledgeLerp;
 
     public Material m_emissionMat;
@@ -339,9 +336,9 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
             {
 //                print("Found ledge");
-                m_indi.transform.position = m_grabPoint;
-                m_foundLedge = true;
+				m_indi.transform.position = m_grabPoint;
                 m_charController.detectCollisions = false;
+				m_foundLedge = true;
                 return;
             }
             m_grabPoint = validPos;
