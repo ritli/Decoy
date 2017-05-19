@@ -159,7 +159,7 @@ public class SceneLoader : MonoBehaviour
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
-            if (currentScene.name != Scenes.InitialScene.ToString())
+            if (currentScene.name != Scenes.InitialScene.ToString() && currentScene.name != "InitialSceneDebug")
             {
                 Debug.Log("Unloading scene: " + currentScene.name);
                 SceneManager.UnloadSceneAsync(currentScene);
