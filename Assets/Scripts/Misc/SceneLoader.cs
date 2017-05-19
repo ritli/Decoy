@@ -9,29 +9,47 @@ public class LoadingScene : MonoBehaviour
 {
     public AsyncOperation loadInfo;
     public SceneLoader.Scenes scene;
+    public bool loaded;
 
-    public LoadingScene(AsyncOperation newLoadInfo, SceneLoader.Scenes newScene)
+    public LoadingScene(AsyncOperation newLoadInfo, SceneLoader.Scenes newScene, bool isloaded)
     {
         loadInfo = newLoadInfo;
         scene = newScene;
+        loaded = isloaded;
     }
 }
 public class SceneLoader : MonoBehaviour
 {
     //Add new Scenes here as they are created.
-    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, CreditScene };
-    public static SceneLoader instance;
-    public bool startfromMenu;
+    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, CreditScene, MusicScene, AudioScene };
+    private static SceneLoader instance;
     private static List<LoadingScene> m_ScenesLoading;
-
-	// Use this for initialization
-	void Start ()
+    public bool startfromMenu;
+    // Use this for initialization
+    private void Awake()
+    {
+        instance = GetComponent<SceneLoader>();
+    }
+    void Start ()
     {
         m_ScenesLoading = new List<LoadingScene>();
+        if(FindObjectsOfType<SceneLoader>().Length > 1)
+        {
+            Debug.LogError("ERROR: More than one SceneLoader is present.");
+        }
         //Load the MainMenu
-        LoadMainMenu();
+        if(startfromMenu)
+            LoadMainMenu();
     }
-    public static void UnloadSceneAsync(Scenes scene)
+    private void Update()
+    {
+        
+    }
+    public static SceneLoader getInstance()
+    {
+        return instance;
+    }
+    public void UnloadSceneAsync(Scenes scene)
     {
         //unload scene in background if it already is't unloaded.
         if (AllowNewSceneState(scene, false))
@@ -39,37 +57,44 @@ public class SceneLoader : MonoBehaviour
         else
             Debug.LogWarning("Scene \"" + scene.ToString() + "\" is not loaded");
     }
-    public static bool IsSceneLoaded(Scenes scene)
+    public bool IsSceneLoading(Scenes scene)
     {
         for(int index = 0; index < m_ScenesLoading.Count-1; index++)
         {
             if (!m_ScenesLoading[index].loadInfo.isDone && m_ScenesLoading[index].scene == scene)
                 return true;
+            //to pervent list to go haywire and only increase in size, remove those that is already loaded.
+            else if (m_ScenesLoading[index].loadInfo.isDone)
+            {
+                m_ScenesLoading.RemoveAt(index);
+            }
         }
 
         return SceneManager.GetSceneByName(scene.ToString()).isLoaded;
 
     }
     //Used for Triggers only
-    public static void LoadSceneAsync(Scenes scene)
+    public void LoadSceneAsync(Scenes scene)
     {
         //loads a scene "additive" in background if it already isn't already loaded.
         if (AllowNewSceneState(scene, true))
         {
-            m_ScenesLoading.Add(new LoadingScene(SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Additive),scene));
+            m_ScenesLoading.Add(new LoadingScene(SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Additive),scene, true));
         }
         else
             Debug.LogWarning("Scene \"" + scene.ToString() + "\" is already loaded");
     }
 
     //Used mainly when initially loading into the game
-    public static void LoadSceneSync(Scenes scene)
+    public void LoadSceneSync(Scenes scene)
     {
+        Debug.Log("Load Scene Sync called to load: "+scene.ToString());
         //loads a scene "addetive" directly. if it already isn't loaded.
         if (AllowNewSceneState(scene, true))
         {
             GameManager.GetPlayer().gameObject.SetActive(true);
             GameManager.GetPlayer().pausePlayer(false);
+
             SceneManager.LoadScene(scene.ToString(),LoadSceneMode.Additive);
             ImageFader.instance.SetVisible(false);
 
@@ -77,9 +102,9 @@ public class SceneLoader : MonoBehaviour
         else
             Debug.LogWarning("Scene \""+scene.ToString()+"\" is already loaded");
     }
-    static bool  AllowNewSceneState(Scenes scene, bool newState)
+    private bool  AllowNewSceneState(Scenes scene, bool newState)
     {
-        if(newState)
+        if (newState)
         {
             int instances = 0;
             for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount - 1; sceneIndex++)
@@ -96,16 +121,13 @@ public class SceneLoader : MonoBehaviour
                 return false;
             }
         }
-        //to handle the exceptions BaseScene and CheckpointScene, this method returns wether the scene can be loaded or unloaded.
-        if(SceneManager.GetSceneByName(scene.ToString()).isLoaded && scene == Scenes.InitialScene)
-            return false;
         //if scene is a section of the map, then load it.
-        if (SceneManager.GetSceneByName(scene.ToString()).isLoaded == newState)
+        if (SceneManager.GetSceneByName(scene.ToString()).isLoaded == newState )
             return false;
 
         return true;
     }
-    public static void LoadMainMenu()
+    public void LoadMainMenu()
     {
         UnloadAll();
 
@@ -114,22 +136,24 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(Scenes.MainMenu.ToString(), LoadSceneMode.Additive);
         ImageFader.instance.SetVisible(false);
     }
-    public static void InitialGameLoad(Scenes scene)
+    public void InitialGameLoad(Scenes scene)
     {
-        if (IsSceneLoaded(Scenes.MainMenu))
+        if (IsSceneLoading(Scenes.MainMenu))
         {
             UnloadSceneAsync(Scenes.MainMenu);
         }
 
-        
         //load checkpoint/ whatever main ingame scene.
-        LoadSceneSync(Scenes.InGameBase);
-        //load target Scene
         LoadSceneSync(scene);
-        GameManager.GetPlayer().enabled = true;
 
+        //load target Scene
+        LoadSceneSync(Scenes.InGameBase);
+        LoadSceneSync(Scenes.MusicScene);
+        LoadSceneSync(Scenes.AudioScene);   
+
+        GameManager.GetPlayer().enabled = true;
     }
-    public static void UnloadAll()
+    public void UnloadAll()
     {
         //removes all scenes from the game, except InitialScene
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
@@ -137,6 +161,7 @@ public class SceneLoader : MonoBehaviour
             Scene currentScene = SceneManager.GetSceneAt(sceneIndex);
             if (currentScene.name != Scenes.InitialScene.ToString())
             {
+                Debug.Log("Unloading scene: " + currentScene.name);
                 SceneManager.UnloadSceneAsync(currentScene);
             }
         }
