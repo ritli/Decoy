@@ -19,7 +19,7 @@ public class CreditBehaviour : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void OnGUI ()
     {
         rectPosition = new Vector2(m_RectTransform.position.x, m_RectTransform.position.y - m_RectTransform.rect.height);
         //check if text is above the screen
