@@ -53,14 +53,14 @@ LightmapSettings:
     m_TemporalCoherenceThreshold: 1
     m_EnvironmentLightingMode: 0
     m_EnableBakedLightmaps: 1
-    m_EnableRealtimeLightmaps: 1
+    m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
     serializedVersion: 8
     m_Resolution: 0.5
     m_BakeResolution: 20
     m_TextureWidth: 1024
     m_TextureHeight: 1024
-    m_AO: 0
+    m_AO: 1
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousColorSigma: 1
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
-  m_LightingDataAsset: {fileID: 112002320, guid: 4710dfa82f927fa42aade0dc0aa602bd,
+  m_LightingDataAsset: {fileID: 112000002, guid: 4710dfa82f927fa42aade0dc0aa602bd,
     type: 2}
   m_ShadowMaskMode: 2
 --- !u!196 &4
@@ -9026,16 +9026,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114244493227201122, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
-        type: 2}
-      propertyPath: m_DisableDoor
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
   m_IsPrefabParent: 0
@@ -9908,7 +9898,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1.94
   m_ColorTemperature: 6570
@@ -13213,6 +13203,51 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 198982944785528628, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198982944785528628, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: randomSeed
+      value: 1703763886
+      objectReference: {fileID: 0}
+    - target: {fileID: 198982944785528628, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 198982944785528628, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 198519256943507032, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 198519256943507032, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: randomSeed
+      value: 612901502
+      objectReference: {fileID: 0}
+    - target: {fileID: 198519256943507032, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 198519256943507032, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 198519256943507032, guid: ff5e38330563049479e661dfe8323d46,
+        type: 2}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff5e38330563049479e661dfe8323d46, type: 2}
   m_IsPrefabParent: 0
@@ -14410,15 +14445,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4012617848779310, guid: 0f5b0de8e58e2f843a355daeb20873f6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1.4300003
+      value: -1.42
       objectReference: {fileID: 0}
     - target: {fileID: 4012617848779310, guid: 0f5b0de8e58e2f843a355daeb20873f6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 8.5953
+      value: 8.59
       objectReference: {fileID: 0}
     - target: {fileID: 4012617848779310, guid: 0f5b0de8e58e2f843a355daeb20873f6, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 22.87
+      value: 19.88
       objectReference: {fileID: 0}
     - target: {fileID: 4012617848779310, guid: 0f5b0de8e58e2f843a355daeb20873f6, type: 2}
       propertyPath: m_LocalRotation.x
@@ -18899,7 +18934,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 10.61
   m_ColorTemperature: 6570
@@ -27807,11 +27842,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4263236658028842, guid: 8a63bc8ee6e233c4c8fa0283befe9525, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.32
+      value: 0.57
       objectReference: {fileID: 0}
     - target: {fileID: 4263236658028842, guid: 8a63bc8ee6e233c4c8fa0283befe9525, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 8.76
+      value: 8.6
       objectReference: {fileID: 0}
     - target: {fileID: 4263236658028842, guid: 8a63bc8ee6e233c4c8fa0283befe9525, type: 2}
       propertyPath: m_LocalPosition.z
@@ -29776,6 +29811,16 @@ Prefab:
     - target: {fileID: 1963250778700246, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108138159471100698, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
@@ -32342,7 +32387,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 0
   m_TimeSlicingMode: 0
   m_Resolution: 128
@@ -38233,7 +38278,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1.94
   m_ColorTemperature: 6570
@@ -49169,6 +49214,16 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 108138159471100698, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
   m_IsPrefabParent: 0
@@ -56253,7 +56308,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 1
   m_TimeSlicingMode: 0
   m_Resolution: 128
@@ -56998,6 +57053,16 @@ Prefab:
     - target: {fileID: 1021194791013240, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108138159471100698, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
@@ -65996,7 +66061,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 0
   m_TimeSlicingMode: 0
   m_Resolution: 128
@@ -70623,6 +70688,16 @@ Prefab:
     - target: {fileID: 1884459444528164, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108138159471100698, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
@@ -77789,6 +77864,16 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108138159471100698, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
   m_IsPrefabParent: 0
@@ -79883,6 +79968,16 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 108138159471100698, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108270666185175520, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
   m_IsPrefabParent: 0
@@ -80997,7 +81092,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 0
   m_TimeSlicingMode: 0
   m_Resolution: 128
@@ -90497,7 +90592,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 0
   m_TimeSlicingMode: 0
   m_Resolution: 128
