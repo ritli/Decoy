@@ -3,6 +3,9 @@ using System.Collections;
 
 public class LerpActivation : ActivationObject {
 
+    public bool timed = false;
+    public float m_time = 0;
+
     public Transform startPos, destPos;
     public float speed;
     [Tooltip("Determines whether the object returns to its original position when toggled off.")]
@@ -14,12 +17,15 @@ public class LerpActivation : ActivationObject {
     private bool m_isActive = false;
     private bool m_isLerping = false;
 
+    private float m_timeElapsed = 0;
+
     // Function to be called when activating the object, toggling on.
     public override void activate()
     {
         m_lerpAim = destPos.transform.position;
         m_isLerping = true;
         m_isActive = true;
+        m_timeElapsed = 0;
     }
 
     // Function to be called when deactivating the objcet, toggling off.
@@ -28,6 +34,7 @@ public class LerpActivation : ActivationObject {
         m_isActive = false;
         if (returnToStart)
         {
+            m_timeElapsed = 0;
             m_lerpAim = startPos.transform.position;
             m_isLerping = true;
         }
@@ -69,10 +76,20 @@ public class LerpActivation : ActivationObject {
     {
 	    if (m_isLerping)
         {
-            transform.position = Vector3.Lerp(transform.position, m_lerpAim, speed * Time.deltaTime);
+            if (timed)
+            {
+                transform.position = Vector3.Lerp(transform.position, destPos.position, m_timeElapsed / m_time);
+
+                m_timeElapsed += Time.deltaTime;
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, destPos.position, speed * Time.deltaTime);
+            }
+
         }
 
-        if (Vector3.Distance(transform.position, m_lerpAim) <= threshold)
+        if (Vector3.Distance(transform.position, m_lerpAim) <= threshold && !timed)
             m_isLerping = false;
 	}
 }
