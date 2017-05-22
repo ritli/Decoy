@@ -13,6 +13,7 @@ public class FindLedge : MonoBehaviour {
 	protected Raycast m_raycaster;
 	protected bool m_isLedgeBlocked = false;
 	private float positionOffset = 0.5f;
+	protected float m_margin = 0.125f;
 
 	[Tooltip("The distance you need to be from a ledge to be able to climb it")]
 	public float ledgeSensitivity;
@@ -21,7 +22,7 @@ public class FindLedge : MonoBehaviour {
 	{
 		m_raycaster = GetComponent<Raycast>();
 		m_playerLength = GetComponent<CharacterController>().height;
-		m_playerWidth = GetComponent<CharacterController> ().radius * 2;	
+        m_playerWidth = GetComponent<CharacterController> ().radius * 2; 
 	}
 
 	/* 
@@ -48,7 +49,7 @@ public class FindLedge : MonoBehaviour {
 
 		// Sweeptest rays up and forward
 		Ray raySweepUp = new Ray();
-		raySweepUp.origin = m_wallPoint;
+		raySweepUp.origin = wallHit.point + wallHit.normal * 0.1f;
 		raySweepUp.direction = Vector3.up;
 
 		Vector3 sweepForward = raySweepUp.origin;
@@ -82,17 +83,18 @@ public class FindLedge : MonoBehaviour {
 //		Debug.DrawRay(m_rayDown2.origin, m_rayDown2.direction * 4, Color.cyan);
 
 		// Sweeptest using rays
-		Debug.DrawRay (raySweepUp.origin, raySweepUp.direction * (ledgeSensitivity + m_playerLength), Color.white);
-		//		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction, Color.white);
+		//Debug.DrawRay (raySweepUp.origin, raySweepUp.direction * (ledgeSensitivity + m_playerLength), Color.white);
+		//Debug.DrawRay (raySweepForward.origin, raySweepForward.direction, Color.white);
 
 		m_isLedgeBlocked = false;
 
 		// Sweeping upward from beside the wall
 		if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, m_playerLength))
 		{
-			Debug.DrawRay (hit.point, hit.normal, Color.cyan);
+			//Debug.DrawRay (hit.point, hit.normal, Color.cyan, 5);
 			m_newPosition = m_wallPoint + hit.normal * m_playerLength;
 			m_newPosition.y = hit.point.y + hit.normal.y * m_playerLength;
+			wallTarget = hit.point + hit.normal * m_playerLength;
 			m_isLedgeBlocked = true;
 //			print ("sweep up");
 			return false;
@@ -100,7 +102,7 @@ public class FindLedge : MonoBehaviour {
 
 		raySweepUp.origin = newPosition;
 
-		Debug.DrawRay (raySweepForward.origin, raySweepForward.direction * m_playerWidth * 2, Color.white);
+		//Debug.DrawRay (raySweepForward.origin, raySweepForward.direction * m_playerWidth * 2, Color.white);
 
 		// Sweeping forward
 		if (m_raycaster.doRaycast(out hit, raySweepForward.direction, raySweepForward.origin, m_playerWidth * 2)) 
@@ -134,13 +136,13 @@ public class FindLedge : MonoBehaviour {
 					rayDownNormal = hit.normal;
 
 					// Set the new position
-					m_newPosition = hit.point;
+                    floorTarget = hit.point;
 
 					// Sweeping upward from ontop of the wall
 					if (m_raycaster.doRaycast(out hit, raySweepUp.direction, raySweepUp.origin, ledgeSensitivity + m_playerLength))
 					{
-						Debug.DrawRay (hit.point, hit.normal, Color.cyan);
-						m_newPosition = m_wallPoint;
+						//Debug.DrawRay (hit.point, hit.normal, Color.cyan);
+                        wallTarget = m_wallPoint;
 						m_isLedgeBlocked = true;
 						return false;
 					}
@@ -148,7 +150,7 @@ public class FindLedge : MonoBehaviour {
 					// Raycast again to check if the first hit was inside an object
 					if (m_raycaster.doRaycast(out hit, rayDown2.direction, rayDown2.origin)) 
 					{
-						Debug.DrawRay(hit.point, hit.normal * 3, Color.blue);
+						//Debug.DrawRay(hit.point, hit.normal, Color.blue);
 
 						/* If the angle between the two rays is different, 
 						 * or the difference in Y between the two normals is larger than zero,
@@ -156,25 +158,22 @@ public class FindLedge : MonoBehaviour {
 						if (Vector3.Angle (rayDownNormal, hit.normal) > 0 || !(Mathf.Abs(hit.normal.y - rayDownNormal.y) > 0))
 						{
 							// Update the position to the higher point
-							m_newPosition = hit.point;
+                            floorTarget = hit.point;
 						}
 					}
 
 					// Check if there is enough space up on the ledge
-					Vector3 offsetHit = hit.point + hit.normal * 0.01f;
 					bool newUpRight = 	Vector3.Angle (Vector3.up, hit.normal) > 0.1 && 
 										Vector3.Angle (Vector3.up, hit.normal) < 179.9 ? true : false;
 
 					if (isSpaceObstructedFloor(hit, newUpRight))
 						return false;
-
-					floorTarget = m_newPosition;
 					return true;
 				}
 			}
 		}
 		// If ray doesn't find floor, set position to point on wall
-		m_newPosition = m_wallPoint;
+        floorTarget = m_wallPoint;
 		return false;
 	}
 
@@ -183,11 +182,9 @@ public class FindLedge : MonoBehaviour {
 		// New local vectors based on the hit's normal
 		localRight = Vector3.Cross (Vector3.up, hit.normal);
 		localUp = Vector3.Cross (localRight, hit.normal);
-
-
-		Debug.DrawRay(hit.point, localRight, Color.magenta);
-		Debug.DrawRay(hit.point, localUp, new Color(0.078f, 204f/255f, 176f/255f)); // Cyan
-		Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
+		//Debug.DrawRay(hit.point, localRight, Color.magenta);
+		//Debug.DrawRay(hit.point, localUp, new Color(19.89f/225f, 204f/255f, 176f/255f)); // Cyan
+		//Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
 	}
 
 	protected bool isSpaceObstructedFloor(RaycastHit hit, bool createNewLocal) 
@@ -202,11 +199,11 @@ public class FindLedge : MonoBehaviour {
 			createNewLocalVectors(out localUp, out localRight, hit);
 
 		RaycastHit rayHit = new RaycastHit ();
-		return (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth));
+		return (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength + m_margin) ||
+			m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth + m_margin) &&
+			m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth + m_margin) ||
+			m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth + m_margin) &&
+			m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth + m_margin));
 	}
 
 	protected bool isSpaceObstructedWall(out RaycastHit wallNormalHit, RaycastHit hit, bool createNewLocal) 
@@ -214,18 +211,20 @@ public class FindLedge : MonoBehaviour {
 		Vector3 localRight = Vector3.right;
 		Vector3 localUp = Vector3.forward;
 
-		// Move the point up a bit to prevent it raycasting from inside the object
+		// Move the point a bit to prevent it raycasting from inside the object
 		Vector3 offsetHit = hit.point + hit.normal * 0.01f;
 
 		if (createNewLocal)
 			createNewLocalVectors(out localUp, out localRight, hit);
 
+		//Debug.DrawRay (hit.point, hit.normal, Color.red);
+
 		RaycastHit rayHit = new RaycastHit ();
-		return (m_raycaster.doRaycast (out wallNormalHit, hit.normal, hit.point, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerLength) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth));
+		return (m_raycaster.doRaycast (out wallNormalHit, hit.normal, hit.point, m_playerWidth + m_margin) ||
+			m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerLength + m_margin) &&
+			m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerLength + m_margin) ||
+			m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth + m_margin) &&
+			m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth + m_margin));
 	}
 
 	protected bool isSpaceObstructedRoof(RaycastHit hit, bool createNewLocal) 
@@ -240,11 +239,30 @@ public class FindLedge : MonoBehaviour {
 			createNewLocalVectors(out localUp, out localRight, hit);
 		
 		RaycastHit rayHit = new RaycastHit ();
-		return (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength) ||
-				m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth) ||
-				m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth) &&
-				m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth));
+		return (m_raycaster.doRaycast (out rayHit, hit.normal, hit.point, m_playerLength + m_margin) ||
+			m_raycaster.doRaycast (out rayHit, localUp, offsetHit, m_playerWidth + m_margin) &&
+			m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth + m_margin) ||
+			m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth + m_margin) &&
+			m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth + m_margin));
+	}
+
+	protected void adjustPosition(Vector3 current, out Vector3 target) 
+	{
+//		print("Adjusting position");
+		RaycastHit hit1 = new RaycastHit ();
+		RaycastHit hit2 = new RaycastHit ();
+		target = current;
+
+		if (m_raycaster.doRaycast(out hit1, Vector3.up, current, m_playerLength) ||
+			m_raycaster.doRaycast(out hit2, -Vector3.up, current, m_playerLength) ||
+			m_raycaster.doRaycast(out hit1, Vector3.left, current, m_playerWidth) ||
+			m_raycaster.doRaycast(out hit2, -Vector3.left, current, m_playerWidth) ||
+			m_raycaster.doRaycast(out hit1, Vector3.forward, current, m_playerWidth) ||
+			m_raycaster.doRaycast(out hit2, -Vector3.forward, current, m_playerWidth))
+		{
+			current = Vector3.MoveTowards(current, transform.position, m_playerWidth);
+		}
+		target = current;
 	}
 
 	/*
