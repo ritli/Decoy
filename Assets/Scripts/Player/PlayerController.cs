@@ -263,7 +263,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void UpdateAnimator()
     {
-		print(m_aniState);
 		if (m_animator != null && m_hasDevice)
         {
             m_animator.SetBool("HasDevice", m_hasDevice);
