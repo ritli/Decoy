@@ -12,14 +12,15 @@ public class CreditBehaviour : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        GameManager.GetPlayer().gameObject.SetActive(false);
+        
         finished = false;
         m_MainCanvas = FindObjectOfType<Canvas>();
         m_RectTransform = GetComponent<RectTransform>();
-	}
+        GameManager.GetPlayer().gameObject.SetActive(false);
+    }
 	
 	// Update is called once per frame
-	void Update ()
+	void OnGUI ()
     {
         rectPosition = new Vector2(m_RectTransform.position.x, m_RectTransform.position.y - m_RectTransform.rect.height);
         //check if text is above the screen
@@ -28,7 +29,7 @@ public class CreditBehaviour : MonoBehaviour
             //ImageFader.instance.SetVisible(true);
             finished = true;
             Debug.Log("Loading Menu");
-            SceneLoader.LoadMainMenu();
+            SceneLoader.getInstance().LoadMainMenu();
         }
         else if(m_MainCanvas.transform.position.y + m_MainCanvas.pixelRect.height / 2 < rectPosition.y && !finished)
         {
