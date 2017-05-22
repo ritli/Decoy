@@ -30,10 +30,10 @@ public class TriggerLoader : MonoBehaviour
             if (m_Mode == Mode.Load) { 
                 Invoke("EnableTrigger", 10f);
                 m_enabled = false;
-                SceneLoader.LoadSceneAsync(m_scene);
+                SceneLoader.getInstance().LoadSceneAsync(m_scene);
             }
             else
-                SceneLoader.UnloadSceneAsync(m_scene);
+                SceneLoader.getInstance().UnloadSceneAsync(m_scene);
         }
     }
      private void OnTriggerExit(Collider other)

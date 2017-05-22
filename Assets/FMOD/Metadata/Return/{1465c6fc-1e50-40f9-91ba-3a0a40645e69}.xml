@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.09.00">
+    <object class="MixerReturn" id="{1465c6fc-1e50-40f9-91ba-3a0a40645e69}">
+        <property name="name">
+            <value>OutdoorReverb</value>
+        </property>
+        <relationship name="effectChain">
+            <destination>{3dc14445-886f-4edf-83ff-f3d30686c09b}</destination>
+        </relationship>
+        <relationship name="panner">
+            <destination>{6224eda4-0326-41ff-b43c-b5ff2c72aa9b}</destination>
+        </relationship>
+        <relationship name="output">
+            <destination>{ad513791-6818-47c5-b7e4-c2ff397305af}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusEffectChain" id="{3dc14445-886f-4edf-83ff-f3d30686c09b}">
+        <relationship name="effects">
+            <destination>{3cb9d30a-65d2-47e1-925b-ba112db9c0d2}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusPanner" id="{6224eda4-0326-41ff-b43c-b5ff2c72aa9b}"/>
+    <object class="MixerBusFader" id="{3cb9d30a-65d2-47e1-925b-ba112db9c0d2}"/>
+</objects>
