@@ -28,9 +28,7 @@ public class LedgeTele : FindLedge {
 	 */
 	public bool findEnoughSpace(Vector3 origin, out Vector3 target) 
 	{
-        //Vector3 relocatedPosition = hit.point + hit.normal * 0.1f;
-
-        // Set position and rotation of the test collider object to the players values
+        // Set position and rotation of the test collider object to the player's values
         testCol.enabled = true;
 		testCol.transform.position = origin;
         testCol.transform.rotation = transform.rotation;
@@ -38,17 +36,13 @@ public class LedgeTele : FindLedge {
         // Looks for overlapping colliders using player measurements
         overlap = Physics.OverlapCapsule(testCol.bounds.min, testCol.bounds.max, m_playerWidth);
         
-        // Iterates through all overlapping colliders and moves the testCol closer to the player
+        // Iterates through all overlapping colliders and moves the testCol closer to the player as long as it intersects
         foreach (Collider col in overlap)
-        {
             if (col != testCol && col.tag != Tags.player)
-            {
                 if (testCol.bounds.Intersects(col.bounds))
-                {
                     testCol.transform.position = Vector3.MoveTowards(testCol.transform.position, transform.position, m_playerWidth);
-                }
-            }
-        }
+
+		// Return the new valid position and disable the test collider
         target = testCol.transform.position;
         testCol.enabled = false;
 		return true;
