@@ -36740,6 +36740,47 @@ Transform:
   m_PrefabParentObject: {fileID: 4705791260689906, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
     type: 2}
   m_PrefabInternal: {fileID: 700571297}
+--- !u!1 &864506376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 864506377}
+  - component: {fileID: 864506378}
+  m_Layer: 0
+  m_Name: Ventilation_InvisibleWall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &864506377
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 864506376}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.463, y: -7.87, z: 17.327}
+  m_LocalScale: {x: 1.8852417, y: 1, z: 0.97409165}
+  m_Children: []
+  m_Father: {fileID: 1895686727}
+  m_RootOrder: 331
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &864506378
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 864506376}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &864584076
 Prefab:
   m_ObjectHideFlags: 0
@@ -81878,6 +81919,7 @@ Transform:
   - {fileID: 1548752122}
   - {fileID: 1642838211}
   - {fileID: 797129694}
+  - {fileID: 864506377}
   m_Father: {fileID: 632003983}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
