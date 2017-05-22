@@ -88,12 +88,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private VectorBobber m_walkingBobber;
     private float m_maximumFreefallHeight;
 
-	// Mouse restriction while climbing vars
-	[Header("Climbing camera restriction variables")]
-	public float horizontalRestr = 45f;
-	public float verticalRestrMin = -20f;
-	public float verticalRestrMax = 75f;
-
     private bool m_leftGround = false;
 
 	// TODO:
@@ -159,7 +153,9 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_airTime;
     private float m_StepCycle;
 	private float m_NextStep;
+
 	private AudioSource m_AudioSource;
+    private AudioPlayer m_Audio;
 
     bool m_inDeathState = false;
 
@@ -217,6 +213,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		m_MouseLook.Init(transform , m_Camera.transform);
 		m_ledgeDetect = GetComponent<LedgeGrab>();
 		m_ledgeLerp = GetComponent<LedgeLerp>();
+        m_Audio = GetComponentInChildren<AudioPlayer>();
     }
 
     public void Kill()
@@ -236,6 +233,7 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         yield return new WaitForSeconds(0.1f);
         FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
+        m_Audio.PlaySoundAtPosition(0, true, transform.position);
 
         UnityStandardAssets.ImageEffects.ScreenOverlay overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
@@ -257,6 +255,11 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         return m_walkingBobber;
     }
+    public void StopBob()
+    {
+        m_cameraBobber.stopBob();
+        m_walkingBobber.stopBob();
+    }
 
     void UpdateAnimator()
     {
@@ -268,8 +271,8 @@ public class PlayerController : MonoBehaviour, IKillable
         }
         else if (m_noDeviceAnimator != null)
         {
-            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
             m_animator.SetBool("HasDevice", m_hasDevice);
+			m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
             m_noDeviceAnimator.SetInteger("State", (int)m_aniState);
         }
     }
@@ -295,7 +298,12 @@ public class PlayerController : MonoBehaviour, IKillable
     void ReadAnimationState()
     {
         int tempStateVal = 0;
-        if (GetBlinkState(out tempStateVal))
+		bool gotBlinkState = GetBlinkState(out tempStateVal);
+		if (m_ledgeGrabbing)
+		{
+			m_aniState = AnimationState.climbing;
+		}	
+		else if (gotBlinkState)
         {
             m_aniState = (AnimationState)tempStateVal;
         }
@@ -303,19 +311,14 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.moving;
         }
-        else if (m_crouching)
-        {
-            m_aniState = AnimationState.crouching;
-        }
         else if (m_Jumping)
         {
             m_aniState = AnimationState.jumping;
         }
-		// Climb animation pls
-//		else if (m_ledgeGrabbing)
-//		{
-//			m_aniState = AnimationState.climbing;
-//		}	
+		else if (m_crouching)
+		{
+			m_aniState = AnimationState.crouching;
+		}
         else
         {
             m_aniState = AnimationState.idle;
@@ -334,8 +337,9 @@ public class PlayerController : MonoBehaviour, IKillable
 
     void Crouch()   
     {
-        if (CrossPlatformInputManager.GetButtonDown("Crouch"))
+        if (CrossPlatformInputManager.GetButtonDown("Crouch") && !m_Jumping)
         {
+            m_Audio.PlayEvent(3, true);
             m_crouching = true;
             m_crouchTimeElapsed = 0;
         }
@@ -348,6 +352,7 @@ public class PlayerController : MonoBehaviour, IKillable
             }
             else
             {
+                m_Audio.PlayEvent(3, true);
                 m_crouching = false;
                 m_crouchTimeElapsed = 0;
             }
@@ -449,14 +454,14 @@ public class PlayerController : MonoBehaviour, IKillable
 //			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
 
-			// ### Ledge grabbing state ###
-			m_ledgeGrabbing = m_ledgeLerp.isLerping();
-
             // the jump state needs to read here to make sure it is not missed
 			if (!m_ledgeGrabbing)
-				Jump ();
-			else
-				m_MoveDir.y = 0;
+                Jump();
+            else // Set vertical velocity to 0 if player is climbing
+                m_MoveDir.y = 0;
+				
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
+
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             ReadAnimationState();
@@ -491,6 +496,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
+            
         }
 		
         // Keep track of the maximum height achieved while in air for measuring when landing
@@ -500,7 +506,11 @@ public class PlayerController : MonoBehaviour, IKillable
                 m_maximumFreefallHeight = transform.position.y;
 
             if (!m_leftGround)
+            {
+                m_Audio.PlayEvent(2, true);
                 m_leftGround = true;
+            }
+
         }
 
         if (m_Jump && !m_ledgeDetect.canGrab() && m_CharacterController.isGrounded)
@@ -766,17 +776,11 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-		// TODO:
 		if (m_ledgeGrabbing) 
 		{
 //			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
 			m_resetRotation = true;
-			m_MouseLook.LookRotationLimited(transform, 
-											m_Camera.transform, 
-											m_ledgeLerp.getDestinationDirection(), 
-											horizontalRestr, 
-											verticalRestrMin, 
-											verticalRestrMax);
+			m_MouseLook.LookRotationLimited(transform, m_Camera.transform, m_ledgeLerp.getDestinationDirection());
 		}
 		else if (m_resetRotation) 
 		{

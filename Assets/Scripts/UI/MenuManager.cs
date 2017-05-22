@@ -47,11 +47,11 @@ public class MenuManager : MonoBehaviour
     {
         if (Checkpoint.isPreviouslySaved())
         {
-            SceneLoader.InitialGameLoad(Checkpoint.getSavedScene());
+            SceneLoader.getInstance().InitialGameLoad(Checkpoint.getSavedScene());
             GameManager.GetPlayer().ResetPlayer();
         }
         else
-            SceneLoader.InitialGameLoad(SceneLoader.Scenes.Section1a);
+            SceneLoader.getInstance().InitialGameLoad(SceneLoader.Scenes.Section1a);
     }
     public void pauseGame(bool pause)
     {

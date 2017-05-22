@@ -11,9 +11,6 @@ public class PlayerTeleport : MonoBehaviour {
 
 
 	private LedgeTele m_ledgeDetection;
-    private LerpObject m_lerpObject;
-    private TeleportationAdjuster m_teleportAdjuster;
-	private GameObject m_instanceOfteleportTarget;
 	private LedgeLerp m_ledgeLerp;
 
     public Material m_emissionMat;
@@ -111,7 +108,8 @@ public class PlayerTeleport : MonoBehaviour {
     }
     private void moveTo(Vector3 target)
     {
-        target += new Vector3(0, m_playerLength / 2, 0);
+        // Bortkommenterad eftersom jag provar ComputePenetration
+        //target += new Vector3(0, m_playerLength / 2, 0);
         m_teleportTo = target;
 		m_arrived = false;
         m_player.disableGravity();
@@ -122,19 +120,14 @@ public class PlayerTeleport : MonoBehaviour {
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
             if (m_cooldownTimer.isTimeUp())
-            {
                 m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
-
-            }
             else
-            {
                 m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
-            }
 
             // Move towards target position set when letting go of the "Teleport" button.
             if (!m_arrived)
             {
-                m_blinkState = BlinkState.nah;
+				m_blinkState = BlinkState.nah;
                 float step = teleportSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
 
@@ -174,30 +167,8 @@ public class PlayerTeleport : MonoBehaviour {
 				m_ledgeLerp.stop();
                 if (!m_cancelTeleport && m_indi.activeSelf)
                 {
-
-					if (m_foundLedge) 
-					{
-						print ("Found ledge");
-						moveTo (m_grabPoint);
-						//m_foundLedge = false;
-					} 
-					else if (m_ledgeDetection.isLedgeBlocked()) 
-					{
-						print ("Ledge blocked");
-						moveTo (m_grabPoint);
-					} 
-					else if (!m_enoughSpace) 
-					{
-						print ("Not enough space");
-						if (m_ledgeDetection.findValidPosition(m_ledgeDetection.getInvalidPosition (), out m_grabPoint))
-							moveTo (m_grabPoint);
-					} 
-					else 
-					{
-						print ("No ledge");
-						m_ledgeDetection.startTeleporting();
-						moveTo(m_indi.transform.position);
-					}
+                    moveTo(m_grabPoint);
+                    m_ledgeDetection.startTeleporting();
 
                     m_blinkState = BlinkState.blinking;
                     Vector3 lastPos = transform.position;
@@ -230,14 +201,7 @@ public class PlayerTeleport : MonoBehaviour {
 
         }
         else if (m_player.m_playerState == PlayerState.isDead)
-        {
-            cancelTeleport();
-            m_arrived = true;
-            m_charController.detectCollisions = true;
-            m_player.enableGravity();
-            m_ledgeDetection.arrivedAtWall();
-			m_ledgeLerp.stop();
-        }
+            FinishTeleport();
         else if (m_player.m_playerState == PlayerState.isPause)
             cancelTeleport();
 
@@ -310,11 +274,15 @@ public class PlayerTeleport : MonoBehaviour {
 
         // Create ray for casting when no terrain was hit
         Vector3 playerLook = forward * actualLength;
-        Ray rayDown = new Ray(transform.position + playerLook + (new Vector3(0, 1.0f, 0)), Vector3.down);
+		Ray rayDown = new Ray(Camera.main.transform.position + playerLook, Vector3.down);
 
         RaycastHit hit = new RaycastHit();
 
-//        Debug.DrawRay(transform.position + playerLook, Vector3.down * 10, Color.red);
+		Vector3 validPos = new Vector3 (0, 0, 0);
+
+//		Debug.DrawRay(Camera.main.transform.position, playerLook, Color.red);
+//		Debug.DrawRay(rayUp.origin, rayUp.direction, Color.white);
+//		Debug.DrawRay(rayDown.origin, rayDown.direction, Color.yellow);
 
 		// Reset the conditions
 		m_enoughSpace = true;
@@ -322,82 +290,34 @@ public class PlayerTeleport : MonoBehaviour {
 
         if (m_raycaster.doRaycast(out hit))
         {
-			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit);
-//			print ("Enough space: " + m_enoughSpace);
-			// Roof
-            if (Vector3.Angle(hit.normal, Vector3.down) < 45)
+			float angle = Vector3.Angle(hit.normal, Vector3.up);
+
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit.point, out validPos);
+            // Start ledge detection and sets the variables to their appropriate positions
+            if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
             {
-                m_indi.transform.position = hit.point + hit.normal * m_playerLength;
-				m_foundLedge = false;
+//                print("Found ledge");
+				m_indi.transform.position = m_grabPoint;
+                m_charController.detectCollisions = false;
+				m_foundLedge = true;
                 return;
             }
-
-			//If true then surface is wall
-			if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-			{
-				if (m_enoughSpace) 
-				{
-					// ## Start ledge detection ##
-					if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
-					{
-						// Only lerps to ledge if hit wasn't on NoGrab area
-						m_foundLedge = true;
-						//m_ledgeLerpTo = m_ledgeDetection.getNewPosition ();
-						m_charController.detectCollisions = false;
-					} 
-					else if (m_ledgeDetection.isLedgeBlocked ()) 
-					{
-						// Sets the indicator to a new calculated position depending on how the ledge is blocked
-						m_foundLedge = false;	
-						m_indi.transform.position = m_ledgeDetection.getNewPosition();
-						return;
-					} 
-					else
-						m_foundLedge = false;
-				}
-				if (m_ledgeDetection.isIndPosSet())
-					m_indi.transform.position = m_ledgeDetection.getValidIndPosition();
-				else
-					m_indi.transform.position = hit.point + hit.normal * m_playerWidth;
-				return;
-			}
-
-			//If true then normal is a ceiling
-
-			//Else then surface is floor
-			else
-            {
-				m_foundLedge = false;
-
-				for (int i = 0; i < 5; i++)
-                {
-                    Vector3 centerpos = hit.point + Vector3.up * 0.5f;
-                    Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
-
-                    if (Physics.Raycast(centerpos, dir, out hit, 1f))
-                    {
-
-                        if (Vector3.Angle(hit.normal, Vector3.up) > 45)
-                        {
-                            m_indi.transform.position = hit.point + hit.normal;
-                            return;
-                        }
-                    }
-                }
-                m_indi.transform.position = hit.point + Vector3.up * 0.2f;
-
-            }
-            return;
-
-        }
-        // Check for collision of floor when ray does not hit a surface.
-        else if (Physics.Raycast(rayDown, out hit, 1.5f))
-        {
-            m_indi.transform.position = hit.point + new Vector3(0, 0.1f, 0);
-//            print("Hitting the ground");
+            m_grabPoint = validPos;
+			m_indi.transform.position = validPos;
 			m_foundLedge = false;
-            return;
+			return;
         }
+		// Check for collision of floor and roof when ray does not hit a surface
+		else if (m_raycaster.doRaycast(out hit, rayDown.direction, rayDown.origin, m_playerLength / 2) || 
+				 m_raycaster.doRaycast(out hit, -rayDown.direction, rayDown.origin, m_playerLength / 2))
+		{
+			m_enoughSpace = m_ledgeDetection.findEnoughSpace(rayDown.origin, out validPos);
+			m_indi.transform.position = validPos;
+			m_grabPoint = validPos;
+			m_foundLedge = false;
+			return;
+		}
+
 
 
         for (int i = 0; i < 5; i++)
@@ -415,9 +335,15 @@ public class PlayerTeleport : MonoBehaviour {
                 }
             }
         }
+
+		// If nothing is hit, check for enough space
+//		print("Hit nothing");
 		m_foundLedge = false;
 		m_ledgeDetection.hitNothing();
-        m_indi.transform.position = transform.position + playerLook;
+		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out validPos);
+        m_indi.transform.position = validPos;
+		m_grabPoint = validPos;
+        //m_indi.transform.position = Camera.main.transform.position + playerLook;
     }
     void pauseIndicator(bool isPaused)
     {
@@ -427,5 +353,22 @@ public class PlayerTeleport : MonoBehaviour {
             m_indi.SetActive(false);
         }
         m_isPaused = isPaused;
+    }
+    public void FinishTeleport()
+    {
+        cancelTeleport();
+        m_arrived = true;
+        m_charController.detectCollisions = true;
+        m_player.enableGravity();
+        m_ledgeDetection.arrivedAtWall();
+        m_ledgeLerp.stop();
+    }
+    public Vector3 TeleportingTo()
+    {
+        return m_teleportTo;
+    }
+    public bool isTeleporting()
+    {
+        return !m_arrived;
     }
 }

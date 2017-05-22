@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 114882374167312562}
   - component: {fileID: 114300794588411738}
   - component: {fileID: 114164667205807124}
-  - component: {fileID: 114707980694823172}
   - component: {fileID: 114863518346403202}
   - component: {fileID: 114366758051768794}
   - component: {fileID: 114899587330457334}
@@ -161,7 +160,7 @@ Transform:
   - {fileID: 411726}
   - {fileID: 4334157725056030}
   m_Father: {fileID: 487950}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &487950
 Transform:
@@ -169,13 +168,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149630}
-  m_LocalRotation: {x: -0, y: -0.00000017881393, z: -0, w: 1}
-  m_LocalPosition: {x: 61.05, y: 20.41, z: 26.55}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -17.9, y: 6.1, z: 5.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4949601670907862}
   - {fileID: 4070706305376274}
   - {fileID: 453968}
+  - {fileID: 4294390024085700}
   - {fileID: 470846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -205,7 +205,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294966271
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -300,7 +300,7 @@ MonoBehaviour:
   allowReset: 0
   m_playerState: 0
   m_deathEvent: event:/Sound/Player/PlayerDeath
-  m_hasDevice: 1
+  m_hasDevice: 0
   m_decoy: {fileID: 135906, guid: 860b64a6cecea6847ba7218062f9d2b1, type: 2}
   m_WindupScale: 0.1
   m_WalkSpeed: 8
@@ -321,16 +321,16 @@ MonoBehaviour:
     smooth: 0
     smoothTime: 5
     lockCursor: 1
+    horizontalRestr: 45
+    verticalRestrMin: -20
+    verticalRestrMax: 75
   m_UseHeadBob: 1
-  horizontalRestr: 45
-  verticalRestrMin: -20
-  verticalRestrMax: 75
   climbAdjSpeed: 1
   landingBob: -0.5
   jumpingBob: -0.5
   walkingBob: -0.05
   landingThreshold: 2
-  walkBobSpeed: 10
+  walkBobSpeed: 17
   jumpBobSpeed: 10
 --- !u!114 &11446192
 MonoBehaviour:
@@ -1957,6 +1957,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4949601670907862}
   - component: {fileID: 114528895425823014}
+  - component: {fileID: 114104369431534246}
+  - component: {fileID: 114939968700196760}
   m_Layer: 9
   m_Name: FootstepManager
   m_TagString: Untagged
@@ -4133,6 +4135,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1979456331990716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4294390024085700}
+  - component: {fileID: 136806969947460990}
+  m_Layer: 9
+  m_Name: validSpaceCollider
+  m_TagString: ValidSpaceCol
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1980762574752902
 GameObject:
   m_ObjectHideFlags: 1
@@ -5360,6 +5378,19 @@ Transform:
   m_Father: {fileID: 4072290684084700}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -3.5296981, y: 106.01443, z: -110.85499}
+--- !u!4 &4294390024085700
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1979456331990716}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 487950}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4294579923322810
 Transform:
   m_ObjectHideFlags: 1
@@ -7826,6 +7857,28 @@ MonoBehaviour:
   ledgeSensitivity: 1
   horizontal: 45
   vertical: 75
+--- !u!114 &114104369431534246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343442841702268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!114 &114129811633040402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8030,44 +8083,6 @@ MonoBehaviour:
   blurIterations: 2
   blurType: 0
   blurShader: {fileID: 4800000, guid: f9d5fa183cd6b45eeb1491f74863cd91, type: 3}
---- !u!114 &114707980694823172
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 120282}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fceaeb339b971b429c4cc600acabd13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweakMode: 1
-  screenBlendMode: 1
-  hdr: 1
-  sepBlurSpread: 2.5
-  quality: 1
-  bloomIntensity: 0.14
-  bloomThreshold: 0.5
-  bloomThresholdColor: {r: 1, g: 1, b: 1, a: 1}
-  bloomBlurIterations: 2
-  hollywoodFlareBlurIterations: 2
-  flareRotation: 0
-  lensflareMode: 1
-  hollyStretchWidth: 2.5
-  lensflareIntensity: 0
-  lensflareThreshold: 0.3
-  lensFlareSaturation: 0.75
-  flareColorA: {r: 0.4, g: 0.4, b: 0.8, a: 0.75}
-  flareColorB: {r: 0.4, g: 0.8, b: 0.8, a: 0.75}
-  flareColorC: {r: 0.8, g: 0.4, b: 0.8, a: 0.75}
-  flareColorD: {r: 0.8, g: 0.4, b: 0, a: 0.75}
-  lensFlareVignetteMask: {fileID: 2800000, guid: 95ef4804fe0be4c999ddaa383536cde8,
-    type: 3}
-  lensFlareShader: {fileID: 4800000, guid: 459fe69d2f6d74ddb92f04dbf45a866b, type: 3}
-  screenBlendShader: {fileID: 4800000, guid: 7856cbff0a0ca45c787d5431eb805bb0, type: 3}
-  blurAndFlaresShader: {fileID: 4800000, guid: be6e39cf196f146d5be72fbefb18ed75, type: 3}
-  brightPassFilterShader: {fileID: 4800000, guid: 0aeaa4cb29f5d4e9c8455f04c8575c8c,
-    type: 3}
 --- !u!114 &114775751990688318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8180,6 +8195,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ledgeSensitivity: 1
+--- !u!114 &114939968700196760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343442841702268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97b9428402d3b7409d4df4aeb4235bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_events:
+  - event:/Sound/Player/PlayerDeath
+  - event:/Sound/Player/PlayerDeathLaser
+  - event:/Sound/Player/PlayerJump
+  - event:/Sound/Player/PlayerCrouch
+  m_emitter: {fileID: 0}
 --- !u!135 &135489145939978978
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -8192,6 +8224,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.75
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!136 &136806969947460990
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1979456331990716}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!137 &137135509854049180
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
