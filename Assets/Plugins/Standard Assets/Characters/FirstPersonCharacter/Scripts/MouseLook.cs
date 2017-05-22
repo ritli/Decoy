@@ -14,7 +14,17 @@ public class MouseLook
     public float smoothTime = 5f;
     public bool lockCursor = true;
 
-    bool rotationReset;
+	// Mouse restriction while climbing vars
+	[Header("Climbing camera restriction variables")]
+	[Tooltip("[0, 360]")]
+	[Range(0, 360)]
+	public float horizontalRestr = 45f;
+	[Tooltip("[-180, 0]")]
+	[Range(-180, 0)]
+	public float verticalRestrMin = -20f;
+	[Tooltip("[0, 180]")]
+	[Range(0, 180)]
+	public float verticalRestrMax = 75f;
 
     private Quaternion m_CharacterTargetRot;
     private Quaternion m_CameraTargetRot;
@@ -28,27 +38,29 @@ public class MouseLook
 
     
 	// TODO: Slerp to min/max if aim already is outside bounds
-	public void LookRotationLimited(Transform character, Transform camera, Vector3 towardWall, float horizontal, float verticalMin, float verticalMax) 
+	public void LookRotationLimited(Transform character, Transform camera, Vector3 targetDir) 
 	{
-		// Rotation towards the target position. Used to determine the angle
-		Quaternion center = Quaternion.LookRotation(towardWall);
+		// Rotation towards the target position. Used to determine the angle between player aim and target direction
+		Quaternion center = Quaternion.LookRotation(targetDir);
 
 		float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
 		float xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
 
-		Quaternion yRotation = Quaternion.Euler (0f, yRot, 0f);
+		// Rotations based on mouse input
 		m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
+		Quaternion yRotation = Quaternion.Euler (0f, yRot, 0f);
 
 		// Horizontal clamp
 		Quaternion coming = m_CharacterTargetRot * yRotation;
 		float angle = Quaternion.Angle (center, coming);
-		if (angle < horizontal)
+		if (angle < horizontalRestr)
 			m_CharacterTargetRot = coming;
 
 		// Vertical clamp
-		Quaternion xRotation = clampRotationX (m_CameraTargetRot, -verticalMax, -verticalMin);
+		Quaternion xRotation = clampRotationX (m_CameraTargetRot, -verticalRestrMax, -verticalRestrMin);
 		m_CameraTargetRot = xRotation;
 
+		// Set the new rotations
 		camera.localRotation = m_CameraTargetRot;
 		character.localRotation = m_CharacterTargetRot;
 	}

@@ -14,8 +14,10 @@ public class LedgeGrab : FindLedge {
 
 	[Header("Directional sensitivity")]
 	[Tooltip("Value between [0, 180] where 0 is straight into the wall and 180 is straight away from the wall")]
+    [Range(0, 180)]
 	public float horizontal;
 	[Tooltip("Value between [0, 90] where 0 is straight into the wall and 90 is straight up or down")]
+    [Range(0, 90)]
 	public float vertical;
 
 	// Use this for initialization
@@ -23,19 +25,15 @@ public class LedgeGrab : FindLedge {
 	{
 		m_ledgeTele = GetComponent<LedgeTele>();
 	}
-
-
+		
 	Vector3 calcNormal() 
 	{
-		Vector3 direction = m_collider.ClosestPoint(transform.position);
-		Debug.DrawRay (direction, Vector3.up, Color.red);
-		direction = transform.position - direction;
+        Vector3 positionOnCollider = m_collider.ClosestPoint(transform.position);
+        Vector3 direction = transform.position - positionOnCollider;
+        Debug.DrawRay (positionOnCollider, direction, Color.red);
 		return direction;
 	}
 
-	/*
-     * Update is used for finding ledge on a wall near the player
-     */
 	public bool lookForLedge(out Vector3 floorPosition)
 	{
 		m_isLedgeBlocked = false;
