@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: ChargeIndicator
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Name: Hangar_Roof_Unlit
+  m_Shader: {fileID: 4800000, guid: 019d7e9850557b740889e71374cf85ca, type: 3}
   m_ShaderKeywords: _EMISSION _METALLICGLOSSMAP _NORMALMAP
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -18,7 +18,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 198c35907d73201408b39e7cd3d29711, type: 3}
+        m_Texture: {fileID: 2800000, guid: c318bcdaaf2c72b47a76ea5ca58600cd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -34,15 +34,27 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 2403d2b60b7fe264ba6378960796fef5, type: 3}
+        m_Texture: {fileID: 2800000, guid: ba9747077d3c39d40a9b3edbdfd7a396, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emissive:
+        m_Texture: {fileID: 2800000, guid: ba9747077d3c39d40a9b3edbdfd7a396, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissiveTexture:
+        m_Texture: {fileID: 2800000, guid: ba9747077d3c39d40a9b3edbdfd7a396, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 0a83a5f0678db1c4e812680e31223da8, type: 3}
+        m_Texture: {fileID: 2800000, guid: bf5e52dfc900a9446a2202320ffbff48, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Metalictexture:
+        m_Texture: {fileID: 2800000, guid: 71058313f736735488004acd37a9ebf5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: e4a8af7fb7d6b0b47a07db7f354d70ea, type: 3}
+        m_Texture: {fileID: 2800000, guid: 71058313f736735488004acd37a9ebf5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -53,18 +65,24 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RoughnessTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _GlossMapScale: 1
-    - _Glossiness: 0.52
+    - _EmissiveValue: 1.96
+    - _GlossMapScale: 0.5
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _Metallic: 0.266
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Roughness: 0.8
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -72,4 +90,5 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.027450563, g: 0.74116516, b: 0, a: 0.99998474}
+    - _EmissionColor: {r: 0.7241385, g: 3, b: 0, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
