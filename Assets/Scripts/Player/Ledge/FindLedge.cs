@@ -263,19 +263,6 @@ public class FindLedge : MonoBehaviour {
 			current = Vector3.MoveTowards(current, transform.position, m_playerWidth);
 		}
 		target = current;
-
-		//if (m_raycaster.doRaycast(out hit1, Vector3.forward, current, m_playerWidth) ||
-		//	m_raycaster.doRaycast(out hit2, -Vector3.forward, current, m_playerWidth))
-		//	target = Vector3.MoveTowards(current, transform.position, 0.5f);
-		//	//target += hit1.normal + hit2.normal;
-		//if (m_raycaster.doRaycast(out hit1, Vector3.up, current, m_playerLength) ||
-		//	m_raycaster.doRaycast(out hit2, -Vector3.up, current, m_playerLength))
-		//	target = Vector3.MoveTowards(current, transform.position, 0.5f);
-		//	//target += hit1.normal + hit2.normal;
-		//if (m_raycaster.doRaycast(out hit1, Vector3.left, current, m_playerWidth) ||
-		//	m_raycaster.doRaycast(out hit2, -Vector3.left, current, m_playerWidth))
-		//	target = Vector3.MoveTowards(current, transform.position, 0.5f);
-		//	//target += hit1.normal + hit2.normal;
 	}
 
 	/*

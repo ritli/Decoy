@@ -299,11 +299,12 @@ public class PlayerController : MonoBehaviour, IKillable
     void ReadAnimationState()
     {
         int tempStateVal = 0;
+		bool gotBlinkState = GetBlinkState(out tempStateVal);
 		if (m_ledgeGrabbing)
 		{
 			m_aniState = AnimationState.climbing;
 		}	
-        else if (GetBlinkState(out tempStateVal))
+		else if (gotBlinkState)
         {
             m_aniState = (AnimationState)tempStateVal;
         }
@@ -457,8 +458,9 @@ public class PlayerController : MonoBehaviour, IKillable
             // the jump state needs to read here to make sure it is not missed
 			if (!m_ledgeGrabbing)
                 Jump();
-            else
+            else // Set vertical velocity to 0 if player is climbing
                 m_MoveDir.y = 0;
+				
 			m_ledgeGrabbing = m_ledgeLerp.isLerping();
 
             Crouch();
@@ -775,7 +777,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-		// TODO:
 		if (m_ledgeGrabbing) 
 		{
 //			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);

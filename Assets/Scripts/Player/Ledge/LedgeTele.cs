@@ -24,17 +24,15 @@ public class LedgeTele : FindLedge {
 	 * Does a reverse sweep test to find a position with enough space for the player. 
      * It uses a CapsuleCollider attached as a child to the player and puts it where the player is aiming. 
      * It then checks for all overlapping colliders and moves the CapsuleCollider towards the player as long 
-     * as it intersects one of the found colliders.
+     * as it intersects with one of the found colliders.
 	 */
-    public bool findEnoughSpace(RaycastHit hit, out Vector3 target) 
+	public bool findEnoughSpace(Vector3 origin, out Vector3 target) 
 	{
-        Vector3 relocatedPosition = hit.point + hit.normal * 0.1f;
-        Vector3 direction = new Vector3(0, 0, 0);
-        float distanceToMove = 0;
+        //Vector3 relocatedPosition = hit.point + hit.normal * 0.1f;
 
         // Set position and rotation of the test collider object to the players values
         testCol.enabled = true;
-        testCol.transform.position = relocatedPosition;
+		testCol.transform.position = origin;
         testCol.transform.rotation = transform.rotation;
 
         // Looks for overlapping colliders using player measurements
@@ -54,76 +52,6 @@ public class LedgeTele : FindLedge {
         target = testCol.transform.position;
         testCol.enabled = false;
 		return true;
-
-
-        // ############# OLD CODE. TO BE CHANGED #############
-		/*
-        // Angle used to determine on which surface there was a hit
-		float angle = Vector3.Angle(Vector3.up, hit.normal);
-		bool newUpRight = false;
-
-		// If the hit wasn't on roof or floor, create new right and up vectors
-		if (angle > 0.1 && angle < 179.9)
-			newUpRight = true;
-
-		m_invalidPosition = hit.point;
-
-		RaycastHit rayHit = new RaycastHit();
-		RaycastHit wallNormalRayHit = new RaycastHit();
-		bool enoughSpace = true;
-		m_indPositionSet = false;
-
-		// Surface was floor
-		if (angle <= 45) 
-		{
-//			print ("Surface was floor");
-			if (isSpaceObstructedFloor(hit, newUpRight)) 
-				enoughSpace = false;
-
-		}
-		// Surface was wall
-		else if (angle > 45 && angle < 135) 
-		{
-//			print ("Surface was wall");
-			if (isSpaceObstructedWall(out wallNormalRayHit, hit, newUpRight)) 
-			{
-				enoughSpace = false;
-				//new Color (0.751265f, 0.25678f, 0.3415136f)
-//              Debug.DrawRay(wallNormalRayHit.point, wallNormalRayHit.normal, Color.red);
-				
-			    // Sets a position based on the initial hit, it's normal, and the new hit's normal.
-				Vector3 maybeValid = hit.point + hit.normal + wallNormalRayHit.normal;
-                float distance = Vector3.Distance(maybeValid, hit.point);
-                //m_validIndPosition = Vector3.MoveTowards(maybeValid, transform.position, distance * 0.5f);
-
-//                if (Vector3.Angle(Vector3.up, Camera.main.transform.forward) < 30) 
-//                {
-//                    Vector3 playerDir = transform.position - maybeValid;
-//                    playerDir.y = 0;
-//                    m_validIndPosition = maybeValid + playerDir * 0.25f;
-//                }
-                   
-
-                // Adjust position using rays
-				adjustPosition(maybeValid, out m_validIndPosition);
-
-
-				m_indPositionSet = true;
-
-
-				//Debug.DrawRay (hit.point, hit.normal + wallNormalRayHit.normal, Color.white);
-			}
-		}
-		// Surface was roof
-		else if (angle >= 135)
-		{
-//			print ("Surface was roof");
-			if (isSpaceObstructedRoof(hit, newUpRight)) 
-				enoughSpace = false;
-		}
-//		print ("Enough space: " + enoughSpace);
-		return enoughSpace;
-		*/
 	}
 
 	public bool findValidPosition(Vector3 invalidPosition, out Vector3 validPosition) 
