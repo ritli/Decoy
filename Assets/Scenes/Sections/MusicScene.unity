@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 26830929}
   - component: {fileID: 26830928}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (1)
+  m_Name: S5_Music_Trigger_Mega_Epic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,11 +132,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 26830926}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.81, z: 150.1}
-  m_LocalScale: {x: 5.393393, y: 3.7042587, z: 1}
+  m_LocalPosition: {x: 2.159545, y: 10.66, z: 171.03}
+  m_LocalScale: {x: 15.061961, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 2
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &26830928
 MonoBehaviour:
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 211855200}
   - component: {fileID: 211855199}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (4)
+  m_Name: S5_Music_Trigger Brass1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,10 +192,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 211855197}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 252.1}
-  m_LocalScale: {x: 8.302249, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 7.585698, y: 13.66, z: 254.67}
+  m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
+  m_Father: {fileID: 1449734274}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &211855199
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 584227250}
   - component: {fileID: 584227249}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (5)
+  m_Name: S5_Music_Trigger Brass2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,10 +312,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 584227247}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 261.3}
-  m_LocalScale: {x: 8.302249, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 7.585698, y: 12.76, z: 263.87}
+  m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
+  m_Father: {fileID: 1449734274}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &584227249
@@ -436,12 +436,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1576572559}
-  - {fileID: 984177353}
-  - {fileID: 1896134450}
   - {fileID: 1324192349}
   - {fileID: 1506010375}
+  - {fileID: 984177353}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984177352
 GameObject:
@@ -453,6 +452,7 @@ GameObject:
   - component: {fileID: 984177353}
   - component: {fileID: 984177355}
   - component: {fileID: 984177354}
+  - component: {fileID: 984177356}
   m_Layer: 2
   m_Name: S3_Music_Trigger_End
   m_TagString: Untagged
@@ -467,11 +467,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 984177352}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 416.63, y: 10.06, z: -27.804504}
+  m_LocalPosition: {x: 411.57, y: 10.06, z: -27.804504}
   m_LocalScale: {x: 1, y: 8.4858055, z: 11.41505}
   m_Children: []
   m_Father: {fileID: 940196153}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &984177354
 MonoBehaviour:
@@ -503,6 +503,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &984177356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 984177352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Music/Section4/S4_Main
+  PlayEvent: 3
+  StopEvent: 0
+  CollisionTag: Player
+  AllowFadeout: 1
+  TriggerOnce: 1
+  Preload: 0
+  Params:
+  - Name: Progression
+    Value: 1
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &1010908310
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,18 +551,9 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1010908310}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.14, y: 0, z: 2.57}
-  m_LocalScale: {x: 2.7926688, y: 2.5638852, z: 1}
-  m_Children:
-  - {fileID: 1860486709}
-  - {fileID: 1897270704}
-  - {fileID: 26830927}
-  - {fileID: 1433460975}
-  - {fileID: 1020705510}
-  - {fileID: 2107563057}
-  - {fileID: 211855198}
-  - {fileID: 584227248}
-  - {fileID: 1559015175}
+  m_LocalPosition: {x: -0.36349, y: 2.49, z: -9.7}
+  m_LocalScale: {x: 3.7699301, y: 3.2536283, z: 1}
+  m_Children: []
   m_Father: {fileID: 1449734274}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -600,11 +615,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1020705509}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.809999, z: 235.54}
-  m_LocalScale: {x: 8.30225, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 2.159545, y: 16.83, z: 238}
+  m_LocalScale: {x: 23.185434, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 4
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1020705511
 MonoBehaviour:
@@ -664,7 +679,7 @@ Transform:
   m_LocalScale: {x: 23.905949, y: 27.34887, z: -3.92078}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1093668380
 MonoBehaviour:
@@ -850,7 +865,7 @@ Transform:
   m_LocalScale: {x: 23.905949, y: 11.376115, z: -3.92078}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1216056487
 MonoBehaviour:
@@ -912,7 +927,7 @@ Transform:
   m_LocalScale: {x: 4.533686, y: 8.466751, z: -17.735538}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1253520201
 MonoBehaviour:
@@ -940,6 +955,66 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1253520199}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1269189221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1269189222}
+  - component: {fileID: 1269189224}
+  - component: {fileID: 1269189223}
+  m_Layer: 2
+  m_Name: S4_Music_Trigger_End
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1269189222
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269189221}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 287.1, y: 0, z: 4.17}
+  m_LocalScale: {x: 3.38888, y: 4.5464597, z: 7.0797977}
+  m_Children: []
+  m_Father: {fileID: 1686042211}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1269189223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269189221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 984177356}
+    Params:
+    - Name: S4_End
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1269189224
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269189221}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -974,7 +1049,7 @@ Transform:
   m_LocalScale: {x: 1, y: 18.155092, z: 11.41505}
   m_Children: []
   m_Father: {fileID: 940196153}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1324192350
 MonoBehaviour:
@@ -1079,7 +1154,7 @@ GameObject:
   - component: {fileID: 1433460977}
   - component: {fileID: 1433460976}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (2)
+  m_Name: S5_Music_Trigger_Cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1092,11 +1167,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1433460974}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099995, z: 203.3}
-  m_LocalScale: {x: 5.3933935, y: 3.7042587, z: 1}
+  m_LocalPosition: {x: 5.6, y: 15.61, z: 205.87001}
+  m_LocalScale: {x: 15.061963, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 3
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1433460976
 MonoBehaviour:
@@ -1154,8 +1229,17 @@ Transform:
   m_LocalScale: {x: 4.0882955, y: 3.3803024, z: 1}
   m_Children:
   - {fileID: 1010908311}
+  - {fileID: 1860486709}
+  - {fileID: 1897270704}
+  - {fileID: 26830927}
+  - {fileID: 1433460975}
+  - {fileID: 1020705510}
+  - {fileID: 211855198}
+  - {fileID: 584227248}
+  - {fileID: 1559015175}
+  - {fileID: 2107563057}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1486267148
 GameObject:
@@ -1188,7 +1272,7 @@ Transform:
   - {fileID: 834358970}
   - {fileID: 381038247}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1506010374
 GameObject:
@@ -1218,7 +1302,7 @@ Transform:
   m_LocalScale: {x: 1, y: 25.358767, z: 40.418037}
   m_Children: []
   m_Father: {fileID: 940196153}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1506010376
 MonoBehaviour:
@@ -1261,7 +1345,7 @@ GameObject:
   - component: {fileID: 1559015177}
   - component: {fileID: 1559015176}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (6)
+  m_Name: S5_Music_Trigger Brass3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1274,10 +1358,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1559015174}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 273.1}
-  m_LocalScale: {x: 8.302249, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 7.585698, y: 12.18, z: 275.67}
+  m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
+  m_Father: {fileID: 1449734274}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1559015176
@@ -1402,7 +1486,7 @@ Transform:
   m_LocalScale: {x: 4.53369, y: 29.165257, z: -30.730844}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1647556191
 MonoBehaviour:
@@ -1500,6 +1584,35 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1686042210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1686042211}
+  m_Layer: 2
+  m_Name: MusicTriggersS4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1686042211
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1686042210}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 328.90366, y: 25.628723, z: -44.427128}
+  m_LocalScale: {x: 1, y: 9.0344095, z: 11.41505}
+  m_Children:
+  - {fileID: 1269189222}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1819470891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,7 +1675,7 @@ Transform:
   m_LocalScale: {x: 3.8552706, y: 3.9211366, z: 4.1168194}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1860486708
 GameObject:
@@ -1587,12 +1700,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1860486708}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.007, y: 0.034, z: 6.73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.33651, y: 2.6, z: 9.299999}
+  m_LocalScale: {x: 3.7699306, y: 3.253628, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 0
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1860486710
 MonoBehaviour:
@@ -1688,47 +1801,6 @@ Transform:
   m_Father: {fileID: 2026311871}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1896134449
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1896134450}
-  - component: {fileID: 1896134451}
-  m_Layer: 2
-  m_Name: S3_Temporary_End_Trigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1896134450
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1896134449}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 642.9321, y: -7.1115446, z: -9.65}
-  m_LocalScale: {x: 13.296562, y: 7.052091, z: 1}
-  m_Children: []
-  m_Father: {fileID: 940196153}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1896134451
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1896134449}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1897270703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,7 +1812,7 @@ GameObject:
   - component: {fileID: 1897270706}
   - component: {fileID: 1897270705}
   m_Layer: 2
-  m_Name: S5_Music_Trigger
+  m_Name: S5_Music_Trigger_Break
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1753,11 +1825,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1897270703}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 2.784, z: 100.43}
-  m_LocalScale: {x: 5.393392, y: 3.7042592, z: 1}
+  m_LocalPosition: {x: 2.159545, y: 7.137856, z: 89.1}
+  m_LocalScale: {x: 15.061959, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 1
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1897270705
 MonoBehaviour:
@@ -1798,7 +1870,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2026311871}
   m_Layer: 2
-  m_Name: Music
+  m_Name: MusicTriggersS1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1814,13 +1886,13 @@ Transform:
   m_LocalPosition: {x: 49.123646, y: 14.458723, z: 25.77287}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1093668379}
+  - {fileID: 1819470894}
   - {fileID: 1656970756}
   - {fileID: 1876135920}
-  - {fileID: 1819470894}
   - {fileID: 1253520200}
   - {fileID: 1647556190}
   - {fileID: 1216056486}
+  - {fileID: 1093668379}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1847,13 +1919,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2107563056}
-  m_LocalRotation: {x: -0, y: -0.38245484, z: -0, w: 0.9239742}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 295.6}
-  m_LocalScale: {x: 5.3933945, y: 3.7042587, z: 1}
+  m_LocalRotation: {x: -0, y: 0.0002480149, z: -0, w: 1}
+  m_LocalPosition: {x: 9.87, y: 12.18, z: 294.38}
+  m_LocalScale: {x: 15.061963, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: -44.972004, z: 0}
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0.028, z: 0}
 --- !u!114 &2107563058
 MonoBehaviour:
   m_ObjectHideFlags: 0
