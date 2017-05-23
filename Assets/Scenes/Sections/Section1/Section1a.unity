@@ -928,6 +928,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 84c231a0f9971674989db6104d8f1a6e, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &22682435 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114934263230245650, guid: 4b9b1eea652e86e44bf28affd6e59490,
+    type: 2}
+  m_PrefabInternal: {fileID: 330816223}
+  m_Script: {fileID: 11500000, guid: 45a9fe2232164cc42a65cd4513e9eee3, type: 3}
 --- !u!4 &24124496 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4236146682352960, guid: 84c231a0f9971674989db6104d8f1a6e,
@@ -9026,6 +9032,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114244493227201122, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
+        type: 2}
+      propertyPath: m_DisableDoor
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
   m_IsPrefabParent: 0
@@ -15165,12 +15176,97 @@ Prefab:
     - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
         type: 2}
       propertyPath: activations.Array.data[0].eventName
-      value: Set device
+      value: Activate glove on Player
       objectReference: {fileID: 0}
     - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
         type: 2}
       propertyPath: activations.Array.data[1].eventName
       value: Move glove
+      objectReference: {fileID: 0}
+    - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: activations.Array.data[2].eventName
+      value: Parent device
+      objectReference: {fileID: 0}
+    - target: {fileID: 114934263230245650, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: destPos
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114291885258506162, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: getByName
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114291885258506162, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: parentName
+      value: handrigg_lowpoly_skinned:R_wrist_joint
+      objectReference: {fileID: 0}
+    - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: activations.Array.data[2].delay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114291885258506162, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: translateToLocal
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: activations.Array.data[1].activationObject
+      value: 
+      objectReference: {fileID: 22682435}
+    - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: activations.Array.data[2].activationObject
+      value: 
+      objectReference: {fileID: 1554957590}
+    - target: {fileID: 114934263230245650, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: lerpLocal
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114291885258506162, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: parentedOffset.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114934263230245650, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: findLerpdestByName
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114934263230245650, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: searchName
+      value: LerpDest
+      objectReference: {fileID: 0}
+    - target: {fileID: 114772049852846432, guid: 4b9b1eea652e86e44bf28affd6e59490,
+        type: 2}
+      propertyPath: activations.Array.data[2].setState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694519592311572, guid: 4b9b1eea652e86e44bf28affd6e59490, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1.6591928
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694519592311572, guid: 4b9b1eea652e86e44bf28affd6e59490, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1.659192
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694519592311572, guid: 4b9b1eea652e86e44bf28affd6e59490, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 1.659192
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694519592311572, guid: 4b9b1eea652e86e44bf28affd6e59490, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -0.089996
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694519592311572, guid: 4b9b1eea652e86e44bf28affd6e59490, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4b9b1eea652e86e44bf28affd6e59490, type: 2}
@@ -68735,6 +68831,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4263236658028842, guid: 8a63bc8ee6e233c4c8fa0283befe9525,
     type: 2}
   m_PrefabInternal: {fileID: 1554876366}
+--- !u!114 &1554957590 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114291885258506162, guid: 4b9b1eea652e86e44bf28affd6e59490,
+    type: 2}
+  m_PrefabInternal: {fileID: 330816223}
+  m_Script: {fileID: 11500000, guid: 1a1137025dec29f4c857aa071b5dabee, type: 3}
 --- !u!1001 &1555499633
 Prefab:
   m_ObjectHideFlags: 0
@@ -77903,7 +78005,7 @@ Prefab:
     - target: {fileID: 114244493227201122, guid: fd6d88dbee5bd0f4bbe590ab89076d9d,
         type: 2}
       propertyPath: m_DisableDoor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1715459510176728, guid: fd6d88dbee5bd0f4bbe590ab89076d9d, type: 2}
       propertyPath: m_Name
