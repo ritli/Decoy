@@ -9,7 +9,7 @@ public class PlayerDeviceActivation : ActivationObject {
 
     public override void activate()
     {
-        GameManager.GetPlayer().m_hasDevice = m_value;
+        GameManager.GetPlayer().hasDevice(m_value);
     }
 
     public override void deactivate()

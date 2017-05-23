@@ -188,6 +188,13 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
+
+        // Disable telepotation if the device is set to be inactive.
+        if (!m_hasDevice)
+        {
+            m_teleport.disableTeleportation();
+        }
+
         m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
         m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
@@ -443,6 +450,15 @@ public class PlayerController : MonoBehaviour, IKillable
         m_teleport.m_indi.SetActive(false);
 
         GameManager.resetActivations();
+    }
+
+    public void hasDevice(bool hasDevice)
+    {
+        m_hasDevice = hasDevice;
+        if (hasDevice)
+        {
+            m_teleport.enableTeleportation();
+        }
     }
 
     // Update is called once per frame

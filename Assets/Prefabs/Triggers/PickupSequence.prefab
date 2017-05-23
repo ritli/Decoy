@@ -87,9 +87,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1764888729781592}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.606, y: -15.23, z: 30.89}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: -3.7060013, y: -8.882, z: 4.921}
+  m_LocalScale: {x: 0.47903126, y: 0.47903126, z: 0.47903126}
   m_Children:
   - {fileID: 4649115683830416}
   - {fileID: 4746778079110576}
@@ -117,8 +117,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1637283599453812}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071067, w: 0.70710695}
-  m_LocalPosition: {x: -0.24099731, y: -0.7709999, z: -0.09000015}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.24099731, y: -0.7, z: -0.089996}
+  m_LocalScale: {x: 1.6591928, y: 1.659192, z: 1.659192}
   m_Children: []
   m_Father: {fileID: 4081350741762024}
   m_RootOrder: 2
@@ -193,7 +193,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 4, z: 2}
+  m_Size: {x: 4.42, y: 7.61, z: 4.87}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114243510666713276
 MonoBehaviour:
@@ -221,6 +221,9 @@ MonoBehaviour:
   checkIndex: 0
   objectToParent: {fileID: 4694519592311572}
   parent: {fileID: 0}
+  getByName: 1
+  parentName: handrigg_lowpoly_skinned:R_wrist_joint
+  translateToLocal: 1
 --- !u!114 &114329925107810410
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -260,15 +263,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopList: 0
   activations:
-  - activationObject: {fileID: 114556112695286650}
+  - eventName: Activate glove on Player
+    activationObject: {fileID: 114556112695286650}
     setState: 1
     delay: 1
-  - activationObject: {fileID: 114934263230245650}
+  - eventName: Move glove
+    activationObject: {fileID: 114934263230245650}
     setState: 1
     delay: 1
-  - activationObject: {fileID: 114291885258506162}
+  - eventName: Parent device
+    activationObject: {fileID: 114291885258506162}
     setState: 1
-    delay: 1
+    delay: 0.5
   m_triggerType: 1
   m_triggererTag: Player
 --- !u!114 &114934263230245650
@@ -290,3 +296,6 @@ MonoBehaviour:
   speed: 1.2
   returnToStart: 0
   threshold: 0.01
+  lerpLocal: 0
+  findLerpdestByName: 1
+  searchName: LerpDest
