@@ -306,13 +306,13 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = (AnimationState)tempStateVal;
         }
-		else if (Mathf.Abs(m_Input.y) > 0 || Mathf.Abs(m_Input.x) > 0 && !m_Jumping && !m_crouching) 
+		else if (m_Jumping)
+		{
+			m_aniState = AnimationState.jumping;
+		}
+		else if (Mathf.Abs(m_Input.y) > 0 && !m_Jumping && !m_crouching) 
         {
             m_aniState = AnimationState.moving;
-        }
-        else if (m_Jumping)
-        {
-            m_aniState = AnimationState.jumping;
         }
 		else if (m_crouching)
 		{
@@ -369,8 +369,7 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 		else
 		{
-			float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
-			m_CharacterController.height = newHeight;
+			m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
 
 			// Lerp the camera's position back to origin
 			float cameraHeight = Mathf.Lerp(m_Camera.transform.localPosition.y, m_cameraOrigin.y, m_crouchTimeElapsed);
@@ -379,7 +378,6 @@ public class PlayerController : MonoBehaviour, IKillable
 									cameraHeight, 
 									m_cameraOrigin.z);
 			m_Camera.transform.localPosition = cameraPos;
-
 		}
 
         //If player has tried to stand up and can't due to an obstruction, starts checking for obstruction each frame.
