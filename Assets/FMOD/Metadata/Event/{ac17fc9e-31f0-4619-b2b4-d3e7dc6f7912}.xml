@@ -46,6 +46,9 @@
         </relationship>
     </object>
     <object class="MixerInput" id="{335e01ab-b656-4d8f-b121-2a7f72880bce}">
+        <relationship name="masters">
+            <destination>{41012925-ad1d-4dcd-a6e9-c8311d44d10d}</destination>
+        </relationship>
         <relationship name="effectChain">
             <destination>{e7f5caa8-d63b-43f9-a986-504d8ebbab8b}</destination>
         </relationship>
@@ -53,7 +56,7 @@
             <destination>{351083f2-60c0-45cb-85ac-5df4fbc21811}</destination>
         </relationship>
         <relationship name="output">
-            <destination>{ad513791-6818-47c5-b7e4-c2ff397305af}</destination>
+            <destination>{d2471c30-33db-4ab8-b41f-f1912835ea8d}</destination>
         </relationship>
     </object>
     <object class="EventAutomatableProperties" id="{95822308-c9d8-49b9-8ce0-4d20e20f6dd1}"/>
@@ -123,7 +126,7 @@
             <value>0</value>
         </property>
         <property name="volumeRandomization">
-            <value>-10</value>
+            <value>-5</value>
         </property>
         <property name="pitchRandomization">
             <value>0.49999997</value>
@@ -133,6 +136,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{0c9d3fee-5163-4eb5-83db-5471a92f325e}">
+        <property name="volume">
+            <value>10</value>
+        </property>
         <property name="name">
             <value>BrokenwindowWind</value>
         </property>
@@ -193,7 +199,14 @@
     </object>
     <object class="MixerBusPanner" id="{4357e50f-0e71-42d7-b1bf-75fa1db4c8d5}"/>
     <object class="MixerBusFader" id="{7205a781-531a-44af-9be1-359f1b522c86}"/>
-    <object class="SpatialiserEffect" id="{256ee91e-1e6f-4868-9333-9e5f9166c17d}"/>
+    <object class="SpatialiserEffect" id="{256ee91e-1e6f-4868-9333-9e5f9166c17d}">
+        <property name="distanceRolloffType">
+            <value>2</value>
+        </property>
+        <property name="maximumDistance">
+            <value>30</value>
+        </property>
+    </object>
     <object class="MixerSend" id="{7c707805-82f2-435d-b494-be5852e8c8c3}">
         <property name="inputFormat">
             <value>2</value>

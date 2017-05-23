@@ -46,6 +46,9 @@
         </relationship>
     </object>
     <object class="MixerInput" id="{b2e34163-35ed-4ebf-ae43-e997f8eac2f1}">
+        <relationship name="masters">
+            <destination>{41012925-ad1d-4dcd-a6e9-c8311d44d10d}</destination>
+        </relationship>
         <relationship name="effectChain">
             <destination>{b70c0977-ad2c-46a8-95b4-f817f1cba2e5}</destination>
         </relationship>
@@ -100,6 +103,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{1ac258bd-7c6b-40b8-ae68-460affa558cd}">
+        <property name="volume">
+            <value>-5</value>
+        </property>
         <property name="name">
             <value>TurretRotate</value>
         </property>
