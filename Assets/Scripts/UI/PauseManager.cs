@@ -10,7 +10,7 @@ public class PauseManager : MonoBehaviour
     public static event PauseAction OnPause;
 
     private bool m_PauseDisabled = false; 
-    private bool isPaused = false;
+    private bool m_Paused = false;
 
     private void OnEnable()
     {
@@ -24,7 +24,6 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         instance = FindObjectOfType<PauseManager>();
-
         //To force the game to begin running at full speed.
         //There was an error on some machines that originated from the timescale being 0.
         Time.timeScale = 1.0f;
@@ -40,18 +39,26 @@ public class PauseManager : MonoBehaviour
         //Pauses the game if input is pressed
 		if(Input.GetKeyDown(KeyCode.Escape) && !m_PauseDisabled)
         {
-            if(OnPause != null && !isPaused)
+            if(OnPause != null && !m_Paused)
             {
-                isPaused = true;
+                m_Paused = true;
                 OnPause(true);
             }
             else
             {
-                isPaused = false;
+                m_Paused = false;
                 OnPause(false);
             }
         }
 	}
+    public bool isPaused()
+    {
+        return m_Paused;
+    }
+    public bool isPausedDisabled()
+    {
+        return m_PauseDisabled;
+    }
     public void pauseGame(bool pause)
     {
         //pause all Physics
@@ -68,7 +75,7 @@ public class PauseManager : MonoBehaviour
     }
     public static void resumeGame()
     {
-        PauseManager.GetInstance().isPaused = false;
+        PauseManager.GetInstance().m_Paused = false;
         OnPause(false);
     }
     public void DisablePause( bool state)

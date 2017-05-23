@@ -12,5 +12,5 @@ public class Tags : MonoBehaviour {
     public static string asphalt = "Asphalt";
     public static string concrete = "Concrete";
     public static string metal = "Metal";
-    public static string sand = "Sand";
+    public static string sand = "Sand"; 
 }
