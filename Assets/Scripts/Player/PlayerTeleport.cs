@@ -340,7 +340,7 @@ public class PlayerTeleport : MonoBehaviour {
 //		print("Hit nothing");
 		m_foundLedge = false;
 		m_ledgeDetection.hitNothing();
-		m_ledgeDetection.findValidPosition (Camera.main.transform.position + playerLook, out validPos);
+		m_ledgeDetection.findEnoughSpace(Camera.main.transform.position + playerLook, out validPos);
         m_indi.transform.position = validPos;
 		m_grabPoint = validPos;
         //m_indi.transform.position = Camera.main.transform.position + playerLook;

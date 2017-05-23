@@ -102,8 +102,6 @@ public class FindLedge : MonoBehaviour {
 
 		raySweepUp.origin = newPosition;
 
-		//Debug.DrawRay (raySweepForward.origin, raySweepForward.direction * m_playerWidth * 2, Color.white);
-
 		// Sweeping forward
 		if (m_raycaster.doRaycast(out hit, raySweepForward.direction, raySweepForward.origin, m_playerWidth * 2)) 
 		{
@@ -134,8 +132,6 @@ public class FindLedge : MonoBehaviour {
 				{
 					// Store the found normal to compare with rayDown2
 					rayDownNormal = hit.normal;
-
-					// Set the new position
                     floorTarget = hit.point;
 
 					// Sweeping upward from ontop of the wall
@@ -187,6 +183,7 @@ public class FindLedge : MonoBehaviour {
 		//Debug.DrawRay(hit.point, hit.normal, new Color(1f, 0.56f, 0.2f)); // Light brown
 	}
 
+	// Probably to be removed
 	protected bool isSpaceObstructedFloor(RaycastHit hit, bool createNewLocal) 
 	{
 		Vector3 localRight = Vector3.right;
@@ -206,6 +203,7 @@ public class FindLedge : MonoBehaviour {
 			m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth + m_margin));
 	}
 
+	/*
 	protected bool isSpaceObstructedWall(out RaycastHit wallNormalHit, RaycastHit hit, bool createNewLocal) 
 	{
 		Vector3 localRight = Vector3.right;
@@ -244,26 +242,7 @@ public class FindLedge : MonoBehaviour {
 			m_raycaster.doRaycast (out rayHit, -localUp, offsetHit, m_playerWidth + m_margin) ||
 			m_raycaster.doRaycast (out rayHit, localRight, offsetHit, m_playerWidth + m_margin) &&
 			m_raycaster.doRaycast (out rayHit, -localRight, offsetHit, m_playerWidth + m_margin));
-	}
-
-	protected void adjustPosition(Vector3 current, out Vector3 target) 
-	{
-//		print("Adjusting position");
-		RaycastHit hit1 = new RaycastHit ();
-		RaycastHit hit2 = new RaycastHit ();
-		target = current;
-
-		if (m_raycaster.doRaycast(out hit1, Vector3.up, current, m_playerLength) ||
-			m_raycaster.doRaycast(out hit2, -Vector3.up, current, m_playerLength) ||
-			m_raycaster.doRaycast(out hit1, Vector3.left, current, m_playerWidth) ||
-			m_raycaster.doRaycast(out hit2, -Vector3.left, current, m_playerWidth) ||
-			m_raycaster.doRaycast(out hit1, Vector3.forward, current, m_playerWidth) ||
-			m_raycaster.doRaycast(out hit2, -Vector3.forward, current, m_playerWidth))
-		{
-			current = Vector3.MoveTowards(current, transform.position, m_playerWidth);
-		}
-		target = current;
-	}
+	}*/
 
 	/*
 	 * Returns the position which is on top of the new ledge, if it is valid. 
