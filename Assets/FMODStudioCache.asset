@@ -61,7 +61,7 @@ MonoBehaviour:
   - {fileID: 114450048185277568}
   MasterBankRef: {fileID: 114408358288713398}
   StringsBankRef: {fileID: 114624199076878526}
-  stringsBankWriteTime: 636306618623962629
+  stringsBankWriteTime: 636310572008013163
   cacheVersion: 2
 --- !u!114 &114000121568819296
 MonoBehaviour:
@@ -378,6 +378,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: S1_Progression
+  Min: 0
+  Max: 4
+  Default: 0
+--- !u!114 &114046890992949636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Material
   Min: 0
   Max: 4
   Default: 0
@@ -822,6 +837,21 @@ MonoBehaviour:
   Min: 0
   Max: 4
   Default: 0
+--- !u!114 &114095979593165696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Material
+  Min: 0
+  Max: 4
+  Default: 0
 --- !u!114 &114096811122632032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,7 +886,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: 114945770946217534}
+  - {fileID: 114979182550484702}
   MinDistance: 1
   MaxDistance: 80
 --- !u!114 &114100046869060330
@@ -991,6 +1021,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Hi-passRemove
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114120668922661612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: FirstBlink
   Min: 0
   Max: 1
   Default: 0
@@ -1757,8 +1802,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114478810059631378}
-  - {fileID: 114141664057829998}
+  - {fileID: 114894589192356166}
+  - {fileID: 114046890992949636}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114238111208419872
@@ -1827,6 +1872,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: BuildCancel
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114248788518245886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: EndingAb
   Min: 0
   Max: 1
   Default: 0
@@ -2552,8 +2612,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114280237645029270}
-  - {fileID: 114375707642121572}
+  - {fileID: 114340173102808240}
+  - {fileID: 114095979593165696}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114336801421672838
@@ -2601,6 +2661,21 @@ MonoBehaviour:
   Min: 0
   Max: 2
   Default: 0
+--- !u!114 &114340173102808240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Heavy
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114340201140561366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2615,6 +2690,36 @@ MonoBehaviour:
   Name: Sand
   Min: 0
   Max: 1
+  Default: 0
+--- !u!114 &114341855758893908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Intensity
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114347908727842472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: BrassRising
+  Min: 0
+  Max: 4
   Default: 0
 --- !u!114 &114348082509776150
 MonoBehaviour:
@@ -2673,6 +2778,21 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114361761873278280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S5_Progression
+  Min: 0
+  Max: 3
+  Default: 0
 --- !u!114 &114362791488455052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2838,7 +2958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: D:\Workspace\Decoy\Assets\FMOD\Build\Desktop\Sound Master Bank.bank
-  lastModified: 636306618729668689
+  lastModified: 636310572408636816
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -3027,7 +3147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: D:\Workspace\Decoy\Assets\FMOD\Build\Desktop\Master Bank.bank
-  lastModified: 636306618623912597
+  lastModified: 636310572007843019
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -3178,7 +3298,7 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114534842388987536}
+  - {fileID: 114617936858189874}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114448524516578624
@@ -3500,6 +3620,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114511409631595406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Hi-PassRemove
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114511544498524134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3810,11 +3945,11 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114537584054155608}
-  - {fileID: 114936919075206596}
-  - {fileID: 114407006738089118}
-  - {fileID: 114155060736064062}
-  - {fileID: 114623250996476022}
+  - {fileID: 114739285909020486}
+  - {fileID: 114347908727842472}
+  - {fileID: 114698629842771832}
+  - {fileID: 114248788518245886}
+  - {fileID: 114361761873278280}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114550751579945250
@@ -4078,6 +4213,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114595239343095104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S1_Progression
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114596810112054992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4201,7 +4351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: D:\Workspace\Decoy\Assets\FMOD\Build\Desktop\Music Master Bank S 1-3.bank
-  lastModified: 636306618686898123
+  lastModified: 636310572027316804
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -4273,6 +4423,21 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 25
+--- !u!114 &114617936858189874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S3_Progression
+  Min: 0
+  Max: 3
+  Default: 0
 --- !u!114 &114619713114737894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4375,7 +4540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets/FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636306618623962629
+  lastModified: 636310572008013163
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -4490,9 +4655,9 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114219720153235046}
-  - {fileID: 114807255419503256}
-  - {fileID: 114733606173798658}
+  - {fileID: 114511409631595406}
+  - {fileID: 114595239343095104}
+  - {fileID: 114997966426751824}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114643855419362526
@@ -4974,6 +5139,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114698629842771832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S5Ini.ActionStart
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114699294146117352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5293,6 +5473,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114739285909020486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S5_ToEnd
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114739328401227264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5342,7 +5537,7 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114423722663566580}
+  - {fileID: 114341855758893908}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114744721411425920
@@ -5608,6 +5803,21 @@ MonoBehaviour:
   Name: Material
   Min: 0
   Max: 4
+  Default: 0
+--- !u!114 &114775632905107210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S2Progression
+  Min: 0
+  Max: 3
   Default: 0
 --- !u!114 &114777383570139926
 MonoBehaviour:
@@ -5909,6 +6119,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114830713225569516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S2ToEnd
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114833928059819854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5974,6 +6199,21 @@ MonoBehaviour:
   Name: Progression
   Min: 0
   Max: 1
+  Default: 0
+--- !u!114 &114848207644255116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: BlinkUsage
+  Min: 0
+  Max: 2
   Default: 0
 --- !u!114 &114853030000278942
 MonoBehaviour:
@@ -6282,6 +6522,21 @@ MonoBehaviour:
   Max: 1
   Default: 0
 --- !u!114 &114894333782286350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Sand
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114894589192356166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -6638,7 +6893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: D:\Workspace\Decoy\Assets\FMOD\Build\Desktop\Music Master Bank S 4 -6.bank
-  lastModified: 636306618707845354
+  lastModified: 636310572411979198
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -6826,8 +7081,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114296388547046572}
-  - {fileID: 114277850949805006}
+  - {fileID: 114120668922661612}
+  - {fileID: 114848207644255116}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114965071868782470
@@ -6971,6 +7226,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114979182550484702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: BuildCancel
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114979585438369978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7041,8 +7311,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114636450456638074}
-  - {fileID: 114609455505509456}
+  - {fileID: 114775632905107210}
+  - {fileID: 114830713225569516}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114992636670443160
@@ -7104,6 +7374,21 @@ MonoBehaviour:
   Name: Material
   Min: 0
   Max: 4
+  Default: 0
+--- !u!114 &114997966426751824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: S1_Variation1
+  Min: 0
+  Max: 1
   Default: 0
 --- !u!114 &114998438515414190
 MonoBehaviour:
