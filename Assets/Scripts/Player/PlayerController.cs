@@ -88,12 +88,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private VectorBobber m_walkingBobber;
     private float m_maximumFreefallHeight;
 
-	// Mouse restriction while climbing vars
-	[Header("Climbing camera restriction variables")]
-	public float horizontalRestr = 45f;
-	public float verticalRestrMin = -20f;
-	public float verticalRestrMax = 75f;
-
     private bool m_leftGround = false;
 
 	// TODO:
@@ -277,8 +271,8 @@ public class PlayerController : MonoBehaviour, IKillable
         }
         else if (m_noDeviceAnimator != null)
         {
-            m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
             m_animator.SetBool("HasDevice", m_hasDevice);
+			m_noDeviceAnimator.SetBool("HasDevice", m_hasDevice);
             m_noDeviceAnimator.SetInteger("State", (int)m_aniState);
         }
     }
@@ -304,7 +298,12 @@ public class PlayerController : MonoBehaviour, IKillable
     void ReadAnimationState()
     {
         int tempStateVal = 0;
-        if (GetBlinkState(out tempStateVal))
+		bool gotBlinkState = GetBlinkState(out tempStateVal);
+		if (m_ledgeGrabbing)
+		{
+			m_aniState = AnimationState.climbing;
+		}	
+		else if (gotBlinkState)
         {
             m_aniState = (AnimationState)tempStateVal;
         }
@@ -312,19 +311,14 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = AnimationState.moving;
         }
-        else if (m_crouching)
-        {
-            m_aniState = AnimationState.crouching;
-        }
         else if (m_Jumping)
         {
             m_aniState = AnimationState.jumping;
         }
-		// Climb animation pls
-//		else if (m_ledgeGrabbing)
-//		{
-//			m_aniState = AnimationState.climbing;
-//		}	
+		else if (m_crouching)
+		{
+			m_aniState = AnimationState.crouching;
+		}
         else
         {
             m_aniState = AnimationState.idle;
@@ -460,19 +454,13 @@ public class PlayerController : MonoBehaviour, IKillable
 //			print ("LedgeGrabbing contr: " + m_ledgeGrabbing);
 			RotateView ();
 
-			// ### Ledge grabbing state ###
-			m_ledgeGrabbing = m_ledgeLerp.isLerping();
-
             // the jump state needs to read here to make sure it is not missed
 			if (!m_ledgeGrabbing)
-                {
-                    Jump();
-                }
-            else
-                {
-                    m_MoveDir.y = 0;
-
-                }
+                Jump();
+            else // Set vertical velocity to 0 if player is climbing
+                m_MoveDir.y = 0;
+				
+			m_ledgeGrabbing = m_ledgeLerp.isLerping();
 
             Crouch();
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
@@ -788,17 +776,11 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void RotateView()
     {
-		// TODO:
 		if (m_ledgeGrabbing) 
 		{
 //			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
 			m_resetRotation = true;
-			m_MouseLook.LookRotationLimited(transform, 
-											m_Camera.transform, 
-											m_ledgeLerp.getDestinationDirection(), 
-											horizontalRestr, 
-											verticalRestrMin, 
-											verticalRestrMax);
+			m_MouseLook.LookRotationLimited(transform, m_Camera.transform, m_ledgeLerp.getDestinationDirection());
 		}
 		else if (m_resetRotation) 
 		{
