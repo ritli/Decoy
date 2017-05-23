@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a3bdb2cd68f901469e7cc149151eb49, type: 3}
-  m_Name: Antons Post processing profile
+  m_Name: Updated Post processing Profile
   m_EditorClassIdentifier: 
   debugViews:
     m_Enabled: 1
@@ -114,8 +114,8 @@ MonoBehaviour:
       tonemapping:
         tonemapper: 2
         neutralBlackIn: 0.02
-        neutralWhiteIn: 9.5
-        neutralBlackOut: -0.026
+        neutralWhiteIn: 10
+        neutralBlackOut: 0.034
         neutralWhiteOut: 11.3
         neutralWhiteLevel: 8.1
         neutralWhiteClip: 10
@@ -127,20 +127,20 @@ MonoBehaviour:
         saturation: 1
         contrast: 1
       channelMixer:
-        red: {x: 2, y: 0, z: 0}
-        green: {x: 0, y: 2, z: 0}
-        blue: {x: -0.2, y: 0, z: 1.06}
-        currentEditingChannel: 2
+        red: {x: 0.59, y: 0.61, z: 0.96}
+        green: {x: 0, y: 0.51, z: 0}
+        blue: {x: 0, y: -0.05, z: -0.21}
+        currentEditingChannel: 0
       colorWheels:
         mode: 1
         log:
-          slope: {r: 0.7554917, g: 0.8055092, b: 1, a: 0.06576976}
-          power: {r: 0.8019469, g: 0.84034836, b: 1, a: -0.08968612}
-          offset: {r: 0.70349056, g: 0.72172695, b: 1, a: 0.113602005}
+          slope: {r: 1, g: 0.5528699, b: 0.74003005, a: 0.06576976}
+          power: {r: 0.6500675, g: 0.7118968, b: 1, a: -0.08968612}
+          offset: {r: 0.53946674, g: 0.59461385, b: 1, a: 0.113602005}
         linear:
-          lift: {r: 1, g: 1, b: 1, a: 0}
-          gamma: {r: 1, g: 1, b: 1, a: 0}
-          gain: {r: 1, g: 1, b: 1, a: 0}
+          lift: {r: 0, g: 0, b: 0, a: 0}
+          gamma: {r: 0, g: 0, b: 0, a: 0}
+          gain: {r: 0, g: 0, b: 0, a: 0}
       curves:
         master:
           curve:
