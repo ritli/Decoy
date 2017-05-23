@@ -5,26 +5,36 @@ using UnityEngine;
 public class CreditBehaviour : MonoBehaviour
 {
     private RectTransform m_RectTransform;
-    private Rect m_ScreenRect;
+    private Rect m_CreditRect;
     private Canvas m_MainCanvas;
-    Vector2[] rectPositions;
-    bool finished = false;
+    Vector2 rectPosition;
+    bool finished;
 	// Use this for initialization
 	void Start ()
     {
+        
+        finished = false;
         m_MainCanvas = FindObjectOfType<Canvas>();
         m_RectTransform = GetComponent<RectTransform>();
-	}
+        GameManager.GetPlayer().gameObject.SetActive(false);
+    }
 	
 	// Update is called once per frame
-	void Update ()
+	void OnGUI ()
     {
+        rectPosition = new Vector2(m_RectTransform.position.x, m_RectTransform.position.y - m_RectTransform.rect.height);
         //check if text is above the screen
-            if (!m_MainCanvas.pixelRect.Overlaps(m_RectTransform.rect) && !finished)
-            {
-                finished = true;
-                Debug.Log("Loading Menu");
-                SceneLoader.LoadMainMenu();
-            }
-	}
+        if (m_MainCanvas.transform.position.y+m_MainCanvas.pixelRect.height * 0.75f < rectPosition.y && !finished)
+        {
+            //ImageFader.instance.SetVisible(true);
+            finished = true;
+            Debug.Log("Loading Menu");
+            SceneLoader.getInstance().LoadMainMenu();
+        }
+        else if(m_MainCanvas.transform.position.y + m_MainCanvas.pixelRect.height / 2 < rectPosition.y && !finished)
+        {
+            ImageFader.instance.SetVisible(true);
+        }
+
+    }
 }
