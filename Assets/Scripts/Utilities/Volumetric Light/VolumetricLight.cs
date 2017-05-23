@@ -45,7 +45,7 @@ public class VolumetricLight : MonoBehaviour
 
     [Range(1, 64)]
     public int SampleCount = 8;
-    [Range(0.0f, 1.0f)]
+    [Range(0.0f, 3.0f)]
     public float ScatteringCoef = 0.5f;
     [Range(0.0f, 0.1f)]
     public float ExtinctionCoef = 0.01f;
@@ -396,7 +396,7 @@ public class VolumetricLight : MonoBehaviour
             _material.DisableKeyword("NOISE");
 
         _material.SetVector("_LightDir", new Vector4(_light.transform.forward.x, _light.transform.forward.y, _light.transform.forward.z, 1.0f / (_light.range * _light.range)));
-        _material.SetVector("_LightColor", _light.color * _light.intensity);
+        _material.SetVector("_LightColor", _light.color * _light.intensity * LightMultiplier);
         _material.SetFloat("_MaxRayLength", MaxRayLength);
 
         if (_light.cookie == null)
