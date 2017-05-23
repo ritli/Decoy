@@ -10,6 +10,7 @@ public class PlayerDeviceActivation : ActivationObject {
     public override void activate()
     {
         GameManager.GetPlayer().hasDevice(m_value);
+        //GameManager.GetPlayer().pausePlayer(true);
     }
 
     public override void deactivate()

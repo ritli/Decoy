@@ -162,6 +162,9 @@ public class PlayerController : MonoBehaviour, IKillable
     public delegate void landEvent();
     public landEvent onLand;
 
+    // Variables for locking the controls of the player when picking up
+    private bool m_lockMovement = false;
+
     public bool IsCrouching
     {
         get
@@ -892,6 +895,11 @@ public class PlayerController : MonoBehaviour, IKillable
             m_playerState = PlayerState.isPause;
         }
 
+    }
+
+    public void setMovementLock(bool isLocked)
+    {
+        m_lockMovement = true;
     }
 }
 
