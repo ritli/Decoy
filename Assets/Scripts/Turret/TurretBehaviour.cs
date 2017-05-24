@@ -37,7 +37,7 @@ public class TurretBehaviour : MonoBehaviour
     FMODUnity.StudioEventEmitter m_emitter;
 
     RaycastHit m_Hit;
-    Vector3 m_TargetPosition;
+    Transform m_TargetPosition;
 
     public Color m_activeColor = Color.red;
     public Color m_idleColor = Color.white;
@@ -47,6 +47,9 @@ public class TurretBehaviour : MonoBehaviour
     bool m_switchTargetPlayed = false;
     bool m_alertSoundPlayed = false;
     float m_timeSinceAlertSound;
+    bool m_locked = false;
+    bool m_playerLocked = false;
+
 
     // Use this for initialization
     void Start()
@@ -102,6 +105,13 @@ public class TurretBehaviour : MonoBehaviour
     {
         //set the decoy
         m_Decoy = GameManager.GetDecoy();
+        if (isObjectVisible(GameManager.GetPlayer().transform, Tags.player))
+        {
+            m_playerLocked = false;
+            m_Target = m_Decoy;
+            m_TargetPosition = m_Decoy.transform;
+        }
+        //m_Target = null;
     }
 
     // Update is called once per frame
@@ -154,7 +164,7 @@ public class TurretBehaviour : MonoBehaviour
 
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
-
+                m_Target.ShowOverlay();
                 currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
 
 
@@ -169,7 +179,7 @@ public class TurretBehaviour : MonoBehaviour
             case TurretState.isFiring:
 
                 aimAtTarget();
-
+                m_Target.ShowOverlay();
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
 
@@ -180,6 +190,7 @@ public class TurretBehaviour : MonoBehaviour
                 {
                     if (!m_shotAudioPlayed)
                     {
+                        print("Target Killed");
                         m_shotAudioPlayed = true;
                         m_audio.PlayEvent(0, true);
                         m_Target.Kill();
@@ -189,6 +200,8 @@ public class TurretBehaviour : MonoBehaviour
                         StartCoroutine(ShootSequence());
                     }
                 }
+                print(m_timeToKillElapsed);
+
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
                 break;
@@ -197,8 +210,9 @@ public class TurretBehaviour : MonoBehaviour
         }
     }
     void aimAtTarget()
-    {
-        m_LookAt.lookAtPosition(m_TargetPosition);
+    {   
+        if(m_TargetPosition != null)
+            m_LookAt.lookAtPosition(m_TargetPosition.position);
     }
     
     IEnumerator ShootSequence()
@@ -257,22 +271,26 @@ public class TurretBehaviour : MonoBehaviour
 
     TurretState decideState()
     {
+
         //if a decoy is present then determine if we can aim at it. 
-        if (m_Decoy != null)
+        if (m_Decoy != null && !m_playerLocked)
         {
-            //
              if(isObjectVisible(m_Decoy.gameObject.transform, Tags.decoy))
              {
-
-                m_TargetPosition = m_Decoy.transform.position;
-                m_Target = m_Decoy;
-
+                if (!m_locked)
+                {
+                    m_TargetPosition = m_Decoy.transform;
+                    m_Target = m_Decoy;
+                    m_locked = true;
+                }
+                
+                
                 //is decoy infron of turret then fire
                 if (m_Raycast.doRaycast(out m_Hit, transform.forward))
                  {
                      if (m_Hit.transform.gameObject.tag == Tags.decoy)
                      {
-                         return TurretState.isFiring;
+                        return TurretState.isFiring;
                      }
                  }
 
@@ -283,9 +301,13 @@ public class TurretBehaviour : MonoBehaviour
        //is player visible to the turret? if not the return to idle.
         if(isObjectVisible(GameManager.GetPlayer().gameObject.transform, Tags.player))
         {
-            //m_TargetPosition = GameManager.GetPlayer().transform.position;
-            m_TargetPosition = GameManager.GetPlayer().GetComponentInChildren<Camera>().transform.position;
-            m_Target = GameManager.GetPlayer();
+            if (!m_locked)
+            {
+                m_TargetPosition = GameManager.GetPlayer().GetComponentInChildren<Camera>().transform;
+                m_Target = GameManager.GetPlayer();
+                m_locked = true;
+                m_playerLocked = true;
+            }
 
             //check if player can be fired at. if yes, initiate fire. Else, target player
             if (m_Raycast.doRaycast(out m_Hit, transform.forward))
@@ -297,6 +319,8 @@ public class TurretBehaviour : MonoBehaviour
             }
             return TurretState.isTargeting;
         }
+        m_playerLocked = false;
+        m_locked = false;
         return TurretState.isIdle;
     }
 
