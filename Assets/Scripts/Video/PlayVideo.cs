@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayVideo : MonoBehaviour {
 
@@ -32,6 +33,7 @@ public class PlayVideo : MonoBehaviour {
 
 	IEnumerator playVideo()
 	{
+		SceneLoader.getInstance().UnloadSceneAsync(SceneLoader.Scenes.MainMenu);
 		//Add VideoPlayer to the GameObject
 		videoPlayer = gameObject.AddComponent<VideoPlayer>();
 
@@ -77,11 +79,21 @@ public class PlayVideo : MonoBehaviour {
 		Debug.Log("Playing Video");
 		while (videoPlayer.isPlaying)
 		{
+			if (CrossPlatformInputManager.GetButtonDown("Cancel"))
+			{
+				videoPlayer.Stop();
+				break;
+			}
 			Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
 			yield return null;
 		}
 
 		Debug.Log("Done Playing Video");
+		// Load next scene
 		SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
+		GameManager.GetPlayer().gameObject.SetActive(true);
+		GameManager.GetPlayer().ResetPlayer();
+		SceneLoader.getInstance().UnloadSceneAsync(SceneLoader.Scenes.IntroCutscene);
+
 	}
 }
