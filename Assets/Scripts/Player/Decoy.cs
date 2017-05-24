@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System;
 using System.Collections.Generic;
 
 public class Decoy : MonoBehaviour, IKillable {
@@ -46,7 +46,10 @@ public class Decoy : MonoBehaviour, IKillable {
     {
         PauseManager.OnPause -= pauseDecoy;
     }
-
+    public void ShowOverlay()
+    {
+        //nothing
+    }
     public void Kill()
     {
         m_decoyState = PlayerState.isDead;
