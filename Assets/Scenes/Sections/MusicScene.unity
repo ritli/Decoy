@@ -513,7 +513,6 @@ GameObject:
   - component: {fileID: 984177353}
   - component: {fileID: 984177355}
   - component: {fileID: 984177354}
-  - component: {fileID: 984177356}
   m_Layer: 2
   m_Name: S3_Music_Trigger_End
   m_TagString: Untagged
@@ -564,30 +563,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &984177356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 984177352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: event:/Music/Section4/S4_Main
-  PlayEvent: 3
-  StopEvent: 0
-  CollisionTag: Player
-  AllowFadeout: 1
-  TriggerOnce: 1
-  Preload: 0
-  Params:
-  - Name: Progression
-    Value: 1
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
 --- !u!1 &1010908310
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,7 +1039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Emitters:
-  - Target: {fileID: 984177356}
+  - Target: {fileID: 1576572560}
     Params:
     - Name: S4_End
       Value: 1
@@ -1106,7 +1081,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1324192348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 334.98, y: 11.45, z: -70.58}
+  m_LocalPosition: {x: 329.92, y: 9.17, z: -70.58}
   m_LocalScale: {x: 1, y: 18.155092, z: 39.960175}
   m_Children: []
   m_Father: {fileID: 940196153}
@@ -1361,8 +1336,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1506010374}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 387.75, y: 11.449999, z: -70.6}
-  m_LocalScale: {x: 1, y: 25.358767, z: 40.418037}
+  m_LocalPosition: {x: 397.42, y: 11.449999, z: -77.99}
+  m_LocalScale: {x: 1, y: 25.358767, z: 26.217426}
   m_Children: []
   m_Father: {fileID: 940196153}
   m_RootOrder: 2
