@@ -37,7 +37,12 @@ public class AnimationActivation : ActivationObject {
 
     public override bool isActivated()
     {
-        throw new NotImplementedException();
+        if (m_animator.GetAnimatorTransitionInfo(0).normalizedTime > 0 && m_active)
+        {
+            m_active = false;
+        }
+
+        return m_active;
     }
 
     protected override void checkActivationEvent(int index)

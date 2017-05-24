@@ -39,8 +39,7 @@ public class Raycast : MonoBehaviour {
     // Raycast from source and forward a set distance. Returns true if ray hits a collider
     public bool doRaycast(out RaycastHit inHit)
     {
-        Ray ray = new Ray(raySource.position, raySource.forward);
-
+        Ray ray = new Ray(raySource.position, raySource.forward); 
         if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
         {
             Debug.DrawLine(ray.origin, hit.point, Color.red);
