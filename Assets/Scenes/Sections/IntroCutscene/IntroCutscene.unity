@@ -428,7 +428,6 @@ GameObject:
   - component: {fileID: 2137340878}
   - component: {fileID: 2137340882}
   - component: {fileID: 2137340881}
-  - component: {fileID: 2137340880}
   - component: {fileID: 2137340879}
   m_Layer: 5
   m_Name: Video
@@ -455,36 +454,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!328 &2137340879
-VideoPlayer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2137340877}
-  m_Enabled: 1
-  m_VideoClip: {fileID: 0}
-  m_TargetCameraAlpha: 1
-  m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 0}
-  m_TargetMaterialRenderer: {fileID: 0}
-  m_TargetMaterialProperty: _MainTex
-  m_RenderMode: 2
-  m_AspectRatio: 2
-  m_DataSource: 0
-  m_PlaybackSpeed: 1
-  m_AudioOutputMode: 1
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
-  m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
-  m_PlayOnAwake: 1
-  m_SkipOnDrop: 1
-  m_Looping: 0
-  m_WaitForFirstFrame: 0
-  m_FrameReadyEventEnabled: 0
---- !u!114 &2137340880
+--- !u!114 &2137340879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -492,12 +462,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2137340877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b356bf7dc6f246e4a2c9fe970d68ba8, type: 3}
+  m_Script: {fileID: 11500000, guid: d22a274e70c884be38af68f77a979c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SelectedScene: 3
   image: {fileID: 2137340881}
-  videoToPlay: {fileID: 32900000, guid: 62f4f7080220b41cfae31b023796b83f, type: 3}
+  videos:
+  - videoClip: {fileID: 32900000, guid: 44d207c6f2c34408aab197decb913725, type: 3}
+    isSkippable: 0
+  - videoClip: {fileID: 32900000, guid: 93e93ef9ce4ff4358b8e2ec1b305eebd, type: 3}
+    isSkippable: 1
 --- !u!114 &2137340881
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,15 +5,23 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 
+[System.Serializable]
+public struct Video
+{
+	public VideoClip videoClip;
+	public bool isSkippable;
+}
+	
 public class PlayVideo : MonoBehaviour {
-
+	
 	// Scene to load when video is done
 	public SceneLoader.Scenes m_SelectedScene;
 
 	//Raw Image to Show Video Images [Assign from the Editor]
 	public RawImage image;
-	//Video To Play [Assign from the Editor]
-	public VideoClip videoToPlay;
+
+	//Videos To Play [Assign from the Editor]
+	public Video[] videos;
 
 	private VideoPlayer videoPlayer;
 	private VideoSource videoSource;
@@ -33,7 +41,9 @@ public class PlayVideo : MonoBehaviour {
 
 	IEnumerator playVideo()
 	{
+		// Unload previous scene
 		SceneLoader.getInstance().UnloadSceneAsync(SceneLoader.Scenes.MainMenu);
+
 		//Add VideoPlayer to the GameObject
 		videoPlayer = gameObject.AddComponent<VideoPlayer>();
 
@@ -54,46 +64,46 @@ public class PlayVideo : MonoBehaviour {
 		videoPlayer.EnableAudioTrack(0, true);
 		videoPlayer.SetTargetAudioSource(0, audioSource);
 
-		//Set video To Play then prepare Audio to prevent Buffering
-		videoPlayer.clip = videoToPlay;
-		videoPlayer.Prepare();
-
-		//Wait until video is prepared
-		while (!videoPlayer.isPrepared)
+//		//Set video To Play then prepare Audio to prevent Buffering
+		foreach (Video video in videos)
 		{
-			Debug.Log("Preparing Video");
-			yield return null;
-		}
-
-		Debug.Log("Done Preparing Video");
-
-		//Assign the Texture from Video to RawImage to be displayed
-		image.texture = videoPlayer.texture;
-
-		//Play Video
-		videoPlayer.Play();
-
-		//Play Sound
-		audioSource.Play();
-
-		Debug.Log("Playing Video");
-		while (videoPlayer.isPlaying)
-		{
-			if (CrossPlatformInputManager.GetButtonDown("Cancel"))
+			videoPlayer.clip = video.videoClip;
+			videoPlayer.Prepare();
+			
+			//Wait until video is prepared
+			while (!videoPlayer.isPrepared)
 			{
-				videoPlayer.Stop();
-				break;
+				Debug.Log("Preparing Video");
+				yield return null;
 			}
-			Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
-			yield return null;
+			
+			Debug.Log("Done Preparing Video");
+			
+			//Assign the Texture from Video to RawImage to be displayed
+			image.texture = videoPlayer.texture;
+			
+			//Play Video and Sound
+			videoPlayer.Play();
+			audioSource.Play();
+			
+			Debug.Log("Playing Video");
+			while (videoPlayer.isPlaying)
+			{
+				if (CrossPlatformInputManager.GetButtonDown("Cancel") && video.isSkippable)
+				{
+					videoPlayer.Stop();
+					break;
+				}
+				//Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
+				yield return null;
+			}
+			Debug.Log("Done Playing first video");
 		}
 
-		Debug.Log("Done Playing Video");
 		// Load next scene
 		SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
 		GameManager.GetPlayer().gameObject.SetActive(true);
 		GameManager.GetPlayer().ResetPlayer();
 		SceneLoader.getInstance().UnloadSceneAsync(SceneLoader.Scenes.IntroCutscene);
-
 	}
 }
