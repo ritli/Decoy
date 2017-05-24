@@ -293,15 +293,15 @@ public class PlayerTeleport : MonoBehaviour {
 			float angle = Vector3.Angle(hit.normal, Vector3.up);
 
 			m_enoughSpace = m_ledgeDetection.findEnoughSpace(hit.point, out validPos);
-            // Start ledge detection and sets the variables to their appropriate positions
+            // Start ledge detection and set the variables to their appropriate positions
             if (m_ledgeDetection.findLedge(hit, out m_grabPoint, out m_ledgeLerpTo) && hit.collider.tag != Tags.noGrab) 
             {
-//                print("Found ledge");
 				m_indi.transform.position = m_grabPoint;
                 m_charController.detectCollisions = false;
 				m_foundLedge = true;
                 return;
             }
+			// If there wasn't a ledge found, assign the validPos
             m_grabPoint = validPos;
 			m_indi.transform.position = validPos;
 			m_foundLedge = false;
@@ -319,17 +319,17 @@ public class PlayerTeleport : MonoBehaviour {
 		}
 
 
-
+		// Checks in a half-circle where the aim is if there is a wall nearby. Put the indicator out of the wall
         for (int i = 0; i < 5; i++)
         {
             Vector3 centerpos = transform.position + playerLook;
             Vector3 dir = Quaternion.AngleAxis(i * -45, Vector3.up) * right;
-
             if (Physics.Raycast(centerpos, dir, out hit, 0.5f))
             {
                 if (Vector3.Angle(hit.normal, Vector3.up) > 45)
                 {
                     m_indi.transform.position = hit.point + hit.normal;
+					m_grabPoint = hit.point + hit.normal;
                     m_foundLedge = false;
                     return;
                 }
