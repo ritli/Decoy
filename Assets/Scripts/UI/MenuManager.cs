@@ -6,13 +6,18 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    private GameObject m_DefaultMenu;
     public bool m_StartActive;
+
+    public GameObject m_Main;
+    public GameObject m_Options;
+    public GameObject m_QuitConfirm;
+
     private void Start()
     {
-        transform.root.SetAsFirstSibling();
-        m_DefaultMenu = transform.root.GetChild(1).gameObject;
-        m_DefaultMenu.SetActive(m_StartActive);
+        //set only main to be visible
+        m_Main.SetActive(m_StartActive);
+        m_Options.SetActive(false);
+        m_QuitConfirm.SetActive(false);
     }
     private void OnEnable()
     {
@@ -21,6 +26,26 @@ public class MenuManager : MonoBehaviour
     private void OnDisable()
     {
         PauseManager.OnPause -= pauseGame;
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !m_Main.activeSelf)
+        {
+
+            if (m_Options.activeSelf)
+            {
+                m_Options.SetActive(false);
+            }
+            else if (m_QuitConfirm.activeSelf)
+            {
+                m_QuitConfirm.SetActive(false);
+            }
+            m_Main.SetActive(true);
+            if (PauseManager.GetInstance() != null && PauseManager.GetInstance().isPausedDisabled() && PauseManager.GetInstance().isPaused())
+            {
+                PauseManager.GetInstance().DisablePause(false);
+            }
+        }
     }
     public void changeScene(int sceneIndex)
     {
@@ -55,7 +80,7 @@ public class MenuManager : MonoBehaviour
     }
     public void pauseGame(bool pause)
     {
-        m_DefaultMenu.SetActive(pause);
+        m_Main.SetActive(pause);
     }
     public void resume()
     {
