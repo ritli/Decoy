@@ -92,8 +92,8 @@ public class SceneLoader : MonoBehaviour
         //loads a scene "addetive" directly. if it already isn't loaded.
         if (AllowNewSceneState(scene, true))
         {
-            GameManager.GetPlayer().gameObject.SetActive(true);
-            GameManager.GetPlayer().pausePlayer(false);
+//            GameManager.GetPlayer().gameObject.SetActive(true);
+//            GameManager.GetPlayer().pausePlayer(false);
 
             SceneManager.LoadScene(scene.ToString(),LoadSceneMode.Additive);
             ImageFader.instance.SetVisible(false);

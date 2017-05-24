@@ -33,9 +33,8 @@ public class PlayVideo : MonoBehaviour {
 	void Start()
 	{
 		Application.runInBackground = true;
-		StartCoroutine(playVideo());
 		GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
-		print(Screen.currentResolution);
+		StartCoroutine(playVideo());
 		//GetComponent<RectTransform>().anchorMax = new Vector2(Screen.width, Screen.height);
 	}
 
@@ -64,7 +63,7 @@ public class PlayVideo : MonoBehaviour {
 		videoPlayer.EnableAudioTrack(0, true);
 		videoPlayer.SetTargetAudioSource(0, audioSource);
 
-//		//Set video To Play then prepare Audio to prevent Buffering
+//		//Prepare and play all available videos
 		foreach (Video video in videos)
 		{
 			videoPlayer.clip = video.videoClip;
@@ -97,9 +96,10 @@ public class PlayVideo : MonoBehaviour {
 				//Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
 				yield return null;
 			}
-			Debug.Log("Done Playing first video");
+			Debug.Log("Done Playing video: " + video.videoClip.name);
 		}
 
+		Debug.Log("Yoyo");
 		// Load next scene
 		SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
 		GameManager.GetPlayer().gameObject.SetActive(true);
