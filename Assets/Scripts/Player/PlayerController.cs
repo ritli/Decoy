@@ -159,8 +159,12 @@ public class PlayerController : MonoBehaviour, IKillable
 
     bool m_inDeathState = false;
 
+    private bool targeted = false;
+    public float overlaySpeed = 1;
     public delegate void landEvent();
     public landEvent onLand;
+
+    private UnityStandardAssets.ImageEffects.ScreenOverlay overlay; 
 
     public bool IsCrouching
     {
@@ -179,7 +183,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
+
+
         m_Camera = transform.FindChild("Camera").GetComponent<Camera>();
+        overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
 
         m_cameraBobber = GetComponent<VectorBobber>();
 
@@ -215,7 +222,10 @@ public class PlayerController : MonoBehaviour, IKillable
 		m_ledgeLerp = GetComponent<LedgeLerp>();
         m_Audio = GetComponentInChildren<AudioPlayer>();
     }
-
+    public void ShowOverlay()
+    {
+        targeted = true;
+    }
     public void Kill()
     {
         m_playerState = PlayerState.isDead;
@@ -235,7 +245,6 @@ public class PlayerController : MonoBehaviour, IKillable
         FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
         m_Audio.PlaySoundAtPosition(0, true, transform.position);
 
-        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
         float deathTime = 0.6f;
 
@@ -441,6 +450,8 @@ public class PlayerController : MonoBehaviour, IKillable
         m_inDeathState = false;
         m_controlsEnabled = true;
         m_teleport.m_indi.SetActive(false);
+        ImageFader.instance.SetVisible(false);
+        m_animator.speed = 1;
 
         GameManager.resetActivations();
     }
@@ -448,6 +459,18 @@ public class PlayerController : MonoBehaviour, IKillable
     // Update is called once per frame
     private void Update()
     {
+        //if a turret has targeted the player, set the bool as false again. 
+        //If they still aim at the player next frame they will set it again
+        if (targeted)
+        {    
+            targeted = false;
+            overlay.intensity = Mathf.Lerp(overlay.intensity, 1, Time.deltaTime * overlaySpeed);
+        }
+        else
+        {
+            overlay.intensity = Mathf.Lerp(overlay.intensity, 0, Time.deltaTime * overlaySpeed);
+        }
+
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
@@ -471,6 +494,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
             if (!m_resetCalled)
             {
+                    m_animator.speed = 0;
+                    ImageFader.instance.SetVisible(true);
                 m_resetCalled = true;
                 Invoke("ResetPlayer", 1.5f);
             }
