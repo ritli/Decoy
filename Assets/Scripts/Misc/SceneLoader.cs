@@ -21,7 +21,7 @@ public class LoadingScene : MonoBehaviour
 public class SceneLoader : MonoBehaviour
 {
     //Add new Scenes here as they are created.
-    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, Section6, CreditScene, MusicScene, AudioScene };
+    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, Section6, CreditScene, MusicScene, AudioScene, IntroCutscene };
     public static SceneLoader instance;
     private static List<LoadingScene> m_ScenesLoading;
     public bool startfromMenu;
@@ -92,8 +92,8 @@ public class SceneLoader : MonoBehaviour
         //loads a scene "addetive" directly. if it already isn't loaded.
         if (AllowNewSceneState(scene, true))
         {
-            GameManager.GetPlayer().gameObject.SetActive(true);
-            GameManager.GetPlayer().pausePlayer(false);
+//            GameManager.GetPlayer().gameObject.SetActive(true);
+//            GameManager.GetPlayer().pausePlayer(false);
 
             SceneManager.LoadScene(scene.ToString(),LoadSceneMode.Additive);
             ImageFader.instance.SetVisible(false);
