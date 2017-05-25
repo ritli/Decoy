@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Timer), typeof(PlaySoundActivation))]
 public class FlashbackFader : ActivationObject {
 
     [Tooltip("The name of the float value in the material that is to be changed.")]
@@ -13,12 +14,19 @@ public class FlashbackFader : ActivationObject {
     public bool fadeOnce = true;
     [Tooltip("List of all meshes to be faded.")]
     public SkinnedMeshRenderer[] fadingMeshes;
+    [Tooltip("Time before the animation is played. (Sound plays immediately)")]
+    public float animationDelay = 0.0f;
+
+    private bool animationInitiated = false;
 
     private List<Material> m_fadingMats = new List<Material>();
     private bool isFading = false;
     private bool finishedFading = false;
     private float fadingTarget;
     private AnimationActivation m_animation;
+
+    Timer m_timer;
+    PlaySoundActivation m_soundPlayer;
 
     // Fade in
     public override void activate()
@@ -54,6 +62,18 @@ public class FlashbackFader : ActivationObject {
 
     private void Awake()
     {
+        m_timer = GetComponent<Timer>();
+        if (m_timer == null)
+            Debug.LogError("No timer found on FlashbackFader");
+        else
+        {
+            m_timer.setTimeout(animationDelay);
+        }
+
+        m_soundPlayer = GetComponent<PlaySoundActivation>();
+        if (m_soundPlayer == null)
+            Debug.LogError("No PlaySoundActivation found on FlashbackFader");
+
         fadeValueName = "_" + fadeValueName;
         m_animation = GetComponent<AnimationActivation>();
 
@@ -94,13 +114,24 @@ public class FlashbackFader : ActivationObject {
                         isFading = false;
                         finishedFading = true;
                         
-                        if (fadingTarget == 1.0f)
-                            m_animation.activate();
+                        // Start sound and wait for animation.
+                        if (!animationInitiated && fadingTarget == 1.0f)
+                        {
+                            animationInitiated = true;
+                            m_timer.resetTimer();
+                            m_soundPlayer.activate();
+                            print("Start sound!");
+                        }
                     }
                 }
             }
         }
-        else if (!m_animation.isActivated() && finishedFading)
+        else if (!isFading && fadingTarget == 1.0f && m_timer.isTimeUp() && animationInitiated)
+        {
+            m_animation.activate();
+            animationInitiated = false;
+        }
+        else if (!m_animation.isActivated() && finishedFading && m_timer.isTimeUp())
         {
             finishedFading = false;
             deactivate();

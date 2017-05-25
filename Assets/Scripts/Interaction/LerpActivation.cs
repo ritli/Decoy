@@ -12,6 +12,10 @@ public class LerpActivation : ActivationObject {
     public bool returnToStart = false;
     [Tooltip("Determines how close the position and target position has to be before the lerp ends.")]
     public float threshold = 0.5f;
+    public bool lerpLocal;
+    [Header("Lerp to the given GameObject name.")]
+    public bool findLerpdestByName;
+    public string searchName;
 
     private Vector3 m_lerpAim;
     private bool m_isActive = false;
@@ -19,10 +23,21 @@ public class LerpActivation : ActivationObject {
 
     private float m_timeElapsed = 0;
 
+    private void Awake()
+    {
+        if (findLerpdestByName)
+        {
+            GameObject foundObject = GameObject.Find(searchName);
+            destPos = foundObject.transform;
+        }
+        else if (destPos == null)
+            Debug.LogError("Destpos is null and no object is being searched for instead.");
+    }
+
     // Function to be called when activating the object, toggling on.
     public override void activate()
     {
-        m_lerpAim = destPos.transform.position;
+        m_lerpAim = destPos.position;
         m_isLerping = true;
         m_isActive = true;
         m_timeElapsed = 0;
@@ -53,7 +68,7 @@ public class LerpActivation : ActivationObject {
     {
         if (checkIndex <= index)
         {
-            transform.position = destPos.transform.position;
+            transform.position = destPos.position;
             m_isActive = true;
         }
 
@@ -78,13 +93,19 @@ public class LerpActivation : ActivationObject {
         {
             if (timed)
             {
-                transform.position = Vector3.Lerp(transform.position, destPos.position, m_timeElapsed / m_time);
+                if (lerpLocal)
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localToWorldMatrix * destPos.position, m_timeElapsed / m_time);
+                else
+                    transform.position = Vector3.Lerp(transform.position, destPos.position, m_timeElapsed / m_time);
 
                 m_timeElapsed += Time.deltaTime;
             }
             else
             {
-                transform.position = Vector3.Lerp(transform.position, destPos.position, speed * Time.deltaTime);
+                if (lerpLocal)
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localToWorldMatrix * destPos.position, speed * Time.deltaTime);
+                else
+                    transform.position = Vector3.Lerp(transform.position, destPos.position, speed * Time.deltaTime);
             }
 
         }

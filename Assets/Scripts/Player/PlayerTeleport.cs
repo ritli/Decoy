@@ -67,6 +67,9 @@ public class PlayerTeleport : MonoBehaviour {
 
     private Vector3 m_lastPosition;
 
+    // Variable controlling whether the players can teleport or not.
+    private bool teleportAllowed = true;
+
 	void Start ()
     {
 		m_playerLength = GetComponent<CharacterController>().height;
@@ -158,8 +161,11 @@ public class PlayerTeleport : MonoBehaviour {
 
                     m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
 
-                    ShowIndicator();
-                    m_blinkState = BlinkState.aiming;
+                    if (teleportAllowed)
+                    {
+                        ShowIndicator();
+                        m_blinkState = BlinkState.aiming;
+                    }                 
                 }
             }
             if (Input.GetButtonUp("Teleport"))
@@ -224,7 +230,7 @@ public class PlayerTeleport : MonoBehaviour {
     {
         StartCoroutine(m_fovKick.FOVKickUp());
         m_partController.LerpAlpha(0, 0.7f, 0.05f);
-        m_partController.PlayBurst(50);
+        m_partController.PlayBurst(60);
 
         Invoke("CancelVisualEffects", 0.5f);
     }
@@ -250,6 +256,16 @@ public class PlayerTeleport : MonoBehaviour {
 		if (resetTimeOnCancel)
 			m_cooldownTimer.resetTimer();
 	}
+
+    public void enableTeleportation()
+    {
+        teleportAllowed = true;
+    }
+
+    public void disableTeleportation()
+    {
+        teleportAllowed = false;
+    }
 
     void ShowIndicator()
     {
