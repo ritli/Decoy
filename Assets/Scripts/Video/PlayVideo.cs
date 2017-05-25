@@ -50,8 +50,8 @@ public class PlayVideo : MonoBehaviour {
 		audioSource = gameObject.AddComponent<AudioSource>();
 
 		//Disable Play on Awake for both Video and Audio
-		videoPlayer.playOnAwake = false;
-		audioSource.playOnAwake = false;
+		//videoPlayer.playOnAwake = false;
+		//audioSource.playOnAwake = false;
 
 		//We want to play from video clip not from url
 		videoPlayer.source = VideoSource.VideoClip;
@@ -75,7 +75,18 @@ public class PlayVideo : MonoBehaviour {
 				Debug.Log("Preparing Video");
 				yield return null;
 			}
-			
+
+			//Wait until video is prepared
+			//WaitForSeconds waitTime = new WaitForSeconds(5);
+			//while (!videoPlayer.isPrepared)
+			//{
+			//	Debug.Log("Preparing Video");
+			//	//Prepare/Wait for 5 sceonds only
+			//	yield return waitTime;
+			//	//Break out of the while loop after 5 seconds wait
+			//	break;
+			//}
+
 			Debug.Log("Done Preparing Video");
 			
 			//Assign the Texture from Video to RawImage to be displayed
@@ -84,16 +95,19 @@ public class PlayVideo : MonoBehaviour {
 			//Play Video and Sound
 			videoPlayer.Play();
 			audioSource.Play();
+
+			ulong totalFrames = videoPlayer.frameCount;
 			
 			Debug.Log("Playing Video");
 			while (videoPlayer.isPlaying)
 			{
-				if (CrossPlatformInputManager.GetButtonDown("Cancel") && video.isSkippable)
+				if (CrossPlatformInputManager.GetButtonDown("Cancel") && video.isSkippable ||
+					(ulong)videoPlayer.frame > totalFrames - 10) // Stop video if current frame is second to last frame
 				{
 					videoPlayer.Stop();
 					break;
 				}
-				//Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
+				Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
 				yield return null;
 			}
 			Debug.Log("Done Playing video: " + video.videoClip.name);

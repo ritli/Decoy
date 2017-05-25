@@ -53,17 +53,24 @@
             <destination>{a0afad58-de16-4729-bbb7-d1bcf333719c}</destination>
         </relationship>
         <relationship name="output">
-            <destination>{ad513791-6818-47c5-b7e4-c2ff397305af}</destination>
+            <destination>{3d281aa2-2ae7-48b8-bb0a-901a156d52f1}</destination>
         </relationship>
     </object>
     <object class="EventAutomatableProperties" id="{50f1955c-ce14-480f-aa3a-d9fb26c433bc}"/>
     <object class="MarkerTrack" id="{0a8dc041-4c43-4bdd-b622-96261f7dc06c}"/>
     <object class="GroupTrack" id="{1d63cc28-d0b2-4bf0-964b-68b0c2d2e169}">
+        <relationship name="modules">
+            <destination>{30ec89cc-cbb2-4379-898c-c5cd41bcf11e}</destination>
+        </relationship>
         <relationship name="mixerGroup">
             <destination>{96bba23a-adcb-4eb6-8eb5-6f6034e28638}</destination>
         </relationship>
     </object>
-    <object class="Timeline" id="{c17d373f-2aa7-497f-ba5e-35f5c4528c50}"/>
+    <object class="Timeline" id="{c17d373f-2aa7-497f-ba5e-35f5c4528c50}">
+        <relationship name="modules">
+            <destination>{30ec89cc-cbb2-4379-898c-c5cd41bcf11e}</destination>
+        </relationship>
+    </object>
     <object class="EventMixerMaster" id="{61adba33-e018-419c-9d46-80bbef20c2c2}">
         <relationship name="effectChain">
             <destination>{11892da4-4a89-4253-beb4-cc76d1577f69}</destination>
@@ -81,9 +88,17 @@
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{a0afad58-de16-4729-bbb7-d1bcf333719c}"/>
+    <object class="SingleSound" id="{30ec89cc-cbb2-4379-898c-c5cd41bcf11e}">
+        <property name="length">
+            <value>14.875</value>
+        </property>
+        <relationship name="audioFile">
+            <destination>{f84bfa39-e405-4d4a-86b3-b9662827ee31}</destination>
+        </relationship>
+    </object>
     <object class="EventMixerGroup" id="{96bba23a-adcb-4eb6-8eb5-6f6034e28638}">
         <property name="name">
-            <value>Audio 1</value>
+            <value>FB2</value>
         </property>
         <relationship name="effectChain">
             <destination>{e47934cb-452d-47bc-85ef-b2e25df78572}</destination>

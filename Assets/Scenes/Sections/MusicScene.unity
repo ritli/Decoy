@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 26830929}
   - component: {fileID: 26830928}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (1)
+  m_Name: S5_Music_Trigger_Mega_Epic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,11 +132,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 26830926}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.81, z: 150.1}
-  m_LocalScale: {x: 5.393393, y: 3.7042587, z: 1}
+  m_LocalPosition: {x: 2.159545, y: 10.66, z: 171.03}
+  m_LocalScale: {x: 15.061961, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 2
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &26830928
 MonoBehaviour:
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 211855200}
   - component: {fileID: 211855199}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (4)
+  m_Name: S5_Music_Trigger Brass1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,10 +192,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 211855197}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 252.1}
-  m_LocalScale: {x: 8.302249, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 7.585698, y: 14.12, z: 252.3}
+  m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
+  m_Father: {fileID: 1449734274}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &211855199
@@ -228,102 +228,42 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &250127272
+--- !u!1 &381038246
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 250127273}
-  - component: {fileID: 250127275}
-  - component: {fileID: 250127274}
+  - component: {fileID: 381038247}
+  - component: {fileID: 381038249}
+  - component: {fileID: 381038248}
   m_Layer: 2
-  m_Name: S3_Music_Emitter (2)
+  m_Name: S2_Music_End_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &250127273
+--- !u!4 &381038247
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 250127272}
+  m_GameObject: {fileID: 381038246}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 408.54, y: 12.46, z: -27.45}
-  m_LocalScale: {x: 1, y: 8.485809, z: 11.41505}
-  m_Children: []
-  m_Father: {fileID: 940196153}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &250127274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 250127272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitters:
-  - Target: {fileID: 1576572560}
-    Params:
-    - Name: S3_Progression
-      Value: 2
-  TriggerEvent: 3
-  CollisionTag: Player
---- !u!65 &250127275
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 250127272}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &297449414
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 297449415}
-  - component: {fileID: 297449417}
-  - component: {fileID: 297449416}
-  m_Layer: 2
-  m_Name: S2_Music_Trigger (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &297449415
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 297449414}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 119.6, y: -3.3000002, z: 79.59999}
-  m_LocalScale: {x: 1.66797, y: 24.97089, z: 64.54857}
+  m_LocalPosition: {x: 254.16, y: 3.87, z: -70.2}
+  m_LocalScale: {x: 1, y: 13.573097, z: 11.41505}
   m_Children: []
   m_Father: {fileID: 1486267149}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &297449416
+--- !u!114 &381038248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 297449414}
+  m_GameObject: {fileID: 381038246}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
@@ -332,18 +272,16 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 1188637574}
     Params:
-    - Name: S2Progression
-      Value: 2
-    - Name: Action Start
+    - Name: S2ToEnd
       Value: 1
   TriggerEvent: 3
   CollisionTag: Player
---- !u!65 &297449417
+--- !u!65 &381038249
 BoxCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 297449414}
+  m_GameObject: {fileID: 381038246}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -361,7 +299,7 @@ GameObject:
   - component: {fileID: 584227250}
   - component: {fileID: 584227249}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (5)
+  m_Name: S5_Music_Trigger Brass2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -374,10 +312,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 584227247}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 261.3}
-  m_LocalScale: {x: 8.302249, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 7.585698, y: 12.76, z: 263.87}
+  m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
+  m_Father: {fileID: 1449734274}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &584227249
@@ -410,59 +348,76 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &854006870
+--- !u!1 &644345683
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 854006871}
-  - component: {fileID: 854006872}
+  - component: {fileID: 644345684}
+  - component: {fileID: 644345686}
+  - component: {fileID: 644345685}
   m_Layer: 2
-  m_Name: DEPLOY
+  m_Name: S3_Music_Trigger3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &854006871
+--- !u!4 &644345684
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 854006870}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: -0.11}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_GameObject: {fileID: 644345683}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 290.58, y: 10.57, z: -70.48}
+  m_LocalScale: {x: 5.588399, y: -7.468077, z: -6.7984347}
   m_Children: []
-  m_Father: {fileID: 1472092419}
-  m_RootOrder: 0
+  m_Father: {fileID: 940196153}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &854006872
+--- !u!114 &644345685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 854006870}
+  m_GameObject: {fileID: 644345683}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a36c3c40606ffac48a07c41b3f6b4dab, type: 3}
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkIndex: 0
-  objectToEnable: {fileID: 1576572558}
-  m_value: 0
---- !u!1 &879336960
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S3_DeathVariation
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &644345686
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 644345683}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &834358969
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 879336961}
-  - component: {fileID: 879336963}
-  - component: {fileID: 879336962}
+  - component: {fileID: 834358970}
+  - component: {fileID: 834358972}
+  - component: {fileID: 834358971}
   m_Layer: 2
   m_Name: S2_Music_Trigger (2)
   m_TagString: Untagged
@@ -470,25 +425,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &879336961
+--- !u!4 &834358970
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 879336960}
-  m_LocalRotation: {x: -0, y: 0.7071067, z: -0, w: 0.70710695}
-  m_LocalPosition: {x: 184.4, y: -9.6, z: -18.2}
+  m_GameObject: {fileID: 834358969}
+  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 183.6, y: -9.67, z: -26.2}
   m_LocalScale: {x: 1.66797, y: 24.97089, z: 64.54857}
   m_Children: []
   m_Father: {fileID: 1486267149}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
---- !u!114 &879336962
+--- !u!114 &834358971
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 879336960}
+  m_GameObject: {fileID: 834358969}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
@@ -503,12 +458,12 @@ MonoBehaviour:
       Value: 1
   TriggerEvent: 3
   CollisionTag: Player
---- !u!65 &879336963
+--- !u!65 &834358972
 BoxCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 879336960}
+  m_GameObject: {fileID: 834358969}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -529,7 +484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &940196153
 Transform:
   m_ObjectHideFlags: 0
@@ -541,14 +496,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1576572559}
-  - {fileID: 1968715991}
+  - {fileID: 1324192349}
+  - {fileID: 1506010375}
   - {fileID: 984177353}
-  - {fileID: 1896134450}
-  - {fileID: 1472092419}
-  - {fileID: 250127273}
-  - {fileID: 1689833357}
+  - {fileID: 644345684}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984177352
 GameObject:
@@ -558,6 +511,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 984177353}
+  - component: {fileID: 984177355}
+  - component: {fileID: 984177354}
   m_Layer: 2
   m_Name: S3_Music_Trigger_End
   m_TagString: Untagged
@@ -572,12 +527,42 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 984177352}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 426.79, y: 12.409338, z: -27.804504}
+  m_LocalPosition: {x: 411.57, y: 10.06, z: -27.804504}
   m_LocalScale: {x: 1, y: 8.4858055, z: 11.41505}
   m_Children: []
   m_Father: {fileID: 940196153}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &984177354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 984177352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S3_EndJump
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &984177355
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 984177352}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1010908310
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,18 +587,9 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1010908310}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.14, y: 0, z: 2.57}
-  m_LocalScale: {x: 2.7926688, y: 2.5638852, z: 1}
-  m_Children:
-  - {fileID: 1860486709}
-  - {fileID: 1897270704}
-  - {fileID: 26830927}
-  - {fileID: 1433460975}
-  - {fileID: 1020705510}
-  - {fileID: 2107563057}
-  - {fileID: 211855198}
-  - {fileID: 584227248}
-  - {fileID: 1559015175}
+  m_LocalPosition: {x: -0.36349, y: 2.49, z: -9.7}
+  m_LocalScale: {x: 3.7699301, y: 3.2536283, z: 1}
+  m_Children: []
   m_Father: {fileID: 1449734274}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -675,11 +651,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1020705509}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.809999, z: 235.54}
-  m_LocalScale: {x: 8.30225, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 2.159545, y: 16.83, z: 233.6}
+  m_LocalScale: {x: 23.185434, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 4
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1020705511
 MonoBehaviour:
@@ -705,68 +681,6 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1020705509}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1046880310
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1046880311}
-  - component: {fileID: 1046880313}
-  - component: {fileID: 1046880312}
-  m_Layer: 2
-  m_Name: S2_Music_Trigger (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1046880311
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1046880310}
-  m_LocalRotation: {x: -0, y: 0.000000029802319, z: -0, w: 1}
-  m_LocalPosition: {x: 247.2, y: 10.5, z: -68.2}
-  m_LocalScale: {x: 1.6679709, y: 24.97089, z: 64.54862}
-  m_Children: []
-  m_Father: {fileID: 1486267149}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1046880312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1046880310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitters:
-  - Target: {fileID: 1188637574}
-    Params:
-    - Name: S2ToEnd
-      Value: 1
-    - Name: Action Start
-      Value: 1
-  TriggerEvent: 3
-  CollisionTag: Player
---- !u!65 &1046880313
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1046880310}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -801,7 +715,7 @@ Transform:
   m_LocalScale: {x: 23.905949, y: 27.34887, z: -3.92078}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1093668380
 MonoBehaviour:
@@ -897,6 +811,130 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1206188196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1206188197}
+  - component: {fileID: 1206188199}
+  - component: {fileID: 1206188198}
+  m_Layer: 2
+  m_Name: S2_Music_Trigger (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1206188197
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1206188196}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 134.1, y: -3.3000002, z: 79.59999}
+  m_LocalScale: {x: 1.66797, y: 24.97089, z: 64.54857}
+  m_Children: []
+  m_Father: {fileID: 1486267149}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1206188198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1206188196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1188637574}
+    Params:
+    - Name: S2Progression
+      Value: 2
+    - Name: Action Start
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1206188199
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1206188196}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1216056485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1216056486}
+  - component: {fileID: 1216056488}
+  - component: {fileID: 1216056487}
+  m_Layer: 2
+  m_Name: S1_Music_Trigger5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1216056486
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1216056485}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -63.837376, y: -9.77, z: 37.75}
+  m_LocalScale: {x: 23.905949, y: 11.376115, z: -3.92078}
+  m_Children: []
+  m_Father: {fileID: 2026311871}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1216056487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1216056485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1819470892}
+    Params:
+    - Name: S1_EndingJump
+      Value: 2
+    - Name: Progression
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1216056488
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1216056485}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1253520199
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,7 +963,7 @@ Transform:
   m_LocalScale: {x: 4.533686, y: 8.466751, z: -17.735538}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1253520201
 MonoBehaviour:
@@ -953,6 +991,128 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1253520199}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1269189221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1269189222}
+  - component: {fileID: 1269189224}
+  - component: {fileID: 1269189223}
+  m_Layer: 2
+  m_Name: S4_Music_Trigger_End
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1269189222
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269189221}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 280.15, y: -0.098, z: 3.708}
+  m_LocalScale: {x: 12.818415, y: 4.069912, z: 1.676813}
+  m_Children: []
+  m_Father: {fileID: 1686042211}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1269189223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269189221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S4_End
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1269189224
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1269189221}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1324192348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1324192349}
+  - component: {fileID: 1324192351}
+  - component: {fileID: 1324192350}
+  m_Layer: 2
+  m_Name: S3_Music_Trigger1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1324192349
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1324192348}
+  m_LocalRotation: {x: -0, y: -0.011305424, z: -0, w: 0.9999361}
+  m_LocalPosition: {x: 359.59, y: 7.3, z: -53.65}
+  m_LocalScale: {x: 30.2948, y: 18.99159, z: 5.4994307}
+  m_Children: []
+  m_Father: {fileID: 940196153}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -1.296, z: 0}
+--- !u!114 &1324192350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1324192348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S3_DeathVariation
+      Value: 0
+    - Name: S3_Progression
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1324192351
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1324192348}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -1032,7 +1192,7 @@ GameObject:
   - component: {fileID: 1433460977}
   - component: {fileID: 1433460976}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (2)
+  m_Name: S5_Music_Trigger_Cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1045,11 +1205,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1433460974}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099995, z: 203.3}
-  m_LocalScale: {x: 5.3933935, y: 3.7042587, z: 1}
+  m_LocalPosition: {x: 5.6, y: 15.61, z: 188.1}
+  m_LocalScale: {x: 15.061963, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 3
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1433460976
 MonoBehaviour:
@@ -1095,7 +1255,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1449734274
 Transform:
   m_ObjectHideFlags: 0
@@ -1107,80 +1267,18 @@ Transform:
   m_LocalScale: {x: 4.0882955, y: 3.3803024, z: 1}
   m_Children:
   - {fileID: 1010908311}
+  - {fileID: 1860486709}
+  - {fileID: 1897270704}
+  - {fileID: 26830927}
+  - {fileID: 1433460975}
+  - {fileID: 1020705510}
+  - {fileID: 211855198}
+  - {fileID: 584227248}
+  - {fileID: 1559015175}
+  - {fileID: 2107563057}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1472092418
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1472092419}
-  - component: {fileID: 1472092422}
-  - component: {fileID: 1472092421}
-  - component: {fileID: 1472092420}
-  m_Layer: 2
-  m_Name: TURN OFF THE MUSIC TRIGGER
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1472092419
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1472092418}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 564.8, y: 22.93, z: -23.43}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 854006871}
-  m_Father: {fileID: 940196153}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1472092420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1472092418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e82a186c9d194384d8755f355b4857ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_activationObjects:
-  - {fileID: 854006872}
-  m_triggerOnce: 1
-  deactivateOnExit: 0
---- !u!114 &1472092421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1472092418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8a60a6b0e177674cae3d765858ad0db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: {r: 1, g: 0.8482759, b: 0, a: 1}
---- !u!65 &1472092422
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1472092418}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 10, y: 40, z: 20}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1486267148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1195,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1486267149
 Transform:
   m_ObjectHideFlags: 0
@@ -1208,12 +1306,72 @@ Transform:
   m_Children:
   - {fileID: 1188637573}
   - {fileID: 1344993412}
-  - {fileID: 297449415}
-  - {fileID: 879336961}
-  - {fileID: 1046880311}
+  - {fileID: 1206188197}
+  - {fileID: 834358970}
+  - {fileID: 381038247}
   m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1506010374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1506010375}
+  - component: {fileID: 1506010377}
+  - component: {fileID: 1506010376}
+  m_Layer: 2
+  m_Name: S3_Music_Trigger2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1506010375
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1506010374}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 405.15, y: 11.449999, z: -78.77}
+  m_LocalScale: {x: 7.7857056, y: 25.358767, z: 23.305113}
+  m_Children: []
+  m_Father: {fileID: 940196153}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1506010376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1506010374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S3_Progression
+      Value: 2
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1506010377
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1506010374}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1559015174
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,7 +1383,7 @@ GameObject:
   - component: {fileID: 1559015177}
   - component: {fileID: 1559015176}
   m_Layer: 2
-  m_Name: S5_Music_Trigger (6)
+  m_Name: S5_Music_Trigger Brass3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1238,10 +1396,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1559015174}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 273.1}
-  m_LocalScale: {x: 8.302249, y: 5.1546307, z: 1}
+  m_LocalPosition: {x: 7.585698, y: 12.18, z: 275.67}
+  m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
+  m_Father: {fileID: 1449734274}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1559015176
@@ -1298,8 +1456,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1576572558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 289.66, y: 12.91, z: -70.2}
-  m_LocalScale: {x: 1, y: 8.4858055, z: 11.41505}
+  m_LocalPosition: {x: 279.78, y: 11.17, z: -70.2}
+  m_LocalScale: {x: 1, y: 9.034406, z: 11.41505}
   m_Children: []
   m_Father: {fileID: 940196153}
   m_RootOrder: 0
@@ -1366,7 +1524,7 @@ Transform:
   m_LocalScale: {x: 4.53369, y: 29.165257, z: -30.730844}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1647556191
 MonoBehaviour:
@@ -1444,6 +1602,8 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 1819470892}
     Params:
+    - Name: S1_EndingJump
+      Value: 1
     - Name: S1_Progression
       Value: 1
     - Name: Progression
@@ -1462,66 +1622,35 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1689833356
+--- !u!1 &1686042210
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 1689833357}
-  - component: {fileID: 1689833359}
-  - component: {fileID: 1689833358}
+  - component: {fileID: 1686042211}
   m_Layer: 2
-  m_Name: S3_Music_Emitter (3)
+  m_Name: MusicTriggersS4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1689833357
+--- !u!4 &1686042211
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1689833356}
+  m_GameObject: {fileID: 1686042210}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 444.46, y: 12.460001, z: -27.45}
-  m_LocalScale: {x: 1, y: 23.619396, z: 66.50583}
-  m_Children: []
-  m_Father: {fileID: 940196153}
-  m_RootOrder: 6
+  m_LocalPosition: {x: 328.90366, y: 25.628723, z: -44.427128}
+  m_LocalScale: {x: 1, y: 9.0344095, z: 11.41505}
+  m_Children:
+  - {fileID: 1269189222}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1689833358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1689833356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitters:
-  - Target: {fileID: 1576572560}
-    Params:
-    - Name: S3_Progression
-      Value: 3
-  TriggerEvent: 3
-  CollisionTag: Player
---- !u!65 &1689833359
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1689833356}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1819470891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,7 +1713,7 @@ Transform:
   m_LocalScale: {x: 3.8552706, y: 3.9211366, z: 4.1168194}
   m_Children: []
   m_Father: {fileID: 2026311871}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1860486708
 GameObject:
@@ -1609,12 +1738,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1860486708}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.007, y: 0.034, z: 6.73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.33651, y: 2.6, z: 9.299999}
+  m_LocalScale: {x: 3.7699306, y: 3.253628, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 0
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1860486710
 MonoBehaviour:
@@ -1710,47 +1839,6 @@ Transform:
   m_Father: {fileID: 2026311871}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1896134449
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1896134450}
-  - component: {fileID: 1896134451}
-  m_Layer: 2
-  m_Name: S3_Temporary_End_Trigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1896134450
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1896134449}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 642.9321, y: -7.1115446, z: -9.65}
-  m_LocalScale: {x: 13.296562, y: 7.052091, z: 1}
-  m_Children: []
-  m_Father: {fileID: 940196153}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1896134451
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1896134449}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1897270703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1762,7 +1850,7 @@ GameObject:
   - component: {fileID: 1897270706}
   - component: {fileID: 1897270705}
   m_Layer: 2
-  m_Name: S5_Music_Trigger
+  m_Name: S5_Music_Trigger_Break
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1775,11 +1863,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1897270703}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.006998624, y: 2.784, z: 100.43}
-  m_LocalScale: {x: 5.393392, y: 3.7042592, z: 1}
+  m_LocalPosition: {x: 2.159545, y: 7.137856, z: 89.1}
+  m_LocalScale: {x: 15.061959, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 1
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1897270705
 MonoBehaviour:
@@ -1811,66 +1899,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1968715990
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1968715991}
-  - component: {fileID: 1968715993}
-  - component: {fileID: 1968715992}
-  m_Layer: 2
-  m_Name: S3_Music_Emitter (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1968715991
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1968715990}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 346.36, y: 6.91, z: -55.95}
-  m_LocalScale: {x: 1, y: 8.485809, z: 11.41505}
-  m_Children: []
-  m_Father: {fileID: 940196153}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1968715992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1968715990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitters:
-  - Target: {fileID: 1576572560}
-    Params:
-    - Name: S3_Progression
-      Value: 1
-  TriggerEvent: 3
-  CollisionTag: Player
---- !u!65 &1968715993
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1968715990}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2026311870
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,12 +1908,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2026311871}
   m_Layer: 2
-  m_Name: Music
+  m_Name: MusicTriggersS1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2026311871
 Transform:
   m_ObjectHideFlags: 0
@@ -1896,12 +1924,13 @@ Transform:
   m_LocalPosition: {x: 49.123646, y: 14.458723, z: 25.77287}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1093668379}
+  - {fileID: 1819470894}
   - {fileID: 1656970756}
   - {fileID: 1876135920}
-  - {fileID: 1819470894}
   - {fileID: 1253520200}
   - {fileID: 1647556190}
+  - {fileID: 1216056486}
+  - {fileID: 1093668379}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1928,13 +1957,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2107563056}
-  m_LocalRotation: {x: -0, y: -0.38245484, z: -0, w: 0.9239742}
-  m_LocalPosition: {x: 0.006998624, y: 3.8099988, z: 295.6}
-  m_LocalScale: {x: 5.3933945, y: 3.7042587, z: 1}
+  m_LocalRotation: {x: -0, y: 0.0002480149, z: -0, w: 1}
+  m_LocalPosition: {x: 9.87, y: 12.18, z: 294.38}
+  m_LocalScale: {x: 15.061963, y: 9.497294, z: 1}
   m_Children: []
-  m_Father: {fileID: 1010908311}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: -44.972004, z: 0}
+  m_Father: {fileID: 1449734274}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0.028, z: 0}
 --- !u!114 &2107563058
 MonoBehaviour:
   m_ObjectHideFlags: 0
