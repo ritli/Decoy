@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1764888729781592}
   m_IsPrefabParent: 1
+--- !u!1 &1208829004938844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4174408195235172}
+  - component: {fileID: 114617743845650732}
+  m_Layer: 2
+  m_Name: LayerSwitcher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1613634936996962
 GameObject:
   m_ObjectHideFlags: 0
@@ -55,8 +71,8 @@ GameObject:
   - component: {fileID: 33120334617858078}
   - component: {fileID: 23701726174419968}
   - component: {fileID: 114934263230245650}
-  m_Layer: 10
-  m_Name: CH_Device_standalone_01_LP
+  m_Layer: 0
+  m_Name: Glove
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,6 +90,7 @@ GameObject:
   - component: {fileID: 114772049852846432}
   - component: {fileID: 114329925107810410}
   - component: {fileID: 114243510666713276}
+  - component: {fileID: 114209658176971830}
   m_Layer: 2
   m_Name: PickupSequence
   m_TagString: Untagged
@@ -87,15 +104,29 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1764888729781592}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.606, y: -15.23, z: 30.89}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.70710677}
+  m_LocalPosition: {x: -4.158, y: -8.807, z: 4.821}
+  m_LocalScale: {x: 0.47903126, y: 0.47903126, z: 0.37250173}
   m_Children:
   - {fileID: 4649115683830416}
   - {fileID: 4746778079110576}
   - {fileID: 4694519592311572}
+  - {fileID: 4174408195235172}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
+--- !u!4 &4174408195235172
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1208829004938844}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4081350741762024}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4649115683830416
 Transform:
@@ -117,8 +148,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1637283599453812}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071067, w: 0.70710695}
-  m_LocalPosition: {x: -0.24099731, y: -0.7709999, z: -0.09000015}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.24099731, y: -0.7, z: -0.089996}
+  m_LocalScale: {x: 1.6591928, y: 1.659192, z: 1.659192}
   m_Children: []
   m_Father: {fileID: 4081350741762024}
   m_RootOrder: 2
@@ -143,7 +174,7 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1637283599453812}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -193,8 +224,22 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 4, z: 2}
+  m_Size: {x: 4.42, y: 7.61, z: 4.87}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114209658176971830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1764888729781592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6bc9616233f55748a1c0079226bafc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  doors:
+  - {fileID: 0}
 --- !u!114 &114243510666713276
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,6 +266,9 @@ MonoBehaviour:
   checkIndex: 0
   objectToParent: {fileID: 4694519592311572}
   parent: {fileID: 0}
+  getByName: 1
+  parentName: LerpDest
+  translateToLocal: 1
 --- !u!114 &114329925107810410
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -247,6 +295,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkIndex: 0
   m_value: 1
+  lookatTransform: {fileID: 4694519592311572}
+  lookOffset: {x: 0, y: 0.5, z: 0}
+  lookSpeed: 200
+--- !u!114 &114617743845650732
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1208829004938844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa34bf1034b2f241889e99e2e3761b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  layerObject: {fileID: 1637283599453812}
+  activationLayer: 10
+  deactivationLayer: 0
 --- !u!114 &114772049852846432
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -260,15 +326,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopList: 0
   activations:
-  - activationObject: {fileID: 114556112695286650}
+  - eventName: Activate glove on Player
+    activationObject: {fileID: 114556112695286650}
     setState: 1
     delay: 1
-  - activationObject: {fileID: 114934263230245650}
+  - eventName: Move glove
+    activationObject: {fileID: 114934263230245650}
     setState: 1
     delay: 1
-  - activationObject: {fileID: 114291885258506162}
+  - eventName: Parent device
+    activationObject: {fileID: 114291885258506162}
     setState: 1
-    delay: 1
+    delay: 0
+  - eventName: Switch Glove Layer
+    activationObject: {fileID: 114617743845650732}
+    setState: 1
+    delay: 0
+  - eventName: Open Door
+    activationObject: {fileID: 114209658176971830}
+    setState: 1
+    delay: 0
+  - eventName: Release Player
+    activationObject: {fileID: 114556112695286650}
+    setState: 0
+    delay: 2
   m_triggerType: 1
   m_triggererTag: Player
 --- !u!114 &114934263230245650
@@ -290,3 +371,6 @@ MonoBehaviour:
   speed: 1.2
   returnToStart: 0
   threshold: 0.01
+  lerpLocal: 0
+  findLerpdestByName: 1
+  searchName: LerpDest
