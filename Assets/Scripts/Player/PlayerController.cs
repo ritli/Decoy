@@ -172,6 +172,16 @@ public class PlayerController : MonoBehaviour, IKillable
             return m_crouching;
         }
     }
+
+    public void hasDevice(bool hasDevice)
+    {
+        m_hasDevice = hasDevice;
+
+        if (hasDevice)
+            m_teleport.enableTeleportation();
+        else
+            m_teleport.disableTeleportation();
+    } 
     
     void Awake()
     {
@@ -194,6 +204,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
+
+        if (!m_hasDevice)
+            m_teleport.disableTeleportation();
+
         m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
         m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
