@@ -230,7 +230,7 @@ public class PlayerTeleport : MonoBehaviour {
     {
         StartCoroutine(m_fovKick.FOVKickUp());
         m_partController.LerpAlpha(0, 0.7f, 0.05f);
-        m_partController.PlayBurst(50);
+        m_partController.PlayBurst(60);
 
         Invoke("CancelVisualEffects", 0.5f);
     }

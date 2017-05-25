@@ -22,11 +22,17 @@
         <relationship name="snapshotProperties">
             <destination>{50dfdc15-4b32-474f-97b2-c24448121f68}</destination>
             <destination>{c2a95dbe-eb9e-401a-bb61-e6fe2c306f72}</destination>
+            <destination>{4279ff6d-6ee6-42ee-b72a-4738c208186a}</destination>
+            <destination>{8c27579e-96c9-45aa-972c-5ef38595c4d0}</destination>
+            <destination>{3cdd1443-d87b-4f84-9b03-7743a730f8ae}</destination>
         </relationship>
         <relationship name="snapshotTracks">
             <destination>{6d377b35-40d4-4c97-99bb-07a2c18a98ba}</destination>
             <destination>{f8613034-384d-4d36-b3ad-280bfff98b37}</destination>
             <destination>{756c9c75-3c01-4f94-b75b-8cb30df261aa}</destination>
+            <destination>{e19d128d-5de8-4634-9b61-133a664a4895}</destination>
+            <destination>{f9edb9a4-d42a-4984-b7d8-2bfcaa67e1fe}</destination>
+            <destination>{834da859-2164-4233-8010-efab19e631ea}</destination>
         </relationship>
     </object>
     <object class="EventAutomatableProperties" id="{382a3e94-70ce-4d5e-809e-f4f00eb4466f}">
@@ -59,6 +65,39 @@
             <destination>{cdbee87b-e7d7-492f-9364-ceac0b5848f9}</destination>
         </relationship>
     </object>
+    <object class="SnapshotProperty" id="{4279ff6d-6ee6-42ee-b72a-4738c208186a}">
+        <property name="propertyName">
+            <value>volume</value>
+        </property>
+        <property name="value">
+            <value>-49.5</value>
+        </property>
+        <relationship name="automatableObject">
+            <destination>{e3aacd87-2075-4282-a06f-cd31f1b66b6d}</destination>
+        </relationship>
+    </object>
+    <object class="SnapshotProperty" id="{8c27579e-96c9-45aa-972c-5ef38595c4d0}">
+        <property name="propertyName">
+            <value>volume</value>
+        </property>
+        <property name="value">
+            <value>-80</value>
+        </property>
+        <relationship name="automatableObject">
+            <destination>{38130713-7064-427a-91f1-bd6427211dbf}</destination>
+        </relationship>
+    </object>
+    <object class="SnapshotProperty" id="{3cdd1443-d87b-4f84-9b03-7743a730f8ae}">
+        <property name="propertyName">
+            <value>volume</value>
+        </property>
+        <property name="value">
+            <value>-80</value>
+        </property>
+        <relationship name="automatableObject">
+            <destination>{1465c6fc-1e50-40f9-91ba-3a0a40645e69}</destination>
+        </relationship>
+    </object>
     <object class="SnapshotTrack" id="{6d377b35-40d4-4c97-99bb-07a2c18a98ba}">
         <relationship name="mixerStrip">
             <destination>{30af7eb0-e10b-488c-989a-773987315e12}</destination>
@@ -74,21 +113,30 @@
             <destination>{6cad9b31-3e06-4222-b31e-5b49cf18f953}</destination>
         </relationship>
     </object>
+    <object class="SnapshotTrack" id="{e19d128d-5de8-4634-9b61-133a664a4895}">
+        <relationship name="mixerStrip">
+            <destination>{e3aacd87-2075-4282-a06f-cd31f1b66b6d}</destination>
+        </relationship>
+    </object>
+    <object class="SnapshotTrack" id="{f9edb9a4-d42a-4984-b7d8-2bfcaa67e1fe}">
+        <relationship name="mixerStrip">
+            <destination>{38130713-7064-427a-91f1-bd6427211dbf}</destination>
+        </relationship>
+    </object>
+    <object class="SnapshotTrack" id="{834da859-2164-4233-8010-efab19e631ea}">
+        <relationship name="mixerStrip">
+            <destination>{1465c6fc-1e50-40f9-91ba-3a0a40645e69}</destination>
+        </relationship>
+    </object>
     <object class="ADSRModulator" id="{ca6c5229-511b-4f89-98e5-d3bedaca0748}">
         <property name="nameOfPropertyBeingModulated">
             <value>snapshotIntensity</value>
-        </property>
-        <property name="attackTime">
-            <value>1400</value>
         </property>
         <property name="peakValue">
             <value>100</value>
         </property>
         <property name="sustainValue">
             <value>100</value>
-        </property>
-        <property name="releaseTime">
-            <value>1400</value>
         </property>
     </object>
 </objects>
