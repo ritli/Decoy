@@ -35,7 +35,8 @@ public class PlayVideo : MonoBehaviour {
 		Application.runInBackground = true;
 		GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
 		StartCoroutine(playVideo());
-		//GetComponent<RectTransform>().anchorMax = new Vector2(Screen.width, Screen.height);
+        //GetComponent<RectTransform>().anchorMax = new Vector2(Screen.width, Screen.height);
+        GameManager.GetPlayer().m_MouseLook.SetCursorLock(true);
 	}
 
 	IEnumerator playVideo()
