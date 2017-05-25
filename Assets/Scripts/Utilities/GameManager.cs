@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
         Init();
 
         FindReferences();
-
+        Time.timeScale = 1;
     }
     //private void OnLevelWasLoaded(int level)
     //{
