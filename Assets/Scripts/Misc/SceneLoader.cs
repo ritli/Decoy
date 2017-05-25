@@ -152,6 +152,7 @@ public class SceneLoader : MonoBehaviour
         LoadSceneSync(Scenes.AudioScene);
 
         GameManager.GetPlayer().gameObject.SetActive(true);
+        GameManager.GetPlayer().m_MouseLook.SetCursorLock(true);
 
     }
     public void UnloadAll()
