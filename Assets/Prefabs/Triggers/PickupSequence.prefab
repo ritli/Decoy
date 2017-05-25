@@ -295,6 +295,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkIndex: 0
   m_value: 1
+  lookatTransform: {fileID: 4694519592311572}
+  lookOffset: {x: 0, y: 0.5, z: 0}
+  lookSpeed: 200
 --- !u!114 &114617743845650732
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -343,6 +346,10 @@ MonoBehaviour:
     activationObject: {fileID: 114209658176971830}
     setState: 1
     delay: 0
+  - eventName: Release Player
+    activationObject: {fileID: 114556112695286650}
+    setState: 0
+    delay: 2
   m_triggerType: 1
   m_triggererTag: Player
 --- !u!114 &114934263230245650

@@ -862,7 +862,9 @@ public class PlayerController : MonoBehaviour, IKillable
             else // Reset the rotation to what it was before the forced movement if forcelook was used.
             {
                 m_Camera.transform.rotation = m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, m_beforeForcelookRotation, m_forcelookSpeed * Time.deltaTime);
-                if (m_Camera.transform.rotation == m_beforeForcelookRotation)
+
+                // Check if the rotation is close enough to be considered done. Thereby avoiding rouning errors. Marginal = 1.0f
+                if (Quaternion.Angle(m_Camera.transform.rotation, m_beforeForcelookRotation) <= 1.0f)
                 {
                     m_resetRotation = false;
                     m_forcingLook = false;
