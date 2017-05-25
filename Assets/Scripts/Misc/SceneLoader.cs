@@ -149,9 +149,10 @@ public class SceneLoader : MonoBehaviour
         //load target Scene
         LoadSceneSync(Scenes.InGameBase);
         LoadSceneSync(Scenes.MusicScene);
-        LoadSceneSync(Scenes.AudioScene);   
+        LoadSceneSync(Scenes.AudioScene);
 
-        GameManager.GetPlayer().enabled = true;
+        GameManager.GetPlayer().gameObject.SetActive(true);
+
     }
     public void UnloadAll()
     {
