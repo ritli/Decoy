@@ -166,6 +166,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool targeted = false;
     public float overlaySpeed = 1;
+    public float overlayIntensityMax;
     public delegate void landEvent();
     public landEvent onLand;
 
@@ -498,7 +499,6 @@ public class PlayerController : MonoBehaviour, IKillable
         m_teleport.m_indi.SetActive(false);
         ImageFader.instance.SetVisible(false);
         m_animator.speed = 1;
-
         GameManager.resetActivations();
     }
 
@@ -507,15 +507,8 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         //if a turret has targeted the player, set the bool as false again. 
         //If they still aim at the player next frame they will set it again
-        if (targeted)
-        {    
-            targeted = false;
-            overlay.intensity = Mathf.Lerp(overlay.intensity, 1, Time.deltaTime * overlaySpeed);
-        }
-        else
-        {
-            overlay.intensity = Mathf.Lerp(overlay.intensity, 0, Time.deltaTime * overlaySpeed);
-        }
+        overlay.intensity = Mathf.Lerp(overlay.intensity, (targeted ? overlayIntensityMax : 0), Time.deltaTime * overlaySpeed);
+        targeted = false;
 
         switch (m_playerState)
         {
