@@ -149,6 +149,11 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
 
+    // Variables for forcing look when locking during pickup animation
+    private bool m_forcingLook = false;
+    private Vector3 m_forcelookDirection = Vector3.zero;
+    private float m_forcelookSpeed = 1.0f;
+
     private float m_airTime;
     private float m_StepCycle;
 	private float m_NextStep;
@@ -171,6 +176,19 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             return m_crouching;
         }
+    }
+
+    public void forceLookat(Vector3 lookTarget, float lookatSpeed)
+    {
+        m_forcingLook = true;
+        m_forcelookDirection = Vector3.Normalize(lookTarget - m_Camera.transform.position);
+        m_forcelookSpeed = lookatSpeed;
+    }
+
+    public void stopForcelook()
+    {
+        m_resetRotation = true;
+        m_forcingLook = false;
     }
 
     public void hasDevice(bool hasDevice)
@@ -833,11 +851,22 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 		else if (m_resetRotation) 
 		{
+            print("Reseting rotationview");
 			m_resetRotation = false;
 			m_MouseLook.Init(transform, m_Camera.transform);
 		}
-		else
-			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
+		else if (m_forcingLook)
+        {
+            //m_MouseLook.LookRotationLimited(transform, m_Camera.transform, m_forcelookDirection);
+            m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, Quaternion.LookRotation(m_forcelookDirection), m_forcelookSpeed * Time.deltaTime);
+            // Also adjust player so that movement remains correct.
+            //transform.rotation = Quaternion.AngleAxis(Quaternion.Angle(m_Camera.transform.rotation, transform.rotation), transform.up);
+        }
+        else
+        {
+            m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
+        }
+
     }
 
     private void UpdateCameraPosition(float speed)
