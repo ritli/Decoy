@@ -29,10 +29,8 @@ public class SceneLoadButton : MonoBehaviour {
     void DoLoad()
     {
         Debug.Log("Request called to load.");
-        GameManager.GetPlayer().gameObject.SetActive(true);
-        GameManager.GetPlayer().ResetPlayer();
         loadRequested = false;
-        SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
+		SceneLoader.getInstance().LoadSceneSync(m_SelectedScene);
         
     }
 }

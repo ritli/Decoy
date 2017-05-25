@@ -50,6 +50,9 @@ public class PlayerController : MonoBehaviour, IKillable
     [SerializeField] private float m_crouchSpeedMultiplier;
     [Tooltip("How fast the player reaches full crouch or stands up.")]
     [SerializeField] private float m_speedToReachCrouch = 2f;
+	[Tooltip("Determines how much more the camera will crouch")]
+	[Range(0.1f, 1)]
+	[SerializeField] private float m_cameraCrouchHeight = 0.1f;
 
     //Jump vars
     [Header("Jump Variables")]
@@ -89,11 +92,6 @@ public class PlayerController : MonoBehaviour, IKillable
     private float m_maximumFreefallHeight;
 
     private bool m_leftGround = false;
-
-	// TODO:
-	[Header("Camera while climbing variable")]
-	[Tooltip("Determines how fast the camera turns toward a ledge when a climb is initiated")]
-	public float climbAdjSpeed = 1.0f;
 
     [Header("Headbobbing variables")]
     [Tooltip("Determines the amount that the camera is moved during a landing bob effect.")]
@@ -146,6 +144,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_Jumping;
     private bool m_Jump;
     private bool m_crouching = false;
+	private bool m_crouchFinished = false;
     private bool m_standObstructed = false;
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
@@ -159,11 +158,12 @@ public class PlayerController : MonoBehaviour, IKillable
 
     bool m_inDeathState = false;
 
+    private bool targeted = false;
+    public float overlaySpeed = 1;
     public delegate void landEvent();
     public landEvent onLand;
 
-    // Variables for locking the controls of the player when picking up
-    private bool m_lockMovement = false;
+    private UnityStandardAssets.ImageEffects.ScreenOverlay overlay; 
 
     public bool IsCrouching
     {
@@ -182,7 +182,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private void Start()
     {
+
+
         m_Camera = transform.FindChild("Camera").GetComponent<Camera>();
+        overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
 
         m_cameraBobber = GetComponent<VectorBobber>();
 
@@ -191,13 +194,6 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
-
-        // Disable telepotation if the device is set to be inactive.
-        if (!m_hasDevice)
-        {
-            m_teleport.disableTeleportation();
-        }
-
         m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
         m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
@@ -225,7 +221,10 @@ public class PlayerController : MonoBehaviour, IKillable
 		m_ledgeLerp = GetComponent<LedgeLerp>();
         m_Audio = GetComponentInChildren<AudioPlayer>();
     }
-
+    public void ShowOverlay()
+    {
+        targeted = true;
+    }
     public void Kill()
     {
         m_playerState = PlayerState.isDead;
@@ -245,7 +244,6 @@ public class PlayerController : MonoBehaviour, IKillable
         FMODUnity.RuntimeManager.PlayOneShot(m_deathEvent, transform.position);
         m_Audio.PlaySoundAtPosition(0, true, transform.position);
 
-        UnityStandardAssets.ImageEffects.ScreenOverlay overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
         float time = 0;
         float deathTime = 0.6f;
 
@@ -317,13 +315,13 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_aniState = (AnimationState)tempStateVal;
         }
-        else if (Mathf.Abs(m_Input.y) > 0 && !m_Jumping && !m_crouching) 
+		else if (m_Jumping)
+		{
+			m_aniState = AnimationState.jumping;
+		}
+		else if (Mathf.Abs(m_Input.y) > 0 && !m_Jumping && !m_crouching) 
         {
             m_aniState = AnimationState.moving;
-        }
-        else if (m_Jumping)
-        {
-            m_aniState = AnimationState.jumping;
         }
 		else if (m_crouching)
 		{
@@ -357,9 +355,7 @@ public class PlayerController : MonoBehaviour, IKillable
         else if (CrossPlatformInputManager.GetButtonUp("Crouch"))
         {
             if (CheckForObstruction())
-            {
                 m_standObstructed = true;
-            }
             else
             {
                 m_Audio.PlayEvent(3, true);
@@ -368,18 +364,30 @@ public class PlayerController : MonoBehaviour, IKillable
             }
         }
 
-        if (m_crouching)
-        {
-            float currentHeight = m_CharacterController.height;
-            float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTimeElapsed);
+		if (m_crouching)
+		{
+			float newHeight = Mathf.Lerp(m_CharacterController.height, m_initalHeight * 0.2f, m_crouchTimeElapsed);
+			m_CharacterController.height = newHeight;
 
-            m_CharacterController.height = newHeight;
-        }
+			// Moves the camera down beyond what the new height does
+			Vector3 cameraPos = new Vector3(
+				                    m_cameraOrigin.x, 
+				                    Mathf.Clamp(newHeight * m_cameraCrouchHeight, 0, m_cameraOrigin.y), 
+				                    m_cameraOrigin.z);
+			m_Camera.transform.localPosition = cameraPos;
+		}
+		else
+		{
+			m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
 
-        else
-        {
-            m_CharacterController.height = Mathf.Lerp(m_CharacterController.height, m_initalHeight, m_crouchTimeElapsed);
-        }
+			// Lerp the camera's position back to origin
+			float cameraHeight = Mathf.Lerp(m_Camera.transform.localPosition.y, m_cameraOrigin.y, m_crouchTimeElapsed);
+			Vector3 cameraPos = new Vector3(
+									m_cameraOrigin.x, 
+									cameraHeight, 
+									m_cameraOrigin.z);
+			m_Camera.transform.localPosition = cameraPos;
+		}
 
         //If player has tried to stand up and can't due to an obstruction, starts checking for obstruction each frame.
         if (m_standObstructed)
@@ -395,6 +403,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_crouchTimeElapsed += Time.deltaTime * m_speedToReachCrouch;
         m_crouchTimeElapsed = Mathf.Clamp01(m_crouchTimeElapsed);
+
+		m_crouchFinished = m_crouchTimeElapsed > 1 ? true : false;
     }
 
     bool CheckForObstruction()
@@ -451,22 +461,27 @@ public class PlayerController : MonoBehaviour, IKillable
         m_inDeathState = false;
         m_controlsEnabled = true;
         m_teleport.m_indi.SetActive(false);
+        ImageFader.instance.SetVisible(false);
+        m_animator.speed = 1;
 
         GameManager.resetActivations();
-    }
-
-    public void hasDevice(bool hasDevice)
-    {
-        m_hasDevice = hasDevice;
-        if (hasDevice)
-        {
-            m_teleport.enableTeleportation();
-        }
     }
 
     // Update is called once per frame
     private void Update()
     {
+        //if a turret has targeted the player, set the bool as false again. 
+        //If they still aim at the player next frame they will set it again
+        if (targeted)
+        {    
+            targeted = false;
+            overlay.intensity = Mathf.Lerp(overlay.intensity, 1, Time.deltaTime * overlaySpeed);
+        }
+        else
+        {
+            overlay.intensity = Mathf.Lerp(overlay.intensity, 0, Time.deltaTime * overlaySpeed);
+        }
+
         switch (m_playerState)
         {
 		case PlayerState.isAlive:
@@ -490,6 +505,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
             if (!m_resetCalled)
             {
+                    m_animator.speed = 0;
+                    ImageFader.instance.SetVisible(true);
                 m_resetCalled = true;
                 Invoke("ResetPlayer", 1.5f);
             }
@@ -797,7 +814,6 @@ public class PlayerController : MonoBehaviour, IKillable
     {
 		if (m_ledgeGrabbing) 
 		{
-//			Debug.DrawRay (transform.position, m_ledgeLerp.getDestinationDirection () * 2, Color.yellow, 3);
 			m_resetRotation = true;
 			m_MouseLook.LookRotationLimited(transform, m_Camera.transform, m_ledgeLerp.getDestinationDirection());
 		}
@@ -806,24 +822,22 @@ public class PlayerController : MonoBehaviour, IKillable
 			m_resetRotation = false;
 			m_MouseLook.Init(transform, m_Camera.transform);
 		}
-		else 
-		{
+		else
 			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
-		}
     }
 
     private void UpdateCameraPosition(float speed)
     {
         if (!m_UseHeadBob)
-        {
             return;
-        }
         
         // Reset camera before each offset so that it does not get continuously moved
-        m_Camera.transform.localPosition = m_cameraOrigin;
-        m_cameraOrigin = m_Camera.transform.localPosition;
-
-        m_Camera.transform.localPosition += m_cameraBobber.getOffset() + m_walkingBobber.getOffset();
+		if (!m_crouching && m_crouchFinished)
+		{
+			// Bobbing
+			m_Camera.transform.localPosition = m_cameraOrigin;
+			m_Camera.transform.localPosition += m_cameraBobber.getOffset() + m_walkingBobber.getOffset();
+		}
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -833,7 +847,7 @@ public class PlayerController : MonoBehaviour, IKillable
         if (m_onEdge)
         {
             m_ledgeHitDir = (hit.collider.ClosestPointOnBounds(transform.position) - transform.position) * -1;
-            Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
+//          Debug.DrawRay(transform.position, m_ledgeHitDir * 5.0f, Color.red);
         }
 
         //dont move the rigidbody if the character is on top of it
@@ -895,11 +909,6 @@ public class PlayerController : MonoBehaviour, IKillable
             m_playerState = PlayerState.isPause;
         }
 
-    }
-
-    public void setMovementLock(bool isLocked)
-    {
-        m_lockMovement = true;
     }
 }
 
