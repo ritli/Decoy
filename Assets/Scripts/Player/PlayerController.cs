@@ -912,13 +912,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!isPaused && m_playerState == PlayerState.isPause)
         {
             m_playerState = m_stateBeforePause;
-			if (m_animator != null)
-            	m_animator.speed = 1;
+			//if (m_animator != null)
+            	//m_animator.speed = 1;
         }
         else if(isPaused && m_playerState != PlayerState.isPause)
         {
-			if (m_animator != null)
-            	m_animator.speed = 0;
+			//if (m_animator != null)
+            	//m_animator.speed = 0;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }
