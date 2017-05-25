@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class AudioTrigger : MonoBehaviour {
 
-    public FMODUnity.EmitterRef m_emitter;
+    public FMODUnity.StudioEventEmitter[] m_emitter;
 
     void OnTriggerEnter(Collider c)
     {
-        if (c.CompareTag(Tags.player))
+        if (c.CompareTag(Tags.player) && m_emitter.Length > 1)
         {
+            for (int i = 0; i < m_emitter.Length; i++)
+            {
+                m_emitter[i].Play();
 
+            }
         }
-
     }
 }
