@@ -7,13 +7,15 @@ public class PlayerDeviceActivation : ActivationObject {
 
     public bool m_value;
     public Transform lookatTransform;
+    public Vector3 lookOffset = Vector3.zero;
+    public float lookSpeed = 200.0f;
 
     public override void activate()
     {
         GameManager.GetPlayer().hasDevice(m_value);
 
         if (lookatTransform != null)
-            GameManager.GetPlayer().forceLookat(lookatTransform.position, 200.0f);
+            GameManager.GetPlayer().forceLookat(lookatTransform.position + lookOffset, lookSpeed);
     }
 
     public override void deactivate()

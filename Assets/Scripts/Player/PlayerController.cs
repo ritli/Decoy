@@ -153,6 +153,7 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_forcingLook = false;
     private Vector3 m_forcelookDirection = Vector3.zero;
     private float m_forcelookSpeed = 1.0f;
+    private Quaternion m_beforeForcelookRotation;
 
     private float m_airTime;
     private float m_StepCycle;
@@ -183,12 +184,14 @@ public class PlayerController : MonoBehaviour, IKillable
         m_forcingLook = true;
         m_forcelookDirection = Vector3.Normalize(lookTarget - m_Camera.transform.position);
         m_forcelookSpeed = lookatSpeed;
+        m_beforeForcelookRotation = m_Camera.transform.rotation;
+        m_controlsEnabled = false;
     }
 
     public void stopForcelook()
     {
         m_resetRotation = true;
-        m_forcingLook = false;
+        m_controlsEnabled = true;
     }
 
     public void hasDevice(bool hasDevice)
@@ -851,16 +854,24 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 		else if (m_resetRotation) 
 		{
-            print("Reseting rotationview");
-			m_resetRotation = false;
-			m_MouseLook.Init(transform, m_Camera.transform);
+            if (!m_forcingLook)
+            {
+                m_resetRotation = false;
+                m_MouseLook.Init(transform, m_Camera.transform);
+            }
+            else // Reset the rotation to what it was before the forced movement if forcelook was used.
+            {
+                m_Camera.transform.rotation = m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, m_beforeForcelookRotation, m_forcelookSpeed * Time.deltaTime);
+                if (m_Camera.transform.rotation == m_beforeForcelookRotation)
+                {
+                    m_resetRotation = false;
+                    m_forcingLook = false;
+                }
+            }
 		}
 		else if (m_forcingLook)
         {
-            //m_MouseLook.LookRotationLimited(transform, m_Camera.transform, m_forcelookDirection);
             m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, Quaternion.LookRotation(m_forcelookDirection), m_forcelookSpeed * Time.deltaTime);
-            // Also adjust player so that movement remains correct.
-            //transform.rotation = Quaternion.AngleAxis(Quaternion.Angle(m_Camera.transform.rotation, transform.rotation), transform.up);
         }
         else
         {
