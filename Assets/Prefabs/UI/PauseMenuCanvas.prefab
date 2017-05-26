@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 223882927332347924}
   - component: {fileID: 114010326842701326}
   - component: {fileID: 114145317107545138}
-  - component: {fileID: 114080281665254446}
   m_Layer: 5
   m_Name: PauseMenuCanvas
   m_TagString: Untagged
@@ -779,6 +778,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4350690655805822}
+  - component: {fileID: 114668509074656910}
   m_Layer: 0
   m_Name: Elements
   m_TagString: Untagged
@@ -993,7 +993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StartActive: 0
-  m_Parent: {fileID: 1080318052239976}
+  m_ElementParent: {fileID: 1972535398786848}
   m_Main: {fileID: 1488462487341618}
   m_Options: {fileID: 1979346287359334}
   m_QuitConfirm: {fileID: 1485080663463448}
@@ -1211,28 +1211,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114080281665254446
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1080318052239976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: snapshot:/Pausemenu
-  PlayEvent: 11
-  StopEvent: 12
-  CollisionTag: 
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
 --- !u!114 &114087902077772382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2915,6 +2893,28 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114668509074656910
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1972535398786848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: snapshot:/Pausemenu
+  PlayEvent: 11
+  StopEvent: 12
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &114668877280059260
 MonoBehaviour:
   m_ObjectHideFlags: 1
