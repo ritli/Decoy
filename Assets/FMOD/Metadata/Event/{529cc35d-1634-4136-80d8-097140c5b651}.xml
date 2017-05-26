@@ -269,6 +269,8 @@
     <object class="MixerBusEffectChain" id="{2c3825d3-286e-4685-bd73-f4e6b2f3e3e6}">
         <relationship name="effects">
             <destination>{1f3b9994-e3db-46b0-8de8-5647cf68fee3}</destination>
+            <destination>{2870d6e8-a21f-4bd6-990a-f9d525e39aa0}</destination>
+            <destination>{0ebae62d-3f68-40dd-b4dc-6d05b59671b4}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{aebae128-de26-4bce-95e5-2f6bece35668}"/>
@@ -363,7 +365,7 @@
             <value>6.4256357670221487</value>
         </property>
         <property name="value">
-            <value>-12.0434799</value>
+            <value>-25.7515526</value>
         </property>
         <property name="curveShape">
             <value>0.262139767</value>
@@ -379,6 +381,22 @@
     </object>
     <object class="MixerBusFader" id="{4a1d0acc-c8ac-4cde-9e70-a40990f5c732}"/>
     <object class="MixerBusFader" id="{1f3b9994-e3db-46b0-8de8-5647cf68fee3}"/>
+    <object class="SFXReverbEffect" id="{2870d6e8-a21f-4bd6-990a-f9d525e39aa0}">
+        <property name="decayTime">
+            <value>850</value>
+        </property>
+        <property name="lowShelfFrequency">
+            <value>20</value>
+        </property>
+        <property name="lowShelfGain">
+            <value>-13.5</value>
+        </property>
+    </object>
+    <object class="ThreeEQEffect" id="{0ebae62d-3f68-40dd-b4dc-6d05b59671b4}">
+        <property name="lowGain">
+            <value>-40</value>
+        </property>
+    </object>
     <object class="AutomationPoint" id="{60669a69-2ad2-4a19-989b-036778a84750}">
         <property name="position">
             <value>0</value>
