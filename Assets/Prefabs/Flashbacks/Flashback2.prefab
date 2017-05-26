@@ -2992,6 +2992,8 @@ GameObject:
   - component: {fileID: 95994763217914748}
   - component: {fileID: 114991254864751980}
   - component: {fileID: 114726930300042788}
+  - component: {fileID: 114330296844840078}
+  - component: {fileID: 114754841473634454}
   m_Layer: 0
   m_Name: Flashback2
   m_TagString: Untagged
@@ -33415,6 +33417,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalMesh: {fileID: 137343783889078208}
   propertyName: node_233
+--- !u!114 &114330296844840078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1166496458099630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20c225db90cb72d41990f1bb80b527e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_timeout: 1
+  printTime: 0
 --- !u!114 &114517118763579502
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -33456,6 +33471,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalMesh: {fileID: 137357624393946316}
   propertyName: node_233
+--- !u!114 &114754841473634454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1166496458099630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e077b5976678844e94306d1d9e8315f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  m_event: event:/Sound/Animations/Flashbacks/Flashback 2
+  m_oneshot: 1
+  m_attached: 1
+  target: {fileID: 0}
+  m_targetPlayer: 1
+  m_emitter: {fileID: 0}
 --- !u!114 &114991254864751980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -33480,6 +33513,7 @@ MonoBehaviour:
   - {fileID: 137343783889078208}
   - {fileID: 137357624393946316}
   - {fileID: 137270782892890588}
+  animationDelay: 0
 --- !u!137 &137270782892890588
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

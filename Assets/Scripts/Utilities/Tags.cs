@@ -14,4 +14,5 @@ public class Tags : MonoBehaviour {
     public static string metal = "Metal";
     public static string sand = "Sand";
     public static string validSpaceCol = "ValidSpaceCol";
+    public static string blinkCharger = "BlinkCharger";
 }

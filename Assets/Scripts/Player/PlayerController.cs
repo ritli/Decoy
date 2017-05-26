@@ -149,6 +149,12 @@ public class PlayerController : MonoBehaviour, IKillable
     private bool m_inBlinkState = false;
     private bool m_controlsEnabled = true;
 
+    // Variables for forcing look when locking during pickup animation
+    private bool m_forcingLook = false;
+    private Vector3 m_forcelookDirection = Vector3.zero;
+    private float m_forcelookSpeed = 1.0f;
+    private Quaternion m_beforeForcelookRotation;
+
     private float m_airTime;
     private float m_StepCycle;
 	private float m_NextStep;
@@ -160,6 +166,7 @@ public class PlayerController : MonoBehaviour, IKillable
 
     private bool targeted = false;
     public float overlaySpeed = 1;
+    public float overlayIntensityMax;
     public delegate void landEvent();
     public landEvent onLand;
 
@@ -172,6 +179,31 @@ public class PlayerController : MonoBehaviour, IKillable
             return m_crouching;
         }
     }
+
+    public void forceLookat(Vector3 lookTarget, float lookatSpeed)
+    {
+        m_forcingLook = true;
+        m_forcelookDirection = Vector3.Normalize(lookTarget - m_Camera.transform.position);
+        m_forcelookSpeed = lookatSpeed;
+        m_beforeForcelookRotation = m_Camera.transform.rotation;
+        m_controlsEnabled = false;
+    }
+
+    public void stopForcelook()
+    {
+        m_resetRotation = true;
+        m_controlsEnabled = true;
+    }
+
+    public void hasDevice(bool hasDevice)
+    {
+        m_hasDevice = hasDevice;
+
+        if (hasDevice)
+            m_teleport.enableTeleportation();
+        else
+            m_teleport.disableTeleportation();
+    } 
     
     void Awake()
     {
@@ -194,6 +226,10 @@ public class PlayerController : MonoBehaviour, IKillable
 
         m_originGravity = m_GravityMultiplier;
         m_teleport = GetComponent<PlayerTeleport>();
+
+        if (!m_hasDevice)
+            m_teleport.disableTeleportation();
+
         m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
         m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
@@ -463,7 +499,6 @@ public class PlayerController : MonoBehaviour, IKillable
         m_teleport.m_indi.SetActive(false);
         ImageFader.instance.SetVisible(false);
         m_animator.speed = 1;
-
         GameManager.resetActivations();
     }
 
@@ -472,15 +507,8 @@ public class PlayerController : MonoBehaviour, IKillable
     {
         //if a turret has targeted the player, set the bool as false again. 
         //If they still aim at the player next frame they will set it again
-        if (targeted)
-        {    
-            targeted = false;
-            overlay.intensity = Mathf.Lerp(overlay.intensity, 1, Time.deltaTime * overlaySpeed);
-        }
-        else
-        {
-            overlay.intensity = Mathf.Lerp(overlay.intensity, 0, Time.deltaTime * overlaySpeed);
-        }
+        overlay.intensity = Mathf.Lerp(overlay.intensity, (targeted ? overlayIntensityMax : 0), Time.deltaTime * overlaySpeed);
+        targeted = false;
 
         switch (m_playerState)
         {
@@ -819,11 +847,32 @@ public class PlayerController : MonoBehaviour, IKillable
 		}
 		else if (m_resetRotation) 
 		{
-			m_resetRotation = false;
-			m_MouseLook.Init(transform, m_Camera.transform);
+            if (!m_forcingLook)
+            {
+                m_resetRotation = false;
+                m_MouseLook.Init(transform, m_Camera.transform);
+            }
+            else // Reset the rotation to what it was before the forced movement if forcelook was used.
+            {
+                m_Camera.transform.rotation = m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, m_beforeForcelookRotation, m_forcelookSpeed * Time.deltaTime);
+
+                // Check if the rotation is close enough to be considered done. Thereby avoiding rouning errors. Marginal = 1.0f
+                if (Quaternion.Angle(m_Camera.transform.rotation, m_beforeForcelookRotation) <= 1.0f)
+                {
+                    m_resetRotation = false;
+                    m_forcingLook = false;
+                }
+            }
 		}
-		else
-			m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
+		else if (m_forcingLook)
+        {
+            m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, Quaternion.LookRotation(m_forcelookDirection), m_forcelookSpeed * Time.deltaTime);
+        }
+        else
+        {
+            m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
+        }
+
     }
 
     private void UpdateCameraPosition(float speed)
@@ -898,13 +947,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!isPaused && m_playerState == PlayerState.isPause)
         {
             m_playerState = m_stateBeforePause;
-			if (m_animator != null)
-            	m_animator.speed = 1;
+			//if (m_animator != null)
+            	//m_animator.speed = 1;
         }
         else if(isPaused && m_playerState != PlayerState.isPause)
         {
-			if (m_animator != null)
-            	m_animator.speed = 0;
+			//if (m_animator != null)
+            	//m_animator.speed = 0;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }

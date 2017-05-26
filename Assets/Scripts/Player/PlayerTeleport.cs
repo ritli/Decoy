@@ -10,6 +10,8 @@ public enum BlinkState
 public class PlayerTeleport : MonoBehaviour {
 
 
+    private Animator m_ChargeIndicatorAnim;
+
 	private LedgeTele m_ledgeDetection;
 	private LedgeLerp m_ledgeLerp;
 
@@ -67,8 +69,12 @@ public class PlayerTeleport : MonoBehaviour {
 
     private Vector3 m_lastPosition;
 
+    // Variable controlling whether the players can teleport or not.
+    private bool teleportAllowed = true;
+
 	void Start ()
     {
+        m_ChargeIndicatorAnim = GameObject.FindGameObjectWithTag(Tags.blinkCharger).GetComponent<Animator>();
 		m_playerLength = GetComponent<CharacterController>().height;
 
         m_partController = transform.FindChild("Camera").GetComponentInChildren<ParticleController>();
@@ -120,9 +126,19 @@ public class PlayerTeleport : MonoBehaviour {
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
             if (m_cooldownTimer.isTimeUp())
+            {
                 m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+                m_ChargeIndicatorAnim.SetBool("isPlaying", false);
+            }
             else
+            {
+                if(!m_ChargeIndicatorAnim.GetBool("isPlaying"))
+                {
+                    m_ChargeIndicatorAnim.SetBool("isPlaying", true);
+                    m_ChargeIndicatorAnim.Play("ChargeAnimation");
+                }
                 m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
+            }
 
             // Move towards target position set when letting go of the "Teleport" button.
             if (!m_arrived)
@@ -158,8 +174,11 @@ public class PlayerTeleport : MonoBehaviour {
 
                     m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
 
-                    ShowIndicator();
-                    m_blinkState = BlinkState.aiming;
+                    if (teleportAllowed)
+                    {
+                        ShowIndicator();
+                        m_blinkState = BlinkState.aiming;
+                    }                 
                 }
             }
             if (Input.GetButtonUp("Teleport"))
@@ -250,6 +269,16 @@ public class PlayerTeleport : MonoBehaviour {
 		if (resetTimeOnCancel)
 			m_cooldownTimer.resetTimer();
 	}
+
+    public void enableTeleportation()
+    {
+        teleportAllowed = true;
+    }
+
+    public void disableTeleportation()
+    {
+        teleportAllowed = false;
+    }
 
     void ShowIndicator()
     {
