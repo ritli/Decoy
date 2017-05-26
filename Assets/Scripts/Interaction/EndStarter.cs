@@ -41,6 +41,7 @@ public class EndStarter : MonoBehaviour
                 emitter.SetParameter("S5_ToEnd", 1);
                 m_PlayerTeleport.FinishTeleport();
                 GameManager.GetPlayer().pausePlayer(true);
+                GameManager.GetPlayer().GetComponentInChildren<Animator>().speed = 0;
                 GameManager.GetPlayer().disableGravity();
                 Destroy(GameManager.GetDecoy().gameObject);
                 GameManager.GetPlayer().StopBob();
