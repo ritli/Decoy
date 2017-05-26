@@ -21,7 +21,8 @@ public class LoadingScene : MonoBehaviour
 public class SceneLoader : MonoBehaviour
 {
     //Add new Scenes here as they are created.
-    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, Section6, CreditScene, MusicScene, AudioScene, IntroCutscene };
+    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, Section6, CreditScene, MusicScene, AudioScene, IntroCutscene, SkyScene };
+	public List<Scenes> outsideScenes = new List<Scenes>{ Scenes.Section2a, Scenes.Section2b, Scenes.Section2c, Scenes.Section4, Scenes.Section5, Scenes.Section6, Scenes.CreditScene };
     public static SceneLoader instance;
     private static List<LoadingScene> m_ScenesLoading;
     public bool startfromMenu;
@@ -145,6 +146,10 @@ public class SceneLoader : MonoBehaviour
 
         //load checkpoint/ whatever main ingame scene.
         LoadSceneSync(scene);
+
+		// Load Sky Scene if needed
+		if (outsideScenes.Contains(scene))
+			LoadSceneSync(Scenes.SkyScene);
 
         //load target Scene
         LoadSceneSync(Scenes.InGameBase);
