@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4464891, g: 0.49632698, b: 0.5747258, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -108,6 +108,68 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &20447957
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -5.95743
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 9.778031
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -22.266386
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 456738, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 170274, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &20447958 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 170274, guid: c04a102db81dd764c8cb8afeef5ab5b3, type: 2}
+  m_PrefabInternal: {fileID: 20447957}
+--- !u!114 &20447959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 20447958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91730b2778ecb144c9cce7de768935ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startfromMenu: 0
 --- !u!1 &91771574
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,9 +465,7 @@ MonoBehaviour:
   m_SelectedScene: 3
   image: {fileID: 2137340881}
   videos:
-  - videoClip: {fileID: 32900000, guid: 44d207c6f2c34408aab197decb913725, type: 3}
-    isSkippable: 0
-  - videoClip: {fileID: 32900000, guid: 93e93ef9ce4ff4358b8e2ec1b305eebd, type: 3}
+  - videoClip: {fileID: 32900000, guid: 78e350d4fa1262644a3573b5ad50a2c3, type: 3}
     isSkippable: 1
 --- !u!114 &2137340881
 MonoBehaviour:
