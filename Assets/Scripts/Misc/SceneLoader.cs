@@ -21,9 +21,10 @@ public class LoadingScene : MonoBehaviour
 public class SceneLoader : MonoBehaviour
 {
     //Add new Scenes here as they are created.
-    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, Section6, CreditScene, MusicScene, AudioScene, IntroCutscene };
+    public enum Scenes { InitialScene, InGameBase, MainMenu, Section1a, Section1b, Section2a, Section2b, Section2c, Section3, Section4, Section5, Section6, CreditScene, MusicScene, AudioScene, IntroCutscene, SkyScene };
     public static SceneLoader instance;
     private static List<LoadingScene> m_ScenesLoading;
+	public List<Scenes> outsideScenes = new List<Scenes>{ Scenes.Section2a, Scenes.Section2b, Scenes.Section2c, Scenes.Section4, Scenes.Section5, Scenes.Section6, Scenes.CreditScene };
     public bool startfromMenu;
     // Use this for initialization
     private void Awake()
@@ -79,7 +80,7 @@ public class SceneLoader : MonoBehaviour
         //loads a scene "additive" in background if it already isn't already loaded.
         if (AllowNewSceneState(scene, true))
         {
-            m_ScenesLoading.Add(new LoadingScene(SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Additive),scene, true));
+            m_ScenesLoading.Add(new LoadingScene(SceneManager.LoadSceneAsync(scene.ToString(), LoadSceneMode.Additive), scene, true));
         }
         else
             Debug.LogWarning("Scene \"" + scene.ToString() + "\" is already loaded");
@@ -145,6 +146,10 @@ public class SceneLoader : MonoBehaviour
 
         //load checkpoint/ whatever main ingame scene.
         LoadSceneSync(scene);
+
+		// Load Sky Scene
+		if (SceneLoader.getInstance().outsideScenes.Contains(scene))
+			LoadSceneSync(Scenes.SkyScene);
 
         //load target Scene
         LoadSceneSync(Scenes.InGameBase);
