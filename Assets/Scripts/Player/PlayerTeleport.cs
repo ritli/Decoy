@@ -10,6 +10,8 @@ public enum BlinkState
 public class PlayerTeleport : MonoBehaviour {
 
 
+    private Animator m_ChargeIndicatorAnim;
+
 	private LedgeTele m_ledgeDetection;
 	private LedgeLerp m_ledgeLerp;
 
@@ -72,6 +74,7 @@ public class PlayerTeleport : MonoBehaviour {
 
 	void Start ()
     {
+        m_ChargeIndicatorAnim = GameObject.FindGameObjectWithTag(Tags.blinkCharger).GetComponent<Animator>();
 		m_playerLength = GetComponent<CharacterController>().height;
 
         m_partController = transform.FindChild("Camera").GetComponentInChildren<ParticleController>();
@@ -123,9 +126,19 @@ public class PlayerTeleport : MonoBehaviour {
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
             if (m_cooldownTimer.isTimeUp())
+            {
                 m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+                m_ChargeIndicatorAnim.SetBool("isPlaying", false);
+            }
             else
+            {
+                if(!m_ChargeIndicatorAnim.GetBool("isPlaying"))
+                {
+                    m_ChargeIndicatorAnim.SetBool("isPlaying", true);
+                    m_ChargeIndicatorAnim.Play("ChargeAnimation");
+                }
                 m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
+            }
 
             // Move towards target position set when letting go of the "Teleport" button.
             if (!m_arrived)
