@@ -84,7 +84,7 @@ public class MenuManager : MonoBehaviour
     }
     public void resume()
     {
-        PauseManager.resumeGame();
+        PauseManager.GetInstance().resumeGame();
     }
     public void clearPlayerPrefs()
     {

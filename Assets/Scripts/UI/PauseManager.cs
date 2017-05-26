@@ -73,7 +73,7 @@ public class PauseManager : MonoBehaviour
             Time.timeScale = 1;
         }
     }
-    public static void resumeGame()
+    public void resumeGame()
     {
         PauseManager.GetInstance().m_Paused = false;
         OnPause(false);
