@@ -8,10 +8,12 @@ public class PlayerTeleportAudio : MonoBehaviour {
     PlayerTeleport m_teleport;
     BlinkState m_blinkState;
     BlinkState m_lastState;
+    public bool m_FirstBlink = true;
     bool m_eventPlayed = false;
 
     void Start()
     {
+        m_FirstBlink = true;
         m_teleport = GetComponent<PlayerTeleport>();
     }
 
@@ -41,6 +43,16 @@ public class PlayerTeleportAudio : MonoBehaviour {
 
                 break;
             case BlinkState.blinking:
+                if(m_FirstBlink)
+                {
+                    m_FirstBlink = false;
+                    m_emitter.SetParameter("FirstBlink", 1);
+                }
+                else
+                {
+                    m_emitter.SetParameter("FirstBlink", 0);
+                }
+
                 m_emitter.SetParameter("BlinkUsage", 0.5f);
                 break;
             default:
