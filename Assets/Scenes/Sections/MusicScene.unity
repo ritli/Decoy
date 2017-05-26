@@ -408,6 +408,54 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &780477101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 780477103}
+  - component: {fileID: 780477102}
+  m_Layer: 2
+  m_Name: PlayEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &780477102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780477101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e077b5976678844e94306d1d9e8315f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  m_delay: 6
+  m_event: event:/Music/Section1/S1_Main
+  m_oneshot: 0
+  m_attached: 0
+  target: {fileID: 0}
+  m_targetPlayer: 0
+  m_emitter: {fileID: 1819470892}
+--- !u!4 &780477103
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780477101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1819470894}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &834358969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1456,8 +1504,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1576572558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 279.78, y: 11.17, z: -70.2}
-  m_LocalScale: {x: 1, y: 9.034406, z: 11.41505}
+  m_LocalPosition: {x: 346.3, y: 11.17, z: -70.2}
+  m_LocalScale: {x: 130.61975, y: 47.5045, z: 113.317825}
   m_Children: []
   m_Father: {fileID: 940196153}
   m_RootOrder: 0
@@ -1661,6 +1709,7 @@ GameObject:
   - component: {fileID: 1819470894}
   - component: {fileID: 1819470893}
   - component: {fileID: 1819470892}
+  - component: {fileID: 1819470895}
   m_Layer: 2
   m_Name: S1_Music_Emitter
   m_TagString: Untagged
@@ -1680,7 +1729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: event:/Music/Section1/S1_Main
-  PlayEvent: 3
+  PlayEvent: 0
   StopEvent: 0
   CollisionTag: Player
   AllowFadeout: 1
@@ -1711,10 +1760,26 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.6366463, y: 2.5912762, z: 2.3011303}
   m_LocalScale: {x: 3.8552706, y: 3.9211366, z: 4.1168194}
-  m_Children: []
+  m_Children:
+  - {fileID: 780477103}
   m_Father: {fileID: 2026311871}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1819470895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1819470891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e82a186c9d194384d8755f355b4857ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_activationObjects:
+  - {fileID: 780477102}
+  m_triggerOnce: 1
+  deactivateOnExit: 0
 --- !u!1 &1860486708
 GameObject:
   m_ObjectHideFlags: 0
