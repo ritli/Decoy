@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlaySoundActivation : ActivationObject {
 
+    public float m_delay = 0f;
     [FMODUnity.EventRef]
     public string m_event;
     public bool m_oneshot;
@@ -35,8 +36,17 @@ public class PlaySoundActivation : ActivationObject {
 
         else
         {
-            print("Not implemented!");
+            if (m_delay != 0)
+            {
+                Invoke("PlayEmitter", m_delay);
+            }
         }
+    }
+
+    void PlayEmitter()
+    {
+        m_emitter.Event = m_event;
+        m_emitter.Play();
     }
 
     public override void deactivate()
