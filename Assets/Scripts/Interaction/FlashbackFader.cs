@@ -16,6 +16,8 @@ public class FlashbackFader : ActivationObject {
     public SkinnedMeshRenderer[] fadingMeshes;
     [Tooltip("Time before the animation is played. (Sound plays immediately)")]
     public float animationDelay = 0.0f;
+    [Tooltip("Disable the audioplayer from being used.")]
+    public bool disableSound;
 
     private bool animationInitiated = false;
 
