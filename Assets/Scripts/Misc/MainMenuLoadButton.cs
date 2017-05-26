@@ -10,7 +10,7 @@ public class MainMenuLoadButton : MonoBehaviour {
     {
         ImageFader.instance.SetVisible(true);
         Invoke("DoLoadMenu", ImageFader.instance.m_FadeTime);
-        PauseManager.resumeGame();
+        PauseManager.GetInstance().resumeGame();
         GameManager.GetPlayer().pausePlayer(true);
 
     }

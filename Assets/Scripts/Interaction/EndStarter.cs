@@ -11,9 +11,13 @@ public class EndStarter : MonoBehaviour
     private ActivationSequence m_AS;
     public GameObject endDecoy;
 
+    public FMODUnity.StudioEventEmitter emitter;
+
     // Use this for initialization
     void Start ()
     {
+
+        emitter = GameObject.Find("S5_Music_Emitter").GetComponent<FMODUnity.StudioEventEmitter>();
         m_AS = GetComponentInChildren<ActivationSequence>();
         m_Collider = GetComponent<BoxCollider>();
 
@@ -34,8 +38,10 @@ public class EndStarter : MonoBehaviour
             {
                 
                 m_EndStarted = true;
+                emitter.SetParameter("S5_ToEnd", 1);
                 m_PlayerTeleport.FinishTeleport();
                 GameManager.GetPlayer().pausePlayer(true);
+                GameManager.GetPlayer().GetComponentInChildren<Animator>().speed = 0;
                 GameManager.GetPlayer().disableGravity();
                 Destroy(GameManager.GetDecoy().gameObject);
                 GameManager.GetPlayer().StopBob();
@@ -44,6 +50,7 @@ public class EndStarter : MonoBehaviour
                 endDecoy.transform.position = m_PlayerTeleport.TeleportingTo();
                 endDecoy.transform.rotation = new Quaternion(0, GameManager.GetPlayer().transform.rotation.y, 0, endDecoy.transform.rotation.w);
                 m_AS.Init();
+                
 
                 enabled = false;
 
