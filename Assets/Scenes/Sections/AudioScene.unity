@@ -153,7 +153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 48472262}
   - component: {fileID: 48472263}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Decoycontainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,6 +222,8 @@ Transform:
   m_Children:
   - {fileID: 1979013476}
   - {fileID: 1067017827}
+  - {fileID: 1640494156}
+  - {fileID: 960240768}
   m_Father: {fileID: 1510775426}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -299,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 252310944}
   - component: {fileID: 252310945}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarAlarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,6 +343,57 @@ MonoBehaviour:
   OverrideAttenuation: 1
   OverrideMinDistance: 10
   OverrideMaxDistance: 45
+--- !u!1 &397775393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 397775394}
+  - component: {fileID: 397775395}
+  m_Layer: 2
+  m_Name: Industrial (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &397775394
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 397775393}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.8, y: 0.20999998, z: -7.09}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Children: []
+  m_Father: {fileID: 1550641561}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &397775395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 397775393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Sound/Objects/Outdoor/ObjOutdoorIndustry
+  PlayEvent: 1
+  StopEvent: 2
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 150
 --- !u!1001 &411635475
 Prefab:
   m_ObjectHideFlags: 0
@@ -427,6 +480,57 @@ Transform:
   m_Father: {fileID: 573307364}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &423501676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 423501677}
+  - component: {fileID: 423501678}
+  m_Layer: 2
+  m_Name: Industrial (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &423501677
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 423501676}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.18, y: 0.21, z: -2.5999997}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Children: []
+  m_Father: {fileID: 1550641561}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &423501678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 423501676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Sound/Objects/Outdoor/ObjOutdoorIndustry
+  PlayEvent: 1
+  StopEvent: 2
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 150
 --- !u!1 &495907019
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +542,7 @@ GameObject:
   - component: {fileID: 495907023}
   - component: {fileID: 495907022}
   - component: {fileID: 495907021}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LabRoomtone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,7 +627,7 @@ GameObject:
   m_Component:
   - component: {fileID: 506693601}
   - component: {fileID: 506693602}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarAlarm (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,6 +704,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &585393985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 585393986}
+  - component: {fileID: 585393988}
+  - component: {fileID: 585393987}
+  m_Layer: 2
+  m_Name: WindIntensity (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &585393986
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 585393985}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 50.861, y: 7.56, z: 77.56}
+  m_LocalScale: {x: 3.7492101, y: 2.9260309, z: 0.57339513}
+  m_Children: []
+  m_Father: {fileID: 587488236}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &585393987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 585393985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 2056808389}
+    Params:
+    - Name: WindIntensity
+      Value: 1
+    - Name: Intensity
+      Value: 0.652
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &585393988
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 585393985}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &587488235
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +793,9 @@ Transform:
   m_Children:
   - {fileID: 2112861227}
   - {fileID: 1755860770}
+  - {fileID: 2035757517}
+  - {fileID: 2005709293}
+  - {fileID: 585393986}
   m_Father: {fileID: 1510775426}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -742,7 +911,7 @@ GameObject:
   m_Component:
   - component: {fileID: 662192514}
   - component: {fileID: 662192515}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Industrial (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -869,6 +1038,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1220084367680044, guid: 3fe82b0b132f5ad4a9cc557306c84e42, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3fe82b0b132f5ad4a9cc557306c84e42, type: 2}
   m_IsPrefabParent: 0
@@ -881,7 +1054,7 @@ GameObject:
   m_Component:
   - component: {fileID: 863608855}
   - component: {fileID: 863608856}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Industrial (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,7 +1105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 943602862}
   - component: {fileID: 943602863}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -983,7 +1156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 951782096}
   - component: {fileID: 951782097}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarAlarm (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1025,6 +1198,57 @@ MonoBehaviour:
   OverrideAttenuation: 1
   OverrideMinDistance: 10
   OverrideMaxDistance: 45
+--- !u!1 &960240767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 960240768}
+  - component: {fileID: 960240769}
+  m_Layer: 2
+  m_Name: Impact (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &960240768
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 960240767}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.49, y: 0.355, z: -9.37}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Children: []
+  m_Father: {fileID: 75659297}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &960240769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 960240767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Sound/Objects/Outdoor/ObjOutdoorImpact
+  PlayEvent: 1
+  StopEvent: 2
+  CollisionTag: Player
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 200
 --- !u!1001 &1002151549
 Prefab:
   m_ObjectHideFlags: 0
@@ -1118,7 +1342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1067017827}
   - component: {fileID: 1067017828}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Impact (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,7 +1396,7 @@ GameObject:
   - component: {fileID: 1076344079}
   - component: {fileID: 1076344081}
   - component: {fileID: 1076344082}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Section3Roomtone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1211,9 +1435,9 @@ MonoBehaviour:
   TriggerOnce: 0
   Preload: 0
   Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
+  OverrideAttenuation: 1
+  OverrideMinDistance: 2
+  OverrideMaxDistance: 20
 --- !u!65 &1076344080
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1501,7 +1725,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1298825491}
   - component: {fileID: 1298825492}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarAlarm (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1552,7 +1776,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1305160952}
   - component: {fileID: 1305160953}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1632,7 +1856,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1425316018}
   - component: {fileID: 1425316019}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1714,7 +1938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1461533944}
   - component: {fileID: 1461533945}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarAlarm (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1765,7 +1989,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1463714243}
   - component: {fileID: 1463714244}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1849,7 +2073,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1535717371}
   - component: {fileID: 1535717372}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Machinery (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1919,6 +2143,8 @@ Transform:
   - {fileID: 1737576153}
   - {fileID: 662192514}
   - {fileID: 863608855}
+  - {fileID: 423501677}
+  - {fileID: 397775394}
   m_Father: {fileID: 1510775426}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1933,7 +2159,7 @@ GameObject:
   - component: {fileID: 1570432087}
   - component: {fileID: 1570432086}
   - component: {fileID: 1570432085}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SaftTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1995,6 +2221,57 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1640494155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1640494156}
+  - component: {fileID: 1640494157}
+  m_Layer: 2
+  m_Name: Impact (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1640494156
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1640494155}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.86, y: 0.664, z: 1.84}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Children: []
+  m_Father: {fileID: 75659297}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1640494157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1640494155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Sound/Objects/Outdoor/ObjOutdoorImpact
+  PlayEvent: 1
+  StopEvent: 2
+  CollisionTag: Player
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 200
 --- !u!1 &1667323819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,7 +2283,7 @@ GameObject:
   - component: {fileID: 1667323822}
   - component: {fileID: 1667323821}
   - component: {fileID: 1667323823}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HangarRoomtone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2127,7 +2404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1737576153}
   - component: {fileID: 1737576154}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Industrial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2179,7 +2456,7 @@ GameObject:
   - component: {fileID: 1755860770}
   - component: {fileID: 1755860772}
   - component: {fileID: 1755860771}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WindIntensity (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2240,7 +2517,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1784311590}
   - component: {fileID: 1784311591}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2291,7 +2568,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1799348085}
   - component: {fileID: 1799348086}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarAlarm (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2393,6 +2670,10 @@ Prefab:
       propertyPath: m_Name
       value: ObjSection3Fans (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1220084367680044, guid: 3fe82b0b132f5ad4a9cc557306c84e42, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3fe82b0b132f5ad4a9cc557306c84e42, type: 2}
   m_IsPrefabParent: 0
@@ -2405,7 +2686,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1904843271}
   - component: {fileID: 1904843272}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2485,7 +2766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1979013476}
   - component: {fileID: 1979013477}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2527,6 +2808,68 @@ MonoBehaviour:
   OverrideAttenuation: 1
   OverrideMinDistance: 1
   OverrideMaxDistance: 200
+--- !u!1 &2005709292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2005709293}
+  - component: {fileID: 2005709295}
+  - component: {fileID: 2005709294}
+  m_Layer: 2
+  m_Name: WindIntensity (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2005709293
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2005709292}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 49.123, y: 4.665, z: 48.08}
+  m_LocalScale: {x: 1.3544518, y: 1.2046071, z: 0.5733947}
+  m_Children: []
+  m_Father: {fileID: 587488236}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2005709294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2005709292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 2056808389}
+    Params:
+    - Name: WindIntensity
+      Value: 0.803
+    - Name: Intensity
+      Value: 0.652
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &2005709295
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2005709292}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2025622377
 Prefab:
   m_ObjectHideFlags: 0
@@ -2582,9 +2925,75 @@ Prefab:
       propertyPath: m_Name
       value: ObjSection3Fans (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1220084367680044, guid: 3fe82b0b132f5ad4a9cc557306c84e42, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3fe82b0b132f5ad4a9cc557306c84e42, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2035757516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2035757517}
+  - component: {fileID: 2035757519}
+  - component: {fileID: 2035757518}
+  m_Layer: 2
+  m_Name: WindIntensity (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2035757517
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035757516}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 33.4526, y: 2.445, z: -26.949}
+  m_LocalScale: {x: 0.041944485, y: 0.39219752, z: 2.7720883}
+  m_Children: []
+  m_Father: {fileID: 587488236}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2035757518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035757516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 2056808389}
+    Params:
+    - Name: WindIntensity
+      Value: 0.603
+    - Name: Intensity
+      Value: 0.652
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &2035757519
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035757516}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2056808387
 GameObject:
   m_ObjectHideFlags: 0
@@ -2594,7 +3003,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2056808388}
   - component: {fileID: 2056808389}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: OutdoorRoomtone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2646,7 +3055,7 @@ GameObject:
   - component: {fileID: 2112861227}
   - component: {fileID: 2112861229}
   - component: {fileID: 2112861228}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WindIntensity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2709,7 +3118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2120374411}
   - component: {fileID: 2120374412}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2760,7 +3169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2124397279}
   - component: {fileID: 2124397280}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObjHangarPipes (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
