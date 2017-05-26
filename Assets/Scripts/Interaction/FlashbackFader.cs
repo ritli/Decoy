@@ -16,6 +16,8 @@ public class FlashbackFader : ActivationObject {
     public SkinnedMeshRenderer[] fadingMeshes;
     [Tooltip("Time before the animation is played. (Sound plays immediately)")]
     public float animationDelay = 0.0f;
+    [Tooltip("Disable the audioplayer from being used.")]
+    public bool disableSound = false;
 
     private bool animationInitiated = false;
 
@@ -27,6 +29,13 @@ public class FlashbackFader : ActivationObject {
 
     Timer m_timer;
     PlaySoundActivation m_soundPlayer;
+
+    // Set the animationdelay for all conserned animations
+    public void setAnimationdelay(float delay)
+    {
+        animationDelay = delay;
+        m_timer.setTimeout(animationDelay);
+    }
 
     // Fade in
     public override void activate()
@@ -119,8 +128,9 @@ public class FlashbackFader : ActivationObject {
                         {
                             animationInitiated = true;
                             m_timer.resetTimer();
-                            m_soundPlayer.activate();
-                            print("Start sound!");
+
+                            if (!disableSound)
+                                m_soundPlayer.activate();
                         }
                     }
                 }
