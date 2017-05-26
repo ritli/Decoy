@@ -81,6 +81,9 @@ public class GameManager : MonoBehaviour {
     }
     public static void applySettings(float musicVol, float fxVol, float mouseSense)
     {
+        FMODUnity.RuntimeManager.GetVCA("vca:/MusicVolume").setVolume(musicVol);
+        FMODUnity.RuntimeManager.GetVCA("vca:/SFXVolume").setVolume(fxVol);
+
         m_instance.m_MusicVolume = musicVol;
         m_instance.m_FXVolume = fxVol;
         m_instance.m_MouseSensitivity = mouseSense;
