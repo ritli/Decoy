@@ -202,6 +202,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{5667fd8a-835a-4301-9d80-014f5f368749}">
+        <property name="volume">
+            <value>-0.5</value>
+        </property>
         <property name="name">
             <value>BrassRising</value>
         </property>
@@ -284,17 +287,17 @@
         <property name="quantizationInterval">
             <value>3</value>
         </property>
-        <relationship name="destination">
-            <destination>{00c31e3e-f07a-42c0-b59b-32157db75471}</destination>
-        </relationship>
-        <relationship name="triggerConditions">
-            <destination>{9d460abd-755d-4ead-8cb4-63bd95fa4eca}</destination>
-        </relationship>
         <relationship name="timeline">
             <destination>{47e5bf7c-59c9-480f-8081-31917566dcef}</destination>
         </relationship>
         <relationship name="markerTrack">
             <destination>{dc3f1a9e-86b3-4a0c-af2e-2071904df0d0}</destination>
+        </relationship>
+        <relationship name="triggerConditions">
+            <destination>{9d460abd-755d-4ead-8cb4-63bd95fa4eca}</destination>
+        </relationship>
+        <relationship name="destination">
+            <destination>{00c31e3e-f07a-42c0-b59b-32157db75471}</destination>
         </relationship>
     </object>
     <object class="TransitionRegion" id="{43f2f86d-8fc8-46f3-9be6-fc1594ec599f}">

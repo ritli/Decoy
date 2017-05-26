@@ -862,6 +862,8 @@ GameObject:
   - component: {fileID: 95314359574879294}
   - component: {fileID: 114937871244944028}
   - component: {fileID: 114173608945723854}
+  - component: {fileID: 114245558822085834}
+  - component: {fileID: 114087176120392158}
   m_Layer: 0
   m_Name: Flashback1
   m_TagString: Untagged
@@ -14115,6 +14117,19 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114087176120392158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1128198498726656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20c225db90cb72d41990f1bb80b527e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_timeout: 1
+  printTime: 0
 --- !u!114 &114173608945723854
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14130,6 +14145,24 @@ MonoBehaviour:
   playOnAwake: 0
   activatedState: Take 001
   deactivatedState: Empty
+--- !u!114 &114245558822085834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1128198498726656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e077b5976678844e94306d1d9e8315f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  m_event: event:/Sound/Animations/Flashbacks/Flashback 1
+  m_oneshot: 1
+  m_attached: 1
+  target: {fileID: 0}
+  m_targetPlayer: 1
+  m_emitter: {fileID: 0}
 --- !u!114 &114937871244944028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14150,6 +14183,7 @@ MonoBehaviour:
   - {fileID: 137373395075308598}
   - {fileID: 137647425818259696}
   - {fileID: 137522617400018128}
+  animationDelay: 0
 --- !u!137 &137373395075308598
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
