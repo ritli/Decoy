@@ -34,6 +34,7 @@
         <relationship name="parameters">
             <destination>{f81b1c5d-8d6c-40cc-aaa1-0fbc8846b690}</destination>
             <destination>{4fd5026e-9d27-4d8e-bd7f-7396f096371b}</destination>
+            <destination>{7df4ad3b-4c1f-4e98-9cdd-a979ccfe32f7}</destination>
         </relationship>
         <relationship name="banks">
             <destination>{646d05c4-b2ee-4873-aa77-5e569adad0db}</destination>
@@ -91,6 +92,14 @@
             <value>S2ToEnd</value>
         </property>
     </object>
+    <object class="GameParameter" id="{7df4ad3b-4c1f-4e98-9cdd-a979ccfe32f7}">
+        <property name="name">
+            <value>S2Checkpoints</value>
+        </property>
+        <property name="maximum">
+            <value>2</value>
+        </property>
+    </object>
     <object class="EventMixerMaster" id="{7a05492c-7009-4b45-8ec8-e513e25df71a}">
         <property name="volume">
             <value>2</value>
@@ -118,6 +127,7 @@
         <relationship name="parameters">
             <destination>{c1f3bb0f-3713-4c3b-be22-ab47da3d2558}</destination>
             <destination>{56444ec1-d07f-4849-b4d0-8f1a9e17238a}</destination>
+            <destination>{d29c5298-8e69-47b5-8ecb-5bc8236f6356}</destination>
         </relationship>
         <relationship name="event">
             <destination>{46c64a2c-7f16-41f6-b3b0-b5892a001581}</destination>
@@ -166,6 +176,11 @@
     <object class="ParameterProperty" id="{56444ec1-d07f-4849-b4d0-8f1a9e17238a}">
         <relationship name="parameter">
             <destination>{ac12265c-fd84-4224-aa0d-6cece91ac706}</destination>
+        </relationship>
+    </object>
+    <object class="ParameterProperty" id="{d29c5298-8e69-47b5-8ecb-5bc8236f6356}">
+        <relationship name="parameter">
+            <destination>{e1f376ba-fb4c-4488-9a80-6fe50aa242e3}</destination>
         </relationship>
     </object>
     <object class="MixerBusEffectChain" id="{815268eb-a153-4915-a17d-de801e20cfd2}">

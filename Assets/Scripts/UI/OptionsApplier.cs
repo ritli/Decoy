@@ -17,6 +17,6 @@ public class OptionsApplier : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        GameManager.applySettings(sliders[0].value, sliders[0].value, sliders[0].value);
+        GameManager.applySettings(sliders[0].value, sliders[1].value, sliders[2].value);
 	}
 }
