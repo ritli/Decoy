@@ -75,6 +75,7 @@
         </relationship>
         <relationship name="markers">
             <destination>{5e9083ae-afd1-471d-bff4-bab3a22cd11e}</destination>
+            <destination>{2f8756db-91e3-4dad-a83e-77f4ecd438d4}</destination>
         </relationship>
     </object>
     <object class="GameParameter" id="{03cc7152-2be8-497a-971b-24448b14dd81}">
@@ -106,6 +107,9 @@
     </object>
     <object class="MixerBusPanner" id="{72f3a776-994c-427f-99a1-f4b3eb370cfb}"/>
     <object class="SingleSound" id="{8566e14c-8aa5-4668-b60f-dee040bd0229}">
+        <property name="start">
+            <value>24.800000000000001</value>
+        </property>
         <property name="length">
             <value>165.16401360544216</value>
         </property>
@@ -115,7 +119,7 @@
     </object>
     <object class="EventMixerGroup" id="{98992441-05af-493f-82da-5f2d5a376a78}">
         <property name="name">
-            <value>Audio 2</value>
+            <value>MenuMusic</value>
         </property>
         <relationship name="effectChain">
             <destination>{204791b2-5268-4f51-a471-bf4ef3819e1f}</destination>
@@ -133,6 +137,20 @@
         </property>
         <property name="tempo">
             <value>165</value>
+        </property>
+        <relationship name="timeline">
+            <destination>{593bd4c6-e587-47b5-b1c0-2e6a81b6d32f}</destination>
+        </relationship>
+        <relationship name="markerTrack">
+            <destination>{d3224dea-9212-422d-b714-1d74a7c1e33d}</destination>
+        </relationship>
+    </object>
+    <object class="LoopRegion" id="{2f8756db-91e3-4dad-a83e-77f4ecd438d4}">
+        <property name="position">
+            <value>0</value>
+        </property>
+        <property name="length">
+            <value>189.96401360544218</value>
         </property>
         <relationship name="timeline">
             <destination>{593bd4c6-e587-47b5-b1c0-2e6a81b6d32f}</destination>
