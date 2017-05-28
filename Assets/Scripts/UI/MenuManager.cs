@@ -8,6 +8,8 @@ public class MenuManager : MonoBehaviour
 {
     public bool m_StartActive;
 
+
+    public GameObject m_ElementParent;
     public GameObject m_Main;
     public GameObject m_Options;
     public GameObject m_QuitConfirm;
@@ -15,6 +17,7 @@ public class MenuManager : MonoBehaviour
     private void Start()
     {
         //set only main to be visible
+        m_ElementParent.SetActive(m_StartActive);
         m_Main.SetActive(m_StartActive);
         m_Options.SetActive(false);
         m_QuitConfirm.SetActive(false);
@@ -80,6 +83,7 @@ public class MenuManager : MonoBehaviour
     }
     public void pauseGame(bool pause)
     {
+        m_ElementParent.SetActive(pause);
         m_Main.SetActive(pause);
     }
     public void resume()
