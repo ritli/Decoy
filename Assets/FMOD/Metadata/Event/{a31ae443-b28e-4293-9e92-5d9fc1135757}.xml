@@ -72,6 +72,12 @@
         </relationship>
     </object>
     <object class="EventMixerMaster" id="{06cbe3a5-c381-437c-80f8-4377087d19ef}">
+        <property name="pitch">
+            <value>-0.5</value>
+        </property>
+        <relationship name="modulators">
+            <destination>{75bf39c9-3789-481a-9ffc-d1b3b4041511}</destination>
+        </relationship>
         <relationship name="effectChain">
             <destination>{7cd8259e-0749-4b7c-b4c7-b11826c1ec10}</destination>
         </relationship>
@@ -97,6 +103,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{7cfde036-6af8-4a17-abf9-f61ab5965efa}">
+        <property name="volume">
+            <value>-3</value>
+        </property>
         <property name="name">
             <value>Charge</value>
         </property>
@@ -110,12 +119,25 @@
             <destination>{06cbe3a5-c381-437c-80f8-4377087d19ef}</destination>
         </relationship>
     </object>
+    <object class="RandomizerModulator" id="{75bf39c9-3789-481a-9ffc-d1b3b4041511}">
+        <property name="nameOfPropertyBeingModulated">
+            <value>pitch</value>
+        </property>
+        <property name="amount">
+            <value>0.5</value>
+        </property>
+    </object>
     <object class="MixerBusEffectChain" id="{7cd8259e-0749-4b7c-b4c7-b11826c1ec10}">
         <relationship name="effects">
             <destination>{b726adee-43c8-423f-9aae-eab36f6fdb22}</destination>
+            <destination>{d71fc002-3810-4882-a46d-0a6a86d390b2}</destination>
         </relationship>
     </object>
-    <object class="MixerBusPanner" id="{15efaef6-8457-498b-8ed5-eb6af3e30460}"/>
+    <object class="MixerBusPanner" id="{15efaef6-8457-498b-8ed5-eb6af3e30460}">
+        <property name="stereoPan">
+            <value>26</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{930815f5-ef25-46bc-93e3-01549af7b5da}"/>
     <object class="MixerBusEffectChain" id="{5e219d43-f1e4-4507-b740-e4842ef837ab}">
         <relationship name="effects">
@@ -124,5 +146,19 @@
     </object>
     <object class="MixerBusPanner" id="{4ebbd223-a8db-46a7-9f63-15c67c340c37}"/>
     <object class="MixerBusFader" id="{b726adee-43c8-423f-9aae-eab36f6fdb22}"/>
+    <object class="ThreeEQEffect" id="{d71fc002-3810-4882-a46d-0a6a86d390b2}">
+        <property name="midGain">
+            <value>-14</value>
+        </property>
+        <property name="highGain">
+            <value>-28</value>
+        </property>
+        <property name="lowCrossover">
+            <value>280</value>
+        </property>
+        <property name="highCrossover">
+            <value>2300</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{94e0b7fa-d7b0-490e-bd5c-473be0c6a61d}"/>
 </objects>
