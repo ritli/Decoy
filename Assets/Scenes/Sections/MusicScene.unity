@@ -548,6 +548,8 @@ Transform:
   - {fileID: 1506010375}
   - {fileID: 984177353}
   - {fileID: 644345684}
+  - {fileID: 1777235719}
+  - {fileID: 1889588304}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1190,13 +1192,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1324192348}
-  m_LocalRotation: {x: -0, y: -0.011305424, z: -0, w: 0.9999361}
-  m_LocalPosition: {x: 359.59, y: 7.3, z: -53.65}
-  m_LocalScale: {x: 30.2948, y: 18.99159, z: 5.4994307}
+  m_LocalRotation: {x: -0, y: -0.22037058, z: -0, w: 0.97541624}
+  m_LocalPosition: {x: 337.63, y: 7.3, z: -69.75}
+  m_LocalScale: {x: 2.524578, y: 18.99159, z: 39.37401}
   m_Children: []
   m_Father: {fileID: 940196153}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -1.296, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -25.462002, z: 0}
 --- !u!114 &1324192350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1448,8 +1450,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1506010374}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 405.15, y: 11.449999, z: -78.77}
-  m_LocalScale: {x: 7.7857056, y: 25.358767, z: 23.305113}
+  m_LocalPosition: {x: 404.1, y: 11.449999, z: -51.32}
+  m_LocalScale: {x: 9.851375, y: 25.358767, z: 19.554243}
   m_Children: []
   m_Father: {fileID: 940196153}
   m_RootOrder: 2
@@ -1763,6 +1765,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1777235718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1777235719}
+  - component: {fileID: 1777235721}
+  - component: {fileID: 1777235720}
+  m_Layer: 2
+  m_Name: S3_Music_Trigger4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1777235719
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1777235718}
+  m_LocalRotation: {x: -0, y: 0.01590026, z: -0, w: 0.9998736}
+  m_LocalPosition: {x: 376.98, y: 7.300001, z: -86.49}
+  m_LocalScale: {x: 49.1505, y: 18.991589, z: 7.508288}
+  m_Children: []
+  m_Father: {fileID: 940196153}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 1.8220001, z: 0}
+--- !u!114 &1777235720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1777235718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S3_Progression
+      Value: 1
+    - Name: S3_DeathVariation
+      Value: 0
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1777235721
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1777235718}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1792637254
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,6 +2094,68 @@ Transform:
   m_Father: {fileID: 2026311871}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1889588303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1889588304}
+  - component: {fileID: 1889588306}
+  - component: {fileID: 1889588305}
+  m_Layer: 2
+  m_Name: S3_Music_Trigger4 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1889588304
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889588303}
+  m_LocalRotation: {x: -0, y: 0.01590026, z: -0, w: 0.9998736}
+  m_LocalPosition: {x: 360.67, y: 3.92, z: -51.84}
+  m_LocalScale: {x: 8.542232, y: 15.727829, z: 7.50829}
+  m_Children: []
+  m_Father: {fileID: 940196153}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 1.8220001, z: 0}
+--- !u!114 &1889588305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889588303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1576572560}
+    Params:
+    - Name: S3_Progression
+      Value: 1
+    - Name: S3_DeathVariation
+      Value: 0
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1889588306
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1889588303}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1897270703
 GameObject:
   m_ObjectHideFlags: 0
