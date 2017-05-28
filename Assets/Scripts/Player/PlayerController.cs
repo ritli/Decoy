@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour, IKillable
     public string m_deathEvent;
 
     public bool m_hasDevice = true;
+    public bool lockPlayer = true;
     AnimationState m_aniState = AnimationState.idle;
     Animator m_animator;
     Animator m_noDeviceAnimator;
@@ -621,7 +622,7 @@ public class PlayerController : MonoBehaviour, IKillable
             m_airTime += Time.fixedDeltaTime;
         }
 
-		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled) 
+		if (m_playerState != PlayerState.isPause && !m_ledgeLerp.isLerping() && m_controlsEnabled && !lockPlayer) 
 		{
 			Move ();
 		}	
@@ -868,7 +869,7 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, Quaternion.LookRotation(m_forcelookDirection), m_forcelookSpeed * Time.deltaTime);
         }
-        else
+        else if (!lockPlayer)
         {
             m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
         }
@@ -947,13 +948,13 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!isPaused && m_playerState == PlayerState.isPause)
         {
             m_playerState = m_stateBeforePause;
-			//if (m_animator != null)
-            	//m_animator.speed = 1;
+			if (m_animator != null)
+            	m_animator.speed = 1;
         }
         else if(isPaused && m_playerState != PlayerState.isPause)
         {
-			//if (m_animator != null)
-            	//m_animator.speed = 0;
+			if (m_animator != null)
+            	m_animator.speed = 0;
             m_stateBeforePause = m_playerState;
             m_playerState = PlayerState.isPause;
         }
