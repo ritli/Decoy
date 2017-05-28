@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class EmitterKill : MonoBehaviour {
 
-	void Start () {
+	void OnEnable() {
         KillAll();
 
         GetComponent<FMODUnity.StudioEventEmitter>().Play();
+    }
 
-        print("ALL SOUNDS KILLED");
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            KillAll();
+        }
     }
 
     void KillAll()
     {
+        FMODUnity.RuntimeManager.GetBus("bus:/Master").stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+
+        /*
         FMODUnity.StudioEventEmitter[] emitters = FindObjectsOfType<FMODUnity.StudioEventEmitter>();
 
         foreach(FMODUnity.StudioEventEmitter e in emitters)
         {
             e.Stop();
         }
+        */
     }
 
 
