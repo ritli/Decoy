@@ -43,7 +43,7 @@ public class MenuManager : MonoBehaviour
             {
                 m_QuitConfirm.SetActive(false);
             }
-            //m_Main.SetActive(true);
+            m_Main.SetActive(true);
             if (PauseManager.GetInstance() != null && PauseManager.GetInstance().isPausedDisabled() && PauseManager.GetInstance().isPaused())
             {
                 PauseManager.GetInstance().DisablePause(false);
