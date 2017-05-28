@@ -66,8 +66,11 @@ public class PlayerTeleport : MonoBehaviour {
     private ParticleController m_partController;
     private BlinkState m_blinkState;
 	private ParticleSystem.MainModule m_particleSystem;
-
+    private bool m_ChargeSoundPlayed = true;
     private Vector3 m_lastPosition;
+
+    [FMODUnity.EventRef]
+    public string m_ChargeEmitter;
 
     // Variable controlling whether the players can teleport or not.
     private bool teleportAllowed = true;
@@ -120,7 +123,10 @@ public class PlayerTeleport : MonoBehaviour {
 		m_arrived = false;
         m_player.disableGravity();
     }
-
+    public void playChargeSound()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(m_ChargeEmitter);
+    }
     // Handle input for teleportation controls.
 	void Update () {
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
@@ -128,10 +134,16 @@ public class PlayerTeleport : MonoBehaviour {
             if (m_cooldownTimer.isTimeUp())
             {
                 m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+                if(!m_ChargeSoundPlayed)
+                {
+                    m_ChargeSoundPlayed = true;
+                    Invoke("playChargeSound", 0.3f);
+                }
                 m_ChargeIndicatorAnim.SetBool("isPlaying", false);
             }
             else
             {
+                m_ChargeSoundPlayed = false;
                 if(!m_ChargeIndicatorAnim.GetBool("isPlaying"))
                 {
                     m_ChargeIndicatorAnim.SetBool("isPlaying", true);
