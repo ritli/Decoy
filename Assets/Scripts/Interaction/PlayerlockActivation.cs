@@ -8,6 +8,7 @@ public class PlayerlockActivation : ActivationObject {
 
     public override void activate()
     {
+        print(name + "Triggered player activate");
         GameManager.GetPlayer().lockPlayer = true;
     }
 
