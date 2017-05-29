@@ -215,7 +215,7 @@ public class ScriptedAnimatorActivation : ActivationObject {
         switch (playState)
         {
             case ScientistState.Aiming:
-                m_animator.Play("Scientist Aim Blink");
+                m_animator.SetTrigger("BeginAim");
                 break;
             case ScientistState.AppearTurn:
                 m_animator.Play("Scientist Appear Turn");
