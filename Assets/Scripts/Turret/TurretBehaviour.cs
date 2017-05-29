@@ -49,7 +49,7 @@ public class TurretBehaviour : MonoBehaviour
     float m_timeSinceAlertSound;
     bool m_locked = false;
     bool m_playerLocked = false;
-
+    bool m_playerDecoyed = false;
 
     // Use this for initialization
     void Start()
@@ -105,6 +105,8 @@ public class TurretBehaviour : MonoBehaviour
     {
         //set the decoy
         m_Decoy = GameManager.GetDecoy();
+        m_playerDecoyed = true;
+
         if (isObjectVisible(GameManager.GetPlayer().transform, Tags.player))
         {
             m_playerLocked = false;
@@ -139,15 +141,23 @@ public class TurretBehaviour : MonoBehaviour
                     m_LookAt.lookAtWaypoint();
                 }
 
-                if (m_timeSinceAlertSound < 0.5f)
+                if (m_timeSinceAlertSound < 0.5f && !m_playerDecoyed)
                 {
+                    print("Decoystate : " + m_playerDecoyed);
+                    print("Cancelled");
                     m_emitter.SetParameter("BuildCancel", 1);
                 }
-                else
+                else if (!m_playerDecoyed)
                 {
+                    print("Stopped");
                     m_emitter.Stop();
                     m_alertSoundPlayed = false;
                     m_emitter.SetParameter("BuildCancel", 0);
+                }
+                else if (m_playerDecoyed && m_timeSinceAlertSound > 0.5f)
+                {
+                    print("Decoyed false");
+                    m_playerDecoyed = false;
                 }
 
                 m_timeSinceAlertSound += Time.deltaTime;
@@ -200,7 +210,6 @@ public class TurretBehaviour : MonoBehaviour
                         StartCoroutine(ShootSequence());
                     }
                 }
-                print(m_timeToKillElapsed);
 
                 //count up timer
                 m_timeToKillElapsed += Time.deltaTime;
