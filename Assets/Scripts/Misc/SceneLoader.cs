@@ -157,8 +157,8 @@ public class SceneLoader : MonoBehaviour
             LoadSceneSync(Scenes.Section1b);
             LoadSceneSync(Scenes.Section2a);
             LoadSceneSync(Scenes.Section2b);
-            LoadSceneSync(Scenes.Section2b);
-            LoadSceneSync(Scenes.Section2b);
+            LoadSceneSync(Scenes.Section2c);
+            LoadSceneSync(Scenes.Section3);
             LoadSceneSync(Scenes.Section4);
             LoadSceneSync(Scenes.Section5a);
             LoadSceneSync(Scenes.Section5b);
