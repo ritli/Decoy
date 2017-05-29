@@ -6,6 +6,7 @@ using UnityEngine;
 public class OptionsApplier : MonoBehaviour
 {
 
+    public Toggle Asynctoggle;
     private Slider[] sliders;
 
 	// Use this for initialization
@@ -18,6 +19,7 @@ public class OptionsApplier : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        GameManager.SetAsyncLoad(Asynctoggle.isOn);
         GameManager.applySettings(sliders[0].value, sliders[1].value, sliders[2].value);
 	}
 }
