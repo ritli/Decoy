@@ -30,6 +30,12 @@ public class SceneLoadButton : MonoBehaviour {
     {
         Debug.Log("Request called to load.");
         loadRequested = false;
+        FindObjectOfType<MenuManager>().clearPlayerPrefs();
+        GameManager.GetPlayer().ResetPlayer();
+        if(Checkpoint.isPreviouslySaved())
+        {
+            Debug.Log("still saved.");
+        }
 		SceneLoader.getInstance().LoadSceneSync(m_SelectedScene);
         
     }
