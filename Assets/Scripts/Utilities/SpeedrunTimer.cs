@@ -37,6 +37,7 @@ public class SpeedrunTimer : MonoBehaviour
     public void stopTimer()
     {
         finished = true;
+        publishTime();
     }
     public void publishTime()
     {
@@ -45,6 +46,12 @@ public class SpeedrunTimer : MonoBehaviour
         float decimals = time - minutes * 60 + seconds;
         string stringDecimals = decimals.ToString().Substring(0, 1);
 
+        m_Text.enabled = true;
         m_Text.text = String.Format("TIME: {0}:{1}:{2}", minutes, seconds, stringDecimals);
+        Invoke("hideText", 10);
+    }
+    public void hideText()
+    {
+        m_Text.enabled = false;
     }
 }
