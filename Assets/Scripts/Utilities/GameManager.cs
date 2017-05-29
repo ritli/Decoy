@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
 
     bool m_LoadAsync;
 
+    string m_timeElapsed;
+
 	void Start () {
         Init();
 
@@ -36,6 +38,18 @@ public class GameManager : MonoBehaviour {
     {
         SceneLoader.getInstance().m_loadAsync = active;
     }
+
+    public static void SetTimeElapsed(string time)
+    {
+        m_instance.m_timeElapsed = time;
+    }
+
+
+    public static string GetTimeElapsed()
+    {
+        return m_instance.m_timeElapsed;
+    }
+
 
     void Init()
     {

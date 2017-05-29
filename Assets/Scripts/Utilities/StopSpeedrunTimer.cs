@@ -17,7 +17,7 @@ public class StopSpeedrunTimer : MonoBehaviour
         if(other.tag == Tags.player)
         {
             sprntmr.stopTimer();
-            sprntmr.m_Text.enabled = true;
+            //sprntmr.m_Text.enabled = true;
         }
     }
 }
