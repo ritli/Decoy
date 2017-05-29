@@ -7,6 +7,7 @@ public class CreditBehaviour : MonoBehaviour
     private RectTransform m_RectTransform;
     private Rect m_CreditRect;
     private Canvas m_MainCanvas;
+    public GameObject m_EndOfCredit;
     Vector2 rectPosition;
     bool finished;
 	// Use this for initialization
@@ -24,11 +25,11 @@ public class CreditBehaviour : MonoBehaviour
     {
         rectPosition = new Vector2(m_RectTransform.position.x, m_RectTransform.position.y - m_RectTransform.rect.height);
         //check if text is above the screen
-        if (m_MainCanvas.transform.position.y+m_MainCanvas.pixelRect.height * 0.75f < rectPosition.y && !finished)
+        if (Camera.main.WorldToViewportPoint(m_EndOfCredit.transform.position).y > 0.3f && !finished)
         {
             //ImageFader.instance.SetVisible(true);
             finished = true;
-            Debug.Log("Loading Menu");
+            GameManager.GetPlayer().m_MouseLook.SetCursorLock(false);
             SceneLoader.getInstance().LoadMainMenu();
         }
         else if(m_MainCanvas.transform.position.y + m_MainCanvas.pixelRect.height / 2 < rectPosition.y && !finished)
