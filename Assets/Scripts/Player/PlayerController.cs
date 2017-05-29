@@ -298,6 +298,14 @@ public class PlayerController : MonoBehaviour, IKillable
         }
     }
 
+    // Set the sensitivit on the mouse
+    public void setMouseSense(float sense)
+    {
+        // Since default mousesense is 2 and senseoption in menus is 0.5...
+        float actualChange = 4.0f * sense;
+        m_MouseLook.XSensitivity = m_MouseLook.YSensitivity = actualChange;
+    }
+
     public VectorBobber GetWalkBob()
     {
         return m_walkingBobber;
@@ -877,7 +885,7 @@ public class PlayerController : MonoBehaviour, IKillable
         {
             m_MouseLook.LookRotation(transform, m_Camera.transform, !m_Jumping);
         }
-
+        
     }
 
     private void UpdateCameraPosition(float speed)
