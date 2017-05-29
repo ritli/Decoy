@@ -143,20 +143,16 @@ public class TurretBehaviour : MonoBehaviour
 
                 if (m_timeSinceAlertSound < 0.5f && !m_playerDecoyed)
                 {
-                    print("Decoystate : " + m_playerDecoyed);
-                    print("Cancelled");
                     m_emitter.SetParameter("BuildCancel", 1);
                 }
                 else if (!m_playerDecoyed)
                 {
-                    print("Stopped");
                     m_emitter.Stop();
                     m_alertSoundPlayed = false;
                     m_emitter.SetParameter("BuildCancel", 0);
                 }
                 else if (m_playerDecoyed && m_timeSinceAlertSound > 0.5f)
                 {
-                    print("Decoyed false");
                     m_playerDecoyed = false;
                 }
 
