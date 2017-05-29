@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour {
     {
         FMODUnity.RuntimeManager.GetVCA("vca:/MusicVolume").setVolume(musicVol);
         FMODUnity.RuntimeManager.GetVCA("vca:/SFXVolume").setVolume(fxVol);
+        m_instance.m_player.setMouseSense(mouseSense);
 
         m_instance.m_MusicVolume = musicVol;
         m_instance.m_FXVolume = fxVol;
