@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.30841383, g: 0.14112395, b: 0.068678185, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -56,8 +56,8 @@ LightmapSettings:
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
     serializedVersion: 8
-    m_Resolution: 2
-    m_BakeResolution: 40
+    m_Resolution: 0.5
+    m_BakeResolution: 16
     m_TextureWidth: 1024
     m_TextureHeight: 1024
     m_AO: 1
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousColorSigma: 1
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
-  m_LightingDataAsset: {fileID: 112000004, guid: 77e6c420079e33f429b1bd4fe513178b,
+  m_LightingDataAsset: {fileID: 112000002, guid: dc6ae2808bd600240a89408791a98969,
     type: 2}
   m_ShadowMaskMode: 2
 --- !u!196 &4
@@ -1283,7 +1283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outsideScenes: 050000000600000007000000090000000a0000000b000000
-  startfromMenu: 1
+  startfromMenu: 0
 --- !u!114 &492778520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1296,7 +1296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_placePlacerAtSceneCamera: 1
-  camPos: {x: 646.5414, y: 101.55527, z: -72.325325}
+  camPos: {x: -16.484535, y: 35.987366, z: 64.22033}
 --- !u!114 &513426753 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11471612, guid: 955dc05533f29904798e93ec0f9878f8,
@@ -4986,31 +4986,31 @@ Prefab:
     m_Modifications:
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 56.7
+      value: -13.346563
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 19.86
+      value: 2.7
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 26.67
+      value: 88.24004
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.7071068
+      value: 0.38850632
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.9214461
       objectReference: {fileID: 0}
     - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
       propertyPath: m_RootOrder
@@ -5075,6 +5075,10 @@ Prefab:
         type: 2}
       propertyPath: vertical
       value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 487950, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 45.723003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d041c3e539ffd1459a5d8213a778764, type: 2}
