@@ -75,8 +75,9 @@ public class MenuManager : MonoBehaviour
     {
         if (Checkpoint.isPreviouslySaved())
         {
+                        GameManager.GetPlayer().ResetPlayer();
             SceneLoader.getInstance().InitialGameLoad(Checkpoint.getSavedScene());
-            GameManager.GetPlayer().ResetPlayer();
+
         }
         else
             SceneLoader.getInstance().InitialGameLoad(SceneLoader.Scenes.Section1a);
