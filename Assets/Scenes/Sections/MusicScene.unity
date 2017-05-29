@@ -108,66 +108,6 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &26830926
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 26830927}
-  - component: {fileID: 26830929}
-  - component: {fileID: 26830928}
-  m_Layer: 2
-  m_Name: S5_Music_Trigger_Mega_Epic
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &26830927
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 26830926}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.159545, y: 10.66, z: 171.03}
-  m_LocalScale: {x: 15.061961, y: 9.497294, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1449734274}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &26830928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 26830926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitters:
-  - Target: {fileID: 1010908312}
-    Params:
-    - Name: S5_Progression
-      Value: 2
-  TriggerEvent: 3
-  CollisionTag: Player
---- !u!65 &26830929
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 26830926}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &211855197
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,11 +132,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 211855197}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.585698, y: 14.12, z: 252.3}
+  m_LocalPosition: {x: 7.585698, y: 15.4, z: 251.5}
   m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
   m_Father: {fileID: 1449734274}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &211855199
 MonoBehaviour:
@@ -316,7 +256,7 @@ Transform:
   m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
   m_Father: {fileID: 1449734274}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &584227249
 MonoBehaviour:
@@ -701,11 +641,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1020705509}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.159545, y: 16.83, z: 233.6}
+  m_LocalPosition: {x: 2.159545, y: 16.83, z: 241}
   m_LocalScale: {x: 23.185434, y: 13.21588, z: 1}
   m_Children: []
   m_Father: {fileID: 1449734274}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1020705511
 MonoBehaviour:
@@ -721,6 +661,10 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 1010908312}
     Params:
+    - Name: S5Ini.ActionStart
+      Value: 1
+    - Name: S5_Progression
+      Value: 3
     - Name: EndingAb
       Value: 1
   TriggerEvent: 3
@@ -1231,6 +1175,68 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1334179486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1334179487}
+  - component: {fileID: 1334179489}
+  - component: {fileID: 1334179488}
+  m_Layer: 2
+  m_Name: S1_Music_Trigger6
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1334179487
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1334179486}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25.81, y: -10.78, z: -30.4}
+  m_LocalScale: {x: 27.829493, y: 27.871975, z: -79.68052}
+  m_Children: []
+  m_Father: {fileID: 2026311871}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1334179488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1334179486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Emitters:
+  - Target: {fileID: 1819470892}
+    Params:
+    - Name: Hi-PassRemove
+      Value: 1
+    - Name: Progression
+      Value: 1
+  TriggerEvent: 3
+  CollisionTag: Player
+--- !u!65 &1334179489
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1334179486}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1344993411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,13 +1322,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1433460974}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.6, y: 15.61, z: 188.1}
-  m_LocalScale: {x: 15.061963, y: 9.497294, z: 1}
+  m_LocalRotation: {x: -0, y: 0.38268322, z: -0, w: 0.9238797}
+  m_LocalPosition: {x: 5.22, y: 14.79, z: 179.03}
+  m_LocalScale: {x: 15.061963, y: 9.497294, z: 1.4005476}
   m_Children: []
   m_Father: {fileID: 1449734274}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 45.000004, z: 0}
 --- !u!114 &1433460976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1337,6 +1343,8 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 1010908312}
     Params:
+    - Name: S5Ini.ActionStart
+      Value: 1
     - Name: S5_Progression
       Value: 3
   TriggerEvent: 3
@@ -1381,7 +1389,6 @@ Transform:
   - {fileID: 1010908311}
   - {fileID: 1860486709}
   - {fileID: 1897270704}
-  - {fileID: 26830927}
   - {fileID: 1433460975}
   - {fileID: 1020705510}
   - {fileID: 211855198}
@@ -1514,7 +1521,7 @@ Transform:
   m_LocalScale: {x: 23.185432, y: 13.21588, z: 1}
   m_Children: []
   m_Father: {fileID: 1449734274}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1559015176
 MonoBehaviour:
@@ -1948,8 +1955,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1819470891}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6366463, y: 2.5912762, z: 2.3011303}
-  m_LocalScale: {x: 3.8552706, y: 3.9211366, z: 4.1168194}
+  m_LocalPosition: {x: -38.4, y: -4.2, z: -30.03}
+  m_LocalScale: {x: 78.88396, y: 24.025331, z: 69.58892}
   m_Children:
   - {fileID: 780477103}
   m_Father: {fileID: 2026311871}
@@ -2248,6 +2255,7 @@ Transform:
   - {fileID: 1647556190}
   - {fileID: 1216056486}
   - {fileID: 1093668379}
+  - {fileID: 1334179487}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2279,7 +2287,7 @@ Transform:
   m_LocalScale: {x: 15.061963, y: 9.497294, z: 1}
   m_Children: []
   m_Father: {fileID: 1449734274}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0.028, z: 0}
 --- !u!114 &2107563058
 MonoBehaviour:
