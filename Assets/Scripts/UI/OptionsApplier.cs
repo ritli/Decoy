@@ -12,6 +12,7 @@ public class OptionsApplier : MonoBehaviour
 	void Start ()
     {
         sliders = GetComponentsInChildren<Slider>();
+        sliders[2].value = 0.5f;
 	}
 	
 	// Update is called once per frame
