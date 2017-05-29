@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour, IKillable
     private Vector2 m_jumpInput;
     private float m_airDecreaseY;
     private float m_airDecreaseX;
+    public float m_JumpGraceTime;
+    public bool m_GraceJump;
 
     //Gravity vars
     [Header("Gravity Variables")]
@@ -558,12 +560,12 @@ public class PlayerController : MonoBehaviour, IKillable
     void Jump()
     {
         
-		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded) 
+		if (!m_Jump && !m_Jumping && m_controlsEnabled && m_CharacterController.isGrounded || !m_Jump && m_controlsEnabled && m_airTime < m_JumpGraceTime) 
 		{
 			m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
-            
         }
-		
+
+
         // Keep track of the maximum height achieved while in air for measuring when landing
         if (!m_CharacterController.isGrounded)
         {
@@ -767,7 +769,7 @@ public class PlayerController : MonoBehaviour, IKillable
         RaycastHit groundHit;
         Debug.DrawRay(transform.position, new Vector3(0, -1, 0), Color.green);
         //If player is not on ground
-        if (m_CharacterController.isGrounded)
+        if (m_CharacterController.isGrounded || m_airTime < m_JumpGraceTime)
         {
             //m_MoveDir.y = -m_StickToGroundForce;
 
@@ -787,6 +789,8 @@ public class PlayerController : MonoBehaviour, IKillable
 
             if (m_Jump) 
 			{
+
+                m_airTime = m_JumpGraceTime;
 				m_jumpVector = m_MoveDir;
 				m_jumpVectorR = transform.right;
 				m_MoveDir.y = m_JumpForce;
