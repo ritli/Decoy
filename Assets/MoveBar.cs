@@ -22,20 +22,36 @@ public class MoveBar : MonoBehaviour {
         targetPosition = m_transform.localPosition.y + moveAmount;
     }
 
-    public void setActive(bool active)
+    private void setActive(bool active)
     {
         isActivated = active;
     }
 
-    public void resetBar()
+    private void resetBar()
     {
         m_transform.localPosition = new Vector3(m_transform.localPosition.x, originalPosition, m_transform.localPosition.z);
+    }
+
+    private void setDone()
+    {
+        m_transform.localPosition = new Vector3(m_transform.localPosition.x, targetPosition, m_transform.localPosition.z);
     }
 
 	// Update is called once per frame
 	void Update ()
     {
-        setActive(GameManager.GetPlayer().lockPlayer);
+        if (!GameManager.GetPlayer().gameObject.activeSelf)
+        {
+            setDone();
+            setActive(false);
+        }
+        else if (GameManager.GetPlayer().lockPlayer)
+        {
+            resetBar();
+            setActive(true);
+        }
+        else
+            setActive(false);
 
         if (!isActivated)
         {
