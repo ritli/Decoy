@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour {
     float m_FXVolume = 0;
     float m_MouseSensitivity = 0;
 
+    bool m_LoadAsync;
+
+    string m_timeElapsed;
+
 	void Start () {
         Init();
 
@@ -29,6 +33,23 @@ public class GameManager : MonoBehaviour {
     //    }
 
     //}
+
+    public static void SetAsyncLoad(bool active)
+    {
+        SceneLoader.getInstance().m_loadAsync = active;
+    }
+
+    public static void SetTimeElapsed(string time)
+    {
+        m_instance.m_timeElapsed = time;
+    }
+
+
+    public static string GetTimeElapsed()
+    {
+        return m_instance.m_timeElapsed;
+    }
+
 
     void Init()
     {

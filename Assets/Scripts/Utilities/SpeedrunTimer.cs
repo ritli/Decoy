@@ -13,7 +13,7 @@ public class SpeedrunTimer : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        m_Text.enabled = false;
+        //m_Text.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -23,6 +23,19 @@ public class SpeedrunTimer : MonoBehaviour
         {
             time += Time.deltaTime;
         }
+        /*
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            int minutes = Mathf.FloorToInt(time / 60);
+            int seconds = (int)time % 60;
+            float decimals = time - Mathf.Floor(time);
+            string stringDecimals = decimals.ToString().Substring(2, 3);
+
+
+            //m_Text.enabled = true;
+            print(String.Format("{0:D2}:{1:D2}:{2:D2}", minutes, seconds, stringDecimals));
+        }
+        */
 	}
 
     public void startTimer()
@@ -46,12 +59,14 @@ public class SpeedrunTimer : MonoBehaviour
         float decimals = time - minutes * 60 + seconds;
         string stringDecimals = decimals.ToString().Substring(0, 1);
 
-        m_Text.enabled = true;
-        m_Text.text = String.Format("TIME: {0}:{1}:{2}", minutes, seconds, stringDecimals);
-        Invoke("hideText", 10);
+
+        //m_Text.enabled = true;
+        GameManager.SetTimeElapsed(String.Format("{0:D2}:{1:D2}:{2:D2}", minutes, seconds, stringDecimals));
+        //Invoke("hideText", 10);
     }
     public void hideText()
     {
         m_Text.enabled = false;
     }
+
 }

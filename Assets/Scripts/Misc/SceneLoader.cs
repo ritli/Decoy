@@ -26,6 +26,7 @@ public class SceneLoader : MonoBehaviour
     public static SceneLoader instance;
     private static List<LoadingScene> m_ScenesLoading;
     public bool startfromMenu;
+    public bool m_loadAsync;
     // Use this for initialization
     private void Awake()
     {
@@ -42,10 +43,7 @@ public class SceneLoader : MonoBehaviour
         if(startfromMenu)
             LoadMainMenu();
     }
-    private void Update()
-    {
-        
-    }
+
     public static SceneLoader getInstance()
     {
         return instance;
@@ -137,6 +135,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(Scenes.MainMenu.ToString(), LoadSceneMode.Additive);
         ImageFader.instance.SetVisible(false);
     }
+
     public void InitialGameLoad(Scenes scene)
     {
         if (IsSceneLoading(Scenes.MainMenu))
@@ -152,6 +151,19 @@ public class SceneLoader : MonoBehaviour
 			LoadSceneSync(Scenes.SkyScene);
 
         //load target Scene
+        if (!m_loadAsync)
+        {
+            GameObject.FindGameObjectWithTag(Tags.triggerloader).SetActive(false);
+            LoadSceneSync(Scenes.Section1b);
+            LoadSceneSync(Scenes.Section2a);
+            LoadSceneSync(Scenes.Section2b);
+            LoadSceneSync(Scenes.Section2c);
+            LoadSceneSync(Scenes.Section3);
+            LoadSceneSync(Scenes.Section4);
+            LoadSceneSync(Scenes.Section5a);
+            LoadSceneSync(Scenes.Section5b);
+        }
+
         LoadSceneSync(Scenes.InGameBase);
         LoadSceneSync(Scenes.MusicScene);
         LoadSceneSync(Scenes.AudioScene);

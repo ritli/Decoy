@@ -83,7 +83,7 @@ public class LookAt : MonoBehaviour
             //Update the aim
             if (m_MovingAim)
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed * Time.deltaTime * 15);
 
                 //When rotation has reached the target rotation, stop rotating
                 if (Mathf.Abs(Quaternion.Angle(transform.rotation, targetRotation)) < 2)
