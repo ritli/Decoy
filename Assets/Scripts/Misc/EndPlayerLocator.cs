@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EndPlayerLocator : MonoBehaviour {
 
-    public EndStarter m_EndStarter;
+    private EndStarter m_EndStarter;
     private void Start()
     {
         if(GetComponentInParent<EndStarter>() != null)
