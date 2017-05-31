@@ -32,6 +32,8 @@ public class SceneLoadButton : MonoBehaviour {
         loadRequested = false;
         FindObjectOfType<MenuManager>().clearPlayerPrefs();
         GameManager.GetPlayer().ResetPlayer();
+        //Reset to initial state, to enable replaying
+        GameManager.GetPlayer().initialReset();
         if(Checkpoint.isPreviouslySaved())
         {
             Debug.Log("still saved.");

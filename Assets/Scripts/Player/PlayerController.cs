@@ -483,7 +483,14 @@ public class PlayerController : MonoBehaviour, IKillable
 
         return false;
     }
-
+    public void initialReset()
+    {
+        lockPlayer = true;
+        hasDevice(false);
+        UpdateAnimator();
+        m_animator.Play("Hide Arms");
+        m_animator.Play("Idle");
+    }
     public void ResetPlayer()
     {
         //Apply saved values if they exist

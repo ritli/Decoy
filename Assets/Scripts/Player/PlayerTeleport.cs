@@ -129,107 +129,110 @@ public class PlayerTeleport : MonoBehaviour {
     }
     // Handle input for teleportation controls.
 	void Update () {
+
         if (!m_isPaused && m_player.m_playerState == PlayerState.isAlive)
         {
-            if (m_cooldownTimer.isTimeUp())
+            if (!m_player.lockPlayer && m_player.m_hasDevice)
             {
-                m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
-                if(!m_ChargeSoundPlayed)
+                if (m_cooldownTimer.isTimeUp())
                 {
-                    m_ChargeSoundPlayed = true;
-                    Invoke("playChargeSound", 0.3f);
-                }
-                m_ChargeIndicatorAnim.SetBool("isPlaying", false);
-            }
-            else
-            {
-                m_ChargeSoundPlayed = false;
-                if(!m_ChargeIndicatorAnim.GetBool("isPlaying"))
-                {
-                    m_ChargeIndicatorAnim.SetBool("isPlaying", true);
-                    m_ChargeIndicatorAnim.Play("ChargeAnimation");
-                }
-                m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
-            }
-
-            // Move towards target position set when letting go of the "Teleport" button.
-            if (!m_arrived)
-            {
-				m_blinkState = BlinkState.nah;
-                float step = teleportSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
-
-                // When the players position has arrived, stop moving.
-                if (Vector3.Distance(transform.position, m_teleportTo) == 0)
-                {
-                    m_arrived = true;
-                    m_ledgeDetection.arrivedAtWall();
-                    m_charController.detectCollisions = true;
-
-                    if (m_foundLedge)
+                    m_currentColor = Color.Lerp(m_currentColor, m_canBlinkColor, 0.5f);
+                    if (!m_ChargeSoundPlayed)
                     {
-                        m_ledgeLerp.lerp(m_ledgeLerpTo);
-                        m_foundLedge = false;
+                        m_ChargeSoundPlayed = true;
+                        Invoke("playChargeSound", 0.3f);
                     }
-                    m_player.enableGravity();
-                    m_player.modifyVelocity(velocityAfterTeleport / 100);
-                }
-            }
-
-            if (Input.GetButtonDown("Teleport"))
-                m_cancelTeleport = false;
-
-            if (Input.GetButton("Teleport"))
-            {
-                if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
-                {
-
-                    m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
-
-                    if (teleportAllowed)
-                    {
-                        ShowIndicator();
-                        m_blinkState = BlinkState.aiming;
-                    }                 
-                }
-            }
-            if (Input.GetButtonUp("Teleport"))
-            {
-				m_ledgeLerp.stop();
-                if (!m_cancelTeleport && m_indi.activeSelf)
-                {
-                    moveTo(m_grabPoint);
-                    m_ledgeDetection.startTeleporting();
-
-                    m_blinkState = BlinkState.blinking;
-                    Vector3 lastPos = transform.position;
-                    PlayVisualEffects();
-
-                    m_cooldownTimer.resetTimer();
-
-                    GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
-
-                    // Inherit player velocity and rotation when instancing
-                    Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
-                    decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance / 100;
-                    decoy.transform.rotation = transform.rotation;
-                    GameManager.SetDecoy(decoy.GetComponent<Decoy>());
-
-                    GameManager.GetPlayer().CreateDecoy();
+                    m_ChargeIndicatorAnim.SetBool("isPlaying", false);
                 }
                 else
+                {
+                    m_ChargeSoundPlayed = false;
+                    if (!m_ChargeIndicatorAnim.GetBool("isPlaying"))
+                    {
+                        m_ChargeIndicatorAnim.SetBool("isPlaying", true);
+                        m_ChargeIndicatorAnim.Play("ChargeAnimation");
+                    }
+                    m_currentColor = Color.Lerp(m_currentColor, m_rechargeColor, 0.5f);
+                }
+
+                // Move towards target position set when letting go of the "Teleport" button.
+                if (!m_arrived)
+                {
+                    m_blinkState = BlinkState.nah;
+                    float step = teleportSpeed * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, m_teleportTo, step);
+
+                    // When the players position has arrived, stop moving.
+                    if (Vector3.Distance(transform.position, m_teleportTo) == 0)
+                    {
+                        m_arrived = true;
+                        m_ledgeDetection.arrivedAtWall();
+                        m_charController.detectCollisions = true;
+
+                        if (m_foundLedge)
+                        {
+                            m_ledgeLerp.lerp(m_ledgeLerpTo);
+                            m_foundLedge = false;
+                        }
+                        m_player.enableGravity();
+                        m_player.modifyVelocity(velocityAfterTeleport / 100);
+                    }
+                }
+
+                if (Input.GetButtonDown("Teleport"))
                     m_cancelTeleport = false;
-                m_indi.SetActive(false);
-            }
 
-            // When right clicking, cancel teleportation.
-            if (Input.GetButtonDown("CancelTeleport"))
-            {
-                cancelTeleport();
-            }
-			
-            //ReadBlinkState();
+                if (Input.GetButton("Teleport"))
+                {
+                    if (!m_cancelTeleport && m_cooldownTimer.isTimeUp())
+                    {
 
+                        m_currentColor = Color.Lerp(m_currentColor, m_activeColor, 0.5f);
+
+                        if (teleportAllowed)
+                        {
+                            ShowIndicator();
+                            m_blinkState = BlinkState.aiming;
+                        }
+                    }
+                }
+                if (Input.GetButtonUp("Teleport"))
+                {
+                    m_ledgeLerp.stop();
+                    if (!m_cancelTeleport && m_indi.activeSelf)
+                    {
+                        moveTo(m_grabPoint);
+                        m_ledgeDetection.startTeleporting();
+
+                        m_blinkState = BlinkState.blinking;
+                        Vector3 lastPos = transform.position;
+                        PlayVisualEffects();
+
+                        m_cooldownTimer.resetTimer();
+
+                        GameObject decoy = (GameObject)Instantiate(m_decoy, lastPos, Quaternion.identity);
+
+                        // Inherit player velocity and rotation when instancing
+                        Vector3 inheritVelocity = (transform.position - m_lastPosition) / Time.deltaTime;
+                        decoy.GetComponent<Rigidbody>().velocity = inheritVelocity * decoyVelocityInheritance / 100;
+                        decoy.transform.rotation = transform.rotation;
+                        GameManager.SetDecoy(decoy.GetComponent<Decoy>());
+
+                        GameManager.GetPlayer().CreateDecoy();
+                    }
+                    else
+                        m_cancelTeleport = false;
+                    m_indi.SetActive(false);
+                }
+
+                // When right clicking, cancel teleportation.
+                if (Input.GetButtonDown("CancelTeleport"))
+                {
+                    cancelTeleport();
+                }
+
+                //ReadBlinkState();
+            }
         }
         else if (m_player.m_playerState == PlayerState.isDead)
             FinishTeleport();
