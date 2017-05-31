@@ -11,7 +11,9 @@ public class EndStarter : MonoBehaviour
     private ActivationSequence m_AS;
     public GameObject endDecoy;
 
-    public FMODUnity.StudioEventEmitter emitter;
+    public bool m_IsplayerReady = false;
+
+    private FMODUnity.StudioEventEmitter emitter;
 
     // Use this for initialization
     void Start ()
@@ -31,7 +33,7 @@ public class EndStarter : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-		if(!m_EndStarted)
+		if(!m_EndStarted && m_IsplayerReady)
         {
             //if player is teleporting into the collider, then start the end.
             if(m_PlayerTeleport.isTeleporting() &&  m_Collider.bounds.Contains(m_PlayerTeleport.TeleportingTo()))

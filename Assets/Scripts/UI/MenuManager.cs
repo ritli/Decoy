@@ -87,6 +87,17 @@ public class MenuManager : MonoBehaviour
         m_ElementParent.SetActive(pause);
         m_Main.SetActive(pause);
     }
+    public void ResetToCheckpoint()
+    {
+        ImageFader.instance.SetVisible(true);
+        Invoke("resetInvoke", ImageFader.instance.m_FadeTime);
+    }
+    private void resetInvoke()
+    {
+        GameManager.GetPlayer().ResetPlayer();
+        ImageFader.instance.SetVisible(false);
+
+    }
     public void resume()
     {
         PauseManager.GetInstance().resumeGame();
