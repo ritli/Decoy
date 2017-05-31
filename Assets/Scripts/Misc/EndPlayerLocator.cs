@@ -12,10 +12,16 @@ public class EndPlayerLocator : MonoBehaviour {
     }
     private void OnTriggerEnter(Collider other)
     {
-        m_EndStarter.m_IsplayerReady = true;
+        if(other.tag == Tags.player)
+        {
+            m_EndStarter.m_IsplayerReady = true;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        m_EndStarter.m_IsplayerReady = false;
+        if (other.tag == Tags.player)
+        {
+            m_EndStarter.m_IsplayerReady = false;
+        }
     }
 }

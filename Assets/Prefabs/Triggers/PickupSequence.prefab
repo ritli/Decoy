@@ -27,6 +27,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1332542007541136
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4116850778508118}
+  - component: {fileID: 114484888200840458}
+  m_Layer: 0
+  m_Name: DestroyGlove
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1613634936996962
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,8 +87,25 @@ GameObject:
   - component: {fileID: 33120334617858078}
   - component: {fileID: 23701726174419968}
   - component: {fileID: 114934263230245650}
+  - component: {fileID: 114495350065907122}
   m_Layer: 0
   m_Name: Glove
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!1 &1650531317823160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4896050834517786}
+  - component: {fileID: 114278410130880608}
+  m_Layer: 2
+  m_Name: LockPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,9 +145,23 @@ Transform:
   - {fileID: 4746778079110576}
   - {fileID: 4694519592311572}
   - {fileID: 4174408195235172}
+  - {fileID: 4896050834517786}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
+--- !u!4 &4116850778508118
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1332542007541136}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4694519592311572}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4174408195235172
 Transform:
   m_ObjectHideFlags: 1
@@ -150,7 +197,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: 0.7071067, w: 0.70710695}
   m_LocalPosition: {x: -0.24099731, y: -0.7, z: -0.089996}
   m_LocalScale: {x: 1.6591928, y: 1.659192, z: 1.659192}
-  m_Children: []
+  m_Children:
+  - {fileID: 4116850778508118}
   m_Father: {fileID: 4081350741762024}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
@@ -166,6 +214,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4081350741762024}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4896050834517786
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1650531317823160}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4081350741762024}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23701726174419968
 MeshRenderer:
@@ -252,6 +313,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &114278410130880608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1650531317823160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d59b26b455f878458fe44b35d288072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
 --- !u!114 &114291885258506162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -282,6 +355,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_timeout: 1
   printTime: 0
+--- !u!114 &114484888200840458
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1332542007541136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a7a6c359b5f5e42bf776cb40d2030d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  targetIsParent: 1
+--- !u!114 &114495350065907122
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1637283599453812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a7a6c359b5f5e42bf776cb40d2030d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkIndex: 0
+  targetIsParent: 1
 --- !u!114 &114556112695286650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -326,10 +425,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopList: 0
   activations:
+  - eventName: Lock
+    activationObject: {fileID: 114278410130880608}
+    setState: 1
+    delay: 1
   - eventName: Activate glove on Player
     activationObject: {fileID: 114556112695286650}
     setState: 1
-    delay: 1
+    delay: 0
   - eventName: Move glove
     activationObject: {fileID: 114934263230245650}
     setState: 1
@@ -346,10 +449,18 @@ MonoBehaviour:
     activationObject: {fileID: 114209658176971830}
     setState: 1
     delay: 0
-  - eventName: Release Player
+  - eventName: ReleasePlayer
     activationObject: {fileID: 114556112695286650}
     setState: 0
     delay: 2
+  - eventName: UnlockPlayer
+    activationObject: {fileID: 114278410130880608}
+    setState: 0
+    delay: 0
+  - eventName: Destroy GloveProp
+    activationObject: {fileID: 114484888200840458}
+    setState: 1
+    delay: 5
   m_triggerType: 1
   m_triggererTag: Player
 --- !u!114 &114934263230245650
