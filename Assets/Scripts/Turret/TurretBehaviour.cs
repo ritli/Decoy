@@ -41,7 +41,8 @@ public class TurretBehaviour : MonoBehaviour
 
     public Color m_activeColor = Color.red;
     public Color m_idleColor = Color.white;
-    public float m_intensity = 1;
+    public float m_idleIntensity = 1;
+    public float m_alertIntensity = 1;
 
     bool m_shotAudioPlayed = false;
     bool m_switchTargetPlayed = false;
@@ -121,7 +122,7 @@ public class TurretBehaviour : MonoBehaviour
     {
         //Update values if changed in editor
         m_Raycast.maxDistance = viewDistance;
-        m_FoVLight.intensity = m_intensity;
+
         m_FoVLight.range = viewDistance * 1.5f;
         if(turretState != TurretState.isPaused)
             turretState = decideState();
@@ -131,7 +132,7 @@ public class TurretBehaviour : MonoBehaviour
             case TurretState.isIdle:
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_idleColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, fieldOfView, m_zoomSpeed * Time.deltaTime);
-
+                m_FoVLight.intensity = Mathf.Lerp(m_FoVLight.intensity, m_idleIntensity, m_zoomSpeed * 1.5f);
                 currentFieldOfView = Mathf.Lerp(currentFieldOfView, fieldOfView, fovAdjustSpeed * Time.deltaTime);
 
                 CheckPlaySweepSound();
@@ -170,6 +171,8 @@ public class TurretBehaviour : MonoBehaviour
 
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
+                m_FoVLight.intensity = Mathf.Lerp(m_FoVLight.intensity, m_alertIntensity, m_zoomSpeed * 1.5f);
+
                 m_Target.ShowOverlay();
                 currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
 
@@ -188,6 +191,7 @@ public class TurretBehaviour : MonoBehaviour
                 m_Target.ShowOverlay();
                 m_FoVLight.color = Color.Lerp(m_FoVLight.color, m_activeColor, m_zoomSpeed * Time.deltaTime);
                 m_FoVLight.spotAngle = Mathf.Lerp(m_FoVLight.spotAngle, m_narrowAngle, m_zoomSpeed * Time.deltaTime);
+                m_FoVLight.intensity = Mathf.Lerp(m_FoVLight.intensity, m_alertIntensity, m_zoomSpeed * 2f);
 
                 currentFieldOfView = Mathf.Lerp(currentFieldOfView, narrowFieldOfView, fovAdjustSpeed * Time.deltaTime);
 
