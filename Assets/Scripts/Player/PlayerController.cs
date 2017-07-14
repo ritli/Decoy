@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour, IKillable
     {
 
 
-        m_Camera = transform.FindChild("Camera").GetComponent<Camera>();
+        m_Camera = transform.Find("Camera").GetComponent<Camera>();
         overlay = m_Camera.GetComponent<UnityStandardAssets.ImageEffects.ScreenOverlay>();
 
         m_cameraBobber = GetComponent<VectorBobber>();
@@ -233,8 +233,8 @@ public class PlayerController : MonoBehaviour, IKillable
         if (!m_hasDevice)
             m_teleport.disableTeleportation();
 
-        m_animator = m_Camera.transform.FindChild("DeviceArms").GetComponent<Animator>();
-        m_noDeviceAnimator = m_Camera.transform.FindChild("Arms").GetComponent<Animator>();
+        m_animator = m_Camera.transform.Find("DeviceArms").GetComponent<Animator>();
+        m_noDeviceAnimator = m_Camera.transform.Find("Arms").GetComponent<Animator>();
         m_CharacterController = GetComponent<CharacterController>();
 
         m_cameraOrigin = m_Camera.transform.localPosition;

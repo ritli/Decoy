@@ -77,17 +77,6 @@ public class PlayVideo : MonoBehaviour {
 				yield return null;
 			}
 
-			//Wait until video is prepared
-			//WaitForSeconds waitTime = new WaitForSeconds(5);
-			//while (!videoPlayer.isPrepared)
-			//{
-			//	Debug.Log("Preparing Video");
-			//	//Prepare/Wait for 5 sceonds only
-			//	yield return waitTime;
-			//	//Break out of the while loop after 5 seconds wait
-			//	break;
-			//}
-
 			Debug.Log("Done Preparing Video");
 			
 			//Assign the Texture from Video to RawImage to be displayed
@@ -114,7 +103,6 @@ public class PlayVideo : MonoBehaviour {
 			Debug.Log("Done Playing video: " + video.videoClip.name);
 		}
 
-		Debug.Log("Yoyo");
 		// Load next scene
 		SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
 		GameManager.GetPlayer().gameObject.SetActive(true);

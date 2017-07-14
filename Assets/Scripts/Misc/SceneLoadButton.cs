@@ -38,7 +38,16 @@ public class SceneLoadButton : MonoBehaviour {
         {
             Debug.Log("still saved.");
         }
-		SceneLoader.getInstance().LoadSceneSync(m_SelectedScene);
-        
+
+        if (m_SelectedScene == SceneLoader.Scenes.Section1a)
+        {
+            SceneLoader.getInstance().InitialGameLoad(m_SelectedScene);
+            return;
+        }
+
+        SceneLoader.getInstance().LoadSceneSync(m_SelectedScene);
+
+
+
     }
 }

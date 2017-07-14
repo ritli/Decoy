@@ -80,7 +80,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_ChargeIndicatorAnim = GameObject.FindGameObjectWithTag(Tags.blinkCharger).GetComponent<Animator>();
 		m_playerLength = GetComponent<CharacterController>().height;
 
-        m_partController = transform.FindChild("Camera").GetComponentInChildren<ParticleController>();
+        m_partController = transform.Find("Camera").GetComponentInChildren<ParticleController>();
 		m_playerWidth = GetComponent<CharacterController>().radius * 2;
         m_cooldownTimer = GetComponent<Timer>();
 		//m_particleSystem = GetComponentInChildren<SpriteRenderer>(true).GetComponentInChildren<ParticleSystem>().main;
@@ -104,7 +104,7 @@ public class PlayerTeleport : MonoBehaviour {
         m_cooldownTimer.setTimeout(teleportCooldown);
         m_cooldownTimer.forwardTime(teleportCooldown);
 
-        m_fovKick.Setup(transform.FindChild("Camera").GetComponent<Camera>());
+        m_fovKick.Setup(transform.Find("Camera").GetComponent<Camera>());
         m_player.setScaleDecay(velocityDecayOnTeleport);
     }
     private void OnEnable()

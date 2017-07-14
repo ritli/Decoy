@@ -62,11 +62,11 @@ public class TurretBehaviour : MonoBehaviour
         m_Raycast = GetComponent<Raycast>();
         turretState = TurretState.isIdle;
         m_fireParticles = GetComponentInChildren<ParticleSystem>();
-        m_muzzleflare1 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare").GetComponent<ParticleSystem>();
-        m_muzzleflare2 = transform.FindChild("TurretMuzzle").FindChild("MuzzleFlare2").GetComponent<ParticleSystem>();
+        m_muzzleflare1 = transform.Find("TurretMuzzle").Find("MuzzleFlare").GetComponent<ParticleSystem>();
+        m_muzzleflare2 = transform.Find("TurretMuzzle").Find("MuzzleFlare2").GetComponent<ParticleSystem>();
         m_FoVLight.spotAngle = fieldOfView + lightAngleOffset;
 
-        m_emitter = transform.FindChild("Detect").GetComponent<FMODUnity.StudioEventEmitter>();
+        m_emitter = transform.Find("Detect").GetComponent<FMODUnity.StudioEventEmitter>();
 
         m_audio.PlayEvent(2, false);
 

@@ -49,7 +49,7 @@ public class LookAt : MonoBehaviour
     //Dynamically allocates waypoints based on the amount of children the gameobject waypoint has
     void GetWaypoints()
     {
-        if (m_waypointParent = transform.parent.transform.FindChild("Waypoints"))
+        if (m_waypointParent = transform.parent.transform.Find("Waypoints"))
         {
             waypoints = new Transform[m_waypointParent.childCount];
 
